@@ -1,0 +1,40 @@
+﻿@model IQueryable<RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+@if (ViewData["msg"] != null)
+{
+    <script>window.onload = function () { alert("@ViewData["msg"]'s Job Application already exist !!") }</script>
+}
+@{
+    int rowcount = 0;
+}
+
+@*//Added search box test*@
+<div class="text-center">
+    <h1 class="display-4 text-center"><b>Selected Candidates :</b></h1>
+
+    <form asp-controller="JobApplication" asp-action="SelectedJobApplications" method="get">
+        <p>
+            Position : <input type="text" name="SearchString">
+            <input class="btn btn-primary" type="submit" value="Search" />
+        </p>
+    </form>
+</div>
+<br />
+
+<table class="table table-sm table-bordered table-striped">
+    <tr><th>S.No.</th><th>Candidate Name</th><th>Job Position</th><th>Joining Date</th><th>Update</th></tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@(rowcount+=1).</td>
+            <td>@user.candidateName</td>
+            <td>@user.position</td>
+            <td>@user.date</td>
+            <td>
+                @Html.ActionLink("Edit", "UpdateJobApplication", "JobApplication", new { id = user.ID }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
+    }
+</table>

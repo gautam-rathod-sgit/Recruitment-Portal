@@ -1,0 +1,46 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.SchedulesViewModel
+@using RecruitmentPortal.Infrastructure.Data.Enum
+<h4>Update Schedule :</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Update_Schedule_POST" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" value="@Model.candidate_name" id="candidate_name" name="candidate_name" />
+            <input type="hidden" value="@Model.position" id="position" name="position" />
+            <input type="hidden" value="@Model.datetime" id="datetime" name="datetime" />
+            <input type="hidden" value="@Model.round" id="round" name="round" />
+            <input type="hidden" value="@Model.applying_through" id="applying_through" name="applying_through" />
+            <input type="hidden" value="@Model.mode_of_interview" id="mode_of_interview" name="mode_of_interview" />
+            <input type="hidden" value="@Model.location" id="location" name="location" />
+            <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
+            <input type="hidden" value="@Model.ID" id="ID" name="ID" />
+            @* <input type="hidden" value="@Model.applicationId" id="applicationId" name="applicationId" />*@
+
+
+            <div class="form-group">
+                <label asp-for="rating" class="control-label">Rating : </label>
+                <input asp-for="rating" class="form-control" />
+                <span asp-validation-for="rating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="remark" class="control-label">Remarks : </label>
+                <input asp-for="remark" class="form-control" />
+                <span asp-validation-for="remark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="statusvalue" class="control-label">Status : </label>
+                <select asp-for="statusvalue" asp-items="Html.GetEnumSelectList<StatusType>()" class="form-control" required>
+                    <option selected="selected" value="">Please select</option>
+                </select>
+                <span asp-validation-for="statusvalue" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

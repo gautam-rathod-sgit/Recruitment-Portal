@@ -1,0 +1,117 @@
+﻿
+@using RecruitmentPortal.WebApp.Helpers
+@model PaginatedList<RecruitmentPortal.WebApp.ViewModels.JobPostViewModel>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@if (ViewData["msg"] != null)
+{
+    <script>window.onload = function () { alert("@ViewData["msg"] already Applied !!") }</script>
+}
+@if (ViewBag.status != null)
+{
+    <script>window.onload = function () { alert("@ViewBag.status") }</script>
+}
+
+<div class="text-center">
+    <h1 class="display-4 text-center"><b>Recruitment Portal</b></h1>
+
+    @if (!User.IsInRole("Admin") && !User.IsInRole("Interviewer"))
+    {
+        <form asp-controller="Home" asp-action="Index" method="get">
+            <p>
+                Job-Title / Location / Job-Role : <input type="text" name="SearchString">
+                <input class="btn btn-primary" type="submit" value="Search" />
+            </p>
+        </form>
+    }
+</div>
+
+@if (!User.IsInRole("Admin") && !User.IsInRole("Interviewer"))
+{
+    <div class="d-flex btn justify-content-between">
+        <div class="border box-shadow" style="padding:5px; border-radius:5px">
+            <strong>Sort By : </strong>
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]" class="mr-2">
+                Job Title
+            </a>
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["LocationSortParm"]" class="mr-2">
+                Location
+            </a>
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["JobRoleSortParm"]" class="mr-2">
+                Job Role
+            </a>
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["JobTypeSortParm"]">
+                Job Type
+            </a>
+        </div>
+        <div class="box-shadow">
+
+            @*-------Added For Sorting---------*@
+            @*//pagination links*@
+            @{
+                var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+            }
+
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="btn btn-default font-weight-bold @prevDisabled">
+                Previous
+            </a>
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="btn btn-default font-weight-bold @nextDisabled">
+                Next
+            </a>
+        </div>
+    </div>
+
+}
+
+@if (User.IsInRole("Admin"))
+{
+    
+}
+else
+{
+    <h2 class="mb-2 text-center">Available Jobs</h2>
+    <hr />
+
+    <div class="container mb-2 box-shadow">
+
+        @foreach (var item in Model)
+        {
+            <div class="row mb-2 p-3" style=" height:auto;
+/* border-radius: 30px;*/
+border-top: 2px solid grey;
+border-bottom: 2px solid grey;
+font-family :'Trebuchet MS'; ">
+                <div class="col-md-6 flex-wrap">
+
+
+                    <strong class="lead" style="font-size:xx-large">@item.job_title</strong><br />
+                    <strong class="lead text-orange"><i class="fa fa-map-marker-alt"></i></strong><strong class="lead"> @item.location</strong><br />
+                    <strong class="lead text-orange"><i class="fa fa-graduation-cap"></i></strong><strong class="lead"> @item.eligibility_criteria</strong> <br />
+                    <strong class="lead text-orange"><i class="fa fa-briefcase"></i></strong><strong class="lead"> @item.experience</strong> <br />
+                    <strong class="lead">Job Role : </strong><span class="lead text-secondary">@item.job_role</span><br />
+                    <strong class="lead">Job Type : </strong><span class="lead text-secondary">@item.job_type</span><br />
+                    <strong class="lead">Vacancy : </strong><span class="lead text-secondary">@item.vacancy</span><br />
+                    <strong class="lead">Required Skills : </strong><span class="lead text-secondary">@item.skills</span> <br /><br />
+
+
+                    @Html.ActionLink("Apply", "Index", "Candidate", new { id = item.ID }, new { @class = "btn btn-primary" })
+                </div>
+
+
+            </div>
+        }
+    </div>
+
+}

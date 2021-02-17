@@ -1,0 +1,75 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.SchedulesViewModel
+
+<div>
+    <h4>Schedule :</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Candidate Name
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.candidate_name)
+        </dd>
+        <dt class="col-sm-2">
+            Job Position
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.position)
+        </dd>
+        <dt class="col-sm-2">
+            Date-Time
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.datetime) at
+            @Html.DisplayFor(model => model.time)
+        </dd>
+        <dt class="col-sm-2">
+            Round
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.round)
+        </dd>
+        <dt class="col-sm-2">
+            Applying Through
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.applying_through)
+        </dd>
+        <dt class="col-sm-2">
+            Mode of Interview
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.mode_of_interview)
+        </dd>
+        <dt class="col-sm-2">
+            Location
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.location)
+        </dd>
+
+        <dt class="col-sm-2">
+            Round Status
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.statusName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Update_Schedule_GET" asp-route-id="@Model.ID" class="btn btn-primary">Update</a>
+</div>
+<br />
+@if (User.IsInRole("Admin"))
+{
+    <div>
+        <a asp-action="AdminIndex" asp-controller="Home" class="btn btn-primary">Back to List</a>
+    </div>
+}
+else
+{
+    <div>
+        <a asp-action="Index" class="btn btn-primary">Back to List</a>
+    </div>
+}
+

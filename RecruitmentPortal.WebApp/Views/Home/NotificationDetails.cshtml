@@ -1,0 +1,65 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel
+
+<div>
+    <h1 class="mb-2  bg-gradient-gray-dark text-white">Candidate Details : </h1>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.candidate.name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.candidate.name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.candidate.email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.candidate.email)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.candidate.phone)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.candidate.phone)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.candidate.Gender)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.candidate.Gender)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.candidate.experience)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.candidate.experience)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.candidate.hsc_perc)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.candidate.hsc_perc)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.candidate.ssc_perc)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.candidate.ssc_perc)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.candidate.degree)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.candidate.degree)
+        </dd>
+    </dl>
+</div>
+<br />
+<div>
+    <a asp-action="UpdateNotification" asp-route-id="@Model.ID" class="btn btn-primary">Confirm</a>
+</div>
+<br />
+<div>
+    <a asp-action="AdminIndex" class="btn btn-primary">Back to List</a>
+</div>

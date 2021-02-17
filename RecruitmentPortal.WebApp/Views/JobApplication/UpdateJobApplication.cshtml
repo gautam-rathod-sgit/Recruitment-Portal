@@ -1,0 +1,26 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel
+
+<h4>Set Application Details :</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UpdateJobApplicationPost">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" value="@Model.ID" id="ID" name="ID" />
+            <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
+            <input type="hidden" value="@Model.round" id="round" name="round" />
+            <input type="hidden" value="@Model.status" id="status" name="status" />
+
+            <div class="form-group">
+                <label asp-for="joining_date" class="control-label">Joining Date :</label>
+                <input asp-for="joining_date" class="form-control" type="date"/>
+                <span asp-validation-for="joining_date" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+

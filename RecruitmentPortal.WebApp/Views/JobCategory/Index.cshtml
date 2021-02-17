@@ -1,0 +1,43 @@
+﻿@model IEnumerable<RecruitmentPortal.WebApp.ViewModels.JobCategoryViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+@{ int rowNo = 0; }
+   
+    <h1  class="bg-gradient-gray-dark text-white">Job Categories :</h1>
+    <p>
+        <a asp-action="AddNewCategory" class="btn btn-primary">Add New Category</a>
+    </p>
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th>S.no</th>
+                <th>Name</th>
+                <th>Add Job</th>
+                <th>Action</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@(rowNo += 1)</td>
+                <td>@item.job_category_name</td>
+                <td>
+                    @Html.ActionLink("Add Job", "AddNewJobPost", "JobPost", new { id = item.ID }, new { @class = "btn btn-primary" })
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "UpdateCategory", new { id = item.ID }, new { @class = "btn btn-primary" }) |
+                    @Html.ActionLink("Delete", "DeleteCategory", new { id = item.ID }, new { @class = "btn btn-danger" })
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "DetailsJobcategory", new { id = item.ID }, new { @class = "btn btn-success" })
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+

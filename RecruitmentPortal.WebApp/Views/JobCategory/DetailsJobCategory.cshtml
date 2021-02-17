@@ -1,0 +1,78 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.JobCategoryViewModel
+
+@{
+    ViewData["Title"] = "DetailsJobCategory";
+}
+@if (ViewData["msg"] != null)
+{
+    <script>window.onload = function () { alert("@ViewData["msg"] already exist !!") }</script>
+}
+
+<h1 class="bg-gradient-gray-dark text-white">Category : @Model.job_category_name</h1>
+
+<hr />
+
+<a asp-action="AddNewJobPost" asp-controller="JobPost" asp-route-id="@Model.ID" class="btn btn-primary">Add New Job</a>
+<a asp-action="Index" asp-controller="JobCategory" class="btn btn-primary">Back to List</a>
+@if (Model.JobPosts != null)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Job Title</th>
+                <th>Location</th>
+                <th>Job Role</th>
+                <th>Vacancy</th>
+                <th>Job Type</th>
+                <th>Eligibility Criteria</th>
+                <th>Experience</th>
+                <th>Skills</th>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <th>Delete</th>
+                    <th>Edit</th>
+                }
+            </tr>
+        </thead>
+        @foreach (var item in Model.JobPosts)
+        {
+
+            <tr>
+                <td>@item.job_title</td>
+                <td>@item.location</td>
+                <td>@item.job_role</td>
+                <td>@item.vacancy</td>
+                <td>@item.job_type</td>
+                <td>@item.eligibility_criteria</td>
+                <td>@item.experience</td>
+                <td>@item.skills</td>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <td>
+                        @Html.ActionLink("Delete", "DeleteJobPost", "JobPost", new { id = item.ID, cid = Model.ID }, null)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "UpdateJobPost", "JobPost", new { id = item.ID, cid = Model.ID }, null)
+                    </td>
+                }
+
+
+            </tr>
+        }
+
+
+    </table>
+
+}
+
+
+
+
+
+
+
+
+
+
+
+

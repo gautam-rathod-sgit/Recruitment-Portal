@@ -1,0 +1,66 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model RecruitmentPortal.Core.Entities.ApplicationUser
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#submit').click(function (event) {
+
+                data = $('#password').val();
+                var len = data.length;
+
+                if (len < 1) {
+                    alert("Password cannot be blank");
+                    // Prevent form submission
+                    event.preventDefault();
+                }
+
+                if ($('#password').val() != $('#confirm_password').val()) {
+                    alert("Password and Confirm Password don't match");
+                    // Prevent form submission
+                    event.preventDefault();
+                }
+
+            });
+        });
+    </script>
+
+
+    <h1 class="bg-gradient-gray-dark text-white">Update User</h1>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+    
+
+    <form asp-action="UpdateUser" method="post" id="updateform">
+        <input type="hidden" value="@Model.Id" id="Id" name="Id" />
+        <div class="form-group">
+            <label asp-for="UserName" class="control-label"></label>
+            <input asp-for="UserName" class="form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="position" class="control-label"></label>
+            <input asp-for="position" class="form-control" />
+            <span asp-validation-for="position" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="skype_id" class="control-label"></label>
+            <input asp-for="skype_id" class="form-control" />
+            <span asp-validation-for="skype_id" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input name="password" class="form-control" id="password" type="password"/>
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">Confirm Password</label>
+            <input name="confirm_password" class="form-control" id="confirm_password" type="password"/>
+        </div>
+        <button type="submit" id="submit" class="btn btn-success">Apply Changes</button>
+    </form>

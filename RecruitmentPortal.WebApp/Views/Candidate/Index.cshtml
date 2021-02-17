@@ -1,0 +1,122 @@
+﻿@using RecruitmentPortal.Infrastructure.Data.Enum
+@model RecruitmentPortal.WebApp.ViewModels.CandidateViewModel
+
+<script src="~/lib//jquery//dist//jquery.min.js"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var resumeok = false;
+        //for setting degree dropdown to starting index
+        $("select#DegreeID")[0].selectedIndex = 0;
+        $('#DegreeID').change(function () {
+            
+          
+                var url = '@Url.Content("~/")' + "Candidate/GetDept";
+                var ddlsource = "#DegreeID";
+                $.getJSON(url, { Id: $(ddlsource).val() }, function (data) {
+                    var items = '';
+                    $("#DeptID").empty();
+                    $.each(data, function (i, dept) {
+                        items += "<option value='" + dept.value + "'>" + dept.text + "</option>";
+                    });
+                    $('#DeptID').html(items);
+                });
+        });
+        //for removing 0 on fields
+        $(".form-control").val($(this).val() == 0 ? '' : $(this).val());
+
+        //for only pdf and docx
+        $('#resume').on('change', function (e) {
+            myfile = $(this).val();
+            var ext = myfile.split('.').pop();
+            if (ext == "pdf" || ext == "docx" || ext == "doc" || ext == "jpeg" || ext == "jpg" || ext == "png") {
+                var resumeok = true;
+            } else {   
+                $('#resume').after('<p style="color:red">File needs to be PDF or DOCX.</p>');
+                alert("File must be pdf or docx or png or jpg or jpeg !!");
+                $("#resume").val(''); 
+            }
+        });
+    });
+</script>
+<style type="text/css">
+    .required:after {
+        content: "*";
+        font-weight: bold;
+        color: red;
+    }
+</style>
+<h2 class="bg-gradient-gray-dark text-white">Apply here :</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index" enctype="multipart/form-data">
+
+            
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" value="@Model.jobpostID" id="jobpostID" name="jobpostID" />
+            <input type="hidden" value="@Model.ID" id="ID" name="ID" />
+            <div class="form-group">
+                <label asp-for="name" class="control-label required">Name : </label>
+                <input asp-for="name" class="form-control" required />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="email" class="control-label required">Email :</label>
+                <input asp-for="email" class="form-control" required />
+                <span asp-validation-for="email" class="text-danger"></span>
+            </div>
+            <div class="form-group"> 
+                <label asp-for="phone" class="control-label required">Phone :</label>
+                <input asp-for="phone" class="form-control" required />
+                <span asp-validation-for="phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label required">Gender : </label>
+                @Html.RadioButtonFor(m => m.Gender, "Male", new { @class = "ml-2" }) Male
+                @Html.RadioButtonFor(m => m.Gender, "Female", new { @class = "ml-2" }) Female
+                @Html.RadioButtonFor(m => m.Gender, "Other", new { @class = "ml-2" }) Other
+            </div>
+            <div class="form-group">
+                <label asp-for="experience" class="control-label required">Experience :</label>
+                <input asp-for="experience" class="form-control" required />
+                <span asp-validation-for="experience" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="hsc_perc" class="control-label required">HSC (%) :</label>
+                <input asp-for="hsc_perc" class="form-control" required />
+                <span asp-validation-for="hsc_perc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ssc_perc" class="control-label required">SSC (%) :</label>
+                <input asp-for="ssc_perc" class="form-control" required />
+                <span asp-validation-for="ssc_perc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="degree" class="control-label required">Graduation :</label>
+                <select asp-for="ID" id="DegreeID" name="selectedDegree"
+                        class="" required
+                        asp-items="@(new SelectList(ViewBag.ListOfDegree,"ID", "degree_name"))">
+                </select>
+                <select asp-for="ID" id="DeptID" name="selectDept"
+                        class="" required
+                        asp-items="@(new SelectList(string.Empty,"ID", "dept_name"))">
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="File" class="control-label required">Upload Resume :</label><br />
+                <input asp-for="File" id="resume" type="file" />
+                <span asp-validation-for="File" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Apply" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

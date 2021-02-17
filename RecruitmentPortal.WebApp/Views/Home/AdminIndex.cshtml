@@ -1,0 +1,118 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.AdminPanelViewModel
+
+@if (ViewBag.status != null)
+{
+    <script>window.onload = function () { alert("@ViewBag.status") }</script>
+}
+<h1 class="display-4 text-center"><b>Recruitment Portal</b></h1>
+<br />
+<div class="text-left">
+
+    <div class="row">
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-gradient-danger">
+                <div class="inner">
+                    <h3>@Model.ApplicationCount</h3>
+
+                    <p>Applications</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-clipboard-list text-white"></i>
+                </div>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                    <h3>@Model.ActiveApplicationCount</h3>
+
+                    <p>Active Applications</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-spinner text-white"></i>
+                </div>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-lightblue">
+                <div class="inner">
+                    <h3>@Model.InterviewerCount</h3>
+
+                    <p>Interviewers</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-users text-white"></i>
+                </div>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <h3>@Model.SelectedCount</h3>
+
+                    <p>Selected candidates</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-check text-white"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2 class="mb-2 text-left"><u>Upcoming Schedules : </u></h2>
+    <hr />
+    <div class="container-fluid mb-2 box-shadow">
+        <table class="table table-sm table-bordered table-striped">
+            <tr><th>S.No.</th><th>Candidate Name</th><th>Job Position</th><th>Mode of Interview</th><th>Date & Time</th><th>Details</th></tr>
+            @{ int rowcount = 0;}
+            @foreach (var item in Model.upcoming_schedules)
+            {
+                <tr>
+                    <td>@(rowcount+=1).</td>
+                    <td>@item.candidate_name</td>
+                    <td>@item.position</td>
+                    <td>@item.mode_of_interview</td>
+                    <td>@item.datetime.ToString("dd-MM-yyyy") at @item.datetime.ToString("HH:mm tt")</td>
+
+                    <td>
+                        <form asp-action="ScheduleDetails" asp-controller="Interviewer" asp-route-scheduleId="@item.ID">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                               Details
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <h2 class="mb-2 text-left"><u>Notifications : </u></h2>
+    <hr />
+    <div class="container-fluid mb-2 box-shadow">
+        <table class="table table-sm table-bordered">
+            <tr><th>S.No.</th><th>Candidate Name</th><th>Job Position</th><th>Joining Date</th><th>Confirm </th></tr>
+            @{ int rowcount1 = 0;}
+                @foreach (var item in Model.selected_application)
+                {
+        <tr>
+            <td>@(rowcount1+=1).</td>
+            <td>@item.candidateName</td>
+            <td>@item.position</td>
+            <td>@item.joining_date.ToString("dd-MM-yyyy")</td>
+            <td>
+                <form asp-action="NotificationDetails" asp-controller="Home" asp-route-id="@item.ID">
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        Click here
+                    </button>
+                </form>
+            </td>
+        </tr>
+                }
+        </table>
+    </div>
+</div>

@@ -1,0 +1,116 @@
+﻿@using static RecruitmentPortal.WebApp.Helpers.NavigationIndicatorHelper;
+
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-orange elevation-4">
+
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <img src="~/img/shaligram_logo2.png" alt="SGIT Logo" class="brand-image img-fluid elevation-3"
+             style="opacity: 1; margin-top:5px; border-radius:5px">
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+                @if (User.IsInRole("Admin"))
+                { 
+                        <li class="nav-item ">
+                            <a asp-controller="Home" asp-action="Index" class="nav-link @Url.MakeActiveClass("Home", "AdminIndex")">
+                                <i class="nav-icon fas fa-home"></i>
+                                <p>
+                                    Dashboard
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a asp-controller="Interviewer" asp-action="IndexCompleted" class="nav-link @Url.MakeActiveClass("Interviewer", "IndexCompleted")">
+                                <i class="nav-icon fas fa-clipboard-check"></i>
+                                <p>
+                                    My Schedules
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a asp-controller="JobCategory" asp-action="Index" class="nav-link @Url.MakeActiveClass("JobCategory", "index")">
+                                <i class="nav-icon fas fa-newspaper"></i>
+                                <p>
+                                    Jobs
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a asp-controller="Qualification" asp-action="Index" class="nav-link @Url.MakeActiveClass("Qualification", "index")">
+                                <i class="nav-icon fas fa-graduation-cap"></i>
+                                <p>
+                                    Qualifications
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a asp-controller="Candidate" asp-action="Applications" class="nav-link @Url.MakeActiveClass("Candidate", "Applications")">
+                                <i class="nav-icon fas fa-list-ol"></i>
+                                <p>
+                                    All Applications
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a asp-controller="JobApplication" asp-action="Index" class="nav-link @Url.MakeActiveClass("JobApplication", "index")">
+                                <i class="nav-icon fas fa-spinner"></i>
+                                <p>
+                                    Active Applications
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a asp-controller="Account" asp-action="Index" class="nav-link @Url.MakeActiveClass("Account", "index")">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Interviewers
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a asp-controller="JobApplication" asp-action="SelectedJobApplications" class="nav-link @Url.MakeActiveClass("JobApplication", "SelectedJobApplications")">
+                                <i class="nav-icon fas fa-check-circle"></i>
+                                <p>
+                                    Selected Candidates
+                                </p>
+                            </a>
+                        </li>
+                    }
+                    @if (User.IsInRole("Interviewer"))
+                    {
+                        <li class="nav-item ">
+                            <a asp-controller="Interviewer" asp-action="Index" class="nav-link @Url.MakeActiveClass("Interviewer","Index")">
+                                <i class="nav-icon fas fa-home"></i>
+                                <p>
+                                    Pending Schedules
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a asp-controller="Interviewer" asp-action="IndexCompleted" class="nav-link @Url.MakeActiveClass("Interviewer","IndexCompleted")">
+                                <i class="nav-icon fas fa-lock"></i>
+                                <p>
+                                    Completed Schedules
+                                </p>
+                            </a>
+                        </li>
+                    }
+                    @if (!User.IsInRole("Interviewer") && !User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item ">
+                            <a asp-controller="Home" asp-action="Index" class="nav-link @Url.MakeActiveClass("home","index")">
+                                <i class="nav-icon fas fa-home"></i>
+                                <p>
+                                    Home
+                                </p>
+                            </a>
+                        </li>
+                    }
+                </ul>
+        </nav>
+    </div>
+</aside>
