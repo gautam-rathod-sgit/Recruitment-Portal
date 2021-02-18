@@ -62,7 +62,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             if (User.IsInRole("Interviewer"))
             {
-                return RedirectToAction("Index", "Interviewer");
+                return RedirectToAction("InterviewerIndex", "Home");
             }
             else
             {
@@ -159,8 +159,27 @@ namespace RecruitmentPortal.WebApp.Controllers
             return View(collection);
         }
 
-        //setting notification update to database
-        //---------------------------------------------------------------------------------------------
+        /// <summary>
+        /// This method fetches Home page for Interviewer
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> InterviewerIndex()
+        {
+            //Counter Part
+            InterviewerPanelViewModel collection = new InterviewerPanelViewModel();
+
+
+           var pending_schedules = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
+
+            //filtering the schedules for getting only the incompleted schedules
+            collection.pending_schedules = pending_schedules.Where(x => x.status != reqValue).ToList();
+            collection.PendingScheduleCount = pending_schedules.Where(x => x.status != reqValue).ToList().Count();
+            collection.CompletedScheduleCount = pending_schedules.Where(x => x.status == reqValue).Count();
+            
+            return View(collection);
+        }
+
+
         /// <summary>
         /// This method is used for setting notification update to database
         /// </summary>

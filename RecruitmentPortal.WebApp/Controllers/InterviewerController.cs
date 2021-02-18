@@ -32,27 +32,27 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// SHOWING ALL THE PENDING SCHEDULES FOR INTERVIEWER 
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string SearchString)
-        {
-            slist = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
+        //public async Task<IActionResult> Index(string SearchString)
+        //{
+        //    slist = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
             
-            try
-            {
-                //filtering the schedules for getting only the incompleted schedules
-                slist = slist.Where(x => x.status != reqValue);
-                //Added search box test
-                if (!String.IsNullOrEmpty(SearchString))
-                {
-                    slist = slist.Where(s => s.position.ToUpper().Contains(SearchString.ToUpper()));
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+        //    try
+        //    {
+        //        //filtering the schedules for getting only the incompleted schedules
+        //        slist = slist.Where(x => x.status != reqValue);
+        //        //Added search box test
+        //        if (!String.IsNullOrEmpty(SearchString))
+        //        {
+        //            slist = slist.Where(s => s.position.ToUpper().Contains(SearchString.ToUpper()));
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
 
-            return View(slist);
-        }
+        //    return View(slist);
+        //}
 
 
         /// <summary>

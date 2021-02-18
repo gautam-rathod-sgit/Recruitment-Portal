@@ -1,0 +1,73 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.InterviewerPanelViewModel
+
+<h1 class="display-4 text-center"><b>Recruitment Portal</b></h1>
+<br />
+<div class="text-left">
+
+    <div class="row">
+        @*------col-------*@
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-gradient-danger">
+                <div class="inner">
+                    <h3>@Model.PendingScheduleCount</h3>
+
+                    <p>Pending Shedules</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-clipboard-list text-white"></i>
+                </div>
+            </div>
+        </div>
+        @*------col-------*@
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <h3>@Model.CompletedScheduleCount</h3>
+
+                    <p>Completed Schedules</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-check text-white"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="mb-2 text-left"><u>Pending Schedules : </u></h2>
+    <br />
+
+    @if (Model.pending_schedules.Count != 0)
+    {
+        <div class="container-fluid mb-2 box-shadow">
+
+            <table class="table table-sm table-bordered table-striped">
+                <tr><th>S.No.</th><th>Candidate Name</th><th>Job Position</th><th>Mode of Interview</th><th>Round</th><th>Details</th></tr>
+                @{ int rowcount = 0;}
+                @foreach (var item in Model.pending_schedules)
+                {
+                    <tr>
+                        <td>@(rowcount += 1).</td>
+                        <td>@item.candidate_name</td>
+                        <td>@item.position</td>
+                        <td>@item.mode_of_interview</td>
+                        <td>@item.round</td>
+
+                        <td>
+                            <form asp-action="ScheduleDetails" asp-controller="Interviewer" asp-route-scheduleId="@item.ID">
+                                <button type="submit" class="btn btn-sm btn-primary">
+                                    Details
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+     }
+     else
+     {
+         <h4 class="text-center text-gray">No Pending Schedules yet !</h4>
+     }
+</div>
