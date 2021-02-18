@@ -74,6 +74,8 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     JobPostCandidate model = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault();
                     item.jobName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
+                    item.isActive = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).Any();
+                    item.isSelected = _dbContext.jobApplications.Where(x => x.candidateId == item.ID && x.notified == true).Any();
                 }
                 modelList = newList.AsQueryable();
 

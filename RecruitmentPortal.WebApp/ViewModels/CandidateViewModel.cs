@@ -62,5 +62,11 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         //for getting the job position
         public string jobName { get; set; }
+
+        //is Active candidate
+        public bool isActive { get; set; }
+
+        //is Selected candidate
+        public bool isSelected { get; set; }
     }
 }

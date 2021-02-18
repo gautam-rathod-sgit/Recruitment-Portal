@@ -7,9 +7,19 @@
     <h1 class="mb-2  bg-gradient-gray-dark text-white">Application Status :</h1>
     <div class="d-flex justify-content-end">
         <form asp-action="Index" asp-controller="Schedules" asp-route-id="@Model.candidateId" method="get">
-            <button type="submit" class="btn btn-primary mr-2">
-                Next Schedule
-            </button>
+            @if (Model.Schedules.Count() == 0)
+            {
+                <button type="submit" class="btn btn-primary mr-2">
+                    Start Scheduling
+                </button>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-primary mr-2">
+                    Next Schedule
+                </button>
+            }
+
         </form>
         <form>
             @Html.ActionLink("Accept", "UpdateJobApplication", "JobApplication", new { id = Model.ID, complete = true }, new { @class = "btn btn-success mr-2" })
@@ -22,13 +32,13 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.candidateName)
+            Candidate Name :
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.candidateName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.position)
+            Applied for Position :
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.position)
@@ -37,33 +47,37 @@
     </dl>
 </div>
 
+@if (Model.Schedules.Count() > 0)
+{
+    <table class="table table-sm table-bordered  table-striped">
+        <tr><th>Round No.</th><th>Interviewer</th><th>Rating</th><th>Remarks</th><th>Status</th><th>Action</th></tr>
+        @foreach (var user in Model.Schedules)
+        {
+            var i = 0;
+            <tr>
+                <td><b>@user.round</b></td>
+                <td>
+                    @foreach (var item in user.InterviewerNames)
+                    {
+                        <p>@(i += 1).@item.Name</p>
+                    }
+                </td>
+                <td>@user.rating</td>
+                <td>@user.remark</td>
+                <td><b>@user.statusName</b></td>
+                <td>
+                    @Html.ActionLink("Edit", "UpdateScheduleOfJobApplication", "JobApplication", new { JobApplicationId = Model.ID, scheduleId = user.ID }, new { @class = "btn btn-primary mr-2" })
+                    @Html.ActionLink("Delete", "UpdateScheduleOfJobApplication", "JobApplication", new { JobApplicationId = Model.ID, scheduleId = user.ID, delete = true }, new { @class = "btn btn-danger mr-2" })
+                </td>
 
-<table class="table table-sm table-bordered  table-striped">
-    <tr><th>Round No.</th><th>Interviewer</th><th>Rating</th><th>Remarks</th><th>Status</th><th>Action</th></tr>
-    @foreach (var user in Model.Schedules)
-    {
-        var i = 0;
-        <tr>
-            <td>@user.round</td>
-            <td>
-                @foreach (var item in user.InterviewerNames)
-                {
-                    <p>@(i += 1).@item.Name</p>
-                }
-            </td>
-            <td>@user.rating</td>
-            <td>@user.remark</td>
-            <td>@user.statusName</td>
-            <td>
-                @Html.ActionLink("Edit", "UpdateScheduleOfJobApplication", "JobApplication", new { JobApplicationId = Model.ID, scheduleId = user.ID }, new { @class = "btn btn-success mr-2" })
-                @Html.ActionLink("Delete", "UpdateScheduleOfJobApplication", "JobApplication", new { JobApplicationId = Model.ID, scheduleId = user.ID, delete = true }, new { @class = "btn btn-danger mr-2" })
-            </td>
 
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <h4 class="text-gray text-center mt-4 text-capitalize"><strong>No Interview Schedules Yet.<br />
+            Click on Start Scheduling.</strong></h4>
+}
 
-        </tr>
-    }
-</table>
-
-<br />
-
-<br />

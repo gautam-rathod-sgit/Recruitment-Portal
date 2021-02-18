@@ -1,5 +1,12 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.SchedulesViewModel
 @using RecruitmentPortal.Infrastructure.Data.Enum
+<script src="~/lib//jquery//dist//jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //for removing 0 on fields
+        $("#rating").val($(this).val() == 0 ? '' : $(this).val());
+</script>
+
 <h4>Update Schedule :</h4>
 <hr />
 <div class="row">
@@ -20,7 +27,7 @@
 
             <div class="form-group">
                 <label asp-for="rating" class="control-label">Rating : </label>
-                <input asp-for="rating" class="form-control" />
+                <input asp-for="rating" class="form-control" id="rating"/>
                 <span asp-validation-for="rating" class="text-danger"></span>
             </div>
             <div class="form-group">

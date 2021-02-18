@@ -9,33 +9,39 @@
 @{
     int rowcount = 0;
 }
+@if (Model.Count() > 0)
+{
+    @*//Added search box test*@
+    <div class="text-center">
+        <h1 class="display-4 text-center"><b>Active Applications</b></h1>
 
-@*//Added search box test*@
-<div class="text-center">
-    <h1 class="display-4 text-center"><b>Active Applications</b></h1>
-
-    <form asp-controller="JobApplication" asp-action="Index" method="get">
-        <p>
-            Position : <input type="text" name="SearchString">
-            <input class="btn btn-primary" type="submit" value="Search" />
-        </p>
-    </form>
-</div>
-<table class="table table-sm table-bordered  table-striped">
-    <tr><th>S.No.</th><th>Candidate Name</th><th>Job Position</th><th>Details</th></tr>
-    @foreach (var user in Model)
-    {
-        <tr>
-            <td>@(rowcount+=1).</td>
-            <td>@user.candidateName</td>
-            <td>@user.position</td>
-            <td>
-                <form asp-action="Details" asp-route-id="@user.ID" method="post">
-                    <button type="submit" class="btn btn-sm btn-primary">
-                        Details
-                    </button>
-                </form>
-            </td>
-        </tr>
-    }
-</table>
+        <form asp-controller="JobApplication" asp-action="Index" method="get">
+            <p>
+                Position : <input type="text" name="SearchString">
+                <input class="btn btn-primary" type="submit" value="Search" />
+            </p>
+        </form>
+    </div>
+    <table class="table table-sm table-bordered  table-striped">
+        <tr><th>S.No.</th><th>Candidate Name</th><th>Job Position</th><th>Details</th></tr>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@(rowcount+=1).</td>
+                <td>@user.candidateName</td>
+                <td>@user.position</td>
+                <td>
+                    <form asp-action="Details" asp-route-id="@user.ID" method="post">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            Details
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <h4 class="text-gray text-center mt-4 text-capitalize"><strong>No Active Applcations Yet.</strong></h4>
+}

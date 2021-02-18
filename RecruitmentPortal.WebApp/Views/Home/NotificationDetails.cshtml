@@ -1,54 +1,63 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel
 
 <div>
-    <h1 class="mb-2  bg-gradient-gray-dark text-white">Candidate Details : </h1>
+    <h1 class="mb-2  bg-gradient-gray-dark text-white">Notify Candidate : </h1>
     <hr />
+    <div class="d-flex justify-content-end">
+        <div>
+            <a asp-action="UpdateNotification" asp-route-id="@Model.ID" class="btn btn-success mr-3">Confirm</a>
+        </div>
+        <br />
+        <div>
+            <a asp-action="AdminIndex" class="btn btn-primary mr-3">Back to List</a>
+        </div>
+    </div>
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.candidate.name)
+           Candidate Name
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.candidate.name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.candidate.email)
+            Email-ID
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.candidate.email)
         </dd>
 
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.candidate.phone)
+            Phone No.
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.candidate.phone)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.candidate.Gender)
+           Gender
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.candidate.Gender)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.candidate.experience)
+           Experience
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.candidate.experience)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.candidate.hsc_perc)
+            HSC Percentage
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.candidate.hsc_perc)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.candidate.ssc_perc)
+            HSC Percentage
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.candidate.ssc_perc)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.candidate.degree)
+           Degree
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.candidate.degree)
@@ -56,10 +65,3 @@
     </dl>
 </div>
 <br />
-<div>
-    <a asp-action="UpdateNotification" asp-route-id="@Model.ID" class="btn btn-primary">Confirm</a>
-</div>
-<br />
-<div>
-    <a asp-action="AdminIndex" class="btn btn-primary">Back to List</a>
-</div>

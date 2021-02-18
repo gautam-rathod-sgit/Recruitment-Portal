@@ -1,8 +1,26 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.SchedulesViewModel
 
 <div>
-    <h4>Schedule :</h4>
+    <h4>Completed Schedule Details :</h4>
     <hr />
+    <div class="d-flex justify-content-end">
+        <div>
+            <a asp-action="Update_Schedule_GET" asp-route-id="@Model.ID" class="btn btn-primary mr-3">Update</a>
+        </div>
+        <br />
+        @if (User.IsInRole("Admin"))
+        {
+            <div>
+                <a asp-action="AdminIndex" asp-controller="Home" class="btn btn-primary mr-3">Back to List</a>
+            </div>
+        }
+        else
+        {
+            <div>
+                <a asp-action="Index" class="btn btn-primary">Back to List</a>
+            </div>
+        }
+    </div>
     <dl class="row">
         <dt class="col-sm-2">
             Candidate Name
@@ -56,20 +74,5 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Update_Schedule_GET" asp-route-id="@Model.ID" class="btn btn-primary">Update</a>
-</div>
-<br />
-@if (User.IsInRole("Admin"))
-{
-    <div>
-        <a asp-action="AdminIndex" asp-controller="Home" class="btn btn-primary">Back to List</a>
-    </div>
-}
-else
-{
-    <div>
-        <a asp-action="Index" class="btn btn-primary">Back to List</a>
-    </div>
-}
+
 

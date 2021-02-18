@@ -3,52 +3,70 @@
 <div>
     <h1 class="mb-2  bg-gradient-gray-dark text-white">Candidate Details : </h1>
     <hr />
+    <div class="d-flex justify-content-end">
+        <div class="mb-2">
+            <a asp-action="Download" class="btn btn-primary btn-md mr-3"
+               asp-route-filename="@Model.resume">
+                Download Resume
+            </a>
+        </div>
+        <div>
+            @Html.ActionLink("Proceed", "AddNewJobApplications", "JobApplication", new { Cid = Model.ID }, new { @class = "btn btn-success mr-3" })
+            <a asp-action="Applications" class="btn btn-danger btn-md mr-3">
+                Cancel
+            </a>
+        </div>
+        <br />
+        <div>
+            <a asp-action="Applications" class="btn btn-primary">Back to List</a>
+        </div>
+    </div>
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.name)
+            Candidate Name
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.email)
+            Email-ID
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.email)
         </dd>
 
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.phone)
+            Phone No.
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.phone)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
+            Gender
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Gender)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.experience)
+            Experience
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.experience)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.hsc_perc)
+            HSC Percentage
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.hsc_perc)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ssc_perc)
+            HSC Percentage
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ssc_perc)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.degree)
+            Degree
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.degree)
@@ -56,21 +74,7 @@
     </dl>
 </div>
 
-<div class="mb-2">
-    <a asp-action="Download" class="btn btn-success btn-sm"
-       asp-route-filename="@Model.resume">
-        Download Resume
-    </a>
-</div>
-<div>
-    @Html.ActionLink("Proceed", "AddNewJobApplications", "JobApplication", new { Cid = Model.ID}, new { @class = "btn btn-primary" })
-    <a asp-action="Applications" class="btn btn-danger btn-md">
-        Cancel
-    </a>
-</div>
-<br />
-<div>
-    <a asp-action="Applications" class="btn btn-primary">Back to List</a>
-</div>
+
+
 
 
