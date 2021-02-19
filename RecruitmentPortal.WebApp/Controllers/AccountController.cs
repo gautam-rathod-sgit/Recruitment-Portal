@@ -44,9 +44,10 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="SearchString"></param>
         /// <returns></returns>
+        [HttpGet]
         public IActionResult Index(string SearchString)
         {
-            IQueryable<ApplicationUser> plist;
+            IQueryable<ApplicationUser> plist = null;
             try
             {
                 //Added search box test
@@ -61,7 +62,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 Console.WriteLine(ex.Message);
             }
 
-            return View(_userManager.Users);
+            return View(plist);
         }
 
         /// <summary>

@@ -5,7 +5,19 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
+<script src="~/lib//jquery//dist//jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#job_ID").click(function () {
+            debugger;
+            var url = '@Url.Content("~/")' + "Home/GetEncryptedID";
+            var ddlsource = $('select[name="Jobid"]').val(); debugger;
+                 $.get(url, { Id: $(ddlsource).val() }, function (data) {
+                     debugger; $("#job_ID").val() = data;
+                });
+            });
+        });
+</script>
 @if (ViewData["msg"] != null)
 {
     <script>window.onload = function () { alert("@ViewData["msg"] already Applied !!") }</script>
@@ -102,7 +114,10 @@ font-family :'Trebuchet MS'; ">
                     <strong class="lead">Required Skills : </strong><span class="lead text-secondary">@item.skills</span> <br /><br />
 
 
-                    @Html.ActionLink("Apply", "Index", "Candidate", new { id = item.ID }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Apply", "Index", "Candidate", new { Jobid = item.ID }, new { @id = "job_ID", @class = "btn btn-primary" })
+                    @*<a asp-controller="Candidate" asp-action="Index" asp-route-job_id ="@item.ID" class = "btn btn-primary">
+                            Apply
+                        </a>*@
                 </div>
 
 

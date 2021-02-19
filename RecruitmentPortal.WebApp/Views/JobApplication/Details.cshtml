@@ -22,7 +22,7 @@
 
         </form>
         <form>
-            @Html.ActionLink("Accept", "UpdateJobApplication", "JobApplication", new { id = Model.ID, complete = true }, new { @class = "btn btn-success mr-2" })
+            @Html.ActionLink("Accept", "UpdateJobApplication", "JobApplication", new { encry_id = Model.EncryptionId, complete = true }, new { @class = "btn btn-success mr-2" })
             @Html.ActionLink("Reject", "UpdateJobApplication", "JobApplication", new { id = Model.ID, rejected = true }, new { @class = "btn btn-danger mr-2" })
         </form>
         <div>

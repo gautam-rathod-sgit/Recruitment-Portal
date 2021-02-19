@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.Infrastructure.Data.Enum;
 using RecruitmentPortal.WebApp.Interfaces;
+using RecruitmentPortal.WebApp.Security;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -23,10 +25,12 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly ICandidatePage _candidatePage;
         private readonly ISchedulesUsersPage _schedulesUsersPage;
         private readonly RecruitmentPortalDbContext _dbContext;
+        private readonly IDataProtector _Protector;
 
         public JobApplicationController(IJobApplicationPage jobApplicationPage,
             RecruitmentPortalDbContext dbContext,
-            ISchedulesPage schedulesPage,
+            ISchedulesPage schedulesPage, IDataProtectionProvider dataProtectionProvider,
+            DataProtectionPurposeStrings dataProtectionPurposeStrings,
             ISchedulesUsersPage schedulesUsersPage,
             ICandidatePage candidatePage)
         {
@@ -35,6 +39,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             _schedulesUsersPage = schedulesUsersPage;
             _candidatePage = candidatePage;
             _dbContext = dbContext;
+            _Protector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.JobAppDetailIdRouteValue);
         }
 
 
@@ -173,6 +178,8 @@ namespace RecruitmentPortal.WebApp.Controllers
             //getting position
             jobApplicationModel.position = getPositionByCandidateId(jobApplicationModel.candidateId);
 
+            //for encrypted id
+            jobApplicationModel.EncryptionId = _Protector.Protect(jobApplicationModel.ID.ToString());
             return View(jobApplicationModel);
         }
 
@@ -185,9 +192,10 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> UpdateJobApplication(int id, bool complete, bool rejected)
+        public async Task<IActionResult> UpdateJobApplication(string encry_id, bool complete, bool rejected)
         {
             JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
+            int id = Convert.ToInt32(_Protector.Unprotect(encry_id));
             //getting the jobapplication
             try
             {

@@ -59,7 +59,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// SHOWING ALL THE COMPLETED SCHEDULES FOR INTERVIEWER 
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> IndexCompleted()
+        public async Task<IActionResult> IndexCompleted(string SearchString)
         {
             slist = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
 
@@ -67,11 +67,17 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 //filtering the schedules for getting only the incompleted schedules
                 slist = slist.Where(x => x.status == reqValue);
+                //Added search box test
+                if (!String.IsNullOrEmpty(SearchString))
+                {
+                    slist = slist.Where(s => s.position.ToUpper().Contains(SearchString.ToUpper()));
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+
             return View(slist);
         }
 
