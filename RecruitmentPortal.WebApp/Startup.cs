@@ -13,6 +13,7 @@ using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.Infrastructure.Repository;
 using RecruitmentPortal.Infrastructure.Repository.Base;
 using RecruitmentPortal.WebApp.Interfaces;
+using RecruitmentPortal.WebApp.Security;
 using RecruitmentPortal.WebApp.Services;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
@@ -83,6 +84,7 @@ namespace RecruitmentPortal.WebApp
             //email
             services.Configure<SMTPConfigModel>(Configuration.GetSection("SMTPConfig"));
             services.AddTransient<IEmailService, EmailService>();
+            services.AddSingleton<DataProtectionPurposeStrings>();
 
             //services of automapper
             services.AddAutoMapper(typeof(Startup));

@@ -2,6 +2,7 @@
 using RecruitmentPortal.WebApp.ViewModels.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,6 +10,9 @@ namespace RecruitmentPortal.WebApp.ViewModels
 {
     public class JobApplicationViewModel : BaseViewModel
     {
+        //for ecryption
+        [NotMapped]
+        public string EncryptionId { get; set; }
         public int round { get; set; }
         public string status { get; set; }
         public DateTime joining_date { get; set; }

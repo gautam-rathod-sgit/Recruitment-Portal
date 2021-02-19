@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,7 @@ using RecruitmentPortal.Infrastructure.Data.Enum;
 using RecruitmentPortal.WebApp.Helpers;
 using RecruitmentPortal.WebApp.Interfaces;
 using RecruitmentPortal.WebApp.Models;
+using RecruitmentPortal.WebApp.Security;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -29,12 +31,15 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly ISchedulesPage _schedulesPage;
         private readonly IJobApplicationPage _jobApplicationPage;
         private readonly ICandidatePage _candidatePage;
+        private readonly IDataProtector _Protector;
         public HomeController(ICandidatePage candidatePage,
             IJobApplicationPage jobApplicationPage,
             ISchedulesPage schedulesPage,
             UserManager<ApplicationUser> userManager,
             ILogger<HomeController> logger,
             RecruitmentPortalDbContext dbContext,
+            IDataProtectionProvider dataProtectionProvider,
+            DataProtectionPurposeStrings dataProtectionPurposeStrings,
             IJobPostPage jobPostPage)
         {
             _logger = logger;
@@ -44,6 +49,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             _candidatePage = candidatePage;
             _userManager = userManager;
             _jobPostPage = jobPostPage;
+            _Protector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.JobPostIdRouteValue);
         }
 
         /// <summary>
@@ -78,7 +84,21 @@ namespace RecruitmentPortal.WebApp.Controllers
 
 
                 IQueryable<JobPostViewModel> plist = await _jobPostPage.getJobPost();
-
+                //IEnumerable<JobPostViewModel> newlist;
+                //newlist = plist.ToList();
+                //foreach(var item in newlist)
+                //{
+                //    item.EncryptionId = _Protector.Protect(item.ID.ToString());
+                //}
+                //plist = newlist.AsQueryable();
+                //foreach(var item in plist)
+                //{
+                //    item.EncryptionId = _Protector.Protect(item.ID.ToString());
+                //}
+                //plist = plist.Select(c =>
+                //{
+                //    c.EncryptionId = _Protector.Protect(c.ID.ToString());
+                //});
                 try
                 {
                     if (!String.IsNullOrEmpty(SearchString))
@@ -120,6 +140,18 @@ namespace RecruitmentPortal.WebApp.Controllers
                 return View(await PaginatedList<JobPostViewModel>.CreateAsync(plist.AsNoTracking(), pageNumber ?? 1, pageSize));
             }
 
+        }
+        //public IQueryable<JobPostViewModel> Addon(List<JobPostViewModel> newlist)
+        //{
+        //    foreach (var item in newlist)
+        //    {
+        //        item.EncryptionId = _Protector.Protect(item.ID.ToString());
+        //    }
+        //    return newlist.AsQueryable();
+        //}
+        public String GetEncryptedID(int Id)
+        {
+            return _Protector.Protect(Id.ToString());
         }
 
         /// <summary>

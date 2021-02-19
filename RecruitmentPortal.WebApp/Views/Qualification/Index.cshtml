@@ -10,9 +10,14 @@
 @{ int rowNo = 0;
     }
 
-<h1  class="bg-gradient-gray-dark text-white">Degree List </h1>
+<div class="bg-gradient-gray-dark text-white d-flex justify-content-between pt-2">
+
+    <h2 class="pl-2">Degree List:</h2>
+
+</div>
+<br />
 <p>
-    <a asp-action="AddNewDegree" class="btn btn-primary">Add New Degree</a>
+    <a asp-action="AddNewDegree" class="btn btn-primary btn-sm">Add New Degree</a>
 </p>
 
 
@@ -31,9 +36,9 @@
             <div class="col-md-6" style="border-right : 2px solid grey">
                 @(rowNo += 1).@item.degree_name<br />
                 <div class="btn box-shadow border w-20">
-                    @Html.ActionLink("Edit", "UpdateDegree", new { id = item.ID }, new {@class = "btn btn-primary" })
-                    @Html.ActionLink("Delete", "DeleteDegree", new { id = item.ID }, new {@class = "btn btn-danger" })
-                    @Html.ActionLink("Add Department", "AddNewDept", "Qualification", new { id = item.ID }, new {@class = "btn btn-primary" })
+                    @Html.ActionLink("Edit", "UpdateDegree", new { id = item.ID }, new {@class = "btn btn-primary btn-sm" })
+                    @Html.ActionLink("Delete", "DeleteDegree", new { id = item.ID }, new {@class = "btn btn-danger btn-sm" })
+                    @Html.ActionLink("Add Department", "AddNewDept", "Qualification", new { id = item.ID }, new {@class = "btn btn-primary btn-sm" })
                 </div>
             </div>
             <div class="col-md-6" style="border-left : 2px solid grey">
@@ -51,8 +56,8 @@
                                         @if (User.Identity.IsAuthenticated)
                                         {
                                             <div class="btn box-shadow border w-20">
-                                                @Html.ActionLink("Delete", "DeleteDept", "Qualification", new { id = dept.ID }, new { @class = "btn btn-danger" })
-                                                @Html.ActionLink("Edit", "UpdateDept", "Qualification", new { id = dept.ID, dept_id = item.ID }, new { @class = "btn btn-primary" })
+                                                @Html.ActionLink("Delete", "DeleteDept", "Qualification", new { id = dept.ID }, new { @class = "btn btn-danger btn-sm" })
+                                                @Html.ActionLink("Edit", "UpdateDept", "Qualification", new { id = dept.ID, dept_id = item.ID }, new { @class = "btn btn-primary btn-sm" })
                                             </div>
                                         }
                                     </div>

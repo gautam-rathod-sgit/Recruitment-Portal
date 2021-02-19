@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,6 +10,9 @@ namespace RecruitmentPortal.WebApp.ViewModels
     {
         //custom made
         public int ID { get; set; }
+        //for ecryption
+        [NotMapped]
+        public string EncryptionId { get; set; }
         public string job_title { get; set; }
         public string location { get; set; }
         public string job_role { get; set; }
