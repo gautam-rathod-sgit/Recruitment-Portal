@@ -10,9 +10,6 @@ namespace RecruitmentPortal.WebApp.ViewModels
     {
         //custom made
         public int ID { get; set; }
-        //for ecryption
-        [NotMapped]
-        public string EncryptionId { get; set; }
         public string job_title { get; set; }
         public string location { get; set; }
         public string job_role { get; set; }
@@ -21,6 +18,10 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public string eligibility_criteria { get; set; }
         public string experience { get; set; }
         public string skills { get; set; }
+        public bool isActive { get; set; }
+
+        //for counter part of available jobs on Home page
+        public int AvailableJobsCount { get; set; }
 
         //relationship with JobCategoryViewModel
         public int JobCategoryId { get; set; }

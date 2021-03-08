@@ -1,11 +1,11 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel
-
+@using RecruitmentPortal.WebApp.Helpers
 <div>
     <h1 class="mb-2  bg-gradient-gray-dark text-white">Notify Candidate : </h1>
     <hr />
     <div class="d-flex justify-content-end">
         <div>
-            <a asp-action="UpdateNotification" asp-route-id="@Model.ID" class="btn btn-success mr-3">Confirm</a>
+            <a asp-action="UpdateNotification" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-success mr-3">Confirm</a>
         </div>
         <br />
         <div>

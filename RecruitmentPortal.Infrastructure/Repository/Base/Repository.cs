@@ -111,8 +111,10 @@ namespace RecruitmentPortal.Infrastructure.Repository.Base
 
         public async Task Update(T Entity)
         {
-            _DbContext.Set<T>().Update(Entity);
-            await _DbContext.SaveChangesAsync();
+           
+                _DbContext.Set<T>().Update(Entity);
+                await _DbContext.SaveChangesAsync();
+          
         }
     }
 }

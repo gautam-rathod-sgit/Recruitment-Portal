@@ -12,7 +12,9 @@ namespace RecruitmentPortal.Core.Entities
         public string candidate_name { get; set; }
         public string position { get; set; }
         public DateTime datetime { get; set; }
+        
         public int round { get; set; }
+        
         public string applying_through { get; set; }
         public string mode_of_interview { get; set; }
         public string location { get; set; }

@@ -7,16 +7,108 @@
 }
 <script src="~/lib//jquery//dist//jquery.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("#job_ID").click(function () {
-            debugger;
-            var url = '@Url.Content("~/")' + "Home/GetEncryptedID";
-            var ddlsource = $('select[name="Jobid"]').val(); debugger;
-                 $.get(url, { Id: $(ddlsource).val() }, function (data) {
-                     debugger; $("#job_ID").val() = data;
-                });
-            });
-        });
+// <!--<!--$(document).ready(function () {-->-->
+@*$("#job_ID").click(function () {
+debugger;
+var url = '@Url.Content("~/")' + "Home/GetEncryptedID";
+var ddlsource = $('select[name="Jobid"]').val(); debugger;
+$.get(url, { Id: $(ddlsource).val() }, function (data) {
+debugger; $("#job_ID").val() = data;
+});
+});*@
+
+
+
+// });
+
+
+
+
+//$(document).ready(function () {
+@*$("#job_ID").click(function (e) {
+debugger;
+// Stop the normal navigation
+e.preventDefault();
+debugger;
+//Build the new URL
+var url = $(this).attr("href");
+var id = $("#job_id").text();
+var vid = $("#job_ID").val(attr("asp-route-id"));
+var encryptedID = null;
+debugger;
+$.get('@Url.Content("~/")' + "Home/GetEncryptedID", { Id: parseInt(id) }, function (data) {
+encryptedID = data;
+debugger;
+url = url.replace("dummyID", encryptedID);
+
+debugger;
+//Navigate to the new URL
+window.location.href = url;
+});*@
+
+
+
+
+
+
+
+
+@*$.ajax({
+url: '@Url.Content("~/")' + "Home/GetEncryptedID",
+type: 'GET',
+Id: parseInt(id),
+success: function (data) {
+debugger;
+$.each(data, function (i, item) {
+encryptedID = item.value;
+});
+}
+});*@
+
+
+@*debugger;
+var url = '@Url.Content("~/")' + "Home/GetEncryptedID";
+var ddlsource = $("#job_id").text(); debugger;
+$.get(url, { Id: parseInt(ddlsource) }, function (data) {
+
+$("job_ID").data("")
+//$('a').attr('asp-route-jobid', data);
+debugger; //Replace the predifined QueryString param "xxx" with the "id"
+alert("data received suceesfully" + data);
+
+alert("data set suceesfully" + $('a').attr('asp-route-jobid'));
+debugger;
+});
+});*@
+
+
+
+
+@*function f(e, id) {
+
+
+debugger;
+// Stop the normal navigation
+e.preventDefault();
+debugger;
+//Build the new URL
+var url = $(this).attr("href");
+var id = $("#job_id").text();
+var vid = $("#job_ID").val(attr("asp-route-id"));
+var encryptedID = null;
+debugger;
+$.get('@Url.Content("~/")' + "Home/GetEncryptedID", { Id: parseInt(id) }, function (data) {
+encryptedID = data;
+debugger;
+url = url.replace("dummyID", encryptedID);
+
+debugger;
+//Navigate to the new URL
+window.location.href = url;
+});
+
+}*@
+
 </script>
 @if (ViewData["msg"] != null)
 {
@@ -28,60 +120,32 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4 text-center"><b>Recruitment Portal</b></h1>
-
-    @if (!User.IsInRole("Admin") && !User.IsInRole("Interviewer"))
-    {
-        <form asp-controller="Home" asp-action="Index" method="get">
-            <p>
-                Job-Title / Location / Job-Role : <input type="text" name="SearchString">
-                <input class="btn btn-primary" type="submit" value="Search" />
-            </p>
-        </form>
-    }
+    <h1 class="display-4 text-center"><b>Careers</b></h1>
 </div>
-
-@if (!User.IsInRole("Admin") && !User.IsInRole("Interviewer"))
+<br />
+@if (!User.IsInRole("Admin") && !User.IsInRole("Interviewer") && Model.Count()>0)
 {
-    <div class="d-flex btn justify-content-between">
-        <div class="border box-shadow" style="padding:5px; border-radius:5px">
-            <strong>Sort By : </strong>
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]" class="mr-2">
+    <div class="d-flex justify-content-between">
+        <div class="border box-shadow d-inline-flex" style="padding:5px; border-radius:5px">
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]" class="mr-2 btn btn-primary btn-sm">
                 Job Title
             </a>
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["LocationSortParm"]" class="mr-2">
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["LocationSortParm"]" class="mr-2 btn btn-primary btn-sm">
                 Location
             </a>
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["JobRoleSortParm"]" class="mr-2">
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["JobRoleSortParm"]" class="mr-2 btn btn-primary btn-sm">
                 Job Role
             </a>
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["JobTypeSortParm"]">
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["JobTypeSortParm"]" class="btn btn-primary btn-sm">
                 Job Type
             </a>
-        </div>
-        <div class="box-shadow">
-
-            @*-------Added For Sorting---------*@
-            @*//pagination links*@
-            @{
-                var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-                var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-            }
-
-            <a asp-action="Index"
-               asp-route-sortOrder="@ViewData["CurrentSort"]"
-               asp-route-pageNumber="@(Model.PageIndex - 1)"
-               asp-route-currentFilter="@ViewData["CurrentFilter"]"
-               class="btn btn-default font-weight-bold @prevDisabled">
-                Previous
-            </a>
-            <a asp-action="Index"
-               asp-route-sortOrder="@ViewData["CurrentSort"]"
-               asp-route-pageNumber="@(Model.PageIndex + 1)"
-               asp-route-currentFilter="@ViewData["CurrentFilter"]"
-               class="btn btn-default font-weight-bold @nextDisabled">
-                Next
-            </a>
+            <form asp-controller="Home" asp-action="Index" method="get">
+                @*//Added search box test*@
+                <div class="mr-2 ml-2">
+                    <input type="text" name="SearchString" placeholder="Job-Title/Location/Job-Role" class=" mr-2">
+                    <input class="btn btn-primary btn-sm" type="submit" value="Search" style="margin-top: -5px" />
+                </div>
+            </form>
         </div>
     </div>
 
@@ -89,7 +153,6 @@
 
 @if (Model.Count() > 0)
 {
-    <h2 class="mb-2 text-center">Available Jobs</h2>
     <hr />
 
     <div class="container mb-2 box-shadow">
@@ -114,9 +177,10 @@ font-family :'Trebuchet MS'; ">
                     <strong class="lead">Required Skills : </strong><span class="lead text-secondary">@item.skills</span> <br /><br />
 
 
-                    @Html.ActionLink("Apply", "Index", "Candidate", new { Jobid = item.ID }, new { @id = "job_ID", @class = "btn btn-primary" })
-                    @*<a asp-controller="Candidate" asp-action="Index" asp-route-job_id ="@item.ID" class = "btn btn-primary">
-                            Apply
+                    @*@Html.ActionLink("Apply", "Index", "Candidate", null , new { jobid = (item.ID), @id = "job_ID", @class = "btn btn-primary myjob" })*@
+                    @Html.ActionLink("Apply", "Index", "Candidate", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-primary" })
+                    @*<a asp-controller="Candidate" asp-action="Index" onclick="create_Encryption(@item.ID)" class = "btn btn-primary">
+                        Apply
                         </a>*@
                 </div>
 
@@ -124,8 +188,39 @@ font-family :'Trebuchet MS'; ">
             </div>
         }
     </div>
+    <hr />
+    <div class="box-shadow d-flex justify-content-end">
+
+        @*-------Added For Sorting---------*@
+        @*//pagination links*@
+        @{
+            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        }
+
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default font-weight-bold @prevDisabled">
+            Previous
+        </a>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex + 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default font-weight-bold @nextDisabled">
+            Next
+        </a>
+    </div>
+    <hr />
 }
 else
 {
-    <h4 class="text-gray text-center">No Jobs Yet.</h4>
+<h4 class="text-gray align-content-between">
+    <p>Sorry, there are no positions available at this time. </p><br />
+    <p>Thank you for your interest about employment opportunities at <b>SHALIGRAM INFOTECH LLP</b>. Currently we do not have any open positions, however if you are interested in possible future opportunities please send your CV to <a href="https://shaligraminfotech.com/company/careers/">career@shaligraminfotech.com</a>. We will be in touch if a role becomes available that matches your skills and experiences.</p>
+</h4>
 }
+
+

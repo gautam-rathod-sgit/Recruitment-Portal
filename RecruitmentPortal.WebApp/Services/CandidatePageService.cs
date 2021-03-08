@@ -59,6 +59,12 @@ namespace RecruitmentPortal.WebApp.Services
         {
             return _mapper.Map<CandidateViewModel>(await _candidateRepository.getCandidateByEmailId(id));
         }
+
+        //public async Task DeleteCandidateById(int id)
+        //{
+        //    await _candidateRepository.Delete(await _candidateRepository.getById(id));
+
+        //}
     }
     
 }

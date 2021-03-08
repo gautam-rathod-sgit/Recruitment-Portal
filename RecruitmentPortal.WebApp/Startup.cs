@@ -12,6 +12,7 @@ using RecruitmentPortal.Core.Repository.Base;
 using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.Infrastructure.Repository;
 using RecruitmentPortal.Infrastructure.Repository.Base;
+using RecruitmentPortal.WebApp.Helpers;
 using RecruitmentPortal.WebApp.Interfaces;
 using RecruitmentPortal.WebApp.Security;
 using RecruitmentPortal.WebApp.Services;
@@ -89,6 +90,9 @@ namespace RecruitmentPortal.WebApp
             //services of automapper
             services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
+
+            //Url Encryption 
+            services.AddDataProtection();
         }
 
 

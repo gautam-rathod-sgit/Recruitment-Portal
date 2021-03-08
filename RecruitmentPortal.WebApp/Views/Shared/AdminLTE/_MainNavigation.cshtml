@@ -24,10 +24,10 @@
                         </a>
                     </li>
                     <li class="nav-item ">
-                        <a asp-controller="Interviewer" asp-action="IndexCompleted" class="nav-link @Url.MakeActiveClass("Interviewer", "IndexCompleted")">
+                        <a asp-controller="Interviewer" asp-action="Index" class="nav-link @Url.MakeActiveClass("Interviewer", "Index")">
                             <i class="nav-icon fas fa-clipboard-check"></i>
                             <p>
-                                My Schedules
+                                Schedules
                             </p>
                         </a>
                     </li>
@@ -48,22 +48,6 @@
                         </a>
                     </li>
                     <li class="nav-item ">
-                        <a asp-controller="Candidate" asp-action="Applications" class="nav-link @Url.MakeActiveClass("Candidate", "Applications")">
-                            <i class="nav-icon fas fa-list-ol"></i>
-                            <p>
-                                All Applications
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a asp-controller="JobApplication" asp-action="Index" class="nav-link @Url.MakeActiveClass("JobApplication", "index")">
-                            <i class="nav-icon fas fa-spinner"></i>
-                            <p>
-                                Active Applications
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item ">
                         <a asp-controller="Account" asp-action="Index" class="nav-link @Url.MakeActiveClass("Account", "index")">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
@@ -72,13 +56,30 @@
                         </a>
                     </li>
                     <li class="nav-item ">
+                        <a asp-controller="Candidate" asp-action="AllApplications" class="nav-link @Url.MakeActiveClass("Candidate", "AllApplications")">
+                            <i class="nav-icon fas fa-list-ol"></i>
+                            <p>
+                                All Applications
+                            </p>
+                        </a>
+                    </li>
+                    @*<li class="nav-item ">
+                        <a asp-controller="JobApplication" asp-action="Index" class="nav-link @Url.MakeActiveClass("JobApplication", "index")">
+                            <i class="nav-icon fas fa-spinner"></i>
+                            <p>
+                                Active Applications
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
                         <a asp-controller="JobApplication" asp-action="SelectedJobApplications" class="nav-link @Url.MakeActiveClass("JobApplication", "SelectedJobApplications")">
                             <i class="nav-icon fas fa-check-circle"></i>
                             <p>
                                 Selected Candidates
                             </p>
                         </a>
-                    </li>
+                    </li>*@
                 }
                 @if (User.IsInRole("Interviewer"))
                 {
@@ -91,15 +92,15 @@
                         </a>
                     </li>
                     @*<li class="nav-item ">
-                        <a asp-controller="Interviewer" asp-action="Index" class="nav-link @Url.MakeActiveClass("Interviewer","Index")">
-                            <i class="nav-icon fas fa-home"></i>
-                            <p>
-                                Pending Schedules
-                            </p>
-                        </a>
-                    </li>*@
+                <a asp-controller="Interviewer" asp-action="Index" class="nav-link @Url.MakeActiveClass("Interviewer","Index")">
+                    <i class="nav-icon fas fa-home"></i>
+                    <p>
+                        Pending Schedules
+                    </p>
+                </a>
+            </li>*@
                     <li class="nav-item ">
-                        <a asp-controller="Interviewer" asp-action="IndexCompleted" class="nav-link @Url.MakeActiveClass("Interviewer","IndexCompleted")">
+                        <a asp-controller="Interviewer" asp-action="Index" class="nav-link @Url.MakeActiveClass("Interviewer","Index")">
                             <i class="nav-icon fas fa-lock"></i>
                             <p>
                                 Completed Schedules

@@ -10,6 +10,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         //custom ID
         public int ID { get; set; }
         public string dept_name { get; set; }
+        public bool isActive { get; set; }
 
         //relationship with DegreeViewModel
         public int DegreeId { get; set; }

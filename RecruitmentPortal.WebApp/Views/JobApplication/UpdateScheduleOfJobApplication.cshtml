@@ -1,9 +1,10 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.SchedulesViewModel
 @using RecruitmentPortal.Infrastructure.Data.Enum
+@using RecruitmentPortal.WebApp.Helpers
 <script src="~/lib//jquery//dist//jquery.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-       
+
         var alreadyBound = false;
         $("#face").click(function () {
             if (!alreadyBound) {
@@ -26,9 +27,6 @@
     });
 
 </script>
-
-<h1 class="mb-2  bg-gradient-gray-dark text-white">Update Schedule :</h1>
-<hr />
 <style type="text/css">
     .required:after {
         content: "*";
@@ -36,9 +34,24 @@
         color: red;
     }
 </style>
+<div class="row bg-gradient-gray-dark text-white">
+    <div class="col-md-5">
+        <h2 class="pl-2">Update Schedule :</h2>
+    </div>
+</div>
+<hr />
+
 <div class="d-flex justify-content-end">
     <div>
-        <a asp-action="Index" class="mr-3">Back to List</a>
+        @if (ViewBag.goback == true)
+        {
+            <a asp-action="ScheduleDetails" asp-controller="Interviewer" asp-route-scheduleId="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="mr-3 btn btn-primary">Back to List</a>
+        }
+        else
+        {
+            <a asp-action="Details" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.jobAppId).ToString())" class="mr-3 btn btn-primary">Back to List</a>
+
+        }
     </div>
 </div>
 <div class="row">
@@ -48,25 +61,32 @@
             <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
             <input type="hidden" value="@Model.ID" id="ID" name="ID" required />
             <div class="form-group">
-                <label asp-for="candidate_name" class="control-label"></label>
-                <input asp-for="candidate_name" class="form-control" readonly/>
+                <label asp-for="candidate_name" class="control-label">Candidate Name</label>
+                <input asp-for="candidate_name" class="form-control" readonly />
                 <span asp-validation-for="candidate_name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="position" class="control-label"></label>
-                <input asp-for="position" class="form-control"readonly/>
+                <label asp-for="position" class="control-label">Position</label>
+                <input asp-for="position" class="form-control" readonly />
                 <span asp-validation-for="position" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="datetime" class="control-label"></label>
+                <label asp-for="datetime" class="control-label required">Date Time </label>
                 <input asp-for="datetime" class="form-control" />
                 <span asp-validation-for="datetime" class="text-danger"></span>
             </div>
 
+            @*<div class="form-group">
+            <label asp-for="round" class="control-label"></label>
+            <input asp-for="round" class="form-control" required min="0" step="1" oninput="validity.valid||(value='');" />
+            <span asp-validation-for="round" class="text-danger"></span>
+        </div>*@
             <div class="form-group">
-                <label asp-for="round" class="control-label"></label>
-                <input asp-for="round" class="form-control" required min="0" step="1" oninput="validity.valid||(value='');" />
-                <span asp-validation-for="round" class="text-danger"></span>
+                <label asp-for="roundValue" class="control-label required">Interview Round : </label>
+                <select asp-for="roundValue" asp-items="Html.GetEnumSelectList<RoundType>()" class="form-control" required>
+                    <option selected="selected" value="">Please select</option>
+                </select>
+                <span asp-validation-for="roundValue" class="text-danger" />
             </div>
 
             @*interviewer selection*@
@@ -78,27 +98,31 @@
                 </select>
                 <span asp-validation-for="Multiinterviewer" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="applying_through" class="control-label required">Applying Through</label>
-                <input asp-for="applying_through" class="form-control" required />
-                <span asp-validation-for="applying_through" class="text-danger"></span>
-            </div>
+
             <div class="form-group" id="mode_select">
                 <label asp-for="mode_of_interview" class="control-label required">Mode of Interview : </label>
-                <input type="radio" name="mode_of_interview" value="Telephonic" id="tele" class="ml-2" required /><span>Telephonic</span>
-                <input type="radio" name="mode_of_interview" value="Face to Face" id="face" class="ml-2" /><span id="facetoface">Face to Face</span>
+                <input type="radio" name="mode_of_interview" value="Telephonic" id="tele" class="ml-2" required /><span> Online</span>
+                <input type="radio" name="mode_of_interview" value="Face to Face" id="face" class="ml-2" /><span id="facetoface"> Face to Face</span>
             </div>
 
 
             <div class="form-group">
-                <label asp-for="statusvalue" class="control-label required">Status : </label>
+                <label asp-for="statusvalue" class="control-label required">Interview Status : </label>
                 <select asp-for="statusvalue" asp-items="Html.GetEnumSelectList<StatusType>()" class="form-control" required>
                     <option selected="selected" value="">Please select</option>
                 </select>
                 <span asp-validation-for="statusvalue" class="text-danger" />
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group d-flex">
+                <input type="submit" value="Save" class="btn btn-primary mr-3" />
+                @if (ViewBag.goback == true)
+                {
+                    <a asp-action="ScheduleDetails" asp-controller="Interviewer" asp-route-scheduleId="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="mr-3 btn btn-danger">Cancel</a>
+                }
+                else
+                {
+                    <a asp-action="Details" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.jobAppId).ToString())" class="mr-3 btn btn-danger">Cancel</a>
+                }
             </div>
         </form>
     </div>

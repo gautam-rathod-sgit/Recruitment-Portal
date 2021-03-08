@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.Infrastructure.Data.Enum;
+using RecruitmentPortal.WebApp.Helpers;
 using RecruitmentPortal.WebApp.Interfaces;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
@@ -46,18 +47,20 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Index(int id)
+        public async  Task<IActionResult> Index(string id)
         {
             SchedulesViewModel model = new SchedulesViewModel();
             List<ApplicationUser> allusers = new List<ApplicationUser>();
+            int decrypted_id = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
             try
             {
                 //setting foreign key in schedule
-                model.candidateId = id;
-
+                model.candidateId = decrypted_id;
+                //getting job application ID
+                model.jobAppId = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == decrypted_id).ID;
                 //getting candidate name and position for readonly in view
-                model.candidate_name = _dbContext.Candidate.Where(x => x.ID == id).FirstOrDefault().name;
-                var job_ID = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == id).FirstOrDefault().job_Id;
+                model.candidate_name = _dbContext.Candidate.Where(x => x.ID == decrypted_id).FirstOrDefault().name;
+                var job_ID = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == decrypted_id).FirstOrDefault().job_Id;
                 model.position = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).job_title;
 
                 //getting dropdown of AspNetUsers from DB
@@ -86,9 +89,8 @@ namespace RecruitmentPortal.WebApp.Controllers
 
             try
             {
-                //for getting the job application of candidate in current scenario (we are in schedules so for getting 
-                //job Application ID, need to go through candidate)
-                candidateModel = _dbContext.Candidate.Where(x => x.ID == model.candidateId).FirstOrDefault();
+                //for getting the job application of candidate in current scenario 
+                //candidateModel = _dbContext.Candidate.Where(x => x.ID == model.candidateId).FirstOrDefault();
                 jobAppModel = _dbContext.jobApplications.Where(x => x.candidateId == model.candidateId).FirstOrDefault();
 
                 //checking for already existing round
@@ -98,12 +100,14 @@ namespace RecruitmentPortal.WebApp.Controllers
                     if(item.round == model.round)
                     {
                         TempData["msg"] = model.round;
-                        return RedirectToAction("Details", "JobApplication", new { id = jobAppModel.ID , conflict = TempData["msg"] });
+                        return RedirectToAction("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName(jobAppModel.ID.ToString()) , conflict = TempData["msg"] });
                     }
                 }
                 //for new schedule Proceed
+
                 //converting enum values to int
                 model.status = Convert.ToInt32(model.statusvalue);
+                model.round = Convert.ToInt32(model.roundValue);
 
                 //saving all the interviewers
                 List<string> interviewers = new List<string>();
@@ -127,7 +131,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
-            return RedirectToAction("Details", "JobApplication", new { id = jobAppModel.ID });
+            return RedirectToAction("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName(jobAppModel.ID.ToString()) });
         }
     }
 }

@@ -1,7 +1,20 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel
+<script>
+    function today() {
+        document.querySelector("#demo").value = today;
+    }
+</script>
+@if (Model.status == "Rejected")
+{
+    <h4>Rejection Reason :</h4>
+    <hr />
+}
+else
+{
+    <h4>Joining Date for Candidate :</h4>
+    <hr />
+}
 
-<h4>Joining Date for Candidate :</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="UpdateJobApplicationPost">
@@ -11,11 +24,23 @@
             <input type="hidden" value="@Model.round" id="round" name="round" />
             <input type="hidden" value="@Model.status" id="status" name="status" />
 
-            <div class="form-group">
-                <label asp-for="joining_date" class="control-label">Joining Date :</label>
-                <input asp-for="joining_date" class="form-control" type="date"/>
-                <span asp-validation-for="joining_date" class="text-danger"></span>
-            </div>
+            @if (Model.status == "Rejected")
+            {
+                <div class="form-group">
+                    <label asp-for="rejection_reason" class="control-label">Rejection Reason :</label>
+                    <input asp-for="rejection_reason" class="form-control" type="text" />
+                    <span asp-validation-for="rejection_reason" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label asp-for="joining_date" class="control-label">Joining Date :</label>
+                    <input asp-for="joining_date" class="form-control" type="date" id="demo" onclick="today()" placeholder="dd-mm-yyyy" />
+                    <span asp-validation-for="joining_date" class="text-danger"></span>
+                </div>
+            }
+
 
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

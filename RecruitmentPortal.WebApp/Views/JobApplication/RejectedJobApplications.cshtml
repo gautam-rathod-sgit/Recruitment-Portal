@@ -1,0 +1,89 @@
+﻿@model IQueryable<RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel>
+@using RecruitmentPortal.WebApp.Helpers
+
+@{
+    ViewData["Title"] = "Index";
+}
+@if (ViewData["msg"] != null)
+{
+    <script>window.onload = function () { alert("@ViewData["msg"]'s Job Application already exist !!") }</script>
+}
+@{
+    int rowcount = 0;
+}
+@*<div class="bg-gradient-gray-dark text-white d-flex justify-content-between pt-2">
+
+    <h2 class="pl-2">Rejected Candidate : </h2>
+    @using (Html.BeginForm("AllApplications", "Candidate", FormMethod.Post, new { @class = "mt-2" }))
+    {
+        @Html.DropDownList("Application_mode", new SelectList(ViewBag.menuSelect, "Value", "Text"), new { onchange = "this.form.submit()" })
+    }
+    <form asp-controller="JobApplication" asp-action="RejectedJobApplications" method="get">
+
+        <div class="mr-2">
+            <input type="text" name="SearchString" placeholder="Job Title" class="mt-2 mr-2">
+            <input class="btn btn-primary btn-sm" type="submit" value="Search" style="margin-top: -5px" />
+        </div>
+    </form>
+</div>*@
+<div class="row bg-gradient-gray-dark text-white">
+    <div class="col-md-5">
+        <h2 class="pl-2">Rejected Applications :</h2>
+    </div>
+    <div class="col-md-7">
+        <div class="row d-flex justify-content-lg-end">
+            <div>
+                @using (Html.BeginForm("AllApplications", "Candidate", FormMethod.Post, new { @class = "mt-2 mr-2 " }))
+                {
+                    @Html.DropDownList("Application_mode", new SelectList(ViewBag.menuSelect, "Value", "Text"), new { onchange = "this.form.submit()", style = "width:100% ; height : 30px; border : 1px solid grey;", @class = "mr-2 box-shadow" })
+                }
+            </div>
+            <form asp-controller="JobApplication" asp-action="RejectedJobApplications" method="get">
+                <div class="mr-2">
+                    <input type="text" name="SearchString" placeholder="Search by Field" class="mt-2">
+                    <input class="btn btn-primary btn-sm" type="submit" value="Search" style="margin-top: -5px" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@if (Model.Count() > 0)
+{
+    <br />
+
+    <table class="table table-sm table-bordered table-striped">
+        <tr>
+            <th>S.No.</th>
+            <th>Candidate Name</th>
+            <th>Job Title</th>
+            <th>Job Role</th>
+            <th>Rejection Date</th>
+            @*<th>Remarks</th>*@
+            <th>Details</th>
+        </tr>
+        @foreach (var user in Model)
+        {
+    <tr>
+        <td>@(rowcount+=1).</td>
+        <td>@user.candidateName</td>
+        <td>@user.position</td>
+        <td>@user.job_Role</td>
+        <td>@user.rejection_date</td>
+        @*<td>@user.rejection_reason</td>*@
+        <td>
+            <form asp-action="SelectedJobApplicationsDetails" asp-route-id="@RSACSPSample.EncodeServerName((user.ID).ToString())" method="post">
+                <button type="submit" class="btn btn-sm btn-primary">
+                    Click here
+                </button>
+            </form>
+        </td>
+
+
+    </tr>
+        }
+    </table>
+}
+else
+{
+    <h4 class="text-gray text-center mt-4 text-capitalize"><strong>No Rejected Candidates Yet.</strong></h4>
+}

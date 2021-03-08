@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace RecruitmentPortal.WebApp.Controllers
 {
@@ -84,21 +85,8 @@ namespace RecruitmentPortal.WebApp.Controllers
 
 
                 IQueryable<JobPostViewModel> plist = await _jobPostPage.getJobPost();
-                //IEnumerable<JobPostViewModel> newlist;
-                //newlist = plist.ToList();
-                //foreach(var item in newlist)
-                //{
-                //    item.EncryptionId = _Protector.Protect(item.ID.ToString());
-                //}
-                //plist = newlist.AsQueryable();
-                //foreach(var item in plist)
-                //{
-                //    item.EncryptionId = _Protector.Protect(item.ID.ToString());
-                //}
-                //plist = plist.Select(c =>
-                //{
-                //    c.EncryptionId = _Protector.Protect(c.ID.ToString());
-                //});
+                plist = plist.Where(x => x.isActive == true);
+
                 try
                 {
                     if (!String.IsNullOrEmpty(SearchString))
@@ -136,7 +124,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 }
                 //for sorting
                 int pageSize = 4;
-
+                
                 return View(await PaginatedList<JobPostViewModel>.CreateAsync(plist.AsNoTracking(), pageNumber ?? 1, pageSize));
             }
 
@@ -149,10 +137,10 @@ namespace RecruitmentPortal.WebApp.Controllers
         //    }
         //    return newlist.AsQueryable();
         //}
-        public String GetEncryptedID(int Id)
-        {
-            return _Protector.Protect(Id.ToString());
-        }
+        //public String GetEncryptedID(int Id)
+        //{
+        //    return _Protector.Protect(Id.ToString());
+        //}
 
         /// <summary>
         /// This method fetches Home page for Admin
@@ -160,28 +148,40 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> AdminIndex()
         {
-
-            //counter part
-            AdminPanelViewModel collection = new AdminPanelViewModel();
+            if (User.Identity.IsAuthenticated)
+            {
+                //counter part
+                AdminPanelViewModel collection = new AdminPanelViewModel();
             try
             {
-                collection.ApplicationCount = _dbContext.Candidate.Where(x => x.emailConfirmed == true).Count();
-                collection.ActiveApplicationCount = _dbContext.jobApplications.ToList().Where(x => x.status == status_Pending).Count();
-                collection.InterviewerCount = _dbContext.Users.Count();
-                collection.SelectedCount = _dbContext.jobApplications.Where(x => x.status == status_Complete).Count();
+                    JobApplications data = new JobApplications();
+                    collection.ApplicationCount = _dbContext.Candidate.Where(x => x.emailConfirmed == true).Count();
+                    collection.ActiveApplicationCount = _dbContext.jobApplications.ToList().Where(x => x.status == status_Pending).Count();
+                    collection.InterviewerCount = _dbContext.Users.Count();
+                    collection.SelectedCount = _dbContext.jobApplications.Where(x => x.status == status_Complete).Count();
 
-                //upcoming schedules scheduleviewmodels
-                var upcoming_schedules = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
-                collection.upcoming_schedules = upcoming_schedules.Where(x => x.status != reqValue).ToList();
-
-                //notification jobapplicationViewModels.
-                var notifyJobApplications = await _jobApplicationPage.getJobApplications();
-                collection.selected_application = notifyJobApplications.Where(x => x.status == status_Complete && x.notified == false).ToList();
-                foreach (var item in collection.selected_application)
-                {
-                    item.candidateName = _dbContext.Candidate.Where(x => x.ID == item.candidateId).FirstOrDefault().name;
-                    item.position = getPositionByCandidateId(item.candidateId);
-                }
+                    //upcoming schedules scheduleviewmodels
+                    var upcoming_schedules = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
+                    upcoming_schedules = upcoming_schedules.Where(x => x.status != reqValue);
+                    List<SchedulesViewModel> schedulelist = new List<SchedulesViewModel>();
+                    //schedulelist = upcoming_schedules.ToList();
+                    foreach(var item in upcoming_schedules)
+                    {
+                        data = _dbContext.jobApplications.Where(x => x.candidateId == item.candidateId).FirstOrDefault();
+                        if (data.status == status_Pending)
+                        {
+                            schedulelist.Add(item);
+                        }
+                    }
+                    collection.upcoming_schedules = schedulelist;
+                    //notification jobapplicationViewModels.
+                    var notifyJobApplications = await _jobApplicationPage.getJobApplications();
+                    collection.selected_application = notifyJobApplications.Where(x => x.status == status_Complete && x.notified == false).ToList();
+                    foreach (var item in collection.selected_application)
+                    {
+                        item.candidateName = _dbContext.Candidate.Where(x => x.ID == item.candidateId).FirstOrDefault().name;
+                        item.position = getPositionByCandidateId(item.candidateId);
+                    }
             }
             catch (Exception ex)
             {
@@ -189,6 +189,11 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
 
             return View(collection);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
         /// <summary>
@@ -212,40 +217,41 @@ namespace RecruitmentPortal.WebApp.Controllers
         }
 
 
-        /// <summary>
-        /// This method is used for setting notification update to database
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public async Task<IActionResult> NotificationDetails(int id)
-        {
-            JobApplicationViewModel jobApplication = new JobApplicationViewModel();
-            try
-            {
-                jobApplication = await _jobApplicationPage.getJobApplicationById(id);
-                CandidateViewModel candidateDetail = await _candidatePage.getCandidateById(jobApplication.candidateId);
-                jobApplication.candidate = candidateDetail;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+        ///// <summary>
+        ///// This method is used for setting notification update to database
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <returns></returns>
+        //public async Task<IActionResult> NotificationDetails(string id)
+        //{
+        //    JobApplicationViewModel jobApplication = new JobApplicationViewModel();
+        //    try
+        //    {
+        //        jobApplication = await _jobApplicationPage.getJobApplicationById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
+        //        CandidateViewModel candidateDetail = await _candidatePage.getCandidateById(jobApplication.candidateId);
+        //        jobApplication.candidate = candidateDetail;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
            
-            return View(jobApplication);
-        }
+        //    return View(jobApplication);
+        //}
 
         /// <summary>
         /// SETS THE NOTIFIED FLAG OF SCHEDULE TO TRUE WHEN ADMIN CONFIRMS THE NOTIFICATION
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UpdateNotification(int id)
+        public async Task<IActionResult> UpdateNotification(string id)
         {
+
             JobApplicationViewModel model = new JobApplicationViewModel();
             try
             {
                 //getting job application
-                model = await _jobApplicationPage.getJobApplicationById(id);
+                model = await _jobApplicationPage.getJobApplicationById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
                 //setting flag
                 model.notified = true;
             }

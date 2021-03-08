@@ -231,14 +231,29 @@ namespace RecruitmentPortal.WebApp.Migrations
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("apply_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("applying_through")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("current_ctc")
+                        .HasColumnType("float");
+
                     b.Property<string>("degree")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("dob")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("email")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("emailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<double>("expected_ctc")
+                        .HasColumnType("float");
 
                     b.Property<string>("experience")
                         .HasColumnType("nvarchar(max)");
@@ -249,14 +264,23 @@ namespace RecruitmentPortal.WebApp.Migrations
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("notice_period")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("phone")
                         .HasColumnType("float");
+
+                    b.Property<string>("relevent_experience")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("resume")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("ssc_perc")
                         .HasColumnType("real");
+
+                    b.Property<string>("total_experience")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -272,6 +296,9 @@ namespace RecruitmentPortal.WebApp.Migrations
 
                     b.Property<string>("degree_name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("ID");
 
@@ -291,6 +318,9 @@ namespace RecruitmentPortal.WebApp.Migrations
                     b.Property<string>("dept_name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
                     b.HasKey("ID");
 
                     b.HasIndex("DegreeId");
@@ -305,8 +335,14 @@ namespace RecruitmentPortal.WebApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("accept_date")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("candidateId")
                         .HasColumnType("int");
+
+                    b.Property<string>("commitment_mode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("joining_date")
                         .HasColumnType("datetime2");
@@ -314,8 +350,23 @@ namespace RecruitmentPortal.WebApp.Migrations
                     b.Property<bool>("notified")
                         .HasColumnType("bit");
 
+                    b.Property<string>("offered_ctc")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("rejection_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("rejection_reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("remarks")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("round")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("start_date")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("status")
                         .HasColumnType("nvarchar(max)");
@@ -333,6 +384,9 @@ namespace RecruitmentPortal.WebApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("job_category_name")
                         .HasColumnType("nvarchar(max)");
@@ -357,6 +411,9 @@ namespace RecruitmentPortal.WebApp.Migrations
 
                     b.Property<string>("experience")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("job_role")
                         .HasColumnType("nvarchar(max)");

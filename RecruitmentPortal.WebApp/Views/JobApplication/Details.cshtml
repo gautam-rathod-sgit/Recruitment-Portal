@@ -1,12 +1,158 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel
+@using RecruitmentPortal.WebApp.Helpers
+@using RecruitmentPortal.Infrastructure.Data.Enum
 @if (ViewData["msg"] != null)
 {
     <script>window.onload = function () { alert("Round @ViewData["msg"] for candidate already exist !!") }</script>
 }
+@{
+    string isFresher = "Fresher";
+    string date_format = "dd-MM-yyyy";
+}
+<script src="~/lib//jquery//dist//jquery.min.js"></script>
+<script>
+    $(function () {
+        debugger;
+        $('button[data-toggle="ajax-modal"]').click(function (event) {
+            var url = $(this).data('url');
+            $.get(url).done(function (data) {
+                $('#modal-placeholder').html(data);
+                $('#modal-placeholder > .modal').modal('show');
+            });
+        });
+    });
+    $(function () {
+        //Display Only Date till today //
+        var dtToday = new Date();
+        var month = dtToday.getMonth() + 1;     // getMonth() is zero-based
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+        debugger;
+        var maxDate = year + '-' + month + '-' + day;
+        $('#demo').attr('min', maxDate);
+    });
+
+    //Function for setting Flag_Accepted value as true
+    function openPopup() {
+        debugger;
+        $("#Flag_Accepted").val(true);
+        $('#add-contact').modal('show');
+    }
+
+     //Function for setting Flag_Rejected value as true
+    function openPopupReject() {
+        debugger;
+        $("#Flag_Rejected").val(true);
+        $('#delete-contact').modal('show');
+    }
+
+</script>
+<style type="text/css">
+    .required:after {
+        content: "*";
+        font-weight: bold;
+        color: red;
+    }
+</style>
+
+
+<!-- Modal for Accepting -->
+<div class="modal fade" id="add-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Fill Details:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="UpdateJobApplicationPost">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" value="@Model.ID" id="ID" name="ID" />
+                    <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
+                    <input type="hidden" value="@Model.round" id="round" name="round" />
+                    <input type="hidden" value="@Model.status" id="status" name="status" />
+                    <input type="hidden" value="@Model.flag_Accepted" id="Flag_Accepted" name="Flag_Accepted" />
+                    <div class="form-group">
+                        <label asp-for="joining_date" class="control-label required">Joining Date:</label>
+                        <input asp-for="joining_date"  required class="form-control" type="date" id="demo" placeholder="dd/mm/yyyy" />
+                        <span asp-validation-for="joining_date" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="commitment_mode" class="control-label required">Commitment Mode: </label>
+                        <input type="radio" id="commitment_mode" name="commitment_mode" value="Cheques" required> Cheques &nbsp;
+                        <input type="radio" id="commitment_mode" name="commitment_mode" value="Documents"> Documents &nbsp;
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="offered_ctc" class="control-label required">Job Offer CTC:</label>
+                        <input asp-for="offered_ctc" required class="form-control" type="number" step=".01" min="0" />
+                        <span asp-validation-for="offered_ctc" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="remarks" class="control-label required">Remarks:</label>
+                        <input asp-for="remarks" required class="form-control" type="text" pattern="[a-zA-Z][a-zA-Z ]{2,}" />
+                        <span asp-validation-for="remarks" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-success" id="submit-btn">Accept</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal end -->
+
+<!-- Modal for Rejecting -->
+<div class="modal fade" id="delete-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Fill Details:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="UpdateJobApplicationPost">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" value="@Model.ID" id="ID" name="ID" />
+                    <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
+                    <input type="hidden" value="@Model.round" id="round" name="round" />
+                    <input type="hidden" value="@Model.status" id="status" name="status" />
+                    <input type="hidden" value="@Model.flag_Rejected" id="Flag_Rejected" name="Flag_Rejected" />
+                    <div class="form-group">
+                        <label asp-for="rejection_reason" class="control-label">Rejection Reason:</label>
+                        <input asp-for="rejection_reason" required class="form-control" type="text" id="demo"/>
+                        <span asp-validation-for="rejection_reason" class="text-danger"></span>
+                    </div>
+                    
+                    <div>
+                        <button type="submit" class="btn btn-success" id="submit-btn">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal end -->
+
 <div>
-    <h1 class="mb-2  bg-gradient-gray-dark text-white">Application Status :</h1>
+    <div class="row bg-gradient-gray-dark text-white">
+        <div class="col-md-5">
+            <h2 class="pl-2">Application Status :</h2>
+        </div>
+    </div>
+    <hr />
     <div class="d-flex justify-content-end">
-        <form asp-action="Index" asp-controller="Schedules" asp-route-id="@Model.candidateId" method="get">
+        <form asp-action="Index" asp-controller="Schedules" asp-route-id="@RSACSPSample.EncodeServerName(( Model.candidateId).ToString())" method="get">
             @if (Model.Schedules.Count() == 0)
             {
                 <button type="submit" class="btn btn-primary mr-2">
@@ -22,11 +168,21 @@
 
         </form>
         <form>
-            @Html.ActionLink("Accept", "UpdateJobApplication", "JobApplication", new { encry_id = Model.EncryptionId, complete = true }, new { @class = "btn btn-success mr-2" })
-            @Html.ActionLink("Reject", "UpdateJobApplication", "JobApplication", new { id = Model.ID, rejected = true }, new { @class = "btn btn-danger mr-2" })
+            <!-- Button trigger modal For Accepting Application-->
+            <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#add-contact" onclick="openPopup()">
+                Accept
+            </button>
+            <!-- Button trigger modal For Rejecting Application-->
+            <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#delete-contact" onclick="openPopupReject()">
+                Reject
+            </button>
+
+
+            @*@Html.ActionLink("Accept", "UpdateJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((Model.ID).ToString()), complete = true }, new { @class = "btn btn-success mr-2" })*@
+            @* @Html.ActionLink("Reject", "UpdateJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((Model.ID).ToString()), rejected = true }, new { @class = "btn btn-danger mr-2" })*@
         </form>
         <div>
-            <a asp-action="Index" class="btn btn-primary">Back to List</a>
+            <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Active" class="btn btn-primary">Back to List</a>
         </div>
     </div>
     <hr />
@@ -38,24 +194,85 @@
             @Html.DisplayFor(model => model.candidateName)
         </dd>
         <dt class="col-sm-2">
-            Applied for Position :
+            Job Title :
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.position)
         </dd>
+        <dt class="col-sm-2">
+            Job Role :
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.job_Role)
+        </dd>
+        <dt class="col-sm-2">
+            Applied Date :
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.date)
+        </dd>
 
+
+        @if (Model.candidate.experience == isFresher)
+        {
+            <dt class="col-sm-2">
+                Experience :
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.candidate.experience)
+            </dd>
+        }
+        else
+        {
+            <dt class="col-sm-2">
+                Experience :
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.candidate.experience)
+            </dd>
+            <dt class="col-sm-2">
+                Total Experience :
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.candidate.total_experience)
+            </dd>
+            <dt class="col-sm-2">
+                Relevent Experience :
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.candidate.relevent_experience)
+            </dd>
+            <dt class="col-sm-2">
+                Current CTC :
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.candidate.current_ctc)
+            </dd>
+            <dt class="col-sm-2">
+                Expected CTC :
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.candidate.expected_ctc)
+            </dd>
+            <dt class="col-sm-2">
+                Notice Period :
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.candidate.notice_period)
+            </dd>
+        }
     </dl>
 </div>
 
 @if (Model.Schedules.Count() > 0)
 {
     <table class="table table-sm table-bordered  table-striped">
-        <tr><th>Round No.</th><th>Interviewer</th><th>Rating</th><th>Remarks</th><th>Status</th><th>Action</th></tr>
+        <tr><th>Round No.</th><th>Interviewer</th><th>Rating</th><th>Remarks</th><th>Status</th><th>Date-Time</th><th>Action</th></tr>
         @foreach (var user in Model.Schedules)
         {
             var i = 0;
             <tr>
-                <td><b>@user.round</b></td>
+                <td>@Enum.GetName(typeof(RoundType), user.round)</td>
                 <td>
                     @foreach (var item in user.InterviewerNames)
                     {
@@ -65,9 +282,10 @@
                 <td>@user.rating</td>
                 <td>@user.remark</td>
                 <td><b>@user.statusName</b></td>
+                <td>@user.datetime</td>
                 <td>
-                    @Html.ActionLink("Edit", "UpdateScheduleOfJobApplication", "JobApplication", new { JobApplicationId = Model.ID, scheduleId = user.ID }, new { @class = "btn btn-primary mr-2" })
-                    @Html.ActionLink("Delete", "UpdateScheduleOfJobApplication", "JobApplication", new { JobApplicationId = Model.ID, scheduleId = user.ID, delete = true }, new { @class = "btn btn-danger mr-2" })
+                    @Html.ActionLink("Edit", "UpdateScheduleOfJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((Model.ID).ToString()), scheduleId = RSACSPSample.EncodeServerName((user.ID).ToString()) }, new { @class = "btn btn-primary mr-2" })
+                    @Html.ActionLink("Delete", "UpdateScheduleOfJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((Model.ID).ToString()), scheduleId = RSACSPSample.EncodeServerName((user.ID).ToString()), delete = true }, new { @class = "btn btn-danger mr-2" })
                 </td>
 
 
@@ -77,7 +295,10 @@
 }
 else
 {
-    <h4 class="text-gray text-center mt-4 text-capitalize"><strong>No Interview Schedules Yet.<br />
-            Click on Start Scheduling.</strong></h4>
+    <h4 class="text-gray text-center mt-4 text-capitalize">
+        <strong>
+            No Interview Schedules Yet.<br />
+            Click on Start Scheduling.
+        </strong>
+    </h4>
 }
-

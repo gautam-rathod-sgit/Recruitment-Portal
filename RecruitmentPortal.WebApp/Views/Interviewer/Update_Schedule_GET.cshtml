@@ -1,14 +1,25 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.SchedulesViewModel
 @using RecruitmentPortal.Infrastructure.Data.Enum
+@using RecruitmentPortal.WebApp.Helpers
 <script src="~/lib//jquery//dist//jquery.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         //for removing 0 on fields
         $("#rating").val($(this).val() == 0 ? '' : $(this).val());
 </script>
-
-<h4>Update Schedule :</h4>
+<style type="text/css">
+    .required:after {
+        content: "*";
+        font-weight: bold;
+        color: red;
+    }
+</style>
+<h4>Add Reviews:</h4>
 <hr />
+<div class="d-flex justify-content-end">
+    <div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Update_Schedule_POST" method="post">
@@ -17,7 +28,7 @@
             <input type="hidden" value="@Model.position" id="position" name="position" />
             <input type="hidden" value="@Model.datetime" id="datetime" name="datetime" />
             <input type="hidden" value="@Model.round" id="round" name="round" />
-            <input type="hidden" value="@Model.applying_through" id="applying_through" name="applying_through" />
+            @*<input type="hidden" value="@Model.applying_through" id="applying_through" name="applying_through" />*@
             <input type="hidden" value="@Model.mode_of_interview" id="mode_of_interview" name="mode_of_interview" />
             <input type="hidden" value="@Model.location" id="location" name="location" />
             <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
@@ -26,24 +37,26 @@
 
 
             <div class="form-group">
-                <label asp-for="rating" class="control-label">Rating : </label>
-                <input asp-for="rating" class="form-control" id="rating"/>
+                <label asp-for="rating" class="control-label ">Rating : </label>
+                <input asp-for="rating" class="form-control" id="rating" />
                 <span asp-validation-for="rating" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="remark" class="control-label">Remarks : </label>
+                <label asp-for="remark" class="control-label ">Remarks : </label>
                 <input asp-for="remark" class="form-control" />
                 <span asp-validation-for="remark" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="statusvalue" class="control-label">Status : </label>
+                <label asp-for="statusvalue" class="control-label required">Interview Status : </label>
                 <select asp-for="statusvalue" asp-items="Html.GetEnumSelectList<StatusType>()" class="form-control" required>
                     <option selected="selected" value="">Please select</option>
                 </select>
                 <span asp-validation-for="statusvalue" class="text-danger" />
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group d-flex">
+                <input type="submit" value="Save" class="btn btn-primary mr-3" />
+                <a asp-action="scheduleDetails" asp-controller="Interviewer" asp-route-scheduleId="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="mr-3 btn btn-danger">Cancel</a>
+
             </div>
         </form>
     </div>

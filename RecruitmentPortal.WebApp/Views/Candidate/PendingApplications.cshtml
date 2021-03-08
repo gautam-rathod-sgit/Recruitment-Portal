@@ -1,0 +1,108 @@
+﻿@model IQueryable<RecruitmentPortal.WebApp.ViewModels.CandidateViewModel>
+@using RecruitmentPortal.WebApp.Helpers
+@{
+    ViewData["Title"] = "Applications";
+}
+
+@{
+    int rowcount = 0;
+}
+<style>
+    .btn-size {
+        width: 100%;
+    }
+</style>
+@*<div class="bg-gradient-gray-dark text-white d-flex justify-content-between pt-2">
+
+    <h2 class="pl-2"> :</h2>
+    <div>
+        @using (Html.BeginForm("AllApplications", "Candidate", FormMethod.Post, new { @class = "mt-2" }))
+        {
+            @Html.DropDownList("Application_mode", new SelectList(ViewBag.menuSelect, "Value", "Text"), new { onchange = "this.form.submit()" })
+        }
+    </div>
+    <form asp-controller="Candidate" asp-action="PendingApplications" method="get">
+        <div class="mr-2">
+            <input type="text" name="SearchString" placeholder="Search by Field" class="mt-2">
+            <input class="btn btn-primary btn-sm" type="submit" value="Search" style="margin-top: -5px" />
+        </div>
+    </form>
+</div>*@
+<div class="row bg-gradient-gray-dark text-white">
+    <div class="col-md-5">
+        <h2 class="pl-2">New Applications :</h2>
+    </div>
+    <div class="col-md-7">
+        <div class="row d-flex justify-content-lg-end">
+            <div>
+                @using (Html.BeginForm("AllApplications", "Candidate", FormMethod.Post, new { @class = "mt-2 mr-2 " }))
+                {
+                    @Html.DropDownList("Application_mode", new SelectList(ViewBag.menuSelect, "Value", "Text"), new { onchange = "this.form.submit()", style = "width:100% ; height : 30px; border : 1px solid grey;", @class = "mr-2box-shadow" })
+                }
+            </div>
+            <form asp-controller="Candidate" asp-action="PendingApplications" method="get">
+                <div class="mr-2">
+                    <input type="text" name="SearchString" placeholder="Search by Field" class="mt-2">
+                    <input class="btn btn-primary btn-sm" type="submit" value="Search" style="margin-top: -5px" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@if (Model.Count() > 0)
+{
+    <table class="table table-sm table-bordered table-striped">
+        <tr><th>S.No.</th><th>Name</th><th>Job Title</th><th>Phone</th><th>SSC(%)</th><th>HSC(%)</th><th>Degree</th><th>Experience</th><th>Details</th></tr>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@(rowcount+=1).</td>
+                <td>@user.name</td>
+                <td>@user.jobName</td>
+                <td>@user.phone</td>
+                <td>@user.ssc_perc</td>
+                <td>@user.hsc_perc</td>
+
+                <td>@user.degree</td>
+                <td>@user.experience</td>
+
+                <td>
+
+                    @if (user.isActive == true && user.isSelected == true)
+                    {
+                        <button class="btn btn-size btn-sm btn-secondary">
+                            Selected
+                        </button>
+                    }
+                    @if (user.isActive == true && user.isSelected == false && user.isRejected == false)
+                    {
+                        <button class="btn  btn-size btn-sm btn-success">
+                            Active
+                        </button>
+                    }
+                    @if (user.isRejected == true)
+                    {
+                        <button class="btn  btn-size btn-sm btn-danger">
+                            Rejected
+                        </button>
+                    }
+                    @if (user.isActive == false && user.isSelected == false)
+                    {
+                        <form asp-action="Details" asp-route-id="@RSACSPSample.EncodeServerName((user.ID).ToString())" method="post">
+                            <button type="submit" class="btn btn-size btn-sm btn-primary">
+                                Details
+                            </button>
+                        </form>
+                    }
+
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <h4 class="text-gray text-center mt-4 text-capitalize"><strong>No Applications Yet.</strong></h4>
+}
+
+

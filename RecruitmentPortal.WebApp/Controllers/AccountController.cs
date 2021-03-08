@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data;
+using RecruitmentPortal.WebApp.Helpers;
 using RecruitmentPortal.WebApp.Interfaces;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
@@ -180,7 +181,6 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> UpdateUser(string id)
         {
-
             ApplicationUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
                 return View(user);
@@ -264,7 +264,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost]
+    
         public async Task<IActionResult> DeleteUser(string id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
