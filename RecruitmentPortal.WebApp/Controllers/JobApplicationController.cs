@@ -21,9 +21,18 @@ namespace RecruitmentPortal.WebApp.Controllers
         private string date_format = "dd-MM-yyyy";
         string activeMode = "Active";
         private static bool goback = false;
+        //jobApplicationStatus
         private string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
         private string status_Complete = Enum.GetName(typeof(JobApplicationStatus), 2);
         private string status_Rejected = Enum.GetName(typeof(JobApplicationStatus), 3);
+
+        //Application mode
+        private string mode_All = Enum.GetName(typeof(ApplicationMode), 1);
+        private string mode_Pending = Enum.GetName(typeof(ApplicationMode), 2);
+        private string mode_Active = Enum.GetName(typeof(ApplicationMode), 3);
+        private string mode_Selected = Enum.GetName(typeof(ApplicationMode), 4);
+        private string mode_Rejected = Enum.GetName(typeof(ApplicationMode), 5);
+
         private readonly IJobApplicationPage _jobApplicationPage;
         private readonly ISchedulesPage _schedulesPage;
         private readonly ICandidatePage _candidatePage;
@@ -110,11 +119,11 @@ namespace RecruitmentPortal.WebApp.Controllers
                 //creating a select list for selecting status type applications
                 List<SelectListItem> ObjItem = new List<SelectListItem>()
                 {
-                new SelectListItem {Text="All Applications",Value="All"},
-                new SelectListItem {Text="New",Value="Pending"},
-                new SelectListItem {Text="Active",Value="Active"},
-                new SelectListItem {Text="Selected",Value="Accepted"},
-                new SelectListItem {Text="Rejected",Value="Rejected"},
+                new SelectListItem {Text="All Applications",Value = mode_All},
+                new SelectListItem {Text="New",Value = mode_Pending},
+                new SelectListItem {Text="Active",Value = mode_Active },
+                new SelectListItem {Text="Selected",Value = mode_Selected},
+                new SelectListItem {Text="Rejected",Value = mode_Rejected},
                 };
                 ViewBag.menuSelect = ObjItem;
 
@@ -393,11 +402,11 @@ namespace RecruitmentPortal.WebApp.Controllers
             //creating a select list for selecting status type applications
             List<SelectListItem> ObjItem = new List<SelectListItem>()
                 {
-                  new SelectListItem {Text="All Applications",Value="All"},
-                  new SelectListItem {Text="New",Value="Pending"},
-                  new SelectListItem {Text="Active",Value="Active"},
-                  new SelectListItem {Text="Selected",Value="Accepted"},
-                  new SelectListItem {Text="Rejected",Value="Rejected"}
+                  new SelectListItem {Text="All Applications",Value = mode_All},
+                  new SelectListItem {Text="New",Value = mode_Pending},
+                  new SelectListItem {Text="Active",Value = mode_Active},
+                  new SelectListItem {Text="Selected",Value = mode_Selected},
+                  new SelectListItem {Text="Rejected",Value = mode_Rejected},
                 };
             ViewBag.menuSelect = ObjItem;
 
@@ -475,14 +484,15 @@ namespace RecruitmentPortal.WebApp.Controllers
         public async Task<IActionResult> RejectedJobApplications(string SearchString, string Application_mode)
         {
             IQueryable<JobApplicationViewModel> models = null;
+
             //creating a select list for selecting status type applications
             List<SelectListItem> ObjItem = new List<SelectListItem>()
                 {
-                  new SelectListItem {Text="All Applications",Value="All"},
-                  new SelectListItem {Text="New",Value="Pending" },
-                  new SelectListItem {Text="Active",Value="Active"},
-                  new SelectListItem {Text="Selected",Value="Accepted"},
-                  new SelectListItem {Text="Rejected",Value="Rejected"},
+                  new SelectListItem {Text="All Applications",Value = mode_All},
+                  new SelectListItem {Text="New",Value = mode_Pending},
+                  new SelectListItem {Text="Active",Value = mode_Active},
+                  new SelectListItem {Text="Selected",Value = mode_Selected},
+                  new SelectListItem {Text="Rejected",Value = mode_Rejected},
                 };
             ViewBag.menuSelect = ObjItem;
 
@@ -681,6 +691,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             //setting the status to pending
             var model = _dbContext.jobApplications.Where(x => x.ID == Convert.ToInt32(RSACSPSample.DecodeServerName(id))).FirstOrDefault();
             model.status = status_Pending;
+            model.start_date = DateTime.Now;
  
             //removing the existing schedules of that candidate.
 

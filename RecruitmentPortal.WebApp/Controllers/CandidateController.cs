@@ -22,10 +22,18 @@ namespace RecruitmentPortal.WebApp.Controllers
     public class CandidateController : Controller
     {
         IQueryable<CandidateViewModel> candidateList;
-        string activeMode = "Active";
+
         private string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
         private string status_Complete = Enum.GetName(typeof(JobApplicationStatus), 2);
         private string status_Rejected = Enum.GetName(typeof(JobApplicationStatus), 3);
+
+        //Application mode
+        private string mode_All = Enum.GetName(typeof(ApplicationMode), 1);
+        private string mode_Pending = Enum.GetName(typeof(ApplicationMode), 2);
+        private string mode_Active = Enum.GetName(typeof(ApplicationMode), 3);
+        private string mode_Selected = Enum.GetName(typeof(ApplicationMode), 4);
+        private string mode_Rejected = Enum.GetName(typeof(ApplicationMode), 5);
+
         CandidateViewModel FinalData = new CandidateViewModel();
         private readonly ICandidatePage _candidatePageServices;
         private readonly IDegreePage _degreePageServices;
@@ -69,19 +77,19 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> AllApplications(string SearchString, string Application_mode)
         {
-            if (Application_mode == status_Pending)
+            if (Application_mode == mode_Pending)
             {
                 return RedirectToAction("PendingApplications", "Candidate", new { Application_mode = Application_mode });
             }
-            if (Application_mode == activeMode)
+            if (Application_mode == mode_Active)
             {
                 return RedirectToAction("Index", "JobApplication", new { Application_mode = Application_mode });
             }
-            if (Application_mode == status_Complete)
+            if (Application_mode == mode_Selected)
             {
                 return RedirectToAction("SelectedJobApplications", "JobApplication", new { Application_mode  = Application_mode });
             }
-            if(Application_mode == status_Rejected)
+            if(Application_mode == mode_Rejected)
             {
                 return RedirectToAction("RejectedJobApplications", "JobApplication", new { Application_mode = Application_mode });
             }
@@ -94,11 +102,11 @@ namespace RecruitmentPortal.WebApp.Controllers
                 //creating a select list for selecting status type applications
                 List<SelectListItem> ObjItem = new List<SelectListItem>()
                 {
-                  new SelectListItem {Text="All Applications",Value="All"},
-                  new SelectListItem {Text="New",Value="Pending"},
-                  new SelectListItem {Text="Active",Value="Active"},
-                  new SelectListItem {Text="Selected",Value="Accepted"},
-                  new SelectListItem {Text="Rejected",Value="Rejected"},
+                  new SelectListItem {Text="All Applications",Value = mode_All},
+                  new SelectListItem {Text="New",Value = mode_Pending},
+                  new SelectListItem {Text="Active",Value = mode_Active},
+                  new SelectListItem {Text="Selected",Value = mode_Selected},
+                  new SelectListItem {Text="Rejected",Value = mode_Rejected},
                 };
                 ViewBag.menuSelect = ObjItem;
 
@@ -151,16 +159,18 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                 //creating a select list for selecting status type applications
                 List<SelectListItem> ObjItem = new List<SelectListItem>()
-                {
-                  new SelectListItem {Text="All Applications",Value="All"},
-                  new SelectListItem {Text="New",Value="Pending"},
-                  new SelectListItem {Text="Active",Value="Active"},
-                  new SelectListItem {Text="Selected",Value="Accepted"},
-                  new SelectListItem {Text="Rejected",Value="Rejected"},
-                };
+                    {
+                      new SelectListItem {Text="All Applications",Value = mode_All},
+                      new SelectListItem {Text="New",Value = mode_Pending},
+                      new SelectListItem {Text="Active",Value = mode_Active},
+                      new SelectListItem {Text="Selected",Value = mode_Selected},
+                      new SelectListItem {Text="Rejected",Value = mode_Rejected},
+                    };
                 ViewBag.menuSelect = ObjItem;
 
-                try
+
+
+            try
                 {
                     List<CandidateViewModel> newList = new List<CandidateViewModel>();
                     newList = modelList.ToList();

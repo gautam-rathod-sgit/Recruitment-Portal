@@ -8,6 +8,7 @@
 @{ DateTime cur_date = DateTime.Now;
     string date_format = "dd-MM-yyyy";
     string time_format = "HH:mm tt";
+    int i = 0;
 }
 
 <br />
@@ -76,25 +77,40 @@
     {
         <div class="container-fluid mb-2 box-shadow">
             <table class="table table-sm table-bordered table-striped">
-                <tr><th>S.No.</th><th>Candidate Name</th><th>Job Title</th><th>Mode of Interview</th><th>Date & Time</th><th>Details</th></tr>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Candidate Name</th>
+                    <th>Job Title</th>
+                    <th>Job Role</th>
+                    <th>Mode of Interview</th>
+                    <th>Date & Time</th>
+                    <th>Interviewer</th>
+                    <th>Details</th>
+                </tr>
                 @{ int rowcount = 0;}
                 @foreach (var item in Model.upcoming_schedules)
                 {
-                    <tr>
-                        <td>@(rowcount += 1).</td>
-                        <td>@item.candidate_name</td>
-                        <td>@item.position</td>
-                        <td>@item.mode_of_interview</td>
-                        <td>@item.datetime.ToString(date_format) at @item.datetime.ToString(time_format)</td>
-
-                        <td>
-                            <form asp-action="ScheduleDetails" asp-controller="Interviewer" asp-route-scheduleId="@RSACSPSample.EncodeServerName((item.ID).ToString())">
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    Details
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
+            <tr>
+                <td>@(rowcount += 1).</td>
+                <td>@item.candidate_name</td>
+                <td>@item.position</td>
+                <td>@item.jobRole</td>
+                <td>@item.mode_of_interview</td>
+                <td>@item.datetime.ToString(date_format) at @item.datetime.ToString(time_format)</td>
+                <td>
+                    @foreach (var data in item.InterviewerNames)
+                    {
+                        <p>@(i += 1).@data.Name</p>
+                    }
+                </td>
+                <td>
+                    <form asp-action="ScheduleDetails" asp-controller="Interviewer" asp-route-scheduleId="@RSACSPSample.EncodeServerName((item.ID).ToString())">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            Details
+                        </button>
+                    </form>
+                </td>
+            </tr>
                 }
             </table>
         </div>

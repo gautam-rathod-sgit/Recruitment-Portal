@@ -91,7 +91,7 @@
 <hr />
 <div>
 
-    @if (Model.status == status_Complete || Model.status == status_Pending)
+    @if (Model.status == status_Complete)
     {
         <div class="d-flex justify-content-end">
 
@@ -155,7 +155,7 @@
 
         </div>
     }
-    else
+    @if (Model.status == status_Rejected)
     {
         <div class="d-flex justify-content-end">
             <div>
@@ -169,6 +169,23 @@
                     Download Resume
                 </a>
             </div>
+            @if (ViewBag.backToAll == true)
+            {
+                <div>
+                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="All" class="btn btn-secondary">Back to List</a>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Rejected" class="btn btn-secondary">Back to List</a>
+                </div>
+            }
+        </div>
+    }
+    @if(Model.status == status_Pending)
+    {
+        <div class="d-flex justify-content-end">
             @if (ViewBag.backToAll == true)
             {
                 <div>
@@ -281,19 +298,13 @@
             </dd>
         }
 
-        @if (Model.status == "Accepted")
+        @if (Model.status == status_Complete)
         {
             <dt class="col-sm-4">
                 Apply Through
             </dt>
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.candidate.applying_through)
-            </dd>
-            <dt class="col-sm-4">
-                Interview Status
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.interview_Status)
             </dd>
             <dt class="col-sm-4">
                 Interview Remarks
@@ -320,7 +331,7 @@
                 @Html.DisplayFor(model => model.offered_ctc)
             </dd>
         }
-        else
+        @if (Model.status == status_Rejected)
         {
             <dt class="col-sm-4">
                 Job Title
@@ -340,21 +351,61 @@
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.rejection_date)
             </dd>
+            @if (Model.remarks != null)
+            {<dt class="col-sm-4">
+                    Remarks
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.rejection_reason)
+                </dd>
+            }
+            else
+            {
+                <dt class="col-sm-4">
+                    Remarks
+                </dt>
+                <dd class="col-sm-8">
+                    <p>No remarks available</p>
+                </dd>
+            }
+            @if (Model.listOfRounds.Count() > 0)
+            {
+                <dt class="col-sm-4">
+                    Interview Rounds Completed
+                </dt>
+                <dd class="col-sm-8">
+                    @foreach (var item in Model.listOfRounds)
+                    {
+                        var i = 0;
+                        <p>@(rowcount+=1).@item</p>
+                    }
+                </dd>
+            }
+            else
+            {
+                <dt class="col-sm-4">
+                    Interview Rounds Completed
+                </dt>
+                <dd class="col-sm-8">
+                    <p>No Rounds available.</p>
+                </dd>
+            }
+
+
+        }
+        else
+        {
             <dt class="col-sm-4">
-                Remarks
+                Applying Through
             </dt>
             <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.rejection_reason)
+                @Html.DisplayFor(model => model.candidate.applying_through)
             </dd>
             <dt class="col-sm-4">
-                Interview Rounds Completed
+                Current Interview Status
             </dt>
             <dd class="col-sm-8">
-                @foreach (var item in Model.listOfRounds)
-                {
-                    var i = 0;
-                    <p>@(rowcount+=1).@item[i]</p>
-                }
+                @Html.DisplayFor(model => model.status)
             </dd>
         }
 

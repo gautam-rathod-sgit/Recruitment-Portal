@@ -164,9 +164,20 @@ namespace RecruitmentPortal.WebApp.Controllers
                     var upcoming_schedules = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
                     upcoming_schedules = upcoming_schedules.Where(x => x.status != reqValue);
                     List<SchedulesViewModel> schedulelist = new List<SchedulesViewModel>();
+
+
+
                     //schedulelist = upcoming_schedules.ToList();
                     foreach(var item in upcoming_schedules)
                     {
+                        //getting interviewers names
+                        List<UserModel> listOfUser = getInterviewerNames(item.ID);
+                        item.InterviewerNames = listOfUser;
+
+                        //job role fetching
+                        item.jobRole = getJobRoleByCandidateId(item.candidateId);
+
+                        //fetching only pending schedules
                         data = _dbContext.jobApplications.Where(x => x.candidateId == item.candidateId).FirstOrDefault();
                         if (data.status == status_Pending)
                         {
@@ -174,6 +185,9 @@ namespace RecruitmentPortal.WebApp.Controllers
                         }
                     }
                     collection.upcoming_schedules = schedulelist;
+
+
+
                     //notification jobapplicationViewModels.
                     var notifyJobApplications = await _jobApplicationPage.getJobApplications();
                     collection.selected_application = notifyJobApplications.Where(x => x.status == status_Complete && x.notified == false).ToList();
@@ -289,6 +303,53 @@ namespace RecruitmentPortal.WebApp.Controllers
             var position = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).job_title;
             return position;
         }
+
+
+
+        /// <summary>
+        /// FETCHING JOB ROLE USING CANDIDATE ID FROM DATABASE
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string getJobRoleByCandidateId(int id)
+        {
+            int job_ID;
+            string job_role = null;
+
+            job_ID = _dbContext.JobPostCandidate.AsNoTracking().FirstOrDefault(x => x.candidate_Id == id).job_Id;
+            job_role = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).job_role;
+
+            return job_role;
+
+        }
+
+        /// <summary>
+        /// fetching interviewer's names by Schedule ID with help of SchedulesUsers.
+        /// </summary>
+        /// <param name="Sid"></param>
+        /// <returns></returns>
+        public List<UserModel> getInterviewerNames(int Sid)
+        {
+            List<SchedulesUsers> allusers = new List<SchedulesUsers>();
+            List<UserModel> interviewer_names = new List<UserModel>();
+            try
+            {
+                allusers = _dbContext.SchedulesUsers.Where(x => x.scheduleId == Sid).ToList();
+                foreach (var user in allusers)
+                {
+                    UserModel userModel = new UserModel();
+                    userModel.Name = _dbContext.Users.Where(x => x.Id == user.UserId).FirstOrDefault().UserName;
+                    userModel.Id = _dbContext.Users.Where(x => x.Id == user.UserId).FirstOrDefault().Id;
+                    interviewer_names.Add(userModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return interviewer_names;
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -108,7 +108,7 @@
         </button>
     </td>
             <td>
-                <form asp-action="SelectedJobApplicationsDetails" asp-route-id="@RSACSPSample.EncodeServerName((user.JobAppId).ToString())" asp-route-backToAll="true" method="post">
+                <form asp-action="SelectedJobApplicationsDetails"  asp-controller="JobApplication"  asp-route-id="@RSACSPSample.EncodeServerName((user.JobAppId).ToString())" asp-route-backToAll="true" method="post">
                     <button type="submit" class="btn btn-sm btn-primary">
                         Click here
                     </button>
@@ -123,7 +123,7 @@
         </button>
     </td>
             <td>
-                <form asp-action="SelectedJobApplicationsDetails" asp-route-id="@RSACSPSample.EncodeServerName((user.JobAppId).ToString())" asp-route-backToAll="true" method="post">
+                <form asp-action="SelectedJobApplicationsDetails"  asp-controller="JobApplication"  asp-route-id="@RSACSPSample.EncodeServerName((user.JobAppId).ToString())" asp-route-backToAll="true" method="post">
                     <button type="submit" class="btn btn-sm btn-primary">
                         Click here
                     </button>
