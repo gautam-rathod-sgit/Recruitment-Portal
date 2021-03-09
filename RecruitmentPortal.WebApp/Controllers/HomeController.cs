@@ -195,6 +195,8 @@ namespace RecruitmentPortal.WebApp.Controllers
                     {
                         item.candidateName = _dbContext.Candidate.Where(x => x.ID == item.candidateId).FirstOrDefault().name;
                         item.position = getPositionByCandidateId(item.candidateId);
+                        //job role fetching
+                        item.job_Role = getJobRoleByCandidateId(item.candidateId);
                     }
             }
             catch (Exception ex)

@@ -9,6 +9,10 @@
     string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
     string status_Complete = Enum.GetName(typeof(JobApplicationStatus), 2);
     string status_Rejected = Enum.GetName(typeof(JobApplicationStatus), 3);
+    string all_mode = "All";
+    string Pending_mode = "Pending";
+    string Selected_mode = "Accepted";
+    string Rejected_mode = "Rejected";
 }
 <script src="~/lib//jquery//dist//jquery.min.js"></script>
 <script>
@@ -90,7 +94,7 @@
 </div>
 <hr />
 <div>
-
+    @*Accpeted Application Details*@
     @if (Model.status == status_Complete)
     {
         <div class="d-flex justify-content-end">
@@ -133,7 +137,7 @@
             @if (ViewBag.backToAll == true)
             {
                 <div>
-                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="All" class="btn btn-secondary">Back to List</a>
+                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Back to List</a>
                 </div>
             }
             else
@@ -155,6 +159,7 @@
 
         </div>
     }
+    @*Rejected application data*@
     @if (Model.status == status_Rejected)
     {
         <div class="d-flex justify-content-end">
@@ -172,30 +177,25 @@
             @if (ViewBag.backToAll == true)
             {
                 <div>
-                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="All" class="btn btn-secondary">Back to List</a>
+                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Back to List</a>
                 </div>
             }
             else
             {
                 <div>
-                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Rejected" class="btn btn-secondary">Back to List</a>
+                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=Rejected_mode class="btn btn-secondary">Back to List</a>
                 </div>
             }
         </div>
     }
+    @*Active Application data*@
     @if(Model.status == status_Pending)
     {
         <div class="d-flex justify-content-end">
             @if (ViewBag.backToAll == true)
             {
                 <div>
-                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="All" class="btn btn-secondary">Back to List</a>
-                </div>
-            }
-            else
-            {
-                <div>
-                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Rejected" class="btn btn-secondary">Back to List</a>
+                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Back to List</a>
                 </div>
             }
         </div>

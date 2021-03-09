@@ -52,51 +52,63 @@
 @if (Model.Count() > 0)
 {
     <table class="table table-sm table-bordered table-striped">
-        <tr><th>S.No.</th><th>Name</th><th>Job Title</th><th>Phone</th><th>SSC(%)</th><th>HSC(%)</th><th>Degree</th><th>Experience</th><th>Details</th></tr>
+        <tr>
+            <th>S.No.</th>
+            <th>Name</th>
+            <th>Job Title</th>
+            <th>Job Role</th>
+            <th>Phone</th>
+            <th>SSC(%)</th>
+            <th>HSC(%)</th>
+            <th>Degree</th>
+            <th>Experience</th>
+            <th>Applied Date</th>
+            <th>Details</th>
+        </tr>
         @foreach (var user in Model)
         {
-            <tr>
-                <td>@(rowcount+=1).</td>
-                <td>@user.name</td>
-                <td>@user.jobName</td>
-                <td>@user.phone</td>
-                <td>@user.ssc_perc</td>
-                <td>@user.hsc_perc</td>
+    <tr>
+        <td>@(rowcount+=1).</td>
+        <td>@user.name</td>
+        <td>@user.jobName</td>
+        <td>@user.jobRole</td>
+        <td>@user.phone</td>
+        <td>@user.ssc_perc</td>
+        <td>@user.hsc_perc</td>
+        <td>@user.degree</td>
+        <td>@user.experience</td>
+        <td>@user.apply_date</td>
+        <td>
 
-                <td>@user.degree</td>
-                <td>@user.experience</td>
+            @if (user.isActive == true && user.isSelected == true)
+            {
+                <button class="btn btn-size btn-sm btn-secondary">
+                    Selected
+                </button>
+            }
+            @if (user.isActive == true && user.isSelected == false && user.isRejected == false)
+            {
+                <button class="btn  btn-size btn-sm btn-success">
+                    Active
+                </button>
+            }
+            @if (user.isRejected == true)
+            {
+                <button class="btn  btn-size btn-sm btn-danger">
+                    Rejected
+                </button>
+            }
+            @if (user.isActive == false && user.isSelected == false)
+            {
+                <form asp-action="Details" asp-controller="Candidate" asp-route-id="@RSACSPSample.EncodeServerName((user.ID).ToString())" method="post">
+                    <button type="submit" class="btn btn-size btn-sm btn-primary">
+                        Details
+                    </button>
+                </form>
+            }
 
-                <td>
-
-                    @if (user.isActive == true && user.isSelected == true)
-                    {
-                        <button class="btn btn-size btn-sm btn-secondary">
-                            Selected
-                        </button>
-                    }
-                    @if (user.isActive == true && user.isSelected == false && user.isRejected == false)
-                    {
-                        <button class="btn  btn-size btn-sm btn-success">
-                            Active
-                        </button>
-                    }
-                    @if (user.isRejected == true)
-                    {
-                        <button class="btn  btn-size btn-sm btn-danger">
-                            Rejected
-                        </button>
-                    }
-                    @if (user.isActive == false && user.isSelected == false)
-                    {
-                        <form asp-action="Details" asp-route-id="@RSACSPSample.EncodeServerName((user.ID).ToString())" method="post">
-                            <button type="submit" class="btn btn-size btn-sm btn-primary">
-                                Details
-                            </button>
-                        </form>
-                    }
-
-                </td>
-            </tr>
+        </td>
+    </tr>
         }
     </table>
 }

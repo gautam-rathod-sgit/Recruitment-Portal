@@ -124,15 +124,23 @@
     @if (Model.selected_application.Count() > 0)
     {
         <div class="container-fluid mb-2 box-shadow">
-            <table class="table table-sm table-bordered  table-striped">
-                <tr><th>S.No.</th><th>Candidate Name</th><th>Job Title</th><th>Joining Date</th><th>Confirm </th></tr>
+            <table class="table table-sm table-bordered  table-striped" style="table-layout: fixed; width: 100%">
+                <tr>
+                    <th>S.No.</th>
+                    <th>Candidate Name</th>
+                    <th>Job Title</th>
+                    <th>Job Role</th>
+                    <th>Joining Date</th>
+                    <th>Confirm </th>
+                </tr>
                 @{ int rowcount1 = 0;}
                 @foreach (var item in Model.selected_application)
                 {
                     <tr>
                         <td>@(rowcount1+=1).</td>
-                        <td>@item.candidateName</td>
-                        <td>@item.position</td>
+                        <td style="word-wrap: break-word">@item.candidateName</td>
+                        <td style="word-wrap: break-word">@item.position</td>
+                        <td  style="word-wrap: break-word">@item.job_Role</td>
                         <td id="joining_date">@item.joining_date.ToString(date_format)</td>
                         <td>
                             @if (item.joining_date > cur_date)

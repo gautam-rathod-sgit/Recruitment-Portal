@@ -266,7 +266,7 @@
 
 @if (Model.Schedules.Count() > 0)
 {
-    <table class="table table-sm table-bordered  table-striped">
+    <table class="table table-sm table-bordered  table-striped" style="table-layout: fixed; width: 100%">
         <tr><th>Round No.</th><th>Interviewer</th><th>Rating</th><th>Remarks</th><th>Status</th><th>Date-Time</th><th>Action</th></tr>
         @foreach (var user in Model.Schedules)
         {
@@ -280,7 +280,7 @@
                     }
                 </td>
                 <td>@user.rating</td>
-                <td>@user.remark</td>
+                <td style="word-wrap: break-word">@user.remark</td>
                 <td><b>@user.statusName</b></td>
                 <td>@user.datetime</td>
                 <td>

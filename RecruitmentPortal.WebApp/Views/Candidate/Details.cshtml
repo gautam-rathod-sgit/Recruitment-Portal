@@ -3,6 +3,8 @@
 @{
 
     string date_format = "dd-MM-yyyy";
+    string all_mode = "All";
+    string Pending_mode = "Pending";
 }
 
 
@@ -28,9 +30,19 @@
             @Html.ActionLink("Reject", "RejectApplicant", "Candidate", new { Cid = RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-danger mr-3" })
         </div>
         <br />
-        <div>
-            <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="All" class="btn btn-secondary">Back to List</a>
-        </div>
+        @if (ViewBag.backToAll == true)
+        {
+            <div>
+                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Back to List</a>
+            </div>
+        }
+        else
+        {
+            <div>
+                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=Pending_mode class="btn btn-secondary">Back to List</a>
+            </div>
+        }
+        
     </div>
     <dl class="row">
         <dt class="col-sm-2">

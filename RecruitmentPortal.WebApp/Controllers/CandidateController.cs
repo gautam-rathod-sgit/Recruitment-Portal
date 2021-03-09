@@ -178,6 +178,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     {
                         JobPostCandidate model = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault();
                         item.jobName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
+                        item.jobRole = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_role;
                         item.isActive = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).Any();
                     }
                     modelList = newList.AsQueryable();
@@ -508,8 +509,12 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(string id, bool backToAll)
         {
+            if (backToAll)
+            {
+                ViewBag.backToAll = backToAll;
+            }
             CandidateViewModel item = await _candidatePageServices.getCandidateById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
             return View(item);
         }
