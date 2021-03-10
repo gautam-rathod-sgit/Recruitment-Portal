@@ -321,7 +321,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     plist = await _jobPostPage.getJobPost();
                     foreach (JobPostViewModel obj in plist)
                     {
-                        obj.EncryptedId = HttpUtility.UrlEncode(EncryptionDecryption.GetEncrypt(obj.DetailId.ToString()));
+                        //obj.EncryptionId = HttpUtility.UrlEncode(EncryptionDecryption.GetEncrypt(obj.ID.ToString()));
                     }
                 }
                 catch (Exception ex)
