@@ -305,6 +305,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         public async Task<IActionResult> GetJobsList()
         {
             IQueryable<JobPostViewModel> plist = null;
+            List<JobPostViewModel> list = new List<JobPostViewModel>();
             if (User.IsInRole("Admin"))
             {
                 return RedirectToAction("AdminIndex", "Home");
@@ -317,19 +318,23 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 try
                 {
-                    TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Jobs Load Successfully..!!";
                     plist = await _jobPostPage.getJobPost();
-                    foreach (JobPostViewModel obj in plist)
+                    list = plist.ToList();
+
+                    foreach (JobPostViewModel obj in list)
                     {
-                        //obj.EncryptionId = HttpUtility.UrlEncode(EncryptionDecryption.GetEncrypt(obj.ID.ToString()));
+                        obj.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.Encrypt(obj.ID));
                     }
+
+                    TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Jobs Load Successfully..!!";
+                    return Json(new { data = list });
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                    return Json(new { data = plist });
                 }
             }
-            return Json(new { data = plist });
         }
         #endregion
     }

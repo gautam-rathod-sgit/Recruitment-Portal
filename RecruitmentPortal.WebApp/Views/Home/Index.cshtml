@@ -11,31 +11,38 @@
     <script>window.onload = function () { alert("@ViewBag.status") }</script>
 }
 
-<!-- Content Header (Page header) -->
+<style>
+    .table-striped > tbody > tr:nth-of-type(odd) {
+        background-color: #ecf0f5;
+    }
+
+    .table > thead > tr > th {
+        border-bottom: 2px solid #ecf0f5;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        border-top: 1px solid #ecf0f5;
+    }
+</style>
+
 <section class="content-header">
     <h1>
-        <i class="fa fa-info-circle"></i>Available Jobs
+        <i class="fa fa-info-circle"></i> Careers
     </h1>
 </section>
 
 <!-- Main content -->
 <section class="content">
     <div class="row">
-        <div class="box">
-            <!-- /.box-header -->
-            <div class="box-body">
-                <div class="col-sm-12">
-                    <table id="datatable" class="table table-bordered table-striped dataTable" role="grid">
-                        <thead>
-                            <tr>
-                                <th width="100px" class="text-center"></th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
+        <div class="col-sm-12">
+            <table id="datatable" class="table dataTable" role="grid">
+                <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
         </div>
-        <!-- /.box-body -->
     </div>
 </section>
 <!-- /.content -->
@@ -43,41 +50,17 @@
 <script>
     $(function () {
         bindDatatable();
-        $("#job_ID").click(function () {
-            var url = '@Url.Content("~/")' + "Home/GetEncryptedID";
-            var ddlsource = $('select[name="Jobid"]').val();
-                $.get(url, { Id: $(ddlsource).val() }, function (data) {
-                $("#job_ID").val() = data;
-            });
-        });
     });
 
     function bindDatatable() {
         $('#datatable').DataTable({
-            select: false,
-            searching: false,
+            lengthChange: true,
+            searching: true,
             ordering: false,
-            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            processing: true,
-            serverSide: true,
+            lengthMenu: [[5, 10, 25, 50, -1], [5,10, 25, 50, "All"]],
             paging: true,
             pagingType: "simple_numbers",
-            bDestroy: true,
-            bLengthChange: false,
-            pageLength:15,
-            bInfo:false,
-            language: {
-                "processing": "Loading",
-                "infoEmpty": "No Records Found",
-                "zeroRecords": "No Records Found",
-                "lengthMenu": "Display _MENU_ records",
-                paginate: {
-                    first: '«',
-                    previous: '‹',
-                    next: '›',
-                    last: '»'
-                }
-            },
+            pageLength:5,
             "ajax":{
                 "url": "@Url.Action("GetJobsList", "Home")",
                 "type": "GET",
@@ -85,50 +68,46 @@
             },
             "columns": [
                 {
-                    "sClass": "text-center",
                     "mRender": function (data, type, row) {
-                        var download = '<div class="col-md-12">'
-	                                    + '    <div class="box box-warning">'
-		                                + '        <div class="box-header with-border">'
-                                        + '            <h3 class="box-title"><strong><i class="fa fa-book margin-r-5"></i></strong>' + row.job_title +'</h3>'
-		                                + '        </div>'
-		                                + '        <div class="form-horizontal">'
-			                            + '            <div class="box-body">'
-				                        + '                <div class="form-group">'
-					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-map-marker margin-r-5"></i> Location: </strong></label>'
-					                    + '                    <div class="col-sm-10">' + row.location +'</div>'
-				                        + '                </div>'
-				                        + '                <div class="form-group">'
-					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Criteria: </strong></label>'
-					                    + '                    <div class="col-sm-10">' + row.eligibility_criteria + '</div>'
-				                        + '                </div>'
-				                        + '                <div class="form-group">'
-					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Experience: </strong></label>'
-                                        + '                    <div class="col-sm-10">' + row.experience + '</div>'
-				                        + '                </div>'
-				                        + '                <div class="form-group">'
-					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Role: </strong></label>'
-                                        + '                    <div class="col-sm-10">'+ row.job_role + '</div>'
-				                        + '                </div>'
-				                        + '                <div class="form-group">'
-					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Type: </strong></label>'
-                                        + '                    <div class="col-sm-10">' + row.job_type + '</div>'
-				                        + '                </div>'
-				                        + '                <div class="form-group">'
-					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Vacancy: </strong></label>'
-                                        + '                    <div class="col-sm-10">' + row.vacancy + '</div>'
-				                        + '                </div>'
-				                        + '                <div class="form-group">'
-					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Required Skills: </strong></label>'
-					                    + '                    <div class="col-sm-10">' + row.skills  +'</div>'
-				                        + '                </div>'
-			                            + '            </div>'
-                                        + '            <div class="box-footer">'
-                                        + '                <a href = "#" title = "Apply" class="btn btn-info" onclick = "applyforJob(\'' + row.EncryptionId + '\')">Apply</a>'
-			                            + '            </div>'
-		                                + '        </div>'
-	                                    + '    </div>'
-                                        + '</div>'
+                        var download =
+                            '    <div class="box box-warning">'
+                            + '        <div class="box-header with-border">'
+                            + '            <h3 class="box-title"><strong><i class="fa fa-book margin-r-5"></i></strong>' + row.job_title + '</h3>'
+                            + '        </div>'
+                            + '            <div class="box-body">'
+                            + '                <div class="row">'
+                            + '                    <label class="col-sm-2"><strong><i class="fa fa-map-marker margin-r-5"></i> Location: </strong></label>'
+                            + '                    <div class="col-sm-10">' + row.location + '</div>'
+                            + '                </div>'
+                            + '                <div class="row">'
+                            + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Criteria: </strong></label>'
+                            + '                    <div class="col-sm-10">' + row.eligibility_criteria + '</div>'
+                            + '                </div>'
+                            + '                <div class="row">'
+                            + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Experience: </strong></label>'
+                            + '                    <div class="col-sm-10">' + row.experience + '</div>'
+                            + '                </div>'
+                            + '                <div class="row">'
+                            + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Role: </strong></label>'
+                            + '                    <div class="col-sm-10">' + row.job_role + '</div>'
+                            + '                </div>'
+                            + '                <div class="row">'
+                            + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Type: </strong></label>'
+                            + '                    <div class="col-sm-10">' + row.job_type + '</div>'
+                            + '                </div>'
+                            + '                <div class="row">'
+                            + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Vacancy: </strong></label>'
+                            + '                    <div class="col-sm-10">' + row.vacancy + '</div>'
+                            + '                </div>'
+                            + '                <div class="row">'
+                            + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Required Skills: </strong></label>'
+                            + '                    <div class="col-sm-10">' + row.skills + '</div>'
+                            + '                </div>'
+                            + '            </div>'
+                            + '            <div class="box-footer">'
+                            + '                <a href = "javascript:void(0);" title = "Apply" class="btn btn-info" onclick = "applyforJob(\'' + row.encryptedId + '\')">Apply</a>'
+                            + '            </div>'
+                            + '    </div>';
                         return download;
                     }
                 },
@@ -138,6 +117,6 @@
     }
 
     function applyforJob(Jobid) {
-        window.location.href = '@Url.Action("Index", "Candidate")?Jobid=' + Jobid;
+        window.location.href = '@Url.Action("Index", "Candidate")?id=' + Jobid;
     }
 </script>

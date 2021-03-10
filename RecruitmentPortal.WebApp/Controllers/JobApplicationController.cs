@@ -18,6 +18,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 {
     public class JobApplicationController : Controller
     {
+        #region private variables
         private string date_format = "dd-MM-yyyy";
         string activeMode = "Active";
         private static bool goback = false;
@@ -39,7 +40,9 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly ISchedulesUsersPage _schedulesUsersPage;
         private readonly RecruitmentPortalDbContext _dbContext;
         private readonly IDataProtector _Protector;
+        #endregion
 
+        #region Constructor
         public JobApplicationController(IJobApplicationPage jobApplicationPage,
             RecruitmentPortalDbContext dbContext,
             ISchedulesPage schedulesPage, IDataProtectionProvider dataProtectionProvider,
@@ -54,8 +57,9 @@ namespace RecruitmentPortal.WebApp.Controllers
             _dbContext = dbContext;
             _Protector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.JobAppDetailIdRouteValue);
         }
+        #endregion
 
-
+        #region Public Methods
         /// <summary>
         /// SHOWING ALL THE ACTIVE-JOB APPLICATION IN LIST FORM
         /// </summary>
@@ -856,6 +860,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             //}
             return interview_status;
         }
-
+        #endregion
     }
 }

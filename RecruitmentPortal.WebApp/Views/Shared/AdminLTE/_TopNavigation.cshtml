@@ -34,7 +34,7 @@
 
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li class="nav-item border box-shadow">
-                                <a class="nav-link font-weight-normal text-white text-lg" asp-area="" asp-controller="Account" asp-action="Profile">
+                                @*<a class="nav-link font-weight-normal text-white text-lg" asp-area="" asp-controller="Account" asp-action="Profile">
                                         @if (User.IsInRole("Admin"))
                                         {
                                             <span>Admin : Hello @User.Identity.Name !</span>
@@ -43,8 +43,7 @@
                                         {
                                             <span>Interviewer : Hello @User.Identity.Name !</span>
                                         }
-                                    </a>
-                                @*<a class="nav-link font-weight-normal text-white text-lg" asp-area="" asp-controller="Account" asp-action="Profile">Profile</a>*@
+                                    </a>*@
                             </li>
                             <li class="nav-item border box-shadow">
                                 <a class="nav-link font-weight-normal text-white text-lg" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>

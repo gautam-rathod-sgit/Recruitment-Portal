@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RecruitmentPortal.WebApp.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RecruitmentPortal.WebApp.ViewModels
 {
-    public class JobPostViewModel
+    public class JobPostViewModel : EncyptionHelperModel
     {
         //custom made
         public int ID { get; set; }
