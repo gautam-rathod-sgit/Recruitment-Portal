@@ -1,23 +1,7 @@
-﻿
-@using RecruitmentPortal.WebApp.Helpers
-@model PaginatedList<RecruitmentPortal.WebApp.ViewModels.JobPostViewModel>
-
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
-<script src="~/lib//jquery//dist//jquery.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#job_ID").click(function () {
-            debugger;
-            var url = '@Url.Content("~/")' + "Home/GetEncryptedID";
-            var ddlsource = $('select[name="Jobid"]').val(); debugger;
-                 $.get(url, { Id: $(ddlsource).val() }, function (data) {
-                     debugger; $("#job_ID").val() = data;
-                });
-            });
-        });
-</script>
+
 @if (ViewData["msg"] != null)
 {
     <script>window.onload = function () { alert("@ViewData["msg"] already Applied !!") }</script>
@@ -27,105 +11,133 @@
     <script>window.onload = function () { alert("@ViewBag.status") }</script>
 }
 
-<div class="text-center">
-    <h1 class="display-4 text-center"><b>Recruitment Portal</b></h1>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        <i class="fa fa-info-circle"></i>Available Jobs
+    </h1>
+</section>
 
-    @if (!User.IsInRole("Admin") && !User.IsInRole("Interviewer"))
-    {
-        <form asp-controller="Home" asp-action="Index" method="get">
-            <p>
-                Job-Title / Location / Job-Role : <input type="text" name="SearchString">
-                <input class="btn btn-primary" type="submit" value="Search" />
-            </p>
-        </form>
-    }
-</div>
-
-@if (!User.IsInRole("Admin") && !User.IsInRole("Interviewer"))
-{
-    <div class="d-flex btn justify-content-between">
-        <div class="border box-shadow" style="padding:5px; border-radius:5px">
-            <strong>Sort By : </strong>
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]" class="mr-2">
-                Job Title
-            </a>
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["LocationSortParm"]" class="mr-2">
-                Location
-            </a>
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["JobRoleSortParm"]" class="mr-2">
-                Job Role
-            </a>
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["JobTypeSortParm"]">
-                Job Type
-            </a>
-        </div>
-        <div class="box-shadow">
-
-            @*-------Added For Sorting---------*@
-            @*//pagination links*@
-            @{
-                var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-                var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-            }
-
-            <a asp-action="Index"
-               asp-route-sortOrder="@ViewData["CurrentSort"]"
-               asp-route-pageNumber="@(Model.PageIndex - 1)"
-               asp-route-currentFilter="@ViewData["CurrentFilter"]"
-               class="btn btn-default font-weight-bold @prevDisabled">
-                Previous
-            </a>
-            <a asp-action="Index"
-               asp-route-sortOrder="@ViewData["CurrentSort"]"
-               asp-route-pageNumber="@(Model.PageIndex + 1)"
-               asp-route-currentFilter="@ViewData["CurrentFilter"]"
-               class="btn btn-default font-weight-bold @nextDisabled">
-                Next
-            </a>
-        </div>
-    </div>
-
-}
-
-@if (Model.Count() > 0)
-{
-    <h2 class="mb-2 text-center">Available Jobs</h2>
-    <hr />
-
-    <div class="container mb-2 box-shadow">
-
-        @foreach (var item in Model)
-        {
-            <div class="row mb-2 p-3" style=" height:auto;
-/* border-radius: 30px;*/
-border-top: 2px solid grey;
-border-bottom: 2px solid grey;
-font-family :'Trebuchet MS'; ">
-                <div class="col-md-6 flex-wrap">
-
-
-                    <strong class="lead" style="font-size:xx-large">@item.job_title</strong><br />
-                    <strong class="lead text-orange"><i class="fa fa-map-marker-alt"></i></strong><strong class="lead"> @item.location</strong><br />
-                    <strong class="lead text-orange"><i class="fa fa-graduation-cap"></i></strong><strong class="lead"> @item.eligibility_criteria</strong> <br />
-                    <strong class="lead text-orange"><i class="fa fa-briefcase"></i></strong><strong class="lead"> @item.experience</strong> <br />
-                    <strong class="lead">Job Role : </strong><span class="lead text-secondary">@item.job_role</span><br />
-                    <strong class="lead">Job Type : </strong><span class="lead text-secondary">@item.job_type</span><br />
-                    <strong class="lead">Vacancy : </strong><span class="lead text-secondary">@item.vacancy</span><br />
-                    <strong class="lead">Required Skills : </strong><span class="lead text-secondary">@item.skills</span> <br /><br />
-
-
-                    @Html.ActionLink("Apply", "Index", "Candidate", new { Jobid = item.ID }, new { @id = "job_ID", @class = "btn btn-primary" })
-                    @*<a asp-controller="Candidate" asp-action="Index" asp-route-job_id ="@item.ID" class = "btn btn-primary">
-                            Apply
-                        </a>*@
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="col-sm-12">
+                    <table id="datatable" class="table table-bordered table-striped dataTable" role="grid">
+                        <thead>
+                            <tr>
+                                <th width="100px" class="text-center"></th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
-
-
             </div>
-        }
+        </div>
+        <!-- /.box-body -->
     </div>
-}
-else
-{
-    <h4 class="text-gray text-center">No Jobs Yet.</h4>
-}
+</section>
+<!-- /.content -->
+
+<script>
+    $(function () {
+        bindDatatable();
+        $("#job_ID").click(function () {
+            var url = '@Url.Content("~/")' + "Home/GetEncryptedID";
+            var ddlsource = $('select[name="Jobid"]').val();
+                $.get(url, { Id: $(ddlsource).val() }, function (data) {
+                $("#job_ID").val() = data;
+            });
+        });
+    });
+
+    function bindDatatable() {
+        $('#datatable').DataTable({
+            select: false,
+            searching: false,
+            ordering: false,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            processing: true,
+            serverSide: true,
+            paging: true,
+            pagingType: "simple_numbers",
+            bDestroy: true,
+            bLengthChange: false,
+            pageLength:15,
+            bInfo:false,
+            language: {
+                "processing": "Loading",
+                "infoEmpty": "No Records Found",
+                "zeroRecords": "No Records Found",
+                "lengthMenu": "Display _MENU_ records",
+                paginate: {
+                    first: '«',
+                    previous: '‹',
+                    next: '›',
+                    last: '»'
+                }
+            },
+            "ajax":{
+                "url": "@Url.Action("GetJobsList", "Home")",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                {
+                    "sClass": "text-center",
+                    "mRender": function (data, type, row) {
+                        var download = '<div class="col-md-12">'
+	                                    + '    <div class="box box-warning">'
+		                                + '        <div class="box-header with-border">'
+                                        + '            <h3 class="box-title"><strong><i class="fa fa-book margin-r-5"></i></strong>' + row.job_title +'</h3>'
+		                                + '        </div>'
+		                                + '        <div class="form-horizontal">'
+			                            + '            <div class="box-body">'
+				                        + '                <div class="form-group">'
+					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-map-marker margin-r-5"></i> Location: </strong></label>'
+					                    + '                    <div class="col-sm-10">' + row.location +'</div>'
+				                        + '                </div>'
+				                        + '                <div class="form-group">'
+					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Criteria: </strong></label>'
+					                    + '                    <div class="col-sm-10">' + row.eligibility_criteria + '</div>'
+				                        + '                </div>'
+				                        + '                <div class="form-group">'
+					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Experience: </strong></label>'
+                                        + '                    <div class="col-sm-10">' + row.experience + '</div>'
+				                        + '                </div>'
+				                        + '                <div class="form-group">'
+					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Role: </strong></label>'
+                                        + '                    <div class="col-sm-10">'+ row.job_role + '</div>'
+				                        + '                </div>'
+				                        + '                <div class="form-group">'
+					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Type: </strong></label>'
+                                        + '                    <div class="col-sm-10">' + row.job_type + '</div>'
+				                        + '                </div>'
+				                        + '                <div class="form-group">'
+					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Vacancy: </strong></label>'
+                                        + '                    <div class="col-sm-10">' + row.vacancy + '</div>'
+				                        + '                </div>'
+				                        + '                <div class="form-group">'
+					                    + '                    <label class="col-sm-2"><strong><i class="fa fa-book margin-r-5"></i>Required Skills: </strong></label>'
+					                    + '                    <div class="col-sm-10">' + row.skills  +'</div>'
+				                        + '                </div>'
+			                            + '            </div>'
+                                        + '            <div class="box-footer">'
+                                        + '                <a href = "#" title = "Apply" class="btn btn-info" onclick = "applyforJob(\'' + row.EncryptionId + '\')">Apply</a>'
+			                            + '            </div>'
+		                                + '        </div>'
+	                                    + '    </div>'
+                                        + '</div>'
+                        return download;
+                    }
+                },
+            ],
+            "order": [[0, "asc"]]
+        });
+    }
+
+    function applyforJob(Jobid) {
+        window.location.href = '@Url.Action("Index", "Candidate")?Jobid=' + Jobid;
+    }
+</script>

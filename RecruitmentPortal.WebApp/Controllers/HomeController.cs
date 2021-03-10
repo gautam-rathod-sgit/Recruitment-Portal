@@ -16,11 +16,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace RecruitmentPortal.WebApp.Controllers
 {
     public class HomeController : Controller
     {
+        #region private variables
         private string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
         private string status_Complete = Enum.GetName(typeof(JobApplicationStatus), 2);
         readonly int reqValue = Convert.ToInt32(Enum.Parse(typeof(StatusType), "Completed"));
@@ -32,6 +34,9 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly IJobApplicationPage _jobApplicationPage;
         private readonly ICandidatePage _candidatePage;
         private readonly IDataProtector _Protector;
+        #endregion
+
+        #region Constructor
         public HomeController(ICandidatePage candidatePage,
             IJobApplicationPage jobApplicationPage,
             ISchedulesPage schedulesPage,
@@ -51,7 +56,9 @@ namespace RecruitmentPortal.WebApp.Controllers
             _jobPostPage = jobPostPage;
             _Protector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.JobPostIdRouteValue);
         }
+        #endregion
 
+        #region Public Methods
         /// <summary>
         /// This method fetches Home Page
         /// </summary>
@@ -60,87 +67,87 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="pageNumber"></param>
         /// <param name="s"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string SearchString, string sortOrder, int? pageNumber, string s)
-        {
-            if (User.IsInRole("Admin"))
-            {
-                return RedirectToAction("AdminIndex", "Home");
-            }
-            if (User.IsInRole("Interviewer"))
-            {
-                return RedirectToAction("InterviewerIndex", "Home");
-            }
-            else
-            {
-                //for candidate conflict
-                if (s != null)
-                    ViewData["msg"] = s;
+        //public async Task<IActionResult> Index(string SearchString, string sortOrder, int? pageNumber, string s)
+        //{
+        //    if (User.IsInRole("Admin"))
+        //    {
+        //        return RedirectToAction("AdminIndex", "Home");
+        //    }
+        //    if (User.IsInRole("Interviewer"))
+        //    {
+        //        return RedirectToAction("InterviewerIndex", "Home");
+        //    }
+        //    else
+        //    {
+        //        //for candidate conflict
+        //        if (s != null)
+        //            ViewData["msg"] = s;
 
-                ViewData["CurrentSort"] = sortOrder;
-                ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "job_title" : "";
-                ViewData["LocationSortParm"] = String.IsNullOrEmpty(sortOrder) ? "location" : "";
-                ViewData["JobRoleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "job_role" : "";
-                ViewData["JobTypeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "job_type" : "";
+        //        ViewData["CurrentSort"] = sortOrder;
+        //        ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "job_title" : "";
+        //        ViewData["LocationSortParm"] = String.IsNullOrEmpty(sortOrder) ? "location" : "";
+        //        ViewData["JobRoleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "job_role" : "";
+        //        ViewData["JobTypeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "job_type" : "";
 
 
-                IQueryable<JobPostViewModel> plist = await _jobPostPage.getJobPost();
-                //IEnumerable<JobPostViewModel> newlist;
-                //newlist = plist.ToList();
-                //foreach(var item in newlist)
-                //{
-                //    item.EncryptionId = _Protector.Protect(item.ID.ToString());
-                //}
-                //plist = newlist.AsQueryable();
-                //foreach(var item in plist)
-                //{
-                //    item.EncryptionId = _Protector.Protect(item.ID.ToString());
-                //}
-                //plist = plist.Select(c =>
-                //{
-                //    c.EncryptionId = _Protector.Protect(c.ID.ToString());
-                //});
-                try
-                {
-                    if (!String.IsNullOrEmpty(SearchString))
-                    {
-                        plist = plist.Where(s => s.job_title.ToUpper().Contains(SearchString.ToUpper()) || s.location.ToUpper().Contains(SearchString.ToUpper()) || s.job_role.ToUpper().Contains(SearchString.ToUpper()) || s.job_type.ToUpper().Contains(SearchString.ToUpper()));
-                    }
+        //        IQueryable<JobPostViewModel> plist = await _jobPostPage.getJobPost();
+        //        //IEnumerable<JobPostViewModel> newlist;
+        //        //newlist = plist.ToList();
+        //        //foreach(var item in newlist)
+        //        //{
+        //        //    item.EncryptionId = _Protector.Protect(item.ID.ToString());
+        //        //}
+        //        //plist = newlist.AsQueryable();
+        //        //foreach(var item in plist)
+        //        //{
+        //        //    item.EncryptionId = _Protector.Protect(item.ID.ToString());
+        //        //}
+        //        //plist = plist.Select(c =>
+        //        //{
+        //        //    c.EncryptionId = _Protector.Protect(c.ID.ToString());
+        //        //});
+        //        try
+        //        {
+        //            if (!String.IsNullOrEmpty(SearchString))
+        //            {
+        //                plist = plist.Where(s => s.job_title.ToUpper().Contains(SearchString.ToUpper()) || s.location.ToUpper().Contains(SearchString.ToUpper()) || s.job_role.ToUpper().Contains(SearchString.ToUpper()) || s.job_type.ToUpper().Contains(SearchString.ToUpper()));
+        //            }
 
-                    switch (sortOrder)
-                    {
-                        case "job_title":
-                            plist = plist.OrderByDescending(s => s.job_title);
-                            break;
+        //            switch (sortOrder)
+        //            {
+        //                case "job_title":
+        //                    plist = plist.OrderByDescending(s => s.job_title);
+        //                    break;
 
-                        case "location":
-                            plist = plist.OrderBy(s => s.location);
-                            break;
+        //                case "location":
+        //                    plist = plist.OrderBy(s => s.location);
+        //                    break;
 
-                        case "job_role":
-                            plist = plist.OrderByDescending(s => s.job_role);
-                            break;
+        //                case "job_role":
+        //                    plist = plist.OrderByDescending(s => s.job_role);
+        //                    break;
 
-                        case "job_type":
-                            plist = plist.OrderByDescending(s => s.job_type);
-                            break;
+        //                case "job_type":
+        //                    plist = plist.OrderByDescending(s => s.job_type);
+        //                    break;
 
-                        default:
-                            plist = plist.OrderBy(s => s.job_title);
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
+        //                default:
+        //                    plist = plist.OrderBy(s => s.job_title);
+        //                    break;
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                    Console.WriteLine(ex.Message);
-                }
-                //for sorting
-                int pageSize = 4;
+        //            Console.WriteLine(ex.Message);
+        //        }
+        //        //for sorting
+        //        int pageSize = 4;
+        //        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Jobs Load Successfully..!!";
+        //        return View(await PaginatedList<JobPostViewModel>.CreateAsync(plist.AsNoTracking(), pageNumber ?? 1, pageSize));
+        //    }
+        //}
 
-                return View(await PaginatedList<JobPostViewModel>.CreateAsync(plist.AsNoTracking(), pageNumber ?? 1, pageSize));
-            }
-
-        }
         //public IQueryable<JobPostViewModel> Addon(List<JobPostViewModel> newlist)
         //{
         //    foreach (var item in newlist)
@@ -149,6 +156,12 @@ namespace RecruitmentPortal.WebApp.Controllers
         //    }
         //    return newlist.AsQueryable();
         //}
+
+        public ActionResult Index()
+        {
+            return View();
+        }
+
         public String GetEncryptedID(int Id)
         {
             return _Protector.Protect(Id.ToString());
@@ -288,5 +301,36 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public async Task<IActionResult> GetJobsList()
+        {
+            IQueryable<JobPostViewModel> plist = null;
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("AdminIndex", "Home");
+            }
+            if (User.IsInRole("Interviewer"))
+            {
+                return RedirectToAction("InterviewerIndex", "Home");
+            }
+            else
+            {
+                try
+                {
+                    TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Jobs Load Successfully..!!";
+                    plist = await _jobPostPage.getJobPost();
+                    foreach (JobPostViewModel obj in plist)
+                    {
+                        obj.EncryptedId = HttpUtility.UrlEncode(EncryptionDecryption.GetEncrypt(obj.DetailId.ToString()));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return Json(new { data = plist });
+        }
+        #endregion
     }
 }

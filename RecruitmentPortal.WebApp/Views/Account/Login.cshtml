@@ -1,51 +1,63 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.LoginViewModel
 @{
-    ViewData["Title"] = "Login";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Log In - Shaligran Buildcon</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+    <partial name="AdminLTE/_Styles" />
+    <script src="~/Content/js/jQuery-2.2.0.min.js"></script>
+</head>
 
-<div class="login-page" style="background-color:lightgray">
-    <div class="login-box box-shadow"
-         style="border:2px solid gray;
-background-color:azure;
-margin-bottom:80px;
-padding-top:30px;
-padding-right:30px;
-padding-bottom:30px;
-padding-left:30px">
-
-        <div class="login-logo">
-            <b>Recruitment Portal</b>
-        </div>
-        <!-- /.login-logo -->
+<body class="hold-transition login-page">
+    <div class="login-box">
         <div class="login-box-body">
-            <p class="login-box-msg">Sign in to start your session</p>
+            <div class="login-logo">
+                <a asp-action="Index" asp-controller="Home">
+                    <img src="~/img/shaligram_logo1.png" height="auto" width="300px" />
+                </a>
+            </div>
+            <div class="login-logo">
+                <b>Recruitment Portal</b>
+            </div>
 
             <form asp-action="Login">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group position-relative">
-                    <i class="fas fa-envelope text-gray position-absolute" style=" margin-left:87%; margin-top:4%"></i>
-                    <input asp-for="Email" class="form-control" placeholder="Email" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                <div class="form-group has-feedback">
+                    <input asp-for="Email" class="form-control" placeholder="Email">
+                    <span asp-validation-for="Email" class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 </div>
-                <div class="form-group position-relative">
-                    <i class="fas fa-lock text-gray position-absolute" style="margin-left: 87%; margin-top: 4%"></i>
-                    <input asp-for="Password" class="form-control" placeholder="Password" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
+                <div class="form-group has-feedback">
+                    <input asp-for="Password" class="form-control" placeholder="Password">
+                    <span asp-validation-for="Password" class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <a asp-action="Index" asp-controller="Home">Forgot Password?</a>
+                    </div>
                 </div>
 
-                <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
-                    </label>
-                </div>
-
-                <div class="form-group">
-                    <input type="submit" value="Login" class="btn text-white" style="background-color:#ff5722; width:300px" />
+                <div class="social-auth-links text-center">
+                    <button type="submit" class="btn btn-block" style="background-color:#ff5722;color: white;font-size: 18px;">
+                        Login <i class="fa fa-arrow-circle-right"></i>
+                    </button>
                 </div>
             </form>
-            <div>
-                <a asp-action="Index" asp-controller="Home">Back to Home</a>
-            </div>
         </div>
     </div>
-</div>
+    <partial name="AdminLTE/_Scripts" />
+</body>
+</html>

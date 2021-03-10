@@ -1,0 +1,11 @@
+﻿.logo{
+    padding:0 !important;
+}
+
+.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #e08e0b;
+    border-color: #e08e0b;
+}
