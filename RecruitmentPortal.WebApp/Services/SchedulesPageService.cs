@@ -60,5 +60,13 @@ namespace RecruitmentPortal.WebApp.Services
         {
             await _schedulesRepository.Delete(await _schedulesRepository.getById(id));
         }
+
+        public async Task<IQueryable<SchedulesViewModel>> GetAllSchedules()
+        {
+            IQueryable<SchedulesViewModel> query1;
+            var item = await _schedulesRepository.getAll();
+            query1 = item.ProjectTo<SchedulesViewModel>(_mapper.ConfigurationProvider);
+            return query1;
+        }
     }
 }

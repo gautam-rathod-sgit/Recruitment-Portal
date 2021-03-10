@@ -1,21 +1,26 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.JobPostViewModel
-
+@using RecruitmentPortal.WebApp.Helpers
 @{
     ViewData["Title"] = "UpdateJobPost";
 }
 
-<h1  class="bg-gradient-gray-dark text-white">Update JobPost :</h1>
+<h1 class="bg-gradient-gray-dark text-white">Update JobPost :</h1>
 
 <hr />
+
+<div>
+    <a asp-action="DetailsJobcategory" asp-controller="JobCategory" asp-route-id="@RSACSPSample.EncodeServerName((Model.JobCategoryId).ToString())" class="btn btn-primary">Back to List</a>
+</div>
+<hr/>
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="UpdateJobPost">
+        <form asp-action="UpdateJobPostPost">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" value="@Model.JobCategoryId" id="JobCategoryId" name="JobCategoryId" />
             <input type="hidden" value="@Model.ID" id="ID" name="ID" />
             <div class="form-group">
                 <label asp-for="job_title" class="control-label"></label>
-                <input asp-for="job_title" class="form-control" readonly/>
+                <input asp-for="job_title" class="form-control" readonly />
                 <span asp-validation-for="job_title" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -61,7 +66,4 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 

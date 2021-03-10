@@ -18,5 +18,7 @@ namespace RecruitmentPortal.WebApp.Interfaces
         //using specification
         public Task<CandidateViewModel> getCandidateByIdWithSchedules(int cid);
 
+        //public Task DeleteCandidateById(int id);
+
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.DataProtection;
+using RecruitmentPortal.WebApp.Security;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
@@ -8,6 +10,14 @@ namespace RecruitmentPortal.WebApp.Helpers
 {
     public class EmailHelper
     {
+        //For Security: Encrypt URL Params
+        private readonly IDataProtector protector;
+
+        public EmailHelper(IDataProtectionProvider dataProtectionProvider, DataProtectionPurposeStrings dataProtectionPurposeStrings)
+        {
+            protector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.JobAppDetailIdRouteValue);
+        }
+
         public bool SendEmail(string userEmail, string confirmationLink)
         {
             MailMessage mailMessage = new MailMessage();
@@ -35,4 +45,6 @@ namespace RecruitmentPortal.WebApp.Helpers
             return false;
         }
     }
+    
+
 }

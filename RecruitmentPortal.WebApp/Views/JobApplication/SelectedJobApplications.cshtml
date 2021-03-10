@@ -1,6 +1,9 @@
 ﻿@model IQueryable<RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel>
+@using RecruitmentPortal.WebApp.Helpers
+
 @{
     ViewData["Title"] = "Index";
+    string date_format = "dd-MM-yyyy";
 }
 @if (ViewData["msg"] != null)
 {
@@ -9,16 +12,42 @@
 @{
     int rowcount = 0;
 }
-<div class="bg-gradient-gray-dark text-white d-flex justify-content-between pt-2">
+@*<div class="bg-gradient-gray-dark text-white d-flex justify-content-between pt-2">
 
-    <h2 class="pl-2">Selected Candidate : </h2>
+    <h2 class="pl-2">Selected Candidates : </h2>
+    @using (Html.BeginForm("AllApplications", "Candidate", FormMethod.Post, new { @class = "mt-2" }))
+    {
+        @Html.DropDownList("Application_mode", new SelectList(ViewBag.menuSelect, "Value", "Text"), new { onchange = "this.form.submit()" })
+    }
     <form asp-controller="JobApplication" asp-action="SelectedJobApplications" method="get">
+
         <div class="mr-2">
             <input type="text" name="SearchString" placeholder="Job Title" class="mt-2 mr-2">
             <input class="btn btn-primary btn-sm" type="submit" value="Search" style="margin-top: -5px" />
         </div>
     </form>
 
+</div>*@
+<div class="row bg-gradient-gray-dark text-white">
+    <div class="col-md-5">
+        <h2 class="pl-2">Selected Applications :</h2>
+    </div>
+    <div class="col-md-7">
+        <div class="row d-flex justify-content-lg-end">
+            <div>
+                @using (Html.BeginForm("AllApplications", "Candidate", FormMethod.Post, new { @class = "mt-2 mr-2 " }))
+                {
+                    @Html.DropDownList("Application_mode", new SelectList(ViewBag.menuSelect, "Value", "Text"), new { onchange = "this.form.submit()", style = "width:100% ; height : 30px; border : 1px solid grey;", @class = "mr-2box-shadow" })
+                }
+            </div>
+            <form asp-controller="JobApplication" asp-action="SelectedJobApplications" method="get">
+                <div class="mr-2">
+                    <input type="text" name="SearchString" placeholder="Search by Field" class="mt-2">
+                    <input class="btn btn-primary btn-sm" type="submit" value="Search" style="margin-top: -5px" />
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 @if (Model.Count() > 0)
 {
@@ -29,30 +58,46 @@
             <th>S.No.</th>
             <th>Candidate Name</th>
             <th>Job Title</th>
+            <th>Job Role</th>
             <th>Joining Date</th>
+            <th>Mode of Commitment</th>
+            <th>Offered CTC</th>
+            @*<th>Remarks</th>*@
+            <th>Details</th>
         </tr>
-            @foreach (var user in Model)
-            {
-                <tr>
-                    <td>@(rowcount+=1).</td>
-                    <td>@user.candidateName</td>
-                    <td>@user.position</td>
-                    <td>@user.date</td>
-                    @if (user.notified == false)
-                    {
-                        <td>
-                            @Html.ActionLink("Edit Date", "UpdateJobApplication", "JobApplication", new { id = user.ID }, new { @class = "btn btn-primary btn-sm" })
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            <p class="btn btn-success btn-sm">Notified</p>
-                        </td>   
-                    }
+        @foreach (var user in Model)
+        {
+    <tr>
+        <td>@(rowcount+=1).</td>
+        <td>@user.candidateName</td>
+        <td>@user.position</td>
+        <td>@user.job_Role</td>
+        <td>@user.joining_date.ToString(date_format)</td>
+        <td>@user.commitment_mode</td>
+        <td>@user.offered_ctc</td>
+        @*<td>@user.remarks</td>*@
+        <td>
+            <form asp-action="SelectedJobApplicationsDetails" asp-route-id="@RSACSPSample.EncodeServerName((user.ID).ToString())" method="post">
+                <button type="submit" class="btn btn-sm btn-primary">
+                    Click here
+                </button>
+            </form>
+        </td>
+        @*@if (user.notified == false)
+        {
+            <td>
+                @Html.ActionLink("Edit Date", "UpdateJobApplication", "JobApplication", new { id = @RSACSPSample.EncodeServerName((user.ID).ToString()) }, new { @class = "btn btn-primary btn-sm" })
+            </td>
+        }*@
+        @*else
+        {
+            <td>
+                <p class="btn btn-success btn-sm">Notified</p>
+            </td>
+        }*@
 
-                </tr>
-            }
+    </tr>
+        }
     </table>
 }
 else

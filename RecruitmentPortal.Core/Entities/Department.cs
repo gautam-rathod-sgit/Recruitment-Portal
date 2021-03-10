@@ -9,6 +9,7 @@ namespace RecruitmentPortal.Core.Entities
     public class Department : Entity
     {
         public string dept_name { get; set; }
+        public bool isActive { get; set; }
 
         //relationship with degree
         [ForeignKey("Degree")]

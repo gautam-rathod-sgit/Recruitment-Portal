@@ -1,4 +1,5 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.JobCategoryViewModel
+@using RecruitmentPortal.WebApp.Helpers
 
 @{
     ViewData["Title"] = "DetailsJobCategory";
@@ -7,12 +8,21 @@
 {
     <script>window.onload = function () { alert("@ViewData["msg"] already exist !!") }</script>
 }
-
+@if (ViewBag.active != null)
+{
+    <script>window.onload = function () { alert("@ViewData["active"]!!") }</script>
+}
 <h1 class="bg-gradient-gray-dark text-white">Category : @Model.job_category_name</h1>
 
 <hr />
-
-<a asp-action="AddNewJobPost" asp-controller="JobPost" asp-route-id="@Model.ID" class="btn btn-primary">Add New Job</a>
+@if (Model.isActive == true)
+{
+    <a asp-action="AddNewJobPost" asp-controller="JobPost" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-primary">Add New Job</a>
+}
+else
+{
+    <a class="btn btn-secondary">Add New Job</a>
+}
 <a asp-action="Index" asp-controller="JobCategory" class="btn btn-primary">Back to List</a>
 @if (Model.JobPosts != null)
 {
@@ -29,7 +39,7 @@
                 <th>Skills</th>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <th>Delete</th>
+                    <th>Action</th>
                     <th>Edit</th>
                 }
             </tr>
@@ -49,10 +59,35 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <td>
-                        @Html.ActionLink("Delete", "DeleteJobPost", "JobPost", new { id = item.ID, cid = Model.ID }, null)
+                        @*@if (Model.isActive == true)
+                            {
+                                @Html.ActionLink("Delete", "DeleteJobPost", "JobPost", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), cid = RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-primary" })
+                            }
+                            else
+                            {
+                            <a class="btn btn-secondary">Delete</a>
+                            }*@
+                        @if (item.isActive == true)
+                        {
+                            @Html.ActionLink("Deactivate", "UpdateJobPost", "JobPost", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), cid = RSACSPSample.EncodeServerName((Model.ID).ToString()), deactivate = true }, new { @class = "btn btn-danger", @style = "width : 90px" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Activate", "UpdateJobPost", "JobPost", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), cid = RSACSPSample.EncodeServerName((Model.ID).ToString()), deactivate = false }, new { @class = "btn btn-success", @style = "width : 90px" })
+
+                        }
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "UpdateJobPost", "JobPost", new { id = item.ID, cid = Model.ID }, null)
+                        @if (item.isActive == false)
+                        {
+                            <a class="btn btn-secondary">Edit</a>
+
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Edit", "UpdateJobPost", "JobPost", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), cid = RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-primary" })
+
+                        }
                     </td>
                 }
 

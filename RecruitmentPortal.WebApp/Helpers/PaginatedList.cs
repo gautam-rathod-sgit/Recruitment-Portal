@@ -14,6 +14,7 @@ namespace RecruitmentPortal.WebApp.Helpers
 
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
         {
+           
             PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
 

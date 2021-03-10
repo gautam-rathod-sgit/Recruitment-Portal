@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RecruitmentPortal.Core.Entities;
+using RecruitmentPortal.Infrastructure.Data;
+using RecruitmentPortal.Infrastructure.Data.Enum;
+using RecruitmentPortal.WebApp.Helpers;
 using RecruitmentPortal.WebApp.Interfaces;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
@@ -15,19 +18,25 @@ namespace RecruitmentPortal.WebApp.Controllers
     {
         IQueryable<DegreeViewModel> degreeList;
         private readonly IDegreePage _degreePageServices;
-       
+        private string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
+
         private readonly IDepartmentPage _departmentPageservices;
         //for userid
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RecruitmentPortalDbContext _dbContext;
 
         //for taking image's property : media stuff
         private readonly IWebHostEnvironment _environment;
-        public QualificationController(IDepartmentPage departmentPageservices, IWebHostEnvironment environment, IDegreePage degreePageServices,
+        public QualificationController(IDepartmentPage departmentPageservices,
+            IWebHostEnvironment environment,
+            IDegreePage degreePageServices,
+             RecruitmentPortalDbContext dbContext,
              UserManager<ApplicationUser> userManager)
         {
             _degreePageServices = degreePageServices;
             _departmentPageservices = departmentPageservices;
             _environment = environment;
+            _dbContext = dbContext;
             _userManager = userManager;
         }
 
@@ -36,12 +45,16 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string s)
+        public async Task<IActionResult> Index(string s, string activeCandidate)
         {
             try
             {
                 if (s != null)
                     ViewData["msg"] = s;
+                if (activeCandidate != null)
+                {
+                    ViewBag.active = activeCandidate;
+                }
                 degreeList = await _degreePageServices.GetAllDegreeWithDepartment();
             }
             catch(Exception ex)
@@ -79,6 +92,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                         return View();
                     }
                 }
+                model.isActive = true;
                 await _degreePageServices.AddNewDegree(model);
             }
             catch (Exception ex)
@@ -94,9 +108,9 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> DeleteDegree(int id)
+        public async Task<IActionResult> DeleteDegree(string id)
         {
-            await _degreePageServices.DeleteDegree(id);
+            await _degreePageServices.DeleteDegree(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
             return RedirectToAction("Index", "Qualification");
         }
         //update Degree[GET POST]
@@ -106,10 +120,70 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UpdateDegree(int id)
+        [HttpGet]
+        public async Task<IActionResult> UpdateDegree(string id, bool deactivate)
         {
-            var category = await _degreePageServices.getDegreeById(id);
-            return View(category);
+            DegreeViewModel model = new DegreeViewModel();
+            try
+            {
+                model = await _degreePageServices.getDegreeById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
+                if (deactivate)
+                {
+                    bool isActiveCandidate = false;
+                    //checking if any candidate is active with this degree
+                    List<JobApplications> jobAppList = new List<JobApplications>();
+                    var listofCandidates = _dbContext.Candidate.Where(x => x.degree.Contains(model.degree_name)).ToList();
+                    foreach(var item in listofCandidates)
+                    {
+                        var data = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).FirstOrDefault();
+                        if (data != null)
+                        jobAppList.Add(data);
+                    }
+                    var temp = jobAppList.Where(x => x.status == status_Pending).Any();
+                    if (temp)
+                    {
+                        isActiveCandidate = true;
+                    }
+                    if (isActiveCandidate)
+                    {
+                        TempData["deactivate"] = "Deactivation Failed !! Candidate with Degree is Active";
+                        return RedirectToAction("Index", "Qualification", new { activeCandidate = TempData["deactivate"]});
+                    }
+                    else
+                    {
+                        //deactivating Degree
+                        model.isActive = false;
+                        //deactivating department
+                        
+                        using (_dbContext)
+                        {
+                            _dbContext.Department
+                            .Where(x => x.DegreeId == model.ID)
+                            .ToList()
+                            .ForEach(a =>
+                            {
+                                a.isActive = false;
+                            }
+                            );
+                            _dbContext.SaveChanges();
+                        }
+                        return RedirectToAction("UpdateDegreePost", "Qualification", model);
+                    }
+                }
+                else
+                {
+                    model.isActive = true;
+                    return RedirectToAction("UpdateDegreePost", "Qualification", model);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+
+            return View(model);
         }
 
         /// <summary>
@@ -117,10 +191,17 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> UpdateDegree(DegreeViewModel model)
+        public async Task<IActionResult> UpdateDegreePost(DegreeViewModel model)
         {
-            await _degreePageServices.UpdateDegree(model);
+            try
+            {
+                await _degreePageServices.UpdateDegree(model);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+           
             return RedirectToAction("Index", "Qualification");
         }
 
@@ -131,10 +212,19 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public IActionResult AddNewDept(int id)
+        [HttpGet]
+        public IActionResult AddNewDept(string id)
         {
             DepartmentViewModel model = new DepartmentViewModel();
-            model.DegreeId = id;
+            try
+            {
+                model.DegreeId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
             return View(model);
         }
 
@@ -144,7 +234,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> AddNewDept(DepartmentViewModel model)
+        public async Task<IActionResult> AddNewDeptPost(DepartmentViewModel model)
         {
             try
             {
@@ -157,6 +247,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                         return RedirectToAction("Index", "Qualification", new { s = TempData["msg"] });
                     }
                 }
+                model.isActive = true;
                 await _departmentPageservices.AddNewDepartment(model);
             }
             catch (Exception ex)
@@ -172,18 +263,19 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> DeleteDept(int id)
-        {
-            try
-            {
-                await _departmentPageservices.DeleteDepartment(id);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return RedirectToAction("Index", "Qualification");
-        }
+        //public async Task<IActionResult> DeleteDept(string id)
+        //{
+        //    try
+        //    {
+        //        await _departmentPageservices.DeleteDepartment(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //    return RedirectToAction("Index", "Qualification");
+        //}
+
 
 
         /// <summary>
@@ -192,13 +284,47 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="id"></param>
         /// <param name="dept_id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UpdateDept(int id, int dept_id)
+        public async Task<IActionResult> UpdateDept(string id, string degree_id, bool deactivated)
         {
             DepartmentViewModel model = new DepartmentViewModel();
             try
             {
-                model = await _departmentPageservices.getDepartmentById(id);
-                model.DegreeId = dept_id;
+                model = await _departmentPageservices.getDepartmentById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
+                //model.DegreeId = Convert.ToInt32(RSACSPSample.DecodeServerName(degree_id));
+
+                if (deactivated)
+                {
+                    bool isActiveCandidate = false;
+                    //checking if any candidate is active with this degree
+                    List<JobApplications> jobAppList = new List<JobApplications>();
+                    var listofCandidates = _dbContext.Candidate.Where(x => x.degree.Contains(model.dept_name)).ToList();
+                    foreach (var item in listofCandidates)
+                    {
+                        var data = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).FirstOrDefault();
+                        if (data != null)
+                            jobAppList.Add(data);
+                    }
+                    var temp = jobAppList.Where(x => x.status == status_Pending).Any();
+                    if (temp)
+                    {
+                        isActiveCandidate = true;
+                    }
+                    if (isActiveCandidate)
+                    {
+                        TempData["deactivate"] = "Deactivation Failed !! Candidate with Department is Active";
+                        return RedirectToAction("Index", "Qualification", new { activeCandidate = TempData["deactivate"] });
+                    }
+                    else
+                    {
+                        model.isActive = false;
+                        return RedirectToAction("UpdateDeptPost", "Qualification", model);
+                    }
+                }
+                else
+                {
+                    model.isActive = true;
+                    return RedirectToAction("UpdateDeptPost", "Qualification", model);
+                }
             }
             catch (Exception ex)
             {
@@ -213,8 +339,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> UpdateDept(DepartmentViewModel model)
+        public async Task<IActionResult> UpdateDeptPost(DepartmentViewModel model)
         {
             try
             {

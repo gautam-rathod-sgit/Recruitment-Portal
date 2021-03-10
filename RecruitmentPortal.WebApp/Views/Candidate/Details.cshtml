@@ -1,7 +1,20 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.CandidateViewModel
+@using RecruitmentPortal.WebApp.Helpers
+@{
+
+    string date_format = "dd-MM-yyyy";
+    string all_mode = "All";
+    string Pending_mode = "Pending";
+}
+
 
 <div>
-    <h1 class="mb-2  bg-gradient-gray-dark text-white">Candidate Details : </h1>
+
+    <div class="row bg-gradient-gray-dark text-white">
+        <div class="col-md-5">
+            <h2 class="pl-2">Candidate Details :</h2>
+        </div>
+    </div>
     <hr />
     <div class="d-flex justify-content-end">
         <div class="mb-2">
@@ -11,15 +24,25 @@
             </a>
         </div>
         <div>
-            @Html.ActionLink("Proceed", "AddNewJobApplications", "JobApplication", new { Cid = Model.ID }, new { @class = "btn btn-success mr-3" })
-            <a asp-action="Applications" class="btn btn-danger btn-md mr-3">
-                Cancel
-            </a>
+            @Html.ActionLink("Proceed", "AddNewJobApplications", "JobApplication", new { Cid = RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-success mr-3" })
+        </div>
+        <div>
+            @Html.ActionLink("Reject", "RejectApplicant", "Candidate", new { Cid = RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-danger mr-3" })
         </div>
         <br />
-        <div>
-            <a asp-action="Applications" class="btn btn-primary">Back to List</a>
-        </div>
+        @if (ViewBag.backToAll == true)
+        {
+            <div>
+                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Back to List</a>
+            </div>
+        }
+        else
+        {
+            <div>
+                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=Pending_mode class="btn btn-secondary">Back to List</a>
+            </div>
+        }
+        
     </div>
     <dl class="row">
         <dt class="col-sm-2">
@@ -42,35 +65,89 @@
             @Html.DisplayFor(model => model.phone)
         </dd>
         <dt class="col-sm-2">
+            Date of Birth
+        </dt>
+        <dd class="col-sm-10">
+            @Model.dob.ToString(date_format)
+        </dd>
+        <dt class="col-sm-2">
             Gender
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Gender)
         </dd>
         <dt class="col-sm-2">
-            Experience
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.experience)
-        </dd>
-        <dt class="col-sm-2">
-            HSC Percentage
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.hsc_perc)
-        </dd>
-        <dt class="col-sm-2">
-            HSC Percentage
+            SSC (%)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ssc_perc)
         </dd>
         <dt class="col-sm-2">
-            Degree
+            HSC (%)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.hsc_perc)
+        </dd>
+        <dt class="col-sm-2">
+            Education
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.degree)
         </dd>
+        <dt class="col-sm-2">
+            Experience
+        </dt>
+        @if (Model.experience == "Fresher")
+        {
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.experience)
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.experience)
+            </dd>
+            <dt class="col-sm-2">
+                Total Experience
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.total_experience)
+            </dd>
+            <dt class="col-sm-2">
+                Relevent Experience
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.relevent_experience)
+            </dd>
+            <dt class="col-sm-2">
+                Current CTC
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.current_ctc)
+            </dd>
+            <dt class="col-sm-2">
+                Expected CTC
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.expected_ctc)
+            </dd>
+            <dt class="col-sm-2">
+                Notice Period
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.notice_period)
+            </dd>
+        }
+        <dt class="col-sm-2">
+            Apply Through
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.applying_through)
+        </dd>
+
+
+
     </dl>
 </div>
 

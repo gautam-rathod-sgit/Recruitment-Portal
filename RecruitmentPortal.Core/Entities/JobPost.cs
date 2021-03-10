@@ -17,6 +17,7 @@ namespace RecruitmentPortal.Core.Entities
         public string eligibility_criteria { get; set; }
         public string experience { get; set; }
         public string skills { get; set; }
+        public bool isActive { get; set; }
 
         //relationship with job_category
         [ForeignKey("JobCategory")]

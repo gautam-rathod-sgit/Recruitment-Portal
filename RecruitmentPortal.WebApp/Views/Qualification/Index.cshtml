@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<RecruitmentPortal.WebApp.ViewModels.DegreeViewModel>
-
+@using RecruitmentPortal.WebApp.Helpers
 @{
     ViewData["Title"] = "Index";
 }
@@ -8,7 +8,13 @@
     <script>window.onload = function () { alert("@ViewData["msg"] already exist !!") }</script>
 }
 @{ int rowNo = 0;
+}
+@{
+    if (ViewBag.active != null)
+    {
+        <script>window.onload = function () { alert("@ViewData["active"] !!") }</script>
     }
+}
 
 <div class="bg-gradient-gray-dark text-white d-flex justify-content-between pt-2">
 
@@ -36,9 +42,19 @@
             <div class="col-md-6" style="border-right : 2px solid grey">
                 @(rowNo += 1).@item.degree_name<br />
                 <div class="btn box-shadow border w-20">
-                    @Html.ActionLink("Edit", "UpdateDegree", new { id = item.ID }, new {@class = "btn btn-primary btn-sm" })
-                    @Html.ActionLink("Delete", "DeleteDegree", new { id = item.ID }, new {@class = "btn btn-danger btn-sm" })
-                    @Html.ActionLink("Add Department", "AddNewDept", "Qualification", new { id = item.ID }, new {@class = "btn btn-primary btn-sm" })
+                    @if (item.isActive == true)
+                    {
+                        @Html.ActionLink("Edit", "UpdateDegree", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-primary btn-sm mr-1" })
+                        @Html.ActionLink("Deactivate", "UpdateDegree", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = true }, new { @class = "mr-1 btn btn-danger w-30 btn-sm", @style = "width : 80px" })
+                        @Html.ActionLink("Add Department", "AddNewDept", "Qualification", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = true }, new { @class = "mr-1 btn btn-primary btn-sm" })
+                    }
+                    else
+                    {
+                        <a class="btn btn-secondary btn-sm">Edit</a>
+                        @Html.ActionLink("Activate", "UpdateDegree", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = false }, new { @class = "btn btn-success w-30 btn-sm", @style = "width : 80px" })
+                        <a class="btn btn-secondary btn-sm">Add Department</a>
+                    }
+
                 </div>
             </div>
             <div class="col-md-6" style="border-left : 2px solid grey">
@@ -53,15 +69,22 @@
                                         <p> @(DeptNo += 1). @dept.dept_name</p>
                                     </div>
                                     <div class="col-md-6">
-                                        @if (User.Identity.IsAuthenticated)
+                                        @if (User.Identity.IsAuthenticated && dept.isActive == true)
                                         {
                                             <div class="btn box-shadow border w-20">
-                                                @Html.ActionLink("Delete", "DeleteDept", "Qualification", new { id = dept.ID }, new { @class = "btn btn-danger btn-sm" })
-                                                @Html.ActionLink("Edit", "UpdateDept", "Qualification", new { id = dept.ID, dept_id = item.ID }, new { @class = "btn btn-primary btn-sm" })
+                                                @Html.ActionLink("Deactivate", "UpdateDept", "Qualification", new { id = RSACSPSample.EncodeServerName((dept.ID).ToString()), deactivated = true }, new { @class = "btn btn-danger btn-sm", @style = "width : 80px" })
+                                                @Html.ActionLink("Edit", "UpdateDept", "Qualification", new { id = RSACSPSample.EncodeServerName((dept.ID).ToString()), degree_id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-primary btn-sm"})
                                             </div>
                                         }
-                                    </div>
-                                </div>
+                                        else
+                                        {
+                                        <div class="btn box-shadow border w-20">
+                                            @Html.ActionLink("Activate", "UpdateDept", "Qualification", new { id = RSACSPSample.EncodeServerName((dept.ID).ToString()), deactivated = false }, new { @class = "btn btn-success btn-sm", @style = "width : 80px" })
+                                            <a class="btn btn-secondary btn-sm">Edit</a>
+                                        </div>
+                                         }
+                                            </div>
+                                        </div>
 
                             </div>
                         }

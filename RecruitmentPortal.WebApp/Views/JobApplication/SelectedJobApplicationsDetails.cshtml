@@ -1,0 +1,413 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel
+@using RecruitmentPortal.WebApp.Helpers
+@using RecruitmentPortal.Infrastructure.Data.Enum
+@{
+    ViewData["Title"] = "SelectedJobApplicationsDetails";
+    string date_format = "dd-MM-yyyy";
+    string isFresher = "Fresher";
+    int rowcount = 0;
+    string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
+    string status_Complete = Enum.GetName(typeof(JobApplicationStatus), 2);
+    string status_Rejected = Enum.GetName(typeof(JobApplicationStatus), 3);
+    string all_mode = "All";
+    string Pending_mode = "Pending";
+    string Selected_mode = "Accepted";
+    string Rejected_mode = "Rejected";
+}
+<script src="~/lib//jquery//dist//jquery.min.js"></script>
+<script>
+    $(function () {
+        debugger;
+        $('button[data-toggle="ajax-modal"]').click(function (event) {
+            var url = $(this).data('url');
+            $.get(url).done(function (data) {
+                $('#modal-placeholder').html(data);
+                $('#modal-placeholder > .modal').modal('show');
+            });
+        });
+    });
+</script>
+
+<style type="text/css">
+    .required:after {
+        content: "*";
+        font-weight: bold;
+        color: red;
+    }
+</style>
+
+<!-- Modal for Edit Joining date -->
+<div class="modal fade" id="edit-date" tabindex="-1" role="dialog" aria-labelledby="addJoiningLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addJoiningLabel">Edit Joining Date:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="UpdateJobApplicationPost">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" value="@Model.ID" id="ID" name="ID" />
+                    <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
+                    <input type="hidden" value="@Model.accept_date" id="accept_date" name="accept_date" />
+                    <input type="hidden" value="@Model.start_date" id="start_date" name="start_date" />
+                    <input type="hidden" value="@Model.status" id="status" name="status" />
+                    <input type="hidden" value="@Model.notified" id="notified" name="notified" />
+                    <input type="hidden" value="@Model.commitment_mode" id="commitment_mode" name="commitment_mode" />
+                    <input type="hidden" value="@Model.offered_ctc" id="offered_ctc" name="offered_ctc" />
+                    <input type="hidden" value="@Model.remarks" id="remarks" name="remarks" />
+                    <input type="hidden" value="true" id="flag_Edit" name="flag_Edit" />
+                    <input type="hidden" value="@ViewBag.toAdminIndex" id="editFromMenu" name="editFromMenu"/>
+
+
+                    <div class="form-group">
+                        <label asp-for="joining_date" class="control-label required">Joining Date:</label>
+                        <input asp-for="joining_date" required class="form-control" type="date" id="demo" placeholder="dd/mm/yyyy" />
+                        <span asp-validation-for="joining_date" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-success" id="submit-btn">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal end -->
+
+
+<div class="row bg-gradient-gray-dark text-white">
+    <div class="col-md-5">
+        @if (Model.status == status_Rejected)
+        {
+            <h2 class="pl-2">Rejected Application Details:</h2>
+        }
+        else
+        {
+            <h2 class="pl-2">Selected Application Details:</h2>
+        }
+
+    </div>
+</div>
+<hr />
+<div>
+    @*Accpeted Application Details*@
+    @if (Model.status == status_Complete)
+    {
+        <div class="d-flex justify-content-end">
+
+            @if (!Model.notified)
+            {
+                <div>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#edit-date">
+                        Edit
+                    </button>
+                    @*@Html.ActionLink("Edit Date", "UpdateJobApplication", "JobApplication", new { id = @RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-primary btn-sm mr-3" })*@
+                </div>
+                <div>
+                    @*Reject button for rejecting the candidate after selection is done. [[[[[[ Riddhi task ]]]]]]*@
+                    <button class="btn  btn-danger mr-2" disabled>
+                        Reject
+                    </button>
+                </div>
+                <div>
+                    <a asp-action="ConfirmJobApplication" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-success mr-3">
+                        Confirm
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <button class="btn btn-secondary mr-1">
+                        Edit
+                    </button>
+                    <button class="btn btn-secondary mr-1">
+                        Reject
+                    </button>
+                    <button class="btn btn-success mr-1">
+                        Notified
+                    </button>
+                </div>
+            }
+            @if (ViewBag.backToAll == true)
+            {
+                <div>
+                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Back to List</a>
+                </div>
+            }
+            else
+            {
+                @if (ViewBag.toAdminIndex != null || ViewBag.toAdminIndex == true)
+                {
+                    <div>
+                        <a asp-action="AdminIndex" asp-controller="Home" class="btn btn-secondary">Back to List</a>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Accepted" class="btn btn-secondary">Back to List</a>
+                    </div>
+                }
+
+            }
+
+        </div>
+    }
+    @*Rejected application data*@
+    @if (Model.status == status_Rejected)
+    {
+        <div class="d-flex justify-content-end">
+            <div>
+                <a asp-action="ReOpenJobApplication" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-success mr-3">
+                    Re-open
+                </a>
+            </div>
+            <div class="mb-2">
+                <a asp-action="Download" asp-controller="Candidate" class="btn btn-primary btn-md mr-3"
+                   asp-route-filename="@Model.candidate.resume">
+                    Download Resume
+                </a>
+            </div>
+            @if (ViewBag.backToAll == true)
+            {
+                <div>
+                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Back to List</a>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=Rejected_mode class="btn btn-secondary">Back to List</a>
+                </div>
+            }
+        </div>
+    }
+    @*Active Application data*@
+    @if(Model.status == status_Pending)
+    {
+        <div class="d-flex justify-content-end">
+            @if (ViewBag.backToAll == true)
+            {
+                <div>
+                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Back to List</a>
+                </div>
+            }
+        </div>
+    }
+
+    <br />
+    <dl class="row">
+        <dt class="col-sm-4">
+            Candidate Name
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.candidate.name)
+        </dd>
+        <dt class="col-sm-4">
+            Email-ID
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.candidate.email)
+        </dd>
+
+        <dt class="col-sm-4">
+            Phone No.
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.candidate.phone)
+        </dd>
+        <dt class="col-sm-4">
+            Date of Birth
+        </dt>
+        <dd class="col-sm-8">
+            @Model.candidate.dob.ToString(date_format)
+        </dd>
+        <dt class="col-sm-4">
+            Gender
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.candidate.Gender)
+        </dd>
+        <dt class="col-sm-4">
+            SSC (%)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.candidate.ssc_perc)
+        </dd>
+        <dt class="col-sm-4">
+            HSC (%)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.candidate.hsc_perc)
+        </dd>
+        <dt class="col-sm-4">
+            Education
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.candidate.degree)
+        </dd>
+        <dt class="col-sm-4">
+            Experience
+        </dt>
+        @if (Model.candidate.experience == isFresher)
+        {
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.candidate.experience)
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.candidate.experience)
+            </dd>
+            <dt class="col-sm-4">
+                Total Experience
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.candidate.total_experience)
+            </dd>
+            <dt class="col-sm-4">
+                Relevent Experience
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.candidate.relevent_experience)
+            </dd>
+            <dt class="col-sm-4">
+                Current CTC
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.candidate.current_ctc)
+            </dd>
+            <dt class="col-sm-4">
+                Expected CTC
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.candidate.expected_ctc)
+            </dd>
+            <dt class="col-sm-4">
+                Notice Period
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.candidate.notice_period)
+            </dd>
+        }
+
+        @if (Model.status == status_Complete)
+        {
+            <dt class="col-sm-4">
+                Apply Through
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.candidate.applying_through)
+            </dd>
+            <dt class="col-sm-4">
+                Interview Remarks
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.remarks)
+            </dd>
+            <dt class="col-sm-4">
+                Joining Date
+            </dt>
+            <dd class="col-sm-8">
+                @Model.joining_date.ToString(date_format)
+            </dd>
+            <dt class="col-sm-4">
+                Mode of Commitment
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.commitment_mode)
+            </dd>
+            <dt class="col-sm-4">
+                Offered CTC
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.offered_ctc)
+            </dd>
+        }
+        @if (Model.status == status_Rejected)
+        {
+            <dt class="col-sm-4">
+                Job Title
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.position)
+            </dd>
+            <dt class="col-sm-4">
+                Job Role
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.job_Role)
+            </dd>
+            <dt class="col-sm-4">
+                Rejection Date
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.rejection_date)
+            </dd>
+            @if (Model.remarks != null)
+            {<dt class="col-sm-4">
+                    Remarks
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.rejection_reason)
+                </dd>
+            }
+            else
+            {
+                <dt class="col-sm-4">
+                    Remarks
+                </dt>
+                <dd class="col-sm-8">
+                    <p>No remarks available</p>
+                </dd>
+            }
+            @if (Model.listOfRounds.Count() > 0)
+            {
+                <dt class="col-sm-4">
+                    Interview Rounds Completed
+                </dt>
+                <dd class="col-sm-8">
+                    @foreach (var item in Model.listOfRounds)
+                    {
+                        var i = 0;
+                        <p>@(rowcount+=1).@item</p>
+                    }
+                </dd>
+            }
+            else
+            {
+                <dt class="col-sm-4">
+                    Interview Rounds Completed
+                </dt>
+                <dd class="col-sm-8">
+                    <p>No Rounds available.</p>
+                </dd>
+            }
+
+
+        }
+        else
+        {
+            <dt class="col-sm-4">
+                Applying Through
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.candidate.applying_through)
+            </dd>
+            <dt class="col-sm-4">
+                Current Interview Status
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.status)
+            </dd>
+        }
+
+    </dl>
+</div>

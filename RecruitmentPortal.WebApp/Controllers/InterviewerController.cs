@@ -1,31 +1,39 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.Infrastructure.Data.Enum;
+using RecruitmentPortal.WebApp.Helpers;
 using RecruitmentPortal.WebApp.Interfaces;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace RecruitmentPortal.WebApp.Controllers
 {
     public class InterviewerController : Controller
     {
         private string time_format = "HH:mm tt";
-        private int reqValue = Convert.ToInt32(Enum.Parse(typeof(StatusType), "Completed"));
+        private string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
+        private int status_scheduled = Convert.ToInt32(Enum.Parse(typeof(StatusType), "Scheduled"));
+        private int status_pending = Convert.ToInt32(Enum.Parse(typeof(StatusType), "Pending"));
+        private int status_completed = Convert.ToInt32(Enum.Parse(typeof(StatusType), "Completed"));
         private IQueryable<SchedulesViewModel> slist;
         private readonly RecruitmentPortalDbContext _dbContext;
         private readonly ISchedulesPage _schedulesPage;
+        private readonly ICandidatePage _candidatePageServices;
         private readonly UserManager<ApplicationUser> _userManager;
-        public InterviewerController(UserManager<ApplicationUser> userManager, RecruitmentPortalDbContext dbContext, ISchedulesPage schedulesPage)
+        public InterviewerController(UserManager<ApplicationUser> userManager, ICandidatePage candidatePage, RecruitmentPortalDbContext dbContext, ISchedulesPage schedulesPage)
         {          
             _dbContext = dbContext;
             _userManager = userManager;
             _schedulesPage = schedulesPage;
+            _candidatePageServices = candidatePage;
         }
 
         /// <summary>
@@ -56,21 +64,66 @@ namespace RecruitmentPortal.WebApp.Controllers
 
 
         /// <summary>
-        /// SHOWING ALL THE COMPLETED SCHEDULES FOR INTERVIEWER 
+        /// SHOWING ALL THE SCHEDULES FOR INTERVIEWER 
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> IndexCompleted(string SearchString)
+        public async Task<IActionResult> Index(string SearchString)
         {
-            slist = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
+            
 
             try
             {
-                //filtering the schedules for getting only the incompleted schedules
-                slist = slist.Where(x => x.status == reqValue);
+                JobApplications data = new JobApplications();
+                List<SchedulesViewModel> schedulelist = new List<SchedulesViewModel>();
+                List<SchedulesViewModel> viewScheduleList = new List<SchedulesViewModel>();
+
+                if (User.IsInRole("Admin"))
+                {
+                    //getting all the schedules of all candidates
+                    slist = await _schedulesPage.GetAllSchedules();
+
+                    //filtering the schedules for getting only the incompleted schedules (for active applications only)
+                    slist = slist.Where(x => x.status == status_scheduled || x.status == status_pending);
+                    viewScheduleList = slist.ToList();
+                    //schedulelist = upcoming_schedules.ToList();
+                    foreach (var item in viewScheduleList)
+                    {
+                        data = _dbContext.jobApplications.Where(x => x.candidateId == item.candidateId).FirstOrDefault();
+
+                        //getting job application ID
+                        item.jobAppId = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == item.candidateId).ID;
+                        item.jobRole = getJobRoleByCandidateId(item.candidateId);
+
+                        //getting interviewer names of schedule
+                        List<UserModel> listOfUser = getInterviewerNames(item.ID);
+                        item.InterviewerNames = listOfUser;
+
+                        //creating new schedule list 
+                        if (data.status == status_Pending)
+                        {
+                            schedulelist.Add(item);
+                        }
+                    }
+                    //assigning to view passing list
+                    slist = schedulelist.AsQueryable();
+                }
+                else
+                {
+                    slist = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
+                    //filtering the schedules for getting only the completed schedules for interviewer
+                    slist = slist.Where(x => x.status == status_completed);
+                    foreach(var item in slist)
+                    {
+                        item.jobRole = getJobRoleByCandidateId(item.candidateId);
+                        schedulelist.Add(item);
+                    }
+                    slist = schedulelist.AsQueryable();
+                }
+
                 //Added search box test
                 if (!String.IsNullOrEmpty(SearchString))
                 {
-                    slist = slist.Where(s => s.position.ToUpper().Contains(SearchString.ToUpper()));
+                    slist = slist.Where(s => s.position.ToUpper().Contains(SearchString.ToUpper()) || s.candidate_name.ToUpper().Contains(SearchString.ToUpper()));
                 }
             }
             catch (Exception ex)
@@ -80,22 +133,58 @@ namespace RecruitmentPortal.WebApp.Controllers
 
             return View(slist);
         }
+        public string getJobRoleByCandidateId(int id)
+        {
+            int job_ID;
+            string job_role = null;
+
+            job_ID = _dbContext.JobPostCandidate.AsNoTracking().FirstOrDefault(x => x.candidate_Id == id).job_Id;
+            job_role = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).job_role;
+
+            return job_role;
+        }
+        public List<UserModel> getInterviewerNames(int Sid)
+        {
+            List<SchedulesUsers> allusers = new List<SchedulesUsers>();
+            List<UserModel> interviewer_names = new List<UserModel>();
+            try
+            {
+                allusers = _dbContext.SchedulesUsers.Where(x => x.scheduleId == Sid).ToList();
+                foreach (var user in allusers)
+                {
+                    UserModel userModel = new UserModel();
+                    userModel.Name = _dbContext.Users.Where(x => x.Id == user.UserId).FirstOrDefault().UserName;
+                    userModel.Id = _dbContext.Users.Where(x => x.Id == user.UserId).FirstOrDefault().Id;
+                    interviewer_names.Add(userModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return interviewer_names;
+        }
 
         /// <summary>
         /// ENLIST ALL THE DETAILS OF PARTICULAR SCHEDULE FOR CANDIDATE TO INTERVIEWER
         /// </summary>
         /// <param name="Sid"></param>
         /// <returns></returns>
-        public async Task<IActionResult> ScheduleDetails(int scheduleId)
+        public async Task<IActionResult> ScheduleDetails(string scheduleId)
         {
-            //getting schedule by ID
-            SchedulesViewModel model = await _schedulesPage.GetSchedulesById(scheduleId);
 
+            //getting schedule by ID
+            SchedulesViewModel model = await _schedulesPage.GetSchedulesById(Convert.ToInt32(RSACSPSample.DecodeServerName(scheduleId)));
+            //getting job application ID
+            model.jobAppId = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == model.candidateId).ID;
+            model.candidate = await _candidatePageServices.getCandidateById(model.candidateId);
+            model.candidate.jobRole = getJobRoleByCandidateId(model.candidate.ID);
             try
             {
                 //assigning values to some fields
                 model.time = model.datetime.ToString(time_format);
                 model.statusName = Enum.GetName(typeof(StatusType), model.status);
+                model.roundName = Enum.GetName(typeof(RoundType), model.round);
             }
             catch (Exception ex)
             {
@@ -113,12 +202,13 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Update_Schedule_GET(int id)
+        public async Task<IActionResult> Update_Schedule_GET(string id)
         {
+
             SchedulesViewModel model = new SchedulesViewModel();
             try
             {
-                model = await _schedulesPage.GetSchedulesById(id);
+                model = await _schedulesPage.GetSchedulesById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
 
             }
             catch (Exception ex)
@@ -144,7 +234,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                 Console.WriteLine(ex.Message);
             }
-            return RedirectToAction("ScheduleDetails",new {scheduleId = model.ID });
+            return RedirectToAction("ScheduleDetails",new {scheduleId = RSACSPSample.EncodeServerName((model.ID).ToString()) });
         }
     }
 }

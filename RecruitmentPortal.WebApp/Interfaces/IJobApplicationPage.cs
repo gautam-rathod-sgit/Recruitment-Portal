@@ -12,5 +12,6 @@ namespace RecruitmentPortal.WebApp.Interfaces
         public Task<IQueryable<JobApplicationViewModel>> getJobApplications();
         public Task<JobApplicationViewModel> getJobApplicationById(int id);
         public Task UpdateJobApplication(JobApplicationViewModel model);
+        public string getInterviewStatusForApplication(int id);
     }
 }
