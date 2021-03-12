@@ -491,7 +491,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             else
             {
-                UserEmailOptions options = new UserEmailOptions
+                UserEmailOptions optionss = new UserEmailOptions
                 {
                     Subject = "Recruitment Portal : Confirm you Email for verifying your Application.",
                     ToEmails = new List<string>() { model.email },
@@ -500,7 +500,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 //sending mail to Receivers
                 try
                 {
-                    await _emailService.SendTestEmail(options);
+                    await _emailService.SendTestEmail(optionss);
                     ViewData["token"] = body;
                     ViewData["email"] = model.email;
                 }

@@ -10,6 +10,7 @@ using RecruitmentPortal.WebApp.Helpers;
 using RecruitmentPortal.WebApp.Interfaces;
 using RecruitmentPortal.WebApp.Models;
 using RecruitmentPortal.WebApp.Security;
+using RecruitmentPortal.WebApp.Services;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         readonly int reqValue = Convert.ToInt32(Enum.Parse(typeof(StatusType), "Completed"));
         private readonly RecruitmentPortalDbContext _dbContext;
         private readonly IJobPostPage _jobPostPage;
-        private readonly ILogger<HomeController> _logger; 
+        private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ISchedulesPage _schedulesPage;
         private readonly IJobApplicationPage _jobApplicationPage;
@@ -73,32 +74,32 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="pageNumber"></param>
         /// <param name="s"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string SearchString, string sortOrder, int? pageNumber, string s)
-        {
-            if (User.IsInRole("Admin"))
-            {
-                return RedirectToAction("AdminIndex", "Home");
-            }
-            if (User.IsInRole("Interviewer"))
-            {
-                return RedirectToAction("InterviewerIndex", "Home");
-            }
-            else
-            {
-                //////checking if vacancy of job completed or not
-                //var vacancy = _dbContext.JobPost.FirstOrDefault(x => x.ID == newModel.job_Id).vacancy;
-                //var count_post = _dbContext.JobPostCandidate.Where(x => x.job_Id == newModel.job_Id).Count();
+        //public async Task<IActionResult> Index(string SearchString, string sortOrder, int? pageNumber, string s)
+        //{
+        //    if (User.IsInRole("Admin"))
+        //    {
+        //        return RedirectToAction("AdminIndex", "Home");
+        //    }
+        //    if (User.IsInRole("Interviewer"))
+        //    {
+        //        return RedirectToAction("InterviewerIndex", "Home");
+        //    }
+        //    else
+        //    {
+        //        ////checking if vacancy of job completed or not
+        //        var vacancy = _dbContext.JobPost.FirstOrDefault(x => x.ID == newModel.job_Id).vacancy;
+        //        var count_post = _dbContext.JobPostCandidate.Where(x => x.job_Id == newModel.job_Id).Count();
 
-                //if (vacancy <= count_post)
-                //{
-                //    var jobPostModel = await _jobPostPageservices.getJobPostById(newModel.job_Id);
-                //    return RedirectToAction("DeactivateJobPost", new { model, jobPostModel });
-                //}
+        //        if (vacancy <= count_post)
+        //        {
+        //            var jobPostModel = await JobPostPageService.getJobPostById(newModel.job_Id);
+        //            return RedirectToAction("DeactivateJobPost", new { model, jobPostModel });
+        //        }
 
 
-                //for candidate conflict
-                if (s != null)
-                    ViewData["msg"] = s;
+        //        //for candidate conflict
+        //        if (s != null)
+        //            ViewData["msg"] = s;
 
         //        ViewData["CurrentSort"] = sortOrder;
         //        ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "job_title" : "";
@@ -184,10 +185,10 @@ namespace RecruitmentPortal.WebApp.Controllers
             return _Protector.Protect(Id.ToString());
         }
 
-        /// <summary>
-        /// This method fetches Home page for Admin
-        /// </summary>
-        /// <returns></returns>
+        ///<summary>
+        ///This method fetches Home page for Admin
+        ///</summary>
+        ///<returns></returns>
         public async Task<IActionResult> AdminIndex()
         {
 
@@ -200,35 +201,35 @@ namespace RecruitmentPortal.WebApp.Controllers
                 collection.InterviewerCount = _dbContext.Users.Count();
                 collection.SelectedCount = _dbContext.jobApplications.Where(x => x.status == status_Complete).Count();
 
-                    //upcoming schedules scheduleviewmodels
-                    var upcoming_schedules = await _schedulesPage.GetAllSchedules();
-                    upcoming_schedules = upcoming_schedules.Where(x => x.status != reqValue);
-                    List<SchedulesViewModel> schedulelist = new List<SchedulesViewModel>();
+                //upcoming schedules scheduleviewmodels
+                var upcoming_schedules = await _schedulesPage.GetAllSchedules();
+                upcoming_schedules = upcoming_schedules.Where(x => x.status != reqValue);
+                List<SchedulesViewModel> schedulelist = new List<SchedulesViewModel>();
 
 
-                    //schedulelist = upcoming_schedules.ToList();
-                    foreach(var item in upcoming_schedules.ToList())
-                    {
-                        //getting interviewers names
-                        List<UserModel> listOfUser = getInterviewerNames(item.ID);
-                        item.InterviewerNames = listOfUser;
+                schedulelist = upcoming_schedules.ToList();
+                //foreach (var item in upcoming_schedules.ToList())
+                //{
+                //    //getting interviewers names
+                //    List<UserModel> listOfUser = getInterviewerNames(item.ID);
+                //    item.InterviewerNames = listOfUser;
 
-                        //job role fetching
-                        item.jobRole = getJobRoleByCandidateId(item.candidateId);
+                //    //job role fetching
+                //    item.jobRole = getJobRoleByCandidateId(item.candidateId);
 
-                        //fetching only pending schedules
-                        data = _dbContext.jobApplications.Where(x => x.candidateId == item.candidateId).FirstOrDefault();
-                        if (data.status == status_Pending)
-                        {
-                            schedulelist.Add(item);
-                        }
-                    }
-                    collection.upcoming_schedules = schedulelist;
+                //    //fetching only pending schedules
+                //    data = _dbContext.jobApplications.Where(x => x.candidateId == item.candidateId).FirstOrDefault();
+                //    if (data.status == status_Pending)
+                //    {
+                //        schedulelist.Add(item);
+                //    }
+                //}
+                collection.upcoming_schedules = schedulelist;
 
 
 
                 //notification jobapplicationViewModels.
-                var notifyJobApplications = await _jobApplicationPage.getJobApplications();
+                        var notifyJobApplications = await _jobApplicationPage.getJobApplications();
                 collection.selected_application = notifyJobApplications.Where(x => x.status == status_Complete && x.notified == false).ToList();
                 foreach (var item in collection.selected_application)
                 {
@@ -244,32 +245,33 @@ namespace RecruitmentPortal.WebApp.Controllers
             return View(collection);
         }
 
-        /// <summary>
-        /// This method fetches Home page for Interviewer
-        /// </summary>
-        /// <returns></returns>
+        ///<summary>
+        ///This method fetches Home page for Interviewer
+        ///</summary>
+        ///<returns></returns>
         public async Task<IActionResult> InterviewerIndex()
         {
             //Counter Part
             InterviewerPanelViewModel collection = new InterviewerPanelViewModel();
 
 
-           var pending_schedules = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
+            var pending_schedules = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
 
             //filtering the schedules for getting only the incompleted schedules
+
             collection.pending_schedules = pending_schedules.Where(x => x.status != reqValue).ToList();
             collection.PendingScheduleCount = pending_schedules.Where(x => x.status != reqValue).ToList().Count();
             collection.CompletedScheduleCount = pending_schedules.Where(x => x.status == reqValue).Count();
-            
+
             return View(collection);
         }
 
 
-        /// <summary>
-        /// This method is used for setting notification update to database
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        ///<summary>
+        ///This method is used for setting notification update to database
+        ///</summary>
+        ///<param name = "id" ></ param >
+        ///< returns ></ returns >
         public async Task<IActionResult> NotificationDetails(int id)
         {
             JobApplicationViewModel jobApplication = new JobApplicationViewModel();
@@ -283,15 +285,15 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
-           
+
             return View(jobApplication);
         }
 
-        /// <summary>
-        /// SETS THE NOTIFIED FLAG OF SCHEDULE TO TRUE WHEN ADMIN CONFIRMS THE NOTIFICATION
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        ///<summary>
+        ///SETS THE NOTIFIED FLAG OF SCHEDULE TO TRUE WHEN ADMIN CONFIRMS THE NOTIFICATION
+        ///</summary>
+        ///<param name = "id" ></ param >
+        ///< returns ></ returns >
         public async Task<IActionResult> UpdateNotification(int id)
         {
             JobApplicationViewModel model = new JobApplicationViewModel();
@@ -306,7 +308,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
-           
+
             return RedirectToAction("UpdateNotificationPost", model);
 
         }
@@ -320,16 +322,15 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
-           
+
             return RedirectToAction("AdminIndex", "Home", new { });
         }
-        //-----------------------------------------------------------------------------------------------
 
-        /// <summary>
-        /// FETCHING JOB POSITION USING CANDIDATE ID FROM DATABASE
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        ///<summary>
+        ///FETCHING JOB POSITION USING CANDIDATE ID FROM DATABASE
+        ///</summary>
+        ///<param name = "id" ></ param >
+        ///< returns ></ returns >
         public string getPositionByCandidateId(int id)
         {
             var job_ID = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == id).FirstOrDefault().job_Id;
