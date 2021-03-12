@@ -44,7 +44,7 @@
                 <div class="btn box-shadow border w-20">
                     @if (item.isActive == true)
                     {
-                        @Html.ActionLink("Edit", "UpdateDegree", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-primary btn-sm mr-1" })
+                        @Html.ActionLink("Edit", "UpdateDegree", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), editMode = true }, new { @class = "btn btn-primary btn-sm mr-1" })
                         @Html.ActionLink("Deactivate", "UpdateDegree", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = true }, new { @class = "mr-1 btn btn-danger w-30 btn-sm", @style = "width : 80px" })
                         @Html.ActionLink("Add Department", "AddNewDept", "Qualification", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = true }, new { @class = "mr-1 btn btn-primary btn-sm" })
                     }
@@ -73,7 +73,7 @@
                                         {
                                             <div class="btn box-shadow border w-20">
                                                 @Html.ActionLink("Deactivate", "UpdateDept", "Qualification", new { id = RSACSPSample.EncodeServerName((dept.ID).ToString()), deactivated = true }, new { @class = "btn btn-danger btn-sm", @style = "width : 80px" })
-                                                @Html.ActionLink("Edit", "UpdateDept", "Qualification", new { id = RSACSPSample.EncodeServerName((dept.ID).ToString()), degree_id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-primary btn-sm"})
+                                                @Html.ActionLink("Edit", "UpdateDept", "Qualification", new { id = RSACSPSample.EncodeServerName((dept.ID).ToString()), degree_id = RSACSPSample.EncodeServerName((item.ID).ToString()), editMode = true }, new { @class = "btn btn-primary btn-sm"})
                                             </div>
                                         }
                                         else

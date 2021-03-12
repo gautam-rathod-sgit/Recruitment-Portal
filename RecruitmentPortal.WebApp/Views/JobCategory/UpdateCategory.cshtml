@@ -1,9 +1,5 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.JobCategoryViewModel
 
-@{
-    ViewData["Title"] = "UpdateCategory";
-}
-
 <h1  class="bg-gradient-gray-dark text-white">Update Category</h1>
 
 <hr />
@@ -12,11 +8,11 @@
         <form asp-action="UpdateCategoryPost">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" value="@Model.ID" id="ID" name="ID" />
-            <input type="hidden" value="@Model.isActive" id="isActive" name="isActive" />
-
+            @Html.HiddenFor(m => m.JobPosts)
+            @Html.HiddenFor(m => m.isActive)      
             <div class="form-group">
-                <label asp-for="job_category_name" class="control-label"></label>
-                <input asp-for="job_category_name" class="form-control" required />
+                <label asp-for="job_category_name" class="control-label">Job Category</label>
+                <input asp-for="job_category_name" class="form-control" type="text" pattern="^[a-zA-Z0-9_ ]*$" required />
                 <span asp-validation-for="job_category_name" class="text-danger"></span>
             </div>
 

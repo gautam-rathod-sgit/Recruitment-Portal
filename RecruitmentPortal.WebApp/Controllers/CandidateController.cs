@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.Infrastructure.Data.Enum;
@@ -40,6 +41,8 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly IDegreePage _degreePageServices;
         private readonly IDepartmentPage _departmentPageservices;
         private readonly IJobPostCandidatePage _jobPostCandidatePage;
+        private readonly IJobPostPage _jobPostPageservices;
+
         //for userid
         private readonly UserManager<ApplicationUser> _userManager;
         //for taking image's property : media stuff
@@ -52,6 +55,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         #region Constructor
         public CandidateController(IWebHostEnvironment environment,
              ICandidatePage candidatePage,
+              IJobPostPage jobPostPageservices,
              IDegreePage degreePageServices,
              RecruitmentPortalDbContext dbContext,
               IJobPostCandidatePage jobPostCandidatePage,
@@ -61,6 +65,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             _candidatePageServices = candidatePage;
             _environment = environment;
+            _jobPostPageservices = jobPostPageservices;
             _userManager = userManager;
             _dbContext = dbContext;
             _jobPostCandidatePage = jobPostCandidatePage;
@@ -367,6 +372,26 @@ namespace RecruitmentPortal.WebApp.Controllers
                     candidate_Id = latestRecord.ID
                 };
                 await _jobPostCandidatePage.AddNewJobPostCandidate(newModel);
+
+
+                //-----------------------------------------------------------------------------------------
+                //checking if vacancy of job completed or not, if vacancy fulfilled then deactivate the job
+
+                var vacancy = _dbContext.JobPost.FirstOrDefault(x => x.ID == newModel.job_Id).vacancy;
+                var count_post = _dbContext.JobPostCandidate.Where(x => x.job_Id == newModel.job_Id).Count();
+
+                if (vacancy == count_post)
+                {
+                    var jobPostModel = await _jobPostPageservices.getJobPostById(newModel.job_Id);
+
+                    //serializing the object into string
+                    TempData["candidate"] = JsonConvert.SerializeObject(latestRecord);
+                    TempData["jobpost"] = JsonConvert.SerializeObject(jobPostModel);
+
+                    return RedirectToAction("UpdateJobPostPost","JobPost", new { model = jobPostModel, vacancy_overflow = true });
+                }
+                //--------------------------------------------------------------------------------------------
+
             }
             catch (Exception ex)
             {
@@ -376,8 +401,16 @@ namespace RecruitmentPortal.WebApp.Controllers
             return RedirectToAction("SendOTPToMail", model);
         }
 
-        ////For Rejecting New Candidate Application without Proceeding it
-        public async Task<IActionResult> RejectApplicant(string Cid)
+        //    await _jobPostPageservices.UpdateJobPost(jobPostModel);
+        //    return RedirectToAction("SendOTPToMail", model);
+        //}
+        
+
+
+
+
+            ////For Rejecting New Candidate Application without Proceeding it
+            public async Task<IActionResult> RejectApplicant(string Cid)
         {
             int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid));
 
@@ -385,12 +418,16 @@ namespace RecruitmentPortal.WebApp.Controllers
             candidateModel = await _candidatePageServices.getCandidateById(decrypted_key);
 
             candidateModel.isRejected = true;
+
             //AddNewCandidate
-            await _candidatePageServices.UpdateCandidate(candidateModel);
+            // await _candidatePageServices.UpdateCandidate(candidateModel);
 
 
 
             //int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid));
+
+            //return RedirectToAction("SendRejectionMailToCandidate", "Candidate", new { id = candidateModel.ID });
+
             return RedirectToAction("AllApplications", "Candidate");
         }
 
@@ -421,12 +458,58 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<IActionResult> SendOTPToMail(CandidateViewModel model)
+        public async Task<IActionResult> SendOTPToMail(CandidateViewModel model, bool vacancy_overflow = false)
         {
-
             //generate otp
             string body = GenerateToken();
 
+            if (vacancy_overflow)
+            {
+                //getting candidate model for sending to confirm otp
+                CandidateViewModel candidateModel = new CandidateViewModel();
+                candidateModel = JsonConvert.DeserializeObject<CandidateViewModel>((string)TempData["candidateForEmailConfirmation"]);
+
+
+                UserEmailOptions options_new = new UserEmailOptions
+                {
+                    Subject = "Recruitment Portal : Confirm you Email for verifying your Application.",
+                    ToEmails = new List<string>() { candidateModel.email},
+                    Body = body
+                };
+                //sending mail to Receivers
+                try
+                {
+                    await _emailService.SendTestEmail(options_new);
+                    ViewData["token"] = body;
+                    ViewData["email"] = candidateModel.email;
+                }
+                catch (Exception ex)
+                {
+                    ViewData["error"] = "error";
+                }
+                return View(candidateModel);
+            }
+            else
+            {
+                UserEmailOptions options = new UserEmailOptions
+                {
+                    Subject = "Recruitment Portal : Confirm you Email for verifying your Application.",
+                    ToEmails = new List<string>() { model.email },
+                    Body = body
+                };
+                //sending mail to Receivers
+                try
+                {
+                    await _emailService.SendTestEmail(options);
+                    ViewData["token"] = body;
+                    ViewData["email"] = model.email;
+                }
+                catch (Exception ex)
+                {
+                    ViewData["error"] = "error";
+                }
+            }
+                      
             UserEmailOptions options = new UserEmailOptions
             {
                 Subject = "Recruitment Portal : Confirm you Email for verifying your Application.",
@@ -487,8 +570,9 @@ namespace RecruitmentPortal.WebApp.Controllers
             //Creating Email Credentials - email-id, subject
             UserEmailOptions emailOptions = new UserEmailOptions
             {
-                Subject = "Reason for Rejection",
+                Subject = "Your application to Shaligram Infotech",
                 ToEmails = new List<string>() { model.email },
+                Body = "Dear  " + model.name + "," + "<br />" + "Sorry ! But We are not having any position you're Applying for." + "<br/>" + " We will get back to you if there is any vacancy for you."
             };
 
             //Sending Email to Receiver

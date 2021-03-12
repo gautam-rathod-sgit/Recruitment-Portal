@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210312125255_Application User file added.cs" />
+    <Compile Remove="Migrations\20210312125255_Application User file added.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Views\JobCategory\AddNewCategory.cshtml" />
     <None Include="Views\JobCategory\DetailsJobCategory.cshtml" />
     <None Include="Views\JobCategory\Index.cshtml" />
@@ -56,6 +61,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Files\" />
     <Folder Include="wwwroot\Resume\" />
   </ItemGroup>
 

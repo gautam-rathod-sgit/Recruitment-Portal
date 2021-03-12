@@ -75,20 +75,20 @@
     <hr />
     @if (Model.upcoming_schedules.Count() > 0)
     {
-        <div class="container-fluid mb-2 box-shadow">
-            <table class="table table-sm table-bordered table-striped">
-                <tr>
-                    <th>S.No.</th>
-                    <th>Candidate Name</th>
-                    <th>Job Title</th>
-                    <th>Job Role</th>
-                    <th>Mode of Interview</th>
-                    <th>Date & Time</th>
-                    <th>Interviewer</th>
-                    <th>Details</th>
-                </tr>
-                @{ int rowcount = 0;}
-                @foreach (var item in Model.upcoming_schedules)
+    <div class="container-fluid mb-2 box-shadow">
+        <table class="table table-sm table-bordered table-striped">
+            <tr>
+                <th>S.No.</th>
+                <th>Candidate Name</th>
+                <th>Job Title</th>
+                <th>Job Role</th>
+                <th>Mode of Interview</th>
+                <th>Date & Time</th>
+                <th>Interviewer</th>
+                <th>Details</th>
+            </tr>
+            @{ int rowcount = 0;}
+            @foreach (var item in Model.upcoming_schedules)
                 {
             <tr>
                 <td>@(rowcount += 1).</td>
@@ -100,75 +100,75 @@
                 <td>
                     @foreach (var data in item.InterviewerNames)
                     {
-                        <p>@(i += 1).@data.Name</p>
+                    <p>@(i += 1).@data.Name</p>
                     }
                 </td>
                 <td>
-                    <form asp-action="ScheduleDetails" asp-controller="Interviewer" asp-route-scheduleId="@RSACSPSample.EncodeServerName((item.ID).ToString())">
+                    <form asp-action="ScheduleDetails" asp-controller="Interviewer" asp-route-toAdminIndex="true" asp-route-scheduleId="@RSACSPSample.EncodeServerName((item.ID).ToString())">
                         <button type="submit" class="btn btn-sm btn-primary">
-                            Details
+                            Click here
                         </button>
                     </form>
                 </td>
             </tr>
                 }
-            </table>
-        </div>
+        </table>
+    </div>
     }
     else
     {
-        <h4 class="text-gray text-center">No Upcoming Scehdules yet.</h4>
+    <h4 class="text-gray text-center">No Upcoming Scehdules yet.</h4>
     }
     <h2 class="mb-2 text-left"><u>Notifications : </u></h2>
     <hr />
     @if (Model.selected_application.Count() > 0)
     {
-        <div class="container-fluid mb-2 box-shadow">
-            <table class="table table-sm table-bordered  table-striped" style="table-layout: fixed; width: 100%">
-                <tr>
-                    <th>S.No.</th>
-                    <th>Candidate Name</th>
-                    <th>Job Title</th>
-                    <th>Job Role</th>
-                    <th>Joining Date</th>
-                    <th>Confirm </th>
-                </tr>
-                @{ int rowcount1 = 0;}
-                @foreach (var item in Model.selected_application)
+    <div class="container-fluid mb-2 box-shadow">
+        <table class="table table-sm table-bordered  table-striped" style="table-layout: fixed; width: 100%">
+            <tr>
+                <th>S.No.</th>
+                <th>Candidate Name</th>
+                <th>Job Title</th>
+                <th>Job Role</th>
+                <th>Joining Date</th>
+                <th>Details </th>
+            </tr>
+            @{ int rowcount1 = 0;}
+            @foreach (var item in Model.selected_application)
                 {
-                    <tr>
-                        <td>@(rowcount1+=1).</td>
-                        <td style="word-wrap: break-word">@item.candidateName</td>
-                        <td style="word-wrap: break-word">@item.position</td>
-                        <td  style="word-wrap: break-word">@item.job_Role</td>
-                        <td id="joining_date">@item.joining_date.ToString(date_format)</td>
-                        <td>
-                            @if (item.joining_date > cur_date)
-                            {
-                                <form asp-action="NotificationDetails" asp-controller="Home" asp-route-id="@RSACSPSample.EncodeServerName((item.ID).ToString())">
-                                    <button id="btn-confirm" type="submit" class="btn btn-sm btn-secondary" disabled>
-                                        Click here
-                                    </button>
-                                </form>
-                            }
-                            else
-                            {
-                                <form asp-action="SelectedJobApplicationsDetails" asp-controller="JobApplication" asp-route-toAdminIndex="true" asp-route-editFromDashboard="true" asp-route-id="@RSACSPSample.EncodeServerName((item.ID).ToString())">
-                                    <button id="btn-confirm" type="submit" class="btn btn-sm btn-primary">
-                                        Click here
-                                    </button>
-                                </form>
-                            }
+            <tr>
+                <td>@(rowcount1+=1).</td>
+                <td style="word-wrap: break-word">@item.candidateName</td>
+                <td style="word-wrap: break-word">@item.position</td>
+                <td style="word-wrap: break-word">@item.job_Role</td>
+                <td id="joining_date">@item.joining_date.ToString(date_format)</td>
+                <td>
+                    @*@if (item.joining_date > cur_date)
+                        {
+                            <form asp-action="NotificationDetails" asp-controller="Home" asp-route-id="@RSACSPSample.EncodeServerName((item.ID).ToString())">
+                                <button id="btn-confirm" type="submit" class="btn btn-sm btn-secondary" disabled>
+                                    Click here
+                                </button>
+                            </form>
+                        }
+                        else
+                        {*@
+                    <form asp-action="SelectedJobApplicationsDetails" asp-controller="JobApplication" asp-route-toAdminIndex="true" asp-route-editFromDashboard="true" asp-route-id="@RSACSPSample.EncodeServerName((item.ID).ToString())">
+                        <button id="btn-confirm" type="submit" class="btn btn-sm btn-primary">
+                            Click here
+                        </button>
+                    </form>
+                    @*}*@
 
-                        </td>
-                    </tr>
+                </td>
+            </tr>
                 }
-            </table>
-        </div>
+        </table>
+    </div>
     }
     else
     {
-        <h4 class="text-center text-gray">No Notifications yet.</h4>
+    <h4 class="text-center text-gray">No Notifications yet.</h4>
     }
 
 

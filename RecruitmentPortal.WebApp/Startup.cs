@@ -54,7 +54,14 @@ namespace RecruitmentPortal.WebApp
                 opts.Password.RequireNonAlphanumeric = false;
                 opts.Password.RequiredLength = 8;
             })
-            .AddEntityFrameworkStores<RecruitmentPortalDbContext>();
+            .AddEntityFrameworkStores<RecruitmentPortalDbContext>()
+             .AddDefaultTokenProviders();  //for token generation
+
+            //for timspan of token
+            services.Configure<DataProtectionTokenProviderOptions>(opt =>
+            opt.TokenLifespan = TimeSpan.FromHours(2));
+
+
             //services of upper generics
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); //for generic
 

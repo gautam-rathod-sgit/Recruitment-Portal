@@ -11,7 +11,7 @@
         <div class="mb-2">
             <a asp-action="UpdateScheduleOfJobApplication" asp-controller="JobApplication" class="btn btn-primary btn-md mr-3"
                asp-route-id="@RSACSPSample.EncodeServerName((Model.jobAppId).ToString())"
-               asp-route-scheduleId ="@RSACSPSample.EncodeServerName((Model.ID).ToString()) " asp-route-to_schedule ="true">
+               asp-route-scheduleId="@RSACSPSample.EncodeServerName((Model.ID).ToString()) " asp-route-to_schedule="true">
                 Re-Schedule
             </a>
         </div>
@@ -27,9 +27,19 @@
         <br />
         @if (User.IsInRole("Admin"))
         {
-            <div>
-                <a asp-action="Index" asp-controller="Interviewer" class="btn btn-secondary mr-3">Back to List</a>
-            </div>
+            if (ViewBag.toAdminIndex != null || ViewBag.toAdminIndex == true)
+            {
+                <div>
+                    <a asp-action="AdminIndex" asp-controller="Home" class="btn btn-secondary mr-3">Back to List</a>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <a asp-action="Index" asp-controller="Interviewer" class="btn btn-secondary mr-3">Back to List</a>
+                </div>
+            }
+
         }
         else
         {
