@@ -89,6 +89,9 @@ namespace RecruitmentPortal.WebApp.ViewModels
         //is rejected candidate
         public bool isRejected { get; set; }
 
+        
+
+
         //for jobApplicationID
         public int JobAppId { get; set; }
 

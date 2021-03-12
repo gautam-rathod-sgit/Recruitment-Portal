@@ -418,12 +418,16 @@ namespace RecruitmentPortal.WebApp.Controllers
             candidateModel = await _candidatePageServices.getCandidateById(decrypted_key);
 
             candidateModel.isRejected = true;
+
             //AddNewCandidate
-            await _candidatePageServices.UpdateCandidate(candidateModel);
+            // await _candidatePageServices.UpdateCandidate(candidateModel);
 
 
 
             //int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid));
+
+            //return RedirectToAction("SendRejectionMailToCandidate", "Candidate", new { id = candidateModel.ID });
+
             return RedirectToAction("AllApplications", "Candidate");
         }
 
@@ -550,8 +554,9 @@ namespace RecruitmentPortal.WebApp.Controllers
             //Creating Email Credentials - email-id, subject
             UserEmailOptions emailOptions = new UserEmailOptions
             {
-                Subject = "Reason for Rejection",
+                Subject = "Your application to Shaligram Infotech",
                 ToEmails = new List<string>() { model.email },
+                Body = "Dear  " + model.name + "," + "<br />" + "Sorry ! But We are not having any position you're Applying for." + "<br/>" + " We will get back to you if there is any vacancy for you."
             };
 
             //Sending Email to Receiver

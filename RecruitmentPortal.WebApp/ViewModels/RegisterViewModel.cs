@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,6 +20,12 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         public string position { get; set; }
         public string skype_id { get; set; }
+
+
+        //For uploading file
+        //   [Required(ErrorMessage = "Required.")]
+        public string file { get; set; }
+        public IFormFile FileNew { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 8)]

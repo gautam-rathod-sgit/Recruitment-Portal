@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -9,6 +10,7 @@ using RecruitmentPortal.WebApp.Interfaces;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,14 +26,18 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly ILogger<AccountController> _logger;
         private IPasswordHasher<ApplicationUser> passwordHasher;
 
+        //for uploading Images/File : media stuff
+        private readonly IWebHostEnvironment _environment;
+
 
         public IEmailService _emailService { get; }
-        public AccountController(SignInManager<ApplicationUser> signInManager,
+        public AccountController(IWebHostEnvironment environment, SignInManager<ApplicationUser> signInManager,
            ILogger<AccountController> logger,
            IPasswordHasher<ApplicationUser> passwordHash,
 
            UserManager<ApplicationUser> userManager, IEmailService emailService, RoleManager<IdentityRole> roleManager, RecruitmentPortalDbContext dbContext)
         {
+            _environment = environment;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
@@ -130,10 +136,22 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             try
             {
+                //File details fetching
+                //create a place in wwwroot for storing uploaded files
+                var uploads = Path.Combine(_environment.WebRootPath, "Files");
+                if (model.FileNew != null)
+                {
+                    using (var fileStream = new FileStream(Path.Combine(uploads, model.FileNew.FileName), FileMode.Create))
+                    {
+                        await model.FileNew.CopyToAsync(fileStream);
+                    }
+                    model.file = model.FileNew.FileName;
+
+                }
                 if (ModelState.IsValid)
                 {
 
-                    ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email, position = model.position, skype_id = model.skype_id };
+                    ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email, position = model.position, skype_id = model.skype_id, file = model.file };
 
                     var result = await _userManager.CreateAsync(user, model.Password);
 
