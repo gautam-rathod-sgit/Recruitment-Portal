@@ -21,6 +21,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 {
     public class CandidateController : Controller
     {
+        #region private variables
         IQueryable<CandidateViewModel> candidateList;
 
         private string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
@@ -41,16 +42,14 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly IJobPostCandidatePage _jobPostCandidatePage;
         //for userid
         private readonly UserManager<ApplicationUser> _userManager;
-
         //for taking image's property : media stuff
         private readonly IWebHostEnvironment _environment;
-
-
         //for dropdown
         private readonly RecruitmentPortalDbContext _dbContext;
-
         public IEmailService _emailService { get; }
+        #endregion
 
+        #region Constructor
         public CandidateController(IWebHostEnvironment environment,
              ICandidatePage candidatePage,
              IDegreePage degreePageServices,
@@ -69,96 +68,102 @@ namespace RecruitmentPortal.WebApp.Controllers
             _departmentPageservices = departmentPageservices;
             _emailService = emailService;
         }
+        #endregion
 
+        #region Public Methods
         /// <summary>
         /// This method Retrieves all Applications from the database
         /// </summary>
         /// <param name="SearchString"></param>
         /// <returns></returns>
-        public async Task<IActionResult> AllApplications(string SearchString, string Application_mode)
+        //public async Task<IActionResult> AllApplications(string SearchString, string Application_mode)
+        //{
+        //    if (Application_mode == mode_Pending)
+        //    {
+        //        return RedirectToAction("PendingApplications", "Candidate", new { Application_mode = Application_mode });
+        //    }
+        //    if (Application_mode == mode_Active)
+        //    {
+        //        return RedirectToAction("Index", "JobApplication", new { Application_mode = Application_mode });
+        //    }
+        //    if (Application_mode == mode_Selected)
+        //    {
+        //        return RedirectToAction("SelectedJobApplications", "JobApplication", new { Application_mode = Application_mode });
+        //    }
+        //    if (Application_mode == mode_Rejected)
+        //    {
+        //        return RedirectToAction("RejectedJobApplications", "JobApplication", new { Application_mode = Application_mode });
+        //    }
+
+        //    else
+        //    {
+        //        IQueryable<CandidateViewModel> modelList;
+        //        modelList = await _candidatePageServices.getCandidates();
+
+        //        //creating a select list for selecting status type applications
+        //        List<SelectListItem> ObjItem = new List<SelectListItem>()
+        //        {
+        //          new SelectListItem {Text="All Applications",Value = mode_All},
+        //          new SelectListItem {Text="New",Value = mode_Pending},
+        //          new SelectListItem {Text="Active",Value = mode_Active},
+        //          new SelectListItem {Text="Selected",Value = mode_Selected},
+        //          new SelectListItem {Text="Rejected",Value = mode_Rejected},
+        //        };
+        //        ViewBag.menuSelect = ObjItem;
+
+        //        try
+        //        {
+        //            List<CandidateViewModel> newList = new List<CandidateViewModel>();
+        //            newList = modelList.ToList();
+        //            foreach (var item in newList)
+        //            {
+        //                JobPostCandidate model = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault();
+        //                item.jobName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
+        //                item.jobRole = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_role;
+        //                item.isActive = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).Any();
+        //                item.isSelected = _dbContext.jobApplications.Where(x => x.candidateId == item.ID && x.status == status_Complete).Any();
+        //                item.isRejected = _dbContext.jobApplications.Where(x => x.candidateId == item.ID && x.status == status_Rejected).Any();
+
+        //                //getting job app id of candidates who have their records in job application table
+        //                var proceededCandidates = _dbContext.jobApplications.ToList();
+        //                var isPresent = proceededCandidates.Where(x => x.candidateId == item.ID).Any();
+        //                if (isPresent)
+        //                {
+        //                    item.JobAppId = proceededCandidates.Where(x => x.candidateId == item.ID).FirstOrDefault().ID;
+        //                }
+        //            }
+        //            modelList = newList.AsQueryable();
+
+
+        //            //for only verified candidate applications
+        //            modelList = modelList.Where(x => x.emailConfirmed == true);
+
+        //            //Added search box test
+        //            if (!String.IsNullOrEmpty(SearchString))
+        //            {
+        //                modelList = modelList.Where(s => s.jobName.ToUpper().Contains(SearchString.ToUpper()) || s.degree.ToUpper().Contains(SearchString.ToUpper()) || s.experience.ToUpper().Contains(SearchString.ToUpper()) || s.name.ToUpper().Contains(SearchString.ToUpper()));
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine(ex.Message);
+        //        }
+        //        return View(modelList);
+        //    }
+        //}
+
+        public ActionResult AllApplications()
         {
-            if (Application_mode == mode_Pending)
-            {
-                return RedirectToAction("PendingApplications", "Candidate", new { Application_mode = Application_mode });
-            }
-            if (Application_mode == mode_Active)
-            {
-                return RedirectToAction("Index", "JobApplication", new { Application_mode = Application_mode });
-            }
-            if (Application_mode == mode_Selected)
-            {
-                return RedirectToAction("SelectedJobApplications", "JobApplication", new { Application_mode  = Application_mode });
-            }
-            if(Application_mode == mode_Rejected)
-            {
-                return RedirectToAction("RejectedJobApplications", "JobApplication", new { Application_mode = Application_mode });
-            }
-
-            else
-            {
-                IQueryable<CandidateViewModel> modelList;
-                modelList = await _candidatePageServices.getCandidates();
-
-                //creating a select list for selecting status type applications
-                List<SelectListItem> ObjItem = new List<SelectListItem>()
-                {
-                  new SelectListItem {Text="All Applications",Value = mode_All},
-                  new SelectListItem {Text="New",Value = mode_Pending},
-                  new SelectListItem {Text="Active",Value = mode_Active},
-                  new SelectListItem {Text="Selected",Value = mode_Selected},
-                  new SelectListItem {Text="Rejected",Value = mode_Rejected},
-                };
-                ViewBag.menuSelect = ObjItem;
-
-                try
-                {
-                    List<CandidateViewModel> newList = new List<CandidateViewModel>();
-                    newList = modelList.ToList();
-                    foreach (var item in newList)
-                    {
-                        JobPostCandidate model = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault();
-                        item.jobName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
-                        item.jobRole = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_role;
-                        item.isActive = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).Any();
-                        item.isSelected = _dbContext.jobApplications.Where(x => x.candidateId == item.ID && x.status == status_Complete).Any();
-                        item.isRejected = _dbContext.jobApplications.Where(x => x.candidateId == item.ID && x.status == status_Rejected).Any();
-
-                        //getting job app id of candidates who have their records in job application table
-                        var proceededCandidates = _dbContext.jobApplications.ToList();
-                        var isPresent = proceededCandidates.Where(x => x.candidateId == item.ID).Any();
-                        if (isPresent)
-                        {
-                            item.JobAppId = proceededCandidates.Where(x => x.candidateId == item.ID).FirstOrDefault().ID;
-                        }
-                    }
-                    modelList = newList.AsQueryable();
-
-
-                    //for only verified candidate applications
-                    modelList = modelList.Where(x => x.emailConfirmed == true);
-
-                    //Added search box test
-                    if (!String.IsNullOrEmpty(SearchString))
-                    {
-                        modelList = modelList.Where(s => s.jobName.ToUpper().Contains(SearchString.ToUpper()) || s.degree.ToUpper().Contains(SearchString.ToUpper()) || s.experience.ToUpper().Contains(SearchString.ToUpper()) || s.name.ToUpper().Contains(SearchString.ToUpper()));
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                    Console.WriteLine(ex.Message);
-                }
-                return View(modelList);
-            }
-            
+            ViewBag.DegreeList = SelectionList.GetDegreeList().Select(m => new { Id = m.ID, Name = m.degree_name });
+            return View();
         }
         public async Task<IActionResult> PendingApplications(string SearchString, string Application_mode)
         {
-                IQueryable<CandidateViewModel> modelList;
-                modelList = await _candidatePageServices.getCandidates();
+            IQueryable<CandidateViewModel> modelList;
+            modelList = await _candidatePageServices.getCandidates();
 
-                //creating a select list for selecting status type applications
-                List<SelectListItem> ObjItem = new List<SelectListItem>()
+            //creating a select list for selecting status type applications
+            List<SelectListItem> ObjItem = new List<SelectListItem>()
                     {
                       new SelectListItem {Text="All Applications",Value = mode_All},
                       new SelectListItem {Text="New",Value = mode_Pending},
@@ -166,46 +171,44 @@ namespace RecruitmentPortal.WebApp.Controllers
                       new SelectListItem {Text="Selected",Value = mode_Selected},
                       new SelectListItem {Text="Rejected",Value = mode_Rejected},
                     };
-                ViewBag.menuSelect = ObjItem;
+            ViewBag.menuSelect = ObjItem;
 
 
 
             try
+            {
+                List<CandidateViewModel> newList = new List<CandidateViewModel>();
+                newList = modelList.ToList();
+                foreach (var item in newList)
                 {
-                    List<CandidateViewModel> newList = new List<CandidateViewModel>();
-                    newList = modelList.ToList();
-                    foreach (var item in newList)
-                    {
-                        JobPostCandidate model = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault();
-                        item.jobName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
-                        item.jobRole = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_role;
-                        item.isActive = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).Any();
-                    }
-                    modelList = newList.AsQueryable();
-
-
-                    //for only verified candidate applications
-                    modelList = modelList.Where(x => x.emailConfirmed == true && x.isActive == false);
-
-                    //Added search box test
-                    if (!String.IsNullOrEmpty(SearchString))
-                    {
-                        modelList = modelList.Where(s => s.jobName.ToUpper().Contains(SearchString.ToUpper()) || s.degree.ToUpper().Contains(SearchString.ToUpper()) || s.experience.ToUpper().Contains(SearchString.ToUpper()) || s.name.ToUpper().Contains(SearchString.ToUpper()));
-                    }
+                    JobPostCandidate model = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault();
+                    item.jobName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
+                    item.jobRole = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_role;
+                    item.isActive = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).Any();
                 }
-                catch (Exception ex)
+                modelList = newList.AsQueryable();
+
+
+                //for only verified candidate applications
+                modelList = modelList.Where(x => x.emailConfirmed == true && x.isActive == false);
+
+                //Added search box test
+                if (!String.IsNullOrEmpty(SearchString))
                 {
-
-                    Console.WriteLine(ex.Message);
+                    modelList = modelList.Where(s => s.jobName.ToUpper().Contains(SearchString.ToUpper()) || s.degree.ToUpper().Contains(SearchString.ToUpper()) || s.experience.ToUpper().Contains(SearchString.ToUpper()) || s.name.ToUpper().Contains(SearchString.ToUpper()));
                 }
+            }
+            catch (Exception ex)
+            {
 
-                ////for sorting
-                //int pageSize = 4;
-                //return View(await PaginatedList<CandidateViewModel>.CreateAsync(modelList.AsNoTracking(), pageNumber ?? 1, pageSize));
-                return View(modelList);
+                Console.WriteLine(ex.Message);
             }
 
-
+            ////for sorting
+            //int pageSize = 4;
+            //return View(await PaginatedList<CandidateViewModel>.CreateAsync(modelList.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(modelList);
+        }
 
         /// <summary>
         /// This method retrieves Application-Form which is used to apply for a particular job [GET]
@@ -215,29 +218,29 @@ namespace RecruitmentPortal.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string id) //jobpost id
         {
-            
-                CandidateViewModel model = new CandidateViewModel();
-                try
-                {
-                    model.jobpostID = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
 
-                    model.jobName = _dbContext.JobPost.FirstOrDefault(x => x.ID == model.jobpostID).job_title;
-                    //------------------------------------------------------------------------
-                    //fetching all the degrees for candidate to apply with.
+            CandidateViewModel model = new CandidateViewModel();
+            try
+            {
+                model.jobpostID = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
 
-                    //getting data from database
-                    List<Degree> DegreeList = new List<Degree>();
-                    DegreeList = (from element in _dbContext.Degree select element).ToList();
-                    DegreeList = DegreeList.Where(x => x.isActive == true).ToList();
+                model.jobName = _dbContext.JobPost.FirstOrDefault(x => x.ID == model.jobpostID).job_title;
+                //------------------------------------------------------------------------
+                //fetching all the degrees for candidate to apply with.
 
-                    //inserting into dropdown list
-                    DegreeList.Insert(0, new Degree { ID = 0, degree_name = "Select Degree" });
+                //getting data from database
+                List<Degree> DegreeList = new List<Degree>();
+                DegreeList = (from element in _dbContext.Degree select element).ToList();
+                DegreeList = DegreeList.Where(x => x.isActive == true).ToList();
 
-                    //assigning degreelist to viewbag.listofdegree
-                    ViewBag.ListOfDegree = DegreeList;
+                //inserting into dropdown list
+                DegreeList.Insert(0, new Degree { ID = 0, degree_name = "Select Degree" });
 
-                    //creating a select list for selecting Hear about US field
-                    List<SelectListItem> apply_through_items = new List<SelectListItem>()
+                //assigning degreelist to viewbag.listofdegree
+                ViewBag.ListOfDegree = DegreeList;
+
+                //creating a select list for selecting Hear about US field
+                List<SelectListItem> apply_through_items = new List<SelectListItem>()
                     {
                       new SelectListItem {Text="Select",Value="null"},
                       new SelectListItem {Text="LinkedIn",Value="LinkedIn"},
@@ -247,15 +250,15 @@ namespace RecruitmentPortal.WebApp.Controllers
                       new SelectListItem {Text="Reference",Value="Reference"},
                       new SelectListItem {Text="Other",Value="Other"}
                     };
-                    ViewBag.ReferenceSelect = apply_through_items;
+                ViewBag.ReferenceSelect = apply_through_items;
                 //--------------------------------------------------------------------------
             }
-                catch (Exception ex)
-                {
+            catch (Exception ex)
+            {
 
-                    model = new CandidateViewModel();
-                }
-                return View(model);
+                model = new CandidateViewModel();
+            }
+            return View(model);
         }
 
         public List<string> noticePeriodList()
@@ -303,9 +306,9 @@ namespace RecruitmentPortal.WebApp.Controllers
 
             try
             {
-            //------------------------------------------------------------------------------------
-            //receiving dropdown value of degree
-            if (model.degree == "Select Degree")
+                //------------------------------------------------------------------------------------
+                //receiving dropdown value of degree
+                if (model.degree == "Select Degree")
                 {
                     ModelState.AddModelError("", "Select Degree");
                 }
@@ -325,7 +328,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 DegreeViewModel selectedDegree = await _degreePageServices.getDegreeById(model.selectedDegree);
                 string degreename = selectedDegree.degree_name;
 
-                if(model.selectDept != 0)
+                if (model.selectDept != 0)
                 {
                     DepartmentViewModel selectedDept = await _departmentPageservices.getDepartmentById(model.selectDept);
                     string deptename = selectedDept.dept_name;
@@ -336,7 +339,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     model.degree = degreename;
                 }
-                
+
 
                 //assigning today's apply date 
                 model.apply_date = DateTime.Now;
@@ -373,7 +376,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             return RedirectToAction("SendOTPToMail", model);
         }
 
-
         ////For Rejecting New Candidate Application without Proceeding it
         public async Task<IActionResult> RejectApplicant(string Cid)
         {
@@ -391,7 +393,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             //int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid));
             return RedirectToAction("AllApplications", "Candidate");
         }
-
 
         /// <summary>
         /// This method returns the Department according to Selected Degree
@@ -422,7 +423,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> SendOTPToMail(CandidateViewModel model)
         {
-            
+
             //generate otp
             string body = GenerateToken();
 
@@ -437,7 +438,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 await _emailService.SendTestEmail(options);
                 ViewData["token"] = body;
-                ViewData["email"] = model.email;    
+                ViewData["email"] = model.email;
             }
             catch (Exception ex)
             {
@@ -463,7 +464,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="email_ID"></param>
         /// <returns></returns>
-       
+
         public async Task<bool> EmailConfirmation(string email_ID)
         {
             FinalData = await _candidatePageServices.getCandidateByEmailId(email_ID);
@@ -515,7 +516,8 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 ViewBag.backToAll = backToAll;
             }
-            CandidateViewModel item = await _candidatePageServices.getCandidateById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
+            int actualId = Convert.ToInt32(RSACSPSample.Decrypt(id));
+            CandidateViewModel item = await _candidatePageServices.getCandidateById(actualId); 
             return View(item);
         }
 
@@ -544,6 +546,72 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         }
 
+
+        public async Task<IActionResult> GetApplicationsList(string startDate, string endDate, string applicationType, string degree)
+        {
+            if (applicationType == null) applicationType = string.Empty;
+            if (degree == null) degree = string.Empty;
+            DateTime? sDate = !string.IsNullOrEmpty(startDate) ? Convert.ToDateTime(startDate) : (DateTime?)null;
+            DateTime? eDate = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : (DateTime?)null;
+
+            IQueryable<CandidateViewModel> modelList;
+            List<CandidateViewModel> newList = new List<CandidateViewModel>();
+            List<CandidateViewModel> filteredList = new List<CandidateViewModel>();
+
+            try
+            {
+                modelList = await _candidatePageServices.getCandidates();
+                newList = modelList.ToList();
+                foreach (var item in newList)
+                {
+                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.Encrypt(item.ID));
+                    JobPostCandidate model = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault();
+                    item.jobName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
+                    item.jobRole = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_role;
+                    item.isActive = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).Any();
+                    item.isSelected = _dbContext.jobApplications.Where(x => x.candidateId == item.ID && x.status == status_Complete).Any();
+                    item.isRejected = _dbContext.jobApplications.Where(x => x.candidateId == item.ID && x.status == status_Rejected).Any();
+
+                    //getting job app id of candidates who have their records in job application table
+                    var proceededCandidates = _dbContext.jobApplications.ToList();
+                    var isPresent = proceededCandidates.Where(x => x.candidateId == item.ID).Any();
+                    if (isPresent)
+                    {
+                        item.JobAppId = proceededCandidates.Where(x => x.candidateId == item.ID).FirstOrDefault().ID;
+                    }
+                    if (item.isActive == true && item.isSelected == true)
+                    {
+                        item.JobStatus = "Selected";
+                    }
+                    else if(item.isActive == true && item.isSelected == false && item.isRejected == false)
+                    {
+                        item.JobStatus = "Active";
+                    }
+                    else if(item.isRejected == true)
+                    {
+                        item.JobStatus = "Rejected";
+                    }
+                    else if(item.isActive == false && item.isSelected == false)
+                    {
+                        item.JobStatus = "New";
+                    }
+                }
+                filteredList = newList.Where(m => (m.JobStatus.Contains(applicationType) || applicationType == null)
+                                        && (m.degree.Contains(degree) || degree == null)
+                                        && (m.apply_date >= sDate || sDate == null)
+                                        && (m.apply_date <= eDate || eDate == null)).ToList();
+
+                return Json(new { data = filteredList });
+            }
+            catch (Exception ex)
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                return Json(new { data = filteredList });
+            }
+        }
+        #endregion
+
+        #region Private Methods
         /// <summary>
         /// This method is a part of Download method. It restricts the resume that it should only in form of .pdf/.doc/.docx
         /// </summary>
@@ -562,7 +630,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         private Dictionary<string, string> GetMimeTypes()
         {
-               return new Dictionary<string, string>
+            return new Dictionary<string, string>
             {
             {".pdf", "application/pdf"},
             {".doc", "application/vnd.ms-word"},
@@ -572,7 +640,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             {".png", "image/png"}
             };
         }
-
-
+        #endregion
     }
 }

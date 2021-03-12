@@ -60,7 +60,8 @@
             lengthMenu: [[5, 10, 25, 50, -1], [5,10, 25, 50, "All"]],
             paging: true,
             pagingType: "simple_numbers",
-            pageLength:5,
+            pageLength: 5,
+            "bDestroy": true,
             "ajax":{
                 "url": "@Url.Action("GetJobsList", "Home")",
                 "type": "GET",

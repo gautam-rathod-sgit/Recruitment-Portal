@@ -10,6 +10,7 @@ using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Core.Repository;
 using RecruitmentPortal.Core.Repository.Base;
 using RecruitmentPortal.Infrastructure.Data;
+using RecruitmentPortal.Infrastructure.Helpers;
 using RecruitmentPortal.Infrastructure.Repository;
 using RecruitmentPortal.Infrastructure.Repository.Base;
 using RecruitmentPortal.WebApp.Helpers;
@@ -42,7 +43,7 @@ namespace RecruitmentPortal.WebApp
             //use Real Database
             services.AddDbContext<RecruitmentPortalDbContext>(c =>
             c.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("RecruitmentPortal.WebApp")));
-
+            CommonHelper.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
             // Add ASP.NET Identity support
             services.AddIdentity<ApplicationUser, IdentityRole>(
             opts =>
@@ -93,6 +94,7 @@ namespace RecruitmentPortal.WebApp
 
             //Url Encryption 
             services.AddDataProtection();
+            services.AddMvc();
         }
 
 

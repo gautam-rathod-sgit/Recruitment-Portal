@@ -1,163 +1,196 @@
-﻿@model IQueryable<RecruitmentPortal.WebApp.ViewModels.CandidateViewModel>
-@using RecruitmentPortal.WebApp.Helpers
+﻿@using RecruitmentPortal.WebApp.Resources
 @{
-    ViewData["Title"] = "Applications";
+    var startDate = new DateTime(DateTime.Now.Date.Year, 1, 1);
+    List<SelectListItem> typeList = new List<SelectListItem>()
+    {
+        new SelectListItem {Text="New",Value = "1" },
+        new SelectListItem {Text="Active",Value = "2" },
+        new SelectListItem {Text="Selected",Value = "3" },
+        new SelectListItem {Text="Rejected",Value = "4" },
+    };
 }
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-search"></i> Search</h3>
 
-@{
-    int rowcount = 0;
-    string date_format = "dd-MM-yyyy";
-}
-<style>
-    .btn-size {
-        width: 100%;
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6 form-group">
+                            <label>@Labels.StartDate</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="srcStartDate">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6 form-group">
+                            <label>@Labels.EndDate</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="srcEndDate">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6 form-group">
+                            <label>Application Type</label>
+                            @Html.DropDownList("srcApplicationType", typeList, Messages.PleaseSelect, new { @class = "form-control select2" })
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6 form-group">
+                            <label>Degree</label>
+                            @Html.DropDownList("srcDegree", new SelectList(ViewBag.DegreeList, "Id", "Name"), Messages.PleaseSelect, new { @class = "form-control select2" })
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6 form-group">
+                            <input type="button" value="Search" class="btn btn-primary" onclick="search()" />
+                            <input type="button" value="Reset" id="Reset" class="btn btn-primary" onclick="reset()"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box -->
+
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">All Applications</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="datatable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Candidate Name</th>
+                                <th>Job Title</th>
+                                <th>Job Role</th>
+                                <th>SSC(%)</th>
+                                <th>HSC(%)</th>
+                                <th>Degree</th>
+                                <th>Experience</th>
+                                <th>Applied Date</th>
+                                <th>Status</th>
+                                <th><b>Actions</b></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        $(".select2").select2();
+        //Date picker
+        $('#srcStartDate').datepicker({
+            format: 'dd/mm/yyyy',
+            endDate: '+0d',
+            autoclose: true
+        });
+        $('#srcEndDate').datepicker({
+            format: 'dd/mm/yyyy',
+            endDate: '+0d',
+            autoclose: true
+        });
+        bindDatatable();
+    });
+
+    function bindDatatable() {
+        var sApplicationType = "";
+        var sDegree = "";
+        var applicationTypeElement = $('#srcApplicationType');
+        var degreeElement = $('#srcDegree');
+        if (applicationTypeElement.select2('data') && applicationTypeElement.select2('data')[0].id != '') {
+            sApplicationType = applicationTypeElement.select2('data')[0].text;
+        }
+        if (degreeElement.select2('data') && degreeElement.select2('data')[0].id != '') {
+            sDegree = degreeElement.select2('data')[0].text;
+        }
+        var sStartDate = getInputValueById('srcStartDate');
+        var sEndDate = getInputValueById('srcEndDate');
+
+        $('#datatable').DataTable({
+            lengthChange: true,
+            searching: true,
+            ordering: false,
+            lengthMenu: [[5, 10, 25, 50, -1], [5,10, 25, 50, "All"]],
+            paging: true,
+            pagingType: "simple_numbers",
+            pageLength: 10,
+            fixedColumns: true,
+            responsive: true,
+            "bDestroy": true,
+            "ajax":{
+                "url": "@Url.Action("GetApplicationsList", "Candidate")",
+                "type": "GET",
+                "data": {
+                    "startDate": sStartDate,
+                    "endDate": sEndDate,
+                    "applicationType": sApplicationType,
+                    "degree": sDegree
+                },
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "name", "name": "name"},
+                { "data": "jobName", "name": "jobName" },
+                { "data": "jobRole", "name": "jobRole" },
+                { "data": "ssc_perc", "name": "ssc_perc" },
+                { "data": "hsc_perc", "name": "hsc_perc" },
+                { "data": "degree", "name": "degree" },
+                { "data": "experience", "name": "experience" },
+                { "data": "apply_date", "name": "apply_date" },
+                { "data": "jobStatus", "name": "jobStatus" },
+                {
+                    "sClass": "text-center",
+                    "mRender": function (data, type, row) {
+                        var edit = '<a href="#" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')"><i class="fa fa-edit"></i></a>';
+                        return edit;
+                    }
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
     }
-</style>
-@*<div class="bg-gradient-gray-dark text-white d-flex justify-content-between pt-2">
 
-        <h2 class="pl-2">All Applications :</h2>
-        <div class="d-flex">
-            <div>
-                @using (Html.BeginForm("AllApplications", "Candidate", FormMethod.Post, new { style = "border : 1px solid grey;", @class = "mt-2" }))
-                {
-                    @Html.DropDownList("Application_mode", new SelectList(ViewBag.menuSelect, "Value", "Text"), new { onchange = "this.form.submit()" })
-                }
-            </div>
-            <form asp-controller="Candidate" asp-action="Applications" method="get">
-                <div class="mr-2">
-                    <input type="text" name="SearchString" placeholder="Search by Field" class="mt-2">
-                    <input class="btn btn-primary btn-sm" type="submit" value="Search" style="margin-top: -5px" />
-                </div>
-            </form>
+    function search() {
+        debugger;
+        var sStartDate = getInputValueById('srcStartDate');
+        var sEndDate = getInputValueById('srcEndDate');
 
-        </div>
-</div>*@
-<div class="row bg-gradient-gray-dark text-white">
-    <div class="col-md-5">
-        <h2 class="pl-2">All Applications :</h2>
-    </div>
-    <div class="col-md-7">
-        <div class="row d-flex justify-content-lg-end">
-            <div>
-                @using (Html.BeginForm("AllApplications", "Candidate", FormMethod.Post, new { @class = "mt-2 mr-2"}))
-                {
-                    @Html.DropDownList("Application_mode", new SelectList(ViewBag.menuSelect, "Value", "Text"), new { onchange = "this.form.submit()", style = "width:100% ; height : 30px; border : 1px solid grey;",@class = "mr-2box-shadow" })
-                }
-            </div>
-            <form asp-controller="Candidate" asp-action="AllApplications" method="get">
-                <div class="mr-2">
-                    <input type="text" name="SearchString" placeholder="Search by Field" class="mt-2">
-                    <input class="btn btn-primary btn-sm" type="submit" value="Search" style="margin-top: -5px" />
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-@if (Model.Count() > 0)
-{
-    <table class="table table-sm table-bordered table-striped">
-        <tr>
-            <th>S.No.</th>
-            <th>Candidate Name</th>
-            <th>Job Title</th>
-            <th>Job Role</th>
-            <th>SSC(%)</th>
-            <th>HSC(%)</th>
-            <th>Degree</th>
-            <th>Experience</th>
-            <th>Applied Date</th>
-            <th>Status</th>
-            <th>Details</th>
-        </tr>
-        @foreach (var user in Model)
-        {
-    <tr>
-        <td>@(rowcount+=1).</td>
-        <td>@user.name</td>
-        <td>@user.jobName</td>
-        <td>@user.jobRole</td>
-        <td>@user.ssc_perc</td>
-        <td>@user.hsc_perc</td>
-        <td>@user.degree</td>
-        <td>@user.experience</td>
-        <td>@user.apply_date.ToString(date_format)</td>
+        var dStartDate = new Date(sStartDate);
+        var dEndDate = new Date(sEndDate);
 
-
-        @if (user.isActive == true && user.isSelected == true)
-        {
-            <td>
-                <button class="btn btn-size btn-sm btn-secondary">
-                    Selected
-                </button>
-            </td>
-            <td>
-                <form asp-action="SelectedJobApplicationsDetails" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((user.JobAppId).ToString())" asp-route-backToAll="true" method="post">
-                    <button type="submit" class="btn btn-sm btn-primary">
-                        Click here
-                    </button>
-                </form>
-            </td>
+        if (dEndDate < dStartDate) {
+            notification("Error", '@Messages.EndDateGreaterThanStartDate', "error");
+            return;
         }
-        @if (user.isActive == true && user.isSelected == false && user.isRejected == false)
-        {
-    <td>
-        <button class="btn  btn-size btn-sm btn-success">
-            Active
-        </button>
-    </td>
-            <td>
-                <form asp-action="SelectedJobApplicationsDetails"  asp-controller="JobApplication"  asp-route-id="@RSACSPSample.EncodeServerName((user.JobAppId).ToString())" asp-route-backToAll="true" method="post">
-                    <button type="submit" class="btn btn-sm btn-primary">
-                        Click here
-                    </button>
-                </form>
-            </td>
-        }
-        @if (user.isRejected == true)
-        {
-    <td>
-        <button class="btn  btn-size btn-sm btn-danger">
-            Rejected
-        </button>
-    </td>
-            <td>
-                <form asp-action="SelectedJobApplicationsDetails"  asp-controller="JobApplication"  asp-route-id="@RSACSPSample.EncodeServerName((user.JobAppId).ToString())" asp-route-backToAll="true" method="post">
-                    <button type="submit" class="btn btn-sm btn-primary">
-                        Click here
-                    </button>
-                </form>
-            </td>
-        }
-        @if (user.isActive == false && user.isSelected == false)
-        {
-        <td>
-            <button type="submit" class="btn btn-size btn-sm btn-primary">
-                New
-            </button>
-        </td>
-            <td>
-                <form asp-action="Details" asp-controller="Candidate" asp-route-id="@RSACSPSample.EncodeServerName((user.ID).ToString())" asp-route-backToAll="true" method="post">
-                    <button type="submit" class="btn btn-sm btn-primary">
-                        Click Here
-                    </button>
-                </form>
-            </td>
-        }
+        bindDatatable();
+    }
 
+    function reset() {
+        setInputValueById('srcApplicationType','');
+        setInputValueById('srcDegree','');
+        setInputValueById('srcStartDate','');
+        setInputValueById('srcEndDate', '');
+        bindDatatable();
+    }
 
-        @*<td>
-            <form asp-action="Details" asp-route-id="@RSACSPSample.EncodeServerName((user.ID).ToString())" method="post">
-                <button type="submit" class="btn btn-size btn-sm btn-primary">
-                    Click here
-                </button>
-            </form>
-        </td>*@
-    </tr>
-        }
-    </table>
-}
-else
-{
-    <h4 class="text-gray text-center mt-4 text-capitalize"><strong>No Applications Yet.</strong></h4>
-}
-
+    function openRecord(id) {
+        window.location.href = '@Url.Action("Details", "Candidate")?id=' + id;
+    }
+</script>

@@ -9,3 +9,42 @@
     background-color: #e08e0b;
     border-color: #e08e0b;
 }
+
+.btn-primary {
+    background-color: #f39c12;
+    border-color: #f39c12;
+}
+
+.datepicker table tr td.active:hover, .datepicker table tr td.active:hover:hover, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active.disabled:hover:hover, .datepicker table tr td.active:focus, .datepicker table tr td.active:hover:focus, .datepicker table tr td.active.disabled:focus, .datepicker table tr td.active.disabled:hover:focus, .datepicker table tr td.active:active, .datepicker table tr td.active:hover:active, .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active, .datepicker table tr td.active.active, .datepicker table tr td.active:hover.active, .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled:hover.active, .open .dropdown-toggle.datepicker table tr td.active, .open .dropdown-toggle.datepicker table tr td.active:hover, .open .dropdown-toggle.datepicker table tr td.active.disabled, .open .dropdown-toggle.datepicker table tr td.active.disabled:hover {
+    color: #ffffff;
+    background: #f39c12;
+    border-color: #f39c12;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #f39c12;
+    color: white;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid #f39c12;
+}
+
+.datepicker thead tr:first-child th:hover, .datepicker tfoot tr th:hover {
+    background: #f39c12;
+}
+
+.datepicker table tr td.day:hover, .datepicker table tr td.day.focused {
+    background: #f39c12;
+    cursor: pointer;
+}
+
+.input-group-addon {
+    color: #f39c12;
+}
+
+.btn-primary:hover, .btn-primary:active:hover, .btn-primary.active.focus {
+    color: #fff;
+    background-color: #f39c12;
+    border-color: #f39c12;
+}
