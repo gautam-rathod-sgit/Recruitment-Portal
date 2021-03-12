@@ -170,8 +170,12 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="Sid"></param>
         /// <returns></returns>
-        public async Task<IActionResult> ScheduleDetails(string scheduleId)
+        public async Task<IActionResult> ScheduleDetails(string scheduleId, bool toAdminIndex)
         {
+            if (toAdminIndex)
+            {
+                ViewBag.toAdminIndex = toAdminIndex;
+            }
 
             //getting schedule by ID
             SchedulesViewModel model = await _schedulesPage.GetSchedulesById(Convert.ToInt32(RSACSPSample.DecodeServerName(scheduleId)));

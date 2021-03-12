@@ -37,13 +37,13 @@
 
 
             <div class="form-group">
-                <label asp-for="rating" class="control-label ">Rating : </label>
-                <input asp-for="rating" class="form-control" id="rating" />
+                <label asp-for="rating" class="control-label required">Rating : </label>
+                <input asp-for="rating" class="form-control" id="rating" type="number" required max="5" />
                 <span asp-validation-for="rating" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="remark" class="control-label ">Remarks : </label>
-                <input asp-for="remark" class="form-control" />
+                <label asp-for="remark" class="control-label required">Remarks : </label>
+                <input asp-for="remark" class="form-control" type="text" pattern="[a-zA-Z][a-zA-Z ]{2,}" required/>
                 <span asp-validation-for="remark" class="text-danger"></span>
             </div>
             <div class="form-group">

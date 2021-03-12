@@ -85,7 +85,7 @@ else
                         }
                         else
                         {
-                            @Html.ActionLink("Edit", "UpdateJobPost", "JobPost", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), cid = RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-primary" })
+                            @Html.ActionLink("Edit", "UpdateJobPost", "JobPost", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), cid = RSACSPSample.EncodeServerName((Model.ID).ToString()),editMode = true }, new { @class = "btn btn-primary" })
 
                         }
                     </td>

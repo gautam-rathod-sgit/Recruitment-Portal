@@ -23,13 +23,14 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
         private IPasswordHasher<ApplicationUser> passwordHasher;
-       
 
+
+        public IEmailService _emailService { get; }
         public AccountController(SignInManager<ApplicationUser> signInManager,
            ILogger<AccountController> logger,
            IPasswordHasher<ApplicationUser> passwordHash,
-          
-           UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, RecruitmentPortalDbContext dbContext)
+
+           UserManager<ApplicationUser> userManager, IEmailService emailService, RoleManager<IdentityRole> roleManager, RecruitmentPortalDbContext dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -37,6 +38,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             _roleManager = roleManager;
             _dbContext = dbContext;
             passwordHasher = passwordHash;
+            _emailService = emailService;
         }
 
 
@@ -287,6 +289,82 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
 
             return View("Index", _userManager.Users);
+        }
+
+
+
+
+        //forgot password feature
+        [HttpGet]
+        public IActionResult ForgotThePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotThePassword(ForgotPasswordModel forgotPasswordModel)
+        {
+            if (!ModelState.IsValid)
+                return View(forgotPasswordModel);
+            var user = await _userManager.FindByEmailAsync(forgotPasswordModel.Email);
+            if (user == null)
+                return RedirectToAction(nameof(ForgotThePasswordConfirmation));
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var callback = Url.Action(nameof(ResetPassword), "Account", new { token, email = user.Email }, Request.Scheme);
+            //var message = new Message(new string[] { "codemazetest@gmail.com" }, "Reset password token",JToken.Parse(callback),null);
+
+            UserEmailOptions options_new = new UserEmailOptions
+            {
+                Subject = "Recruitment Portal : Password Reset Token",
+                ToEmails = new List<string>() { user.Email },
+                Body = callback
+            };
+
+
+            await _emailService.SendTestEmail(options_new);
+            return RedirectToAction(nameof(ForgotThePasswordConfirmation));
+        }
+
+        public IActionResult ForgotThePasswordConfirmation()
+        {
+            return View();
+        }
+
+
+        //for reset password
+        [HttpGet]
+        public IActionResult ResetPassword(string token, string email)
+        {
+            var model = new ResetPasswordModel { Token = token, Email = email };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel resetPasswordModel)
+        {
+            if (!ModelState.IsValid)
+                return View(resetPasswordModel);
+            var user = await _userManager.FindByEmailAsync(resetPasswordModel.Email);
+            if (user == null)
+                RedirectToAction(nameof(ResetPasswordConfirmation));
+            var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.Password);
+            if (!resetPassResult.Succeeded)
+            {
+                foreach (var error in resetPassResult.Errors)
+                {
+                    ModelState.TryAddModelError(error.Code, error.Description);
+                }
+                return View();
+            }
+            return RedirectToAction(nameof(ResetPasswordConfirmation));
+        }
+
+        [HttpGet]
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
         }
 
     }

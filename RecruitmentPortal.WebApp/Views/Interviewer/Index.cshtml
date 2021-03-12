@@ -30,7 +30,7 @@
             <tr>
                 <th>S.No.</th>
                 <th>Candidate Name</th>
-                <th>Job Title</th>
+                <th style="width : 10px; word-wrap : break-word">Job Title</th>
                 <th>Job Role</th>
                 <th>Mode of Interview</th>
                 <th>Interviewer</th>
@@ -59,11 +59,11 @@
                     <td>@item.datetime.ToString(date_time_format)</td>
                     <td class="d-flex">
                         <form asp-action="ScheduleDetails" asp-route-scheduleId="@RSACSPSample.EncodeServerName((item.ID).ToString())" id="details">
-                            <button type="submit" class="btn btn-sm btn-primary mr-3">
+                            <button type="submit" class="btn btn-sm btn-primary mr-1">
                                 Click here
                             </button>
                         </form>
-                        @Html.ActionLink("Delete", "UpdateScheduleOfJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((item.jobAppId).ToString()), scheduleId = RSACSPSample.EncodeServerName((item.ID).ToString()), delete = true }, new { @class = "btn btn-danger btn-sm mr-2" })
+                        @Html.ActionLink("Delete", "UpdateScheduleOfJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((item.jobAppId).ToString()), scheduleId = RSACSPSample.EncodeServerName((item.ID).ToString()), delete = true }, new { @class = "btn btn-danger btn-sm" })
 
                         @*<form asp-action="UpdateScheduleOfJobApplication" asp-route-scheduleId="@RSACSPSample.EncodeServerName((item.ID).ToString())" id="details">
                         <button type="submit" class="btn btn-sm btn-primary">

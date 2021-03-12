@@ -25,5 +25,8 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         //relationship with JobCategoryViewModel
         public int JobCategoryId { get; set; }
+
+        //vacancy_fulfilled counter
+        public bool vacancy_overflow { get; set; }
     }
 }

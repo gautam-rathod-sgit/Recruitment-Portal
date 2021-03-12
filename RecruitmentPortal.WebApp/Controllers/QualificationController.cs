@@ -121,7 +121,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> UpdateDegree(string id, bool deactivate)
+        public async Task<IActionResult> UpdateDegree(string id, bool deactivate, bool editMode)
         {
             DegreeViewModel model = new DegreeViewModel();
             try
@@ -172,8 +172,16 @@ namespace RecruitmentPortal.WebApp.Controllers
                 }
                 else
                 {
-                    model.isActive = true;
-                    return RedirectToAction("UpdateDegreePost", "Qualification", model);
+                    if (editMode)
+                    {
+                        return View(model);
+                    }
+                    else
+                    {
+                        model.isActive = true;
+                        return RedirectToAction("UpdateDegreePost", "Qualification", model);
+                    }
+                    
                 }
 
             }
@@ -284,7 +292,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="id"></param>
         /// <param name="dept_id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UpdateDept(string id, string degree_id, bool deactivated)
+        public async Task<IActionResult> UpdateDept(string id, string degree_id, bool deactivated, bool editMode)
         {
             DepartmentViewModel model = new DepartmentViewModel();
             try
@@ -322,8 +330,16 @@ namespace RecruitmentPortal.WebApp.Controllers
                 }
                 else
                 {
-                    model.isActive = true;
-                    return RedirectToAction("UpdateDeptPost", "Qualification", model);
+                    if (editMode)
+                    {
+                        return View(model);
+                    }
+                    else
+                    {
+                        model.isActive = true;
+                        return RedirectToAction("UpdateDeptPost", "Qualification", model);
+                    }
+                    
                 }
             }
             catch (Exception ex)

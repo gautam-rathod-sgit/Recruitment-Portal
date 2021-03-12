@@ -3,11 +3,17 @@
 @using RecruitmentPortal.Infrastructure.Data.Enum
 @if (ViewData["msg"] != null)
 {
-    <script>window.onload = function () { alert("Round @ViewData["msg"] for candidate already exist !!") }</script>
+    <script>window.onload = function () { alert("Schedule @ViewData["msg"] for candidate already exist !!") }</script>
+}
+@if (ViewBag.timeConflict == true)
+{
+    <script>window.onload = function () { alert("Schedule already exist with Date & Time !!") }</script>
 }
 @{
     string isFresher = "Fresher";
     string date_format = "dd-MM-yyyy";
+    string all_mode = "All";
+
 }
 <script src="~/lib//jquery//dist//jquery.min.js"></script>
 <script>
@@ -43,7 +49,7 @@
         $('#add-contact').modal('show');
     }
 
-     //Function for setting Flag_Rejected value as true
+    //Function for setting Flag_Rejected value as true
     function openPopupReject() {
         debugger;
         $("#Flag_Rejected").val(true);
@@ -80,7 +86,7 @@
                     <input type="hidden" value="@Model.flag_Accepted" id="Flag_Accepted" name="Flag_Accepted" />
                     <div class="form-group">
                         <label asp-for="joining_date" class="control-label required">Joining Date:</label>
-                        <input asp-for="joining_date"  required class="form-control" type="date" id="demo" placeholder="dd/mm/yyyy" />
+                        <input asp-for="joining_date" required class="form-control" type="date" id="demo" placeholder="dd/mm/yyyy" />
                         <span asp-validation-for="joining_date" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -108,7 +114,6 @@
     </div>
 </div>
 <!-- Modal end -->
-
 <!-- Modal for Rejecting -->
 <div class="modal fade" id="delete-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -129,10 +134,10 @@
                     <input type="hidden" value="@Model.flag_Rejected" id="Flag_Rejected" name="Flag_Rejected" />
                     <div class="form-group">
                         <label asp-for="rejection_reason" class="control-label">Rejection Reason:</label>
-                        <input asp-for="rejection_reason" required class="form-control" type="text" id="demo"/>
+                        <input asp-for="rejection_reason" required class="form-control" type="text" id="demo" />
                         <span asp-validation-for="rejection_reason" class="text-danger"></span>
                     </div>
-                    
+
                     <div>
                         <button type="submit" class="btn btn-success" id="submit-btn">Save</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -181,9 +186,18 @@
             @*@Html.ActionLink("Accept", "UpdateJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((Model.ID).ToString()), complete = true }, new { @class = "btn btn-success mr-2" })*@
             @* @Html.ActionLink("Reject", "UpdateJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((Model.ID).ToString()), rejected = true }, new { @class = "btn btn-danger mr-2" })*@
         </form>
-        <div>
-            <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Active" class="btn btn-primary">Back to List</a>
-        </div>
+        @if (ViewBag.backToAll == true)
+        {
+            <div>
+                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Back to List</a>
+            </div>
+        }
+        else
+        {
+            <div>
+                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Active" class="btn btn-secondary">Back to List</a>
+            </div>
+        }
     </div>
     <hr />
     <dl class="row">

@@ -86,23 +86,35 @@ namespace RecruitmentPortal.WebApp.Controllers
             JobApplications jobAppModel = new JobApplications();
             Candidate candidateModel = new Candidate();
             SchedulesViewModel latestRecord = new SchedulesViewModel();
-
+            
             try
             {
                 //for getting the job application of candidate in current scenario 
                 //candidateModel = _dbContext.Candidate.Where(x => x.ID == model.candidateId).FirstOrDefault();
                 jobAppModel = _dbContext.jobApplications.Where(x => x.candidateId == model.candidateId).FirstOrDefault();
 
-                //checking for already existing round
+                //checking for already existing round 
+                
                 allschedules = _dbContext.Schedules.Where(x => x.candidateId == model.candidateId).ToList();
                 foreach(var item in allschedules)
                 {
-                    if(item.round == model.round)
+                    
+
+                    if (item.round == model.round)
                     {
                         TempData["msg"] = model.round;
                         return RedirectToAction("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName(jobAppModel.ID.ToString()) , conflict = TempData["msg"] });
-                    }
+                    }  
                 }
+
+                //checking if any schedule exists on same date and time with same interviewer
+                var validSchedule = isScheduleValid(model.datetime, model.Multiinterviewer);
+                if (validSchedule)
+                {
+                    return RedirectToAction("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName(jobAppModel.ID.ToString()), time_conflict = true });
+                }
+
+
                 //for new schedule Proceed
 
                 //converting enum values to int
@@ -132,6 +144,74 @@ namespace RecruitmentPortal.WebApp.Controllers
                 Console.WriteLine(ex.Message);
             }
             return RedirectToAction("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName(jobAppModel.ID.ToString()) });
+        }
+
+
+        /// <summary>
+        /// Actions returns true if any schedule exists for any specific interviewer in range of 15 minutes.
+        /// </summary>
+        /// <param name="dateValue"></param>
+        /// <param name="names"></param>
+        /// <returns></returns>
+        public bool isScheduleValid(DateTime dateValue, List<string> names)
+        {
+            var scheduleList = _dbContext.Schedules.ToList();
+            foreach (var item in scheduleList)
+            {
+                DateTime startdate = dateValue;
+                DateTime enddate = item.datetime;
+                var Totalminutes = (int)startdate.Subtract(enddate).TotalMinutes;
+                
+                if (Math.Abs(Totalminutes) <= 15 && Math.Abs(Totalminutes) >= 0)
+                {
+                    //checking if any any selected interviewer have any already round 
+
+                    //getting interviewer names of schedule
+                    List<UserModel> listOfUser = getInterviewerNames(item.ID);
+
+                    //checking if same interviewer exist
+                    foreach (var existing_data in listOfUser)
+                    {
+                        foreach (var new_data in names)
+                        {
+                            if (existing_data.Id == new_data)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+
+
+        /// <summary>
+        /// fetching interviewer's names by Schedule ID with help of SchedulesUsers.
+        /// </summary>
+        /// <param name="Sid"></param>
+        /// <returns></returns>
+        public List<UserModel> getInterviewerNames(int Sid)
+        {
+            List<SchedulesUsers> allusers = new List<SchedulesUsers>();
+            List<UserModel> interviewer_names = new List<UserModel>();
+            try
+            {
+                allusers = _dbContext.SchedulesUsers.Where(x => x.scheduleId == Sid).ToList();
+                foreach (var user in allusers)
+                {
+                    UserModel userModel = new UserModel();
+                    userModel.Name = _dbContext.Users.Where(x => x.Id == user.UserId).FirstOrDefault().UserName;
+                    userModel.Id = _dbContext.Users.Where(x => x.Id == user.UserId).FirstOrDefault().Id;
+                    interviewer_names.Add(userModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return interviewer_names;
         }
     }
 }

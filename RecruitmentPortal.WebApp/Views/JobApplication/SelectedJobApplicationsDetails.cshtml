@@ -26,6 +26,14 @@
             });
         });
     });
+
+    //Function for setting Flag_Rejected value as true
+    function openPopupReject() {
+        debugger;
+        $("#Flag_Rejected").val(true);
+        $('#delete-contact').modal('show');
+    }
+
 </script>
 
 <style type="text/css">
@@ -59,7 +67,7 @@
                     <input type="hidden" value="@Model.offered_ctc" id="offered_ctc" name="offered_ctc" />
                     <input type="hidden" value="@Model.remarks" id="remarks" name="remarks" />
                     <input type="hidden" value="true" id="flag_Edit" name="flag_Edit" />
-                    <input type="hidden" value="@ViewBag.toAdminIndex" id="editFromMenu" name="editFromMenu"/>
+                    <input type="hidden" value="@ViewBag.toAdminIndex" id="editFromMenu" name="editFromMenu" />
 
 
                     <div class="form-group">
@@ -77,17 +85,57 @@
     </div>
 </div>
 <!-- Modal end -->
+<!-- Modal for Rejecting -->
+<div class="modal fade" id="delete-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Fill Details:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="UpdateJobApplicationPost">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" value="@Model.ID" id="ID" name="ID" />
+                    <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
+                    <input type="hidden" value="@Model.accept_date" id="accept_date" name="accept_date" />
+                    <input type="hidden" value="@Model.start_date" id="start_date" name="start_date" />
+                    <input type="hidden" value="@Model.status" id="status" name="status" />
+                    <input type="hidden" value="@Model.notified" id="notified" name="notified" />
+                    <input type="hidden" value="@Model.commitment_mode" id="commitment_mode" name="commitment_mode" />
+                    <input type="hidden" value="@Model.offered_ctc" id="offered_ctc" name="offered_ctc" />
+                    <input type="hidden" value="@Model.remarks" id="remarks" name="remarks" />
+                    <input type="hidden" value="true" id="flag_Edit" name="flag_Edit" />
+                    <input type="hidden" value="@ViewBag.toAdminIndex" id="editFromMenu" name="editFromMenu" />
+                    <input type="hidden" value="@Model.flag_Rejected" id="Flag_Rejected" name="Flag_Rejected" />
+                    <div class="form-group">
+                        <label asp-for="rejection_reason" class="control-label">Rejection Reason:</label>
+                        <input asp-for="rejection_reason" required class="form-control" type="text" id="demo" />
+                        <span asp-validation-for="rejection_reason" class="text-danger"></span>
+                    </div>
 
+                    <div>
+                        <button type="submit" class="btn btn-success" id="submit-btn">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal end -->
 
 <div class="row bg-gradient-gray-dark text-white">
     <div class="col-md-5">
         @if (Model.status == status_Rejected)
         {
-            <h2 class="pl-2">Rejected Application Details:</h2>
+        <h2 class="pl-2">Rejected Candidate Details:</h2>
         }
         else
         {
-            <h2 class="pl-2">Selected Application Details:</h2>
+            <h2 class="pl-2">Selected Candidate Details:</h2>
         }
 
     </div>
@@ -109,10 +157,19 @@
                     @*@Html.ActionLink("Edit Date", "UpdateJobApplication", "JobApplication", new { id = @RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-primary btn-sm mr-3" })*@
                 </div>
                 <div>
-                    @*Reject button for rejecting the candidate after selection is done. [[[[[[ Riddhi task ]]]]]]*@
-                    <button class="btn  btn-danger mr-2" disabled>
-                        Reject
-                    </button>
+                    @if (Model.joining_date <= DateTime.Today)
+                    {
+                        <!-- Button trigger modal For Rejecting Application-->
+                        <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#delete-contact" onclick="openPopupReject()">
+                            Reject
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn  btn-danger mr-2" disabled>
+                            Reject
+                        </button>
+                    }
                 </div>
                 <div>
                     <a asp-action="ConfirmJobApplication" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-success mr-3">
@@ -183,23 +240,23 @@
             else
             {
                 <div>
-                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=Rejected_mode class="btn btn-secondary">Back to List</a>
+                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Rejected" class="btn btn-secondary">Back to List</a>
                 </div>
             }
         </div>
     }
     @*Active Application data*@
-    @if(Model.status == status_Pending)
-    {
-        <div class="d-flex justify-content-end">
-            @if (ViewBag.backToAll == true)
-            {
-                <div>
-                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Back to List</a>
-                </div>
-            }
-        </div>
-    }
+    @*@if(Model.status == status_Pending)
+        {
+            <div class="d-flex justify-content-end">
+                @if (ViewBag.backToAll == true)
+                {
+                    <div>
+                        <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Back to List</a>
+                    </div>
+                }
+            </div>
+        }*@
 
     <br />
     <dl class="row">
@@ -301,17 +358,39 @@
         @if (Model.status == status_Complete)
         {
             <dt class="col-sm-4">
+                Applied Date
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.candidate.apply_date)
+            </dd>
+            <dt class="col-sm-4">
                 Apply Through
             </dt>
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.candidate.applying_through)
             </dd>
-            <dt class="col-sm-4">
-                Interview Remarks
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.remarks)
-            </dd>
+            @if (Model.listOfRounds.Count() > 0)
+            {
+                <dt class="col-sm-4">
+                    Interview Rounds
+                </dt>
+                <dd class="col-sm-8">
+                    @foreach (var item in Model.listOfRounds)
+                    {
+                        
+                        <p>@item</p>
+                    }
+                </dd>
+            }
+            else
+            {
+                <dt class="col-sm-4">
+                    Interview Rounds
+                </dt>
+                <dd class="col-sm-8">
+                    No Rounds available.
+                </dd>
+            }
             <dt class="col-sm-4">
                 Joining Date
             </dt>
@@ -330,9 +409,21 @@
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.offered_ctc)
             </dd>
+            <dt class="col-sm-4">
+                Interview Remarks
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.remarks)
+            </dd>
         }
         @if (Model.status == status_Rejected)
         {
+            <dt class="col-sm-4">
+                Applied Date
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.candidate.apply_date)
+            </dd>
             <dt class="col-sm-4">
                 Job Title
             </dt>
@@ -351,27 +442,11 @@
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.rejection_date)
             </dd>
-            @if (Model.remarks != null)
-            {<dt class="col-sm-4">
-                    Remarks
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.rejection_reason)
-                </dd>
-            }
-            else
-            {
-                <dt class="col-sm-4">
-                    Remarks
-                </dt>
-                <dd class="col-sm-8">
-                    <p>No remarks available</p>
-                </dd>
-            }
+
             @if (Model.listOfRounds.Count() > 0)
             {
                 <dt class="col-sm-4">
-                    Interview Rounds Completed
+                    Interview Rounds
                 </dt>
                 <dd class="col-sm-8">
                     @foreach (var item in Model.listOfRounds)
@@ -384,16 +459,34 @@
             else
             {
                 <dt class="col-sm-4">
-                    Interview Rounds Completed
+                    Interview Rounds
                 </dt>
                 <dd class="col-sm-8">
-                    <p>No Rounds available.</p>
+                    No Rounds available.
+                </dd>
+            }
+            @if (Model.rejection_reason != null)
+            {
+                <dt class="col-sm-4">
+                    Remarks
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.rejection_reason)
+                </dd>
+            }
+            else
+            {
+                <dt class="col-sm-4">
+                    Remarks
+                </dt>
+                <dd class="col-sm-8">
+                    No remarks available
                 </dd>
             }
 
 
         }
-        else
+        @*else
         {
             <dt class="col-sm-4">
                 Applying Through
@@ -407,7 +500,7 @@
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.status)
             </dd>
-        }
+        }*@
 
     </dl>
 </div>

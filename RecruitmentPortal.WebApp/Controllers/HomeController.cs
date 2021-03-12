@@ -52,6 +52,12 @@ namespace RecruitmentPortal.WebApp.Controllers
             _jobPostPage = jobPostPage;
             _Protector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.JobPostIdRouteValue);
         }
+        //public async Task<IActionResult> DeactivateJobPost(JobPostViewModel jobPostModel)
+        //{
+
+        //    await _jobPostPageservices.UpdateJobPost(jobPostModel);
+        //    return RedirectToAction("SendOTPToMail", model);
+        //}
 
         /// <summary>
         /// This method fetches Home Page
@@ -73,6 +79,17 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             else
             {
+                //////checking if vacancy of job completed or not
+                //var vacancy = _dbContext.JobPost.FirstOrDefault(x => x.ID == newModel.job_Id).vacancy;
+                //var count_post = _dbContext.JobPostCandidate.Where(x => x.job_Id == newModel.job_Id).Count();
+
+                //if (vacancy <= count_post)
+                //{
+                //    var jobPostModel = await _jobPostPageservices.getJobPostById(newModel.job_Id);
+                //    return RedirectToAction("DeactivateJobPost", new { model, jobPostModel });
+                //}
+
+
                 //for candidate conflict
                 if (s != null)
                     ViewData["msg"] = s;
@@ -161,14 +178,13 @@ namespace RecruitmentPortal.WebApp.Controllers
                     collection.SelectedCount = _dbContext.jobApplications.Where(x => x.status == status_Complete).Count();
 
                     //upcoming schedules scheduleviewmodels
-                    var upcoming_schedules = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
+                    var upcoming_schedules = await _schedulesPage.GetAllSchedules();
                     upcoming_schedules = upcoming_schedules.Where(x => x.status != reqValue);
                     List<SchedulesViewModel> schedulelist = new List<SchedulesViewModel>();
 
 
-
                     //schedulelist = upcoming_schedules.ToList();
-                    foreach(var item in upcoming_schedules)
+                    foreach(var item in upcoming_schedules.ToList())
                     {
                         //getting interviewers names
                         List<UserModel> listOfUser = getInterviewerNames(item.ID);

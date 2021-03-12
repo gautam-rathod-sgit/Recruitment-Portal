@@ -130,13 +130,13 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UpdateCategory(string id, bool deactivate)
+        public async Task<IActionResult> UpdateCategory(string id, bool deactivate, bool editMode)
         {
             JobCategoryViewModel category = new JobCategoryViewModel();
             try
             {
                 category = await _jobCategoryPageservices.getCategoryById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
-                if(deactivate == true)
+                if(deactivate)
                 {
                     //setting final results of deactivating
                     category.isActive = false;
@@ -190,16 +190,25 @@ namespace RecruitmentPortal.WebApp.Controllers
                 }
                 else
                 {
-                    category.isActive = true;
-                    return RedirectToAction("UpdateCategoryPost", category);
+                    if (editMode)
+                    {
+                        return View(category);
+                    }
+                    else
+                    {
+                        category.isActive = true;
+                        return RedirectToAction("UpdateCategoryPost", category);
+                    }
+                    
                 }
+                
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
 
-            return View(category);
+            return View();
         }
         public bool isCandidateActiveForJob(int id)
         {
@@ -234,6 +243,20 @@ namespace RecruitmentPortal.WebApp.Controllers
             try
             {
                 await _jobCategoryPageservices.UpdateCategory(model);
+
+                //now also need to change the job title of its job post as it's dependent on job category name
+                using (_dbContext)
+                {
+                    _dbContext.JobPost
+                    .Where(x => x.JobCategoryId == model.ID)
+                    .ToList()
+                    .ForEach(a =>
+                    {
+                        a.job_title = model.job_category_name;
+                    }
+                    );
+                    _dbContext.SaveChanges();
+                }
             }
             catch (Exception ex)
             {

@@ -4,7 +4,7 @@
 
     string date_format = "dd-MM-yyyy";
     string all_mode = "All";
-    string Pending_mode = "Pending";
+
 }
 
 
@@ -39,7 +39,7 @@
         else
         {
             <div>
-                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=Pending_mode class="btn btn-secondary">Back to List</a>
+                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Pending" class="btn btn-secondary">Back to List</a>
             </div>
         }
         

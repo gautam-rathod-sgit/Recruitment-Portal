@@ -76,22 +76,31 @@
         var alreadyBound = false;
         $("#experienced").click(function () {
             if (!alreadyBound) {
+
+
+                //total_experience Old Pattern = "^[-a-zA-Z0-9-()+]+(\s+[-a-zA-Z0-9-()]+)+*$"
+                                 //New Pattern1= "^[-a-zA-Z0-9-()+]+(\s+[-a-zA-Z0-9-()]+)*$"
+                                 //New Pattern1= "^([0-9a-zA-Z]+)|([0-9a-zA-Z][0-9a-zA-Z\\s]+[0-9a-zA-Z]+)$"
+
                 //total_experience
                 var total_experience = '';
                 total_experience += '<div class="form-group mt-2">';
                 total_experience += '<label class= "control-label required" > Total Experience:</label ><br>';
-                var input = '<input type="text" data-val="true" required pattern="^[-a-zA-Z0-9-()+]+(\s+[-a-zA-Z0-9-()]+)+*$" data-val-total_experience="The Total Experience field is not a valid." data-val-required="The Total Experience field field is required." id="total_experience" name="total_experience" value="" style="width : 100%;height:40px;border-radius : 4px;border:0.5px solid #C7C6C5"/>';
+                var input = '<input type="text" data-val="true" required pattern="^([0-9a-zA-Z]+)|([0-9a-zA-Z][0-9a-zA-Z\\s]+[0-9a-zA-Z]+)$" data-val-total_experience="The Total Experience field is not a valid." data-val-required="The Total Experience field field is required." id="total_experience" name="total_experience" value="" style="width : 100%;height:40px;border-radius : 4px;border:0.5px solid #C7C6C5"/>';
                 total_experience += input;
                 total_experience += '</div >';
                 $("#afterEXP").after(total_experience);
 
 
+                //relevent_experience old Pattern = "^[-a-zA-Z0-9-()+]+(\s+[-a-zA-Z0-9-()]+)+*$"
+                                   // New Pattern = "^[-a-zA-Z0-9-()+]+(\s+[-a-zA-Z0-9-()]+)*$"
+
                 //relevent_experience
                 var relevent_experience = '';
                 relevent_experience += '<div class="form-group mt-2">';
                 relevent_experience += '<label class= "control-label required" > Relevent Experience:</label ><br>';
-                var input = '<input type="text" data-val="true" required pattern="^[-a-zA-Z0-9-()+]+(\s+[-a-zA-Z0-9-()]+)+*$" data-val-relevent_experience="The Relevent Experience field is not a valid." data-val-required="The Relevent Experience field is required." id="relevent_experience" name="relevent_experience" value="" style="width : 100%;height:40px;border-radius : 4px;border:0.5px solid #C7C6C5"/>';
-                relevent_experience += input;
+                var input = '<input type="text" data-val="true" required pattern="^([0-9a-zA-Z]+)|([0-9a-zA-Z][0-9a-zA-Z\\s]+[0-9a-zA-Z]+)$" data-val-relevent_experience="The Relevent Experience field is not a valid." data-val-required="The Relevent Experience field is required." id="relevent_experience" name="relevent_experience" value="" style="width : 100%;height:40px;border-radius : 4px;border:0.5px solid #C7C6C5"/>';
+                relevent_experience += input;                                     
                 relevent_experience += '</div >';
                 $("#total_experience").after(relevent_experience);
 
@@ -228,7 +237,12 @@
     function ValidateEmail() {
         debugger;
         var email = document.getElementById("email").value;
-        
+
+        //email validation new 1 = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+       // email validation new 2 = /\w+([-+.']\w+)*@@\w+([-.]\w+)*\.\w+([-.]\w+)*/
+          //email validation old = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
+
+
         var expr = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
         if (!expr.test(email)) {
             return false;
