@@ -107,7 +107,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         //}
 
         //----riddhi----
-        public async Task<IActionResult> Index(string conflict, string SearchString, string Application_mode)
+        public async Task<IActionResult> Index(string conflict, string SearchString, string Application_mode, string istatus = "Pending")
         {
             if (conflict != null)
             {
@@ -126,6 +126,16 @@ namespace RecruitmentPortal.WebApp.Controllers
                 new SelectListItem {Text="Rejected",Value = mode_Rejected},
                 };
                 ViewBag.menuSelect = ObjItem;
+
+                //creating a select list for selecting Interview Status
+                List<SelectListItem> ObjStatus = new List<SelectListItem>()
+                {
+                new SelectListItem {Text="Scheduled",Value="Scheduled"},
+                new SelectListItem {Text="Pending",Value="Pending"},
+                new SelectListItem {Text="Completed",Value="Completed"},
+                };
+                ViewBag.statusSelect = ObjStatus;
+
 
                 var models = await _jobApplicationPage.getJobApplications();
                 models = models.Where(x => x.status == status_Pending);
@@ -171,9 +181,13 @@ namespace RecruitmentPortal.WebApp.Controllers
                     //    }
                     //}
 
-
                 }
+               
+
+                newlist = newlist.Where(x => x.interview_Status == istatus).ToList();
+              
                 models = newlist.AsQueryable();
+
                 //Added search box test
                 if (!String.IsNullOrEmpty(SearchString))
                 {
@@ -240,11 +254,19 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="id"></param>
         /// <param name="conflict"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Details(string id, int conflict)
+        public async Task<IActionResult> Details(string id, bool backToAll, int conflict, bool time_conflict = false)
         {
             if (conflict != 0)
                 ViewData["msg"] = conflict;
 
+            if (time_conflict)
+            {
+                ViewBag.timeConflict = time_conflict;
+            }
+
+            if (backToAll)
+                ViewBag.backToAll = backToAll;
+            
             JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
             try
             {
@@ -351,23 +373,17 @@ namespace RecruitmentPortal.WebApp.Controllers
                     model.rejection_date = DateTime.Now;
                     await _jobApplicationPage.UpdateJobApplication(model);
                     return RedirectToAction("SendRejectionMailToCandidate", "Candidate", new { id = model.candidateId });
-
-                    //return RedirectToAction("AllApplications","Candidate", new { Application_mode = status_Rejected });
                 }
 
                 if (!model.flag_Edit )
-                {
-                    //if (model.status == status_Rejected) 
-                    //{
+                {    
                         model.status = model.flag_Accepted ? status_Complete : status_Pending;
                         model.accept_date = DateTime.Now;
                         await _jobApplicationPage.UpdateJobApplication(model);
-                    //} 
                 }
                 else
                 {
                     await _jobApplicationPage.UpdateJobApplication(model);
-
                 }
             }
             catch (Exception ex)
@@ -555,7 +571,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 if (delete == true)
                 {
                     await _schedulesPage.DeleteSchedule(schedule_ID);
-                    return RedirectToAction("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName((JobApplicationId).ToString()) });
+                    return RedirectToAction("Index", "Interviewer");
                 }
                 //for updating schedules
                 jobApplicationModel = await _jobApplicationPage.getJobApplicationById(JobApplicationId);

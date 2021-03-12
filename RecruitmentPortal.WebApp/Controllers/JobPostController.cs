@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.Infrastructure.Data.Enum;
@@ -134,29 +135,34 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="id"></param>
         /// <param name="cid"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UpdateJobPost(string id, string cid, bool deactivate)
+        public async Task<IActionResult> UpdateJobPost(string id, string cid, bool deactivate, bool editMode)
         {
             JobPostViewModel item = new JobPostViewModel();
             try
             {
                 item = await _jobPostPageservices.getJobPostById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
                 item.JobCategoryId = Convert.ToInt32(RSACSPSample.DecodeServerName(cid));
+
                 if (deactivate == true)
                 {
                     //checking if any candidate is active with this job
                     bool isAvailable =_dbContext.JobPostCandidate.Where(x => x.job_Id == Convert.ToInt32(RSACSPSample.DecodeServerName(id))).Any();
                     bool isActiveCandidate = false;
                     List<JobApplications> jobAppList = new List<JobApplications>();
+
                     if (isAvailable)
                     {
                         var listOfCandidates = _dbContext.JobPostCandidate.Where(x => x.job_Id == Convert.ToInt32(RSACSPSample.DecodeServerName(id))).ToList();
+
                         foreach (var values in listOfCandidates)
                         {
                             var data = _dbContext.jobApplications.Where(x => x.candidateId == values.candidate_Id).FirstOrDefault();
                             if(data != null)
-                            jobAppList.Add(data);
+                                jobAppList.Add(data);
                         }
+
                         var temp = jobAppList.Where(x => x.status == status_Pending).Any();
+
                         if (temp)
                         {
                             isActiveCandidate = true;
@@ -175,8 +181,16 @@ namespace RecruitmentPortal.WebApp.Controllers
                 }
                 else
                 {
-                    item.isActive = true;
-                    return RedirectToAction("UpdateJobPostPost", "JobPost", item);
+                    if (editMode)
+                    {
+                        return View(item);
+                    }
+                    else
+                    {
+                        item.isActive = true;
+                        return RedirectToAction("UpdateJobPostPost", "JobPost", item);
+                    }
+                   
                 }
                 
             }
@@ -193,11 +207,32 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
 
-        public async Task<IActionResult> UpdateJobPostPost(JobPostViewModel model)
+        public async Task<IActionResult> UpdateJobPostPost(JobPostViewModel model, bool vacancy_overflow = false)
         {
             try
             {
-                await _jobPostPageservices.UpdateJobPost(model);
+                if (vacancy_overflow)
+                {
+                CandidateViewModel candidateModel = new CandidateViewModel();
+                JobPostViewModel jobPostModel = new JobPostViewModel();
+                jobPostModel = JsonConvert.DeserializeObject<JobPostViewModel>((string)TempData["jobpost"]);
+                candidateModel = JsonConvert.DeserializeObject<CandidateViewModel>((string)TempData["candidate"]);
+
+                //deactivating job application
+                jobPostModel.isActive = false;
+
+                await _jobPostPageservices.UpdateJobPost(jobPostModel);
+
+                TempData["candidateForEmailConfirmation"] = JsonConvert.SerializeObject(candidateModel);
+                //redirecting to email confirmation process
+                return RedirectToAction("SendOTPToMail", "Candidate", new {vacancy_overflow = true });
+                }
+                else
+                {
+                    await _jobPostPageservices.UpdateJobPost(model);
+
+                }
+
             }
             catch (Exception ex)
             {

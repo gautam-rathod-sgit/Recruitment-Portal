@@ -24,7 +24,7 @@ namespace RecruitmentPortal.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<SchedulesUsers>().HasKey(sc => new { sc.scheduleId, sc.UserId });
-
+           
             ////for candidate relationship with Job application
             //modelBuilder.Entity<Candidate>()
             //.HasMany<JobApplications>(s => s.JobApplications)

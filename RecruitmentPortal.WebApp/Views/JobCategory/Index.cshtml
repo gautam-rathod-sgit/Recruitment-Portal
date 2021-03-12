@@ -34,44 +34,36 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>@(rowNo += 1)</td>
-                    <td>@item.job_category_name</td>
-                    <td>
-                        @if (item.isActive == true)
-                        {
-                            @Html.ActionLink("Add Job", "AddNewJobPost", "JobPost", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-primary" })
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Add Job", null, null, null, new { @class = "btn btn-secondary" })
+            <tr>
+                <td>@(rowNo += 1)</td>
+                <td>@item.job_category_name</td>
 
-                        }
+                @if (item.isActive == true)
+                {
+                    <td>
+                        @Html.ActionLink("Add Job", "AddNewJobPost", "JobPost", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-primary" })
                     </td>
                     <td>
-                        @if (item.isActive == true)
-                        {
-                            @Html.ActionLink("Edit", "UpdateCategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-primary" })
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Edit", null, null, null, new { @class = "btn btn-secondary" })
-                        }
+                        @Html.ActionLink("Edit", "UpdateCategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), editMode = true }, new { @class = "btn btn-primary mr-1" })
+                        @Html.ActionLink("Deactivate", "UpdateCategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = true }, new { @class = "btn btn-danger", @style = "width : 100px" })
 
-                        @if (item.isActive == true)
-                        {
-                            @Html.ActionLink("Deactivate", "UpdateCategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = true }, new { @class = "btn btn-danger", @style= "width : 100px" })
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Activate", "UpdateCategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = false }, new { @class = "btn btn-success",@style = "width : 100px" })
-
-                        }
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.ActionLink("Add Job", null, null, null, new { @class = "btn btn-secondary" })
                     </td>
                     <td>
-                        @Html.ActionLink("Details", "DetailsJobcategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-success" })
+                        @Html.ActionLink("Edit", null, null, null, new { @class = "btn btn-secondary mr-1" })
+                        @Html.ActionLink("Activate", "UpdateCategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = false }, new { @class = "btn btn-success", @style = "width : 100px" })
                     </td>
-                </tr>
+                }
+
+                <td>
+                    @Html.ActionLink("Details", "DetailsJobcategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-success" })
+                </td>
+            </tr>
             }
         </tbody>
     </table>

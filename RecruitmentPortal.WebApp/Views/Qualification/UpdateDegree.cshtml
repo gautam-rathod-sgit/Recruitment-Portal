@@ -9,7 +9,7 @@
             <input type="hidden" value="@Model.ID" id="ID" name="ID" />
             <div class="form-group">
                 <label asp-for="degree_name" class="control-label"></label>
-                <input asp-for="degree_name" class="form-control" />
+                <input asp-for="degree_name" class="form-control" type="text" pattern="[a-zA-Z][a-zA-Z ]{2,}" required/>
                 <span asp-validation-for="degree_name" class="text-danger"></span>
             </div>
 

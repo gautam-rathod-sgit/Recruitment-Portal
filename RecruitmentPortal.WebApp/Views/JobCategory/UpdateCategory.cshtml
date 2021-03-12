@@ -16,7 +16,7 @@
 
             <div class="form-group">
                 <label asp-for="job_category_name" class="control-label"></label>
-                <input asp-for="job_category_name" class="form-control" required />
+                <input asp-for="job_category_name" class="form-control"  type="text" pattern="[a-zA-Z][a-zA-Z ]{2,}" required />
                 <span asp-validation-for="job_category_name" class="text-danger"></span>
             </div>
 

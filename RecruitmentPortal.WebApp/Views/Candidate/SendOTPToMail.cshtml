@@ -23,6 +23,8 @@ var email = @ViewData["email"];
         </div>
     </form>
 </div>
+
+
 <div class="accent-cyan" id="confirm">
     <h3>Thank you for submitting your application. We will review your application and contact you shortly.</h3><br />
     @Html.ActionLink("Go Back", "Index", "Home", null, new { @class = "btn btn-primary" })
@@ -31,13 +33,14 @@ var email = @ViewData["email"];
     var block = $("#display");
     $("#confirm").hide();
     var data =  @ViewData["token"];
+
     function verify() {
         if ($("#token_input").val() == data) {
             block.remove();
             var url = '@Url.Content("~/")' + "Candidate/EmailConfirmation";
-                $.get(url, { email_ID: "@Model.email" }, function (res) {
-                    $("#confirm").show();
-                });
-            }
+            $.get(url, { email_ID: "@Model.email" }, function (res) {
+                $("#confirm").show();
+            });
+        }
     }
 </script>

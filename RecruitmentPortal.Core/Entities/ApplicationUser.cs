@@ -9,6 +9,9 @@ namespace RecruitmentPortal.Core.Entities
     {
         public string position { get; set; }
         public string skype_id { get; set; }
+        //For uploading file
+        public string file { get; set; }
+
         //relationship with SchedulesUsers
         public IList<SchedulesUsers> SchedulesUsers { get; set; }
     }

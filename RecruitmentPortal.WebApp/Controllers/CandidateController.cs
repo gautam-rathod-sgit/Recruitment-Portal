@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.Infrastructure.Data.Enum;
@@ -39,6 +40,8 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly IDegreePage _degreePageServices;
         private readonly IDepartmentPage _departmentPageservices;
         private readonly IJobPostCandidatePage _jobPostCandidatePage;
+        private readonly IJobPostPage _jobPostPageservices;
+
         //for userid
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -53,6 +56,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         public CandidateController(IWebHostEnvironment environment,
              ICandidatePage candidatePage,
+              IJobPostPage jobPostPageservices,
              IDegreePage degreePageServices,
              RecruitmentPortalDbContext dbContext,
               IJobPostCandidatePage jobPostCandidatePage,
@@ -62,6 +66,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             _candidatePageServices = candidatePage;
             _environment = environment;
+            _jobPostPageservices = jobPostPageservices;
             _userManager = userManager;
             _dbContext = dbContext;
             _jobPostCandidatePage = jobPostCandidatePage;
@@ -278,119 +283,157 @@ namespace RecruitmentPortal.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> IndexPost(CandidateViewModel model)
         {
-            //checking if already applied for same job
-            candidateList = await _candidatePageServices.getCandidates();
+           
 
-            try
-            {
-                List<CandidateViewModel> list = new List<CandidateViewModel>();
-                list = candidateList.ToList();
-                foreach (var item in list)
+                //checking if already applied for same job
+                candidateList = await _candidatePageServices.getCandidates();
+
+                try
                 {
-                    //var job_ID = _dbContext.JobPostCandidate.FirstOrDefault(x => x.candidate_Id == item.ID).job_Id;
-                    //var job_ID = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault().job_Id;
-                    if (item.email == model.email)
+                    List<CandidateViewModel> list = new List<CandidateViewModel>();
+                    list = candidateList.ToList();
+                    foreach (var item in list)
                     {
-                        TempData["msg1"] = model.email;
-                        return RedirectToAction("Index", "Home", new { s = TempData["msg1"] });
+                        //var job_ID = _dbContext.JobPostCandidate.FirstOrDefault(x => x.candidate_Id == item.ID).job_Id;
+                        //var job_ID = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault().job_Id;
+                        if (item.email == model.email)
+                        {
+                            TempData["msg1"] = model.email;
+                            return RedirectToAction("Index", "Home", new { s = TempData["msg1"] });
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            try
-            {
-            //------------------------------------------------------------------------------------
-            //receiving dropdown value of degree
-            if (model.degree == "Select Degree")
+                catch (Exception ex)
                 {
-                    ModelState.AddModelError("", "Select Degree");
+                    Console.WriteLine(ex.Message);
                 }
-                //getting data from database
-                List<Degree> DegreeList = new List<Degree>();
-                DegreeList = (from element in _dbContext.Degree select element).ToList();
-                DegreeList = DegreeList.Where(x => x.isActive == true).ToList();
-                //inserting into dropdown list
-                DegreeList.Insert(0, new Degree { ID = 0, degree_name = "Select Degree" });
 
-                //assigning degreelist to viewbag.listofdegree
-                ViewBag.ListOfDegree = DegreeList;
-                //------------------------------------------------------------------------------------
-
-
-                //getting selected value for degree
-                DegreeViewModel selectedDegree = await _degreePageServices.getDegreeById(model.selectedDegree);
-                string degreename = selectedDegree.degree_name;
-
-                if(model.selectDept != 0)
+                try
                 {
-                    DepartmentViewModel selectedDept = await _departmentPageservices.getDepartmentById(model.selectDept);
-                    string deptename = selectedDept.dept_name;
-
-                    model.degree = degreename + "(" + deptename + ")";
-                }
-                else
-                {
-                    model.degree = degreename;
-                }
-                
-
-                //assigning today's apply date 
-                model.apply_date = DateTime.Now;
-
-                //Resume details fetching
-                //create a place in wwwroot for storing uploaded images
-                var uploads = Path.Combine(_environment.WebRootPath, "Resume");
-                if (model.File != null)
-                {
-                    using (var fileStream = new FileStream(Path.Combine(uploads, model.File.FileName), FileMode.Create))
+                    //------------------------------------------------------------------------------------
+                    //receiving dropdown value of degree
+                    if (model.degree == "Select Degree")
                     {
-                        await model.File.CopyToAsync(fileStream);
+                        ModelState.AddModelError("", "Select Degree");
                     }
-                    model.resume = model.File.FileName;
+                    //getting data from database
+                    List<Degree> DegreeList = new List<Degree>();
+                    DegreeList = (from element in _dbContext.Degree select element).ToList();
+                    DegreeList = DegreeList.Where(x => x.isActive == true).ToList();
+                    //inserting into dropdown list
+                    DegreeList.Insert(0, new Degree { ID = 0, degree_name = "Select Degree" });
+
+                    //assigning degreelist to viewbag.listofdegree
+                    ViewBag.ListOfDegree = DegreeList;
+                    //------------------------------------------------------------------------------------
+
+
+                    //getting selected value for degree
+                    DegreeViewModel selectedDegree = await _degreePageServices.getDegreeById(model.selectedDegree);
+                    string degreename = selectedDegree.degree_name;
+
+                    if (model.selectDept != 0)
+                    {
+                        DepartmentViewModel selectedDept = await _departmentPageservices.getDepartmentById(model.selectDept);
+                        string deptename = selectedDept.dept_name;
+
+                        model.degree = degreename + "(" + deptename + ")";
+                    }
+                    else
+                    {
+                        model.degree = degreename;
+                    }
+
+
+                    //assigning today's apply date 
+                    model.apply_date = DateTime.Now;
+
+                    //Resume details fetching
+                    //create a place in wwwroot for storing uploaded images
+                    var uploads = Path.Combine(_environment.WebRootPath, "Resume");
+                    if (model.File != null)
+                    {
+                        using (var fileStream = new FileStream(Path.Combine(uploads, model.File.FileName), FileMode.Create))
+                        {
+                            await model.File.CopyToAsync(fileStream);
+                        }
+                        model.resume = model.File.FileName;
+
+                    }
+
+                    model.emailConfirmed = false;
+                    var latestRecord = await _candidatePageServices.AddNewCandidate(model);
+
+                    //add to jobpostcandidate
+                    JobPostCandidateViewModel newModel = new JobPostCandidateViewModel()
+                    {
+                        job_Id = model.jobpostID,
+                        candidate_Id = latestRecord.ID
+                    };
+                    await _jobPostCandidatePage.AddNewJobPostCandidate(newModel);
+
+
+                    //-----------------------------------------------------------------------------------------
+                    //checking if vacancy of job completed or not, if vacancy fulfilled then deactivate the job
+
+                    var vacancy = _dbContext.JobPost.FirstOrDefault(x => x.ID == newModel.job_Id).vacancy;
+                    var count_post = _dbContext.JobPostCandidate.Where(x => x.job_Id == newModel.job_Id).Count();
+
+                    if (vacancy == count_post)
+                    {
+                        var jobPostModel = await _jobPostPageservices.getJobPostById(newModel.job_Id);
+
+                        //serializing the object into string
+                        TempData["candidate"] = JsonConvert.SerializeObject(latestRecord);
+                        TempData["jobpost"] = JsonConvert.SerializeObject(jobPostModel);
+
+                        return RedirectToAction("UpdateJobPostPost", "JobPost", new { model = jobPostModel, vacancy_overflow = true });
+                    }
+                    //--------------------------------------------------------------------------------------------
 
                 }
-
-                model.emailConfirmed = false;
-                var latestRecord = await _candidatePageServices.AddNewCandidate(model);
-
-                //add to jobpostcandidate
-                JobPostCandidateViewModel newModel = new JobPostCandidateViewModel()
+                catch (Exception ex)
                 {
-                    job_Id = model.jobpostID,
-                    candidate_Id = latestRecord.ID
-                };
-                await _jobPostCandidatePage.AddNewJobPostCandidate(newModel);
-            }
-            catch (Exception ex)
+                    Console.WriteLine(ex.Message);
+                }
+
+
+            
+                return RedirectToAction("SendOTPToMail", model);
+
+            
+        }
+
+        //public async Task<IActionResult> DeactivateJobPost(CandidateViewModel model, JobPostViewModel jobPostModel)
+        //{
+
+        //    await _jobPostPageservices.UpdateJobPost(jobPostModel);
+        //    return RedirectToAction("SendOTPToMail", model);
+        //}
+        
+
+
+
+
+            ////For Rejecting New Candidate Application without Proceeding it
+            public async Task<IActionResult> RejectApplicant(string Cid)
             {
-                Console.WriteLine(ex.Message);
+                int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid));
+
+                CandidateViewModel candidateModel = new CandidateViewModel();
+                candidateModel = await _candidatePageServices.getCandidateById(decrypted_key);
+
+                candidateModel.is_InitReject = true;
+                candidateModel.isRejected = true;
+
+          
+
+            //Update NewCandidate
+          //  await _candidatePageServices.UpdateCandidate(candidateModel);
+
+                //int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid));
+                return RedirectToAction("SendRejectionMailToCandidate", "Candidate", new { id = candidateModel.ID});
             }
-
-            return RedirectToAction("SendOTPToMail", model);
-        }
-
-
-        ////For Rejecting New Candidate Application without Proceeding it
-        public async Task<IActionResult> RejectApplicant(string Cid)
-        {
-            int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid));
-
-            CandidateViewModel candidateModel = new CandidateViewModel();
-            candidateModel = await _candidatePageServices.getCandidateById(decrypted_key);
-
-            candidateModel.isRejected = true;
-            //AddNewCandidate
-            await _candidatePageServices.UpdateCandidate(candidateModel);
-
-
-
-            //int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid));
-            return RedirectToAction("AllApplications", "Candidate");
-        }
 
 
         /// <summary>
@@ -420,29 +463,58 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<IActionResult> SendOTPToMail(CandidateViewModel model)
+        public async Task<IActionResult> SendOTPToMail(CandidateViewModel model, bool vacancy_overflow = false)
         {
-            
             //generate otp
             string body = GenerateToken();
 
-            UserEmailOptions options = new UserEmailOptions
+            if (vacancy_overflow)
             {
-                Subject = "Recruitment Portal : Confirm you Email for verifying your Application.",
-                ToEmails = new List<string>() { model.email },
-                Body = body
-            };
-            //sending mail to Receivers
-            try
-            {
-                await _emailService.SendTestEmail(options);
-                ViewData["token"] = body;
-                ViewData["email"] = model.email;    
+                //getting candidate model for sending to confirm otp
+                CandidateViewModel candidateModel = new CandidateViewModel();
+                candidateModel = JsonConvert.DeserializeObject<CandidateViewModel>((string)TempData["candidateForEmailConfirmation"]);
+
+
+                UserEmailOptions options_new = new UserEmailOptions
+                {
+                    Subject = "Recruitment Portal : Confirm you Email for verifying your Application.",
+                    ToEmails = new List<string>() { candidateModel.email},
+                    Body = body
+                };
+                //sending mail to Receivers
+                try
+                {
+                    await _emailService.SendTestEmail(options_new);
+                    ViewData["token"] = body;
+                    ViewData["email"] = candidateModel.email;
+                }
+                catch (Exception ex)
+                {
+                    ViewData["error"] = "error";
+                }
+                return View(candidateModel);
             }
-            catch (Exception ex)
+            else
             {
-                ViewData["error"] = "error";
+                UserEmailOptions options = new UserEmailOptions
+                {
+                    Subject = "Recruitment Portal : Confirm you Email for verifying your Application.",
+                    ToEmails = new List<string>() { model.email },
+                    Body = body
+                };
+                //sending mail to Receivers
+                try
+                {
+                    await _emailService.SendTestEmail(options);
+                    ViewData["token"] = body;
+                    ViewData["email"] = model.email;
+                }
+                catch (Exception ex)
+                {
+                    ViewData["error"] = "error";
+                }
             }
+                      
             return View(model);
         }
         /// <summary>
@@ -486,8 +558,9 @@ namespace RecruitmentPortal.WebApp.Controllers
             //Creating Email Credentials - email-id, subject
             UserEmailOptions emailOptions = new UserEmailOptions
             {
-                Subject = "Reason for Rejection",
+                Subject = "Your application to Shaligram Infotech",
                 ToEmails = new List<string>() { model.email },
+                Body =  "Dear  " + model.name + ","+ "<br />" + "Sorry ! But We are not having any position you're Applying for." + "<br/>" + " We will get back to you if there is any vacancy for you."
             };
 
             //Sending Email to Receiver

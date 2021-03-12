@@ -104,7 +104,7 @@
                     }
                 </td>
                 <td>
-                    <form asp-action="ScheduleDetails" asp-controller="Interviewer" asp-route-scheduleId="@RSACSPSample.EncodeServerName((item.ID).ToString())">
+                    <form asp-action="ScheduleDetails" asp-controller="Interviewer" asp-route-toAdminIndex="true" asp-route-scheduleId="@RSACSPSample.EncodeServerName((item.ID).ToString())">
                         <button type="submit" class="btn btn-sm btn-primary">
                             Details
                         </button>

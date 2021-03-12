@@ -130,13 +130,13 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UpdateCategory(string id, bool deactivate)
+        public async Task<IActionResult> UpdateCategory(string id, bool deactivate, bool editMode)
         {
             JobCategoryViewModel category = new JobCategoryViewModel();
             try
             {
                 category = await _jobCategoryPageservices.getCategoryById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
-                if(deactivate == true)
+                if(deactivate)
                 {
                     //setting final results of deactivating
                     category.isActive = false;
@@ -190,9 +190,18 @@ namespace RecruitmentPortal.WebApp.Controllers
                 }
                 else
                 {
-                    category.isActive = true;
-                    return RedirectToAction("UpdateCategoryPost", category);
+                    if (editMode)
+                    {
+                        return View(category);
+                    }
+                    else
+                    {
+                        category.isActive = true;
+                        return RedirectToAction("UpdateCategoryPost", category);
+                    }
+                    
                 }
+                
             }
             catch (Exception ex)
             {

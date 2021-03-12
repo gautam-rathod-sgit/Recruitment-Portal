@@ -28,6 +28,9 @@ namespace RecruitmentPortal.Core.Entities
         public string applying_through { get; set; }
         public string resume { get; set; }
 
+        //For New Candidate Rejection
+        public bool is_InitReject { get; set; }
+
         //relationship with Schedules
         public List<Schedules> Schedules { get; set; }
 
