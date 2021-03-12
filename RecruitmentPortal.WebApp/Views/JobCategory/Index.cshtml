@@ -60,10 +60,12 @@
                     </td>
                 }
 
-                <td>
-                    @Html.ActionLink("Details", "DetailsJobcategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-success" })
-                </td>
-            </tr>
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink("Details", "DetailsJobcategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-success" })
+                    </td>
+                </tr>
             }
         </tbody>
     </table>

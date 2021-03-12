@@ -183,7 +183,6 @@ namespace RecruitmentPortal.WebApp.Controllers
                     List<SchedulesViewModel> schedulelist = new List<SchedulesViewModel>();
 
 
-
                     //schedulelist = upcoming_schedules.ToList();
                     foreach(var item in upcoming_schedules.ToList())
                     {

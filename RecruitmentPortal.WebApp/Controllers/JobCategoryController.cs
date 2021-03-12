@@ -208,7 +208,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 Console.WriteLine(ex.Message);
             }
 
-            return View(category);
+            return View();
         }
         public bool isCandidateActiveForJob(int id)
         {
@@ -243,6 +243,20 @@ namespace RecruitmentPortal.WebApp.Controllers
             try
             {
                 await _jobCategoryPageservices.UpdateCategory(model);
+
+                //now also need to change the job title of its job post as it's dependent on job category name
+                using (_dbContext)
+                {
+                    _dbContext.JobPost
+                    .Where(x => x.JobCategoryId == model.ID)
+                    .ToList()
+                    .ForEach(a =>
+                    {
+                        a.job_title = model.job_category_name;
+                    }
+                    );
+                    _dbContext.SaveChanges();
+                }
             }
             catch (Exception ex)
             {

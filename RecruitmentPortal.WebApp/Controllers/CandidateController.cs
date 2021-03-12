@@ -364,38 +364,18 @@ namespace RecruitmentPortal.WebApp.Controllers
                     model.emailConfirmed = false;
                     var latestRecord = await _candidatePageServices.AddNewCandidate(model);
 
-                    //add to jobpostcandidate
-                    JobPostCandidateViewModel newModel = new JobPostCandidateViewModel()
-                    {
-                        job_Id = model.jobpostID,
-                        candidate_Id = latestRecord.ID
-                    };
-                    await _jobPostCandidatePage.AddNewJobPostCandidate(newModel);
-
-
-                    //-----------------------------------------------------------------------------------------
-                    //checking if vacancy of job completed or not, if vacancy fulfilled then deactivate the job
-
-                    var vacancy = _dbContext.JobPost.FirstOrDefault(x => x.ID == newModel.job_Id).vacancy;
-                    var count_post = _dbContext.JobPostCandidate.Where(x => x.job_Id == newModel.job_Id).Count();
-
-                    if (vacancy == count_post)
-                    {
-                        var jobPostModel = await _jobPostPageservices.getJobPostById(newModel.job_Id);
-
-                        //serializing the object into string
-                        TempData["candidate"] = JsonConvert.SerializeObject(latestRecord);
-                        TempData["jobpost"] = JsonConvert.SerializeObject(jobPostModel);
-
-                        return RedirectToAction("UpdateJobPostPost", "JobPost", new { model = jobPostModel, vacancy_overflow = true });
-                    }
-                    //--------------------------------------------------------------------------------------------
-
-                }
-                catch (Exception ex)
+                //add to jobpostcandidate
+                JobPostCandidateViewModel newModel = new JobPostCandidateViewModel()
                 {
-                    Console.WriteLine(ex.Message);
-                }
+                    job_Id = model.jobpostID,
+                    candidate_Id = latestRecord.ID
+                };
+                await _jobPostCandidatePage.AddNewJobPostCandidate(newModel);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
 
             
@@ -404,21 +384,11 @@ namespace RecruitmentPortal.WebApp.Controllers
             
         }
 
-        //public async Task<IActionResult> DeactivateJobPost(CandidateViewModel model, JobPostViewModel jobPostModel)
-        //{
 
-        //    await _jobPostPageservices.UpdateJobPost(jobPostModel);
-        //    return RedirectToAction("SendOTPToMail", model);
-        //}
-        
-
-
-
-
-            ////For Rejecting New Candidate Application without Proceeding it
-            public async Task<IActionResult> RejectApplicant(string Cid)
-            {
-                int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid));
+        ////For Rejecting New Candidate Application without Proceeding it
+        public async Task<IActionResult> RejectApplicant(string Cid)
+        {
+            int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid));
 
                 CandidateViewModel candidateModel = new CandidateViewModel();
                 candidateModel = await _candidatePageServices.getCandidateById(decrypted_key);

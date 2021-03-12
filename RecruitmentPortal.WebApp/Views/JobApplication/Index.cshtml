@@ -49,22 +49,24 @@
         </div>
     </div>
 </div>
-@if (Model.Count() > 0)
-{
-    <table class="table table-sm table-bordered table-striped">
-        <tr><th>S.No.</th>
+
+<table class="table table-sm table-bordered table-striped">
+    <tr>
+        <th>S.No.</th>
         <th>Candidate Name</th>
         <th>Job Title</th>
         <th>Job Role</th>
         <th>
-            Interview Status @using (Html.BeginForm("Index", "JobApplication", FormMethod.Post, new { @class = "mt-2 mr-2 " }))
+            Interview Status @using (Html.BeginForm("Index", "JobApplication", FormMethod.Post, new { @class = "mt-1 mr-2 " }))
             {
                 @Html.DropDownList("istatus", new SelectList(ViewBag.statusSelect, "Value", "Text"), new { onchange = "this.form.submit()", style = "width:100% ; height : 30px; border : 1px solid grey;", @class = "mr-2box-shadow" })
             }
         </th>
         <th>Activated Date</th>
         <th>Details</th>
-        </tr>
+    </tr>
+    @if (Model.Count() > 0)
+    {
         @foreach (var user in Model)
         {
             <tr>
@@ -83,9 +85,10 @@
                 </td>
             </tr>
         }
-    </table>
-}
-else
-{
-    <h4 class="text-gray text-center mt-4 text-capitalize"><strong>No Active Applcations Yet.</strong></h4>
-}
+
+    }
+    else
+    {
+        <tr><td colspan="100%" class="text-gray text-center mt-4 text-capitalize"><strong>No Active Applcations with Selected Status.</strong></td></tr>
+    }
+</table>

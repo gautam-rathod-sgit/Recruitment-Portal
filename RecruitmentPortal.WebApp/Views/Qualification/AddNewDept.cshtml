@@ -10,7 +10,7 @@
             <input type="hidden" value="@Model.ID" id="ID" name="ID" />
             <div class="form-group">
                 <label asp-for="dept_name" class="control-label"></label>
-                <input asp-for="dept_name" class="form-control" type="text" pattern="[a-zA-Z][a-zA-Z ]{2,}" required/>
+                <input asp-for="dept_name" class="form-control" />
                 <span asp-validation-for="dept_name" class="text-danger"></span>
             </div>
 

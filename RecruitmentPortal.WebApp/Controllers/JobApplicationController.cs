@@ -107,7 +107,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         //}
 
         //----riddhi----
-        public async Task<IActionResult> Index(string conflict, string SearchString, string Application_mode, string istatus = "Pending")
+        public async Task<IActionResult> Index(string conflict, string SearchString, string Application_mode)
         {
             if (conflict != null)
             {
@@ -479,10 +479,10 @@ namespace RecruitmentPortal.WebApp.Controllers
                 model.interview_Status = _jobApplicationPage.getInterviewStatusForApplication(model.candidateId);
                 model.candidate = await _candidatePage.getCandidateById(model.candidateId);
 
-                if(model.status == status_Rejected)
-                {
+                //if(model.status == status_Rejected)
+                //{
                     model.listOfRounds = getListOfRounds(model.candidateId);
-                }
+                //}
             }
             catch (Exception ex)
             {

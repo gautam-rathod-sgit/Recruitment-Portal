@@ -8,13 +8,14 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" value="@Model.DegreeId" id="DegreeId" name="DegreeId" />
             <input type="hidden" value="@Model.ID" id="ID" name="ID" />
-            
+            @Html.HiddenFor(m => m.isActive)
+
             <div class="form-group">
-                <label asp-for="dept_name" class="control-label"></label>
-                <input asp-for="dept_name" class="form-control" type="text" pattern="[a-zA-Z][a-zA-Z ]{2,}" required/>
+                <label asp-for="dept_name" class="control-label">Department Name</label>
+                <input asp-for="dept_name" class="form-control" type="text" pattern="^[a-zA-Z0-9_ ]*$" required />
                 <span asp-validation-for="dept_name" class="text-danger"></span>
             </div>
-           
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

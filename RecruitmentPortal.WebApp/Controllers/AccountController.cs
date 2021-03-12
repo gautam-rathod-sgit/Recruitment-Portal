@@ -25,12 +25,9 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
         private IPasswordHasher<ApplicationUser> passwordHasher;
+       
 
-        //for taking image's property : media stuff
-        private readonly IWebHostEnvironment _environment;
-
-        public IEmailService _emailService { get; }
-        public AccountController(IWebHostEnvironment environment, SignInManager<ApplicationUser> signInManager,
+        public AccountController(SignInManager<ApplicationUser> signInManager,
            ILogger<AccountController> logger,
            IPasswordHasher<ApplicationUser> passwordHash,
 

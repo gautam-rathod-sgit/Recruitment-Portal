@@ -131,11 +131,11 @@
     <div class="col-md-5">
         @if (Model.status == status_Rejected)
         {
-            <h2 class="pl-2">Rejected Application Details:</h2>
+        <h2 class="pl-2">Rejected Candidate Details:</h2>
         }
         else
         {
-            <h2 class="pl-2">Selected Application Details:</h2>
+            <h2 class="pl-2">Selected Candidate Details:</h2>
         }
 
     </div>
@@ -358,16 +358,16 @@
         @if (Model.status == status_Complete)
         {
             <dt class="col-sm-4">
-                Applied Date
+                Apply Through
             </dt>
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.candidate.apply_date)
             </dd>
             <dt class="col-sm-4">
-                Apply Through
+                Interview Remarks
             </dt>
             <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.candidate.applying_through)
+                @Html.DisplayFor(model => model.remarks)
             </dd>
             <dt class="col-sm-4">
                 Joining Date
@@ -420,11 +420,9 @@
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.rejection_date)
             </dd>
-
-            @if (Model.listOfRounds.Count() > 0)
-            {
-                <dt class="col-sm-4">
-                    Interview Rounds Completed
+            @if (Model.remarks != null)
+            {<dt class="col-sm-4">
+                    Remarks
                 </dt>
                 <dd class="col-sm-8">
                     @foreach (var item in Model.listOfRounds)
@@ -437,7 +435,7 @@
             else
             {
                 <dt class="col-sm-4">
-                    Interview Rounds Completed
+                    Remarks
                 </dt>
                 <dd class="col-sm-8">
                     No Rounds available.
@@ -464,21 +462,21 @@
 
 
         }
-        @*else
-            {
-                <dt class="col-sm-4">
-                    Applying Through
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.candidate.applying_through)
-                </dd>
-                <dt class="col-sm-4">
-                    Current Interview Status
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.status)
-                </dd>
-            }*@
+        else
+        {
+            <dt class="col-sm-4">
+                Applying Through
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.candidate.applying_through)
+            </dd>
+            <dt class="col-sm-4">
+                Current Interview Status
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.status)
+            </dd>
+        }
 
     </dl>
 </div>

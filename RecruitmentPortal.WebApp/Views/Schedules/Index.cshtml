@@ -94,7 +94,7 @@
             </div>
             <div class="form-group" id="mode_select">
                 <label asp-for="mode_of_interview" class="control-label required">Mode of Interview : </label>
-                <input type="radio" name="mode_of_interview" value="Telephonic" id="tele" class="ml-2" required /><span> Online</span>
+                <input type="radio" name="mode_of_interview" value="Online" id="tele" class="ml-2" required /><span> Online</span>
                 <input type="radio" name="mode_of_interview" value="Face to Face" id="face" class="ml-2" /><span id="facetoface"> Face to Face</span>
                 @*@Html.RadioButtonFor(m => m.mode_of_interview, "Telephonic", new { @class = "ml-2" })Telephonic
             @Html.RadioButtonFor(m => m.mode_of_interview, "Face to Face", new { @class = "ml-2" })Face to Face*@

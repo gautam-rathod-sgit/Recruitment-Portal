@@ -10,11 +10,11 @@ var email = @ViewData["email"];
 }
 
 <div id="display">
-    <form  onsubmit="verify()" >
+    <form  onsubmit="return verify()" >
 
         <div class="form-group">
             <label>Enter the OTP sent to your Email.</label>
-            <input type="number" class="form-control" id="token_input" />
+            <input type="number" class="form-control" id="token_input" required/>
         </div>
         
 
@@ -38,9 +38,9 @@ var email = @ViewData["email"];
         if ($("#token_input").val() == data) {
             block.remove();
             var url = '@Url.Content("~/")' + "Candidate/EmailConfirmation";
-            $.get(url, { email_ID: "@Model.email" }, function (res) {
-                $("#confirm").show();
-            });
-        }
+                $.get(url, { email_ID: "@Model.email" }, function (res) {
+                    $("#confirm").show();
+                });
+            }
     }
 </script>
