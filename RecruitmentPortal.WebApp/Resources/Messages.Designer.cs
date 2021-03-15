@@ -70,6 +70,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activate Item for Editing.
+        /// </summary>
+        public static string EnableEntity {
+            get {
+                return ResourceManager.GetString("EnableEntity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End date must be greater than or equal to start date.
         /// </summary>
         public static string EndDateGreaterThanStartDate {
