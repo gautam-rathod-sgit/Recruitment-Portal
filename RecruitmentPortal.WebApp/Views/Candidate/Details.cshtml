@@ -27,7 +27,11 @@
             @Html.ActionLink("Proceed", "AddNewJobApplications", "JobApplication", new { Cid = RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-success mr-3" })
         </div>
         <div>
-            @Html.ActionLink("Reject", "RejectApplicant", "Candidate", new { Cid = RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-danger mr-3" })
+            @*@Html.ActionLink("Reject", "RejectApplicant", "Candidate", new { Cid = RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-danger mr-3" })*@
+            @if (Model.ID > 0)
+            {
+                <input type="button" class="btn btn-info btn-xs legitRipple" value="Reject" onclick="rejectCandidate()">
+            }
         </div>
         <br />
         @if (ViewBag.backToAll == true)
@@ -151,7 +155,13 @@
     </dl>
 </div>
 
-
-
-
-
+<script>
+    function rejectCandidate()
+    {
+        bootbox.confirm("Are you sure you want to reject this record?", function (result) {
+            if (result === true) {
+                window.location.href = "@Url.Action("RejectApplicant", "Candidate")?id=" + '@Model.EncryptedId';
+            }
+        }, 'popup-confirmation');
+    }
+</script>

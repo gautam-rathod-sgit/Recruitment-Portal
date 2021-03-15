@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data.Enum;
+using RecruitmentPortal.WebApp.Models;
 using RecruitmentPortal.WebApp.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,10 @@ using System.Threading.Tasks;
 
 namespace RecruitmentPortal.WebApp.ViewModels
 {
-    public class SchedulesViewModel : BaseViewModel
+    public class SchedulesViewModel : EncyptionHelperModel
     {
+        [ScaffoldColumn(false)]
+        public int ID { get; set; }
         public string candidate_name { get; set; }
         public string position { get; set; }
         [DataType(DataType.DateTime)]

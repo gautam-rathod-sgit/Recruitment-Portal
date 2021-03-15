@@ -10,7 +10,7 @@
     border-color: #e08e0b;
 }
 
-.btn-primary {
+.btn-primary, .btn-primary:active:hover, .btn-primary:hover, .btn-primary:active {
     background-color: #f39c12;
     border-color: #f39c12;
 }
@@ -47,4 +47,14 @@
     color: #fff;
     background-color: #f39c12;
     border-color: #f39c12;
+}
+
+.boxPad {
+    padding: 10px;
+    border-bottom: 2px solid #f39c12;
+    border-top: none;
+}
+
+.modal {
+    background: transparent;
 }

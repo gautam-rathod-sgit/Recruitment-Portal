@@ -228,7 +228,6 @@
     }
 
     function search() {
-        debugger;
         var sStartDate = getInputValueById('srcStartDate');
         var sEndDate = getInputValueById('srcEndDate');
 
@@ -251,6 +250,6 @@
     }
 
     function openRecord(id) {
-        window.location.href = '@Url.Action("Details", "Candidate")?id=' + id;
+        window.location.href = '@Url.Action("Details", "Candidate")?id=' + id; 
     }
 </script>

@@ -61,11 +61,38 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email is Required.
+        /// </summary>
+        public static string Emailrequired {
+            get {
+                return ResourceManager.GetString("Emailrequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End date must be greater than or equal to start date.
         /// </summary>
         public static string EndDateGreaterThanStartDate {
             get {
                 return ResourceManager.GetString("EndDateGreaterThanStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please Provide valid Email Address.
+        /// </summary>
+        public static string InvalidEmail {
+            get {
+                return ResourceManager.GetString("InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is Required.
+        /// </summary>
+        public static string Passwordrequired {
+            get {
+                return ResourceManager.GetString("Passwordrequired", resourceCulture);
             }
         }
         

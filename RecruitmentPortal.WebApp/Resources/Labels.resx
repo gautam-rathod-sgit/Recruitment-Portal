@@ -123,6 +123,9 @@
   <data name="EndDate" xml:space="preserve">
     <value>End Date</value>
   </data>
+  <data name="RecruitmentPortal" xml:space="preserve">
+    <value>Recruitment Portal</value>
+  </data>
   <data name="position" xml:space="preserve">
     <value>Position</value>
   </data>

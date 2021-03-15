@@ -97,12 +97,12 @@
                 <td>@item.jobRole</td>
                 <td>@item.mode_of_interview</td>
                 <td>@item.datetime.ToString(date_format) at @item.datetime.ToString(time_format)</td>
-                <td>
-                    @*@foreach (var data in item.InterviewerNames)
+                @*<td>
+                    @foreach (var data in item.InterviewerNames)
                     {
                     <p>@(i += 1).@data.Name</p>
-                    }*@
-                </td>
+                    }
+                </td>*@
                 <td>
                     <form asp-action="ScheduleDetails" asp-controller="Interviewer" asp-route-toAdminIndex="true" asp-route-scheduleId="@RSACSPSample.EncodeServerName((item.ID).ToString())">
                         <button type="submit" class="btn btn-sm btn-primary">

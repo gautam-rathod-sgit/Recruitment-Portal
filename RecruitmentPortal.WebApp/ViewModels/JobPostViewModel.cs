@@ -1,6 +1,7 @@
 ﻿using RecruitmentPortal.WebApp.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
 {
     public class JobPostViewModel : EncyptionHelperModel
     {
-        //custom made
+        [ScaffoldColumn(false)]
         public int ID { get; set; }
         public string job_title { get; set; }
         public string location { get; set; }

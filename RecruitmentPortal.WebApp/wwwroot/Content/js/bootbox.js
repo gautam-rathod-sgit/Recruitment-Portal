@@ -41,8 +41,8 @@
                 " <div class='prod_view'>" +
                                 "<table width='100%' cellpadding='0' cellspacing='0' border='0'>" +
                                     "<tr>" +
-                                        "<td align='left' class='title_pad popup-logo'><img src='/Content/img/logo.png' style='height:42px !important'/></td>" +
-                                        "<td width='33' valign='top' align='right'></td>" +
+                                    "<td align='left' class='title_pad popup-logo'><img src='../img/logo.png' style='height:42px !important'/></td>" +
+                                    "<td width='33' valign='top' align='right'></td>" +
                                     "</tr>" +
                                 "</table>" +
                 "</div>" +
@@ -207,9 +207,9 @@
             if (!button.className) {
                 if (total <= 2 && index === total - 1) {
                     // always add a primary to the main option in a two-button dialog
-                    button.className = "btn btn-info";
+                    button.className = "btn-primary inputbtn_bl";
                 } else {
-                    button.className = "btn btn-info";
+                    button.className = "btn-primary inputbtn_bl";
                 }
             }
         });
