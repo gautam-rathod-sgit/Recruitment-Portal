@@ -102,16 +102,19 @@ namespace RecruitmentPortal.WebApp.Controllers
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User logged in.");
+                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User Logged In Successfully..!!";
                         return RedirectToAction("Index", "Home");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError("Email", "Invalid login attempt.");
+                    TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Invalid login attempt";
                 }
             }
             catch (Exception ex)
             {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
                 Console.WriteLine(ex.Message);
             }
             return View(model);

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RecruitmentPortal.Infrastructure.Helpers;
+using RecruitmentPortal.WebApp.Resources;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,15 +10,13 @@ namespace RecruitmentPortal.WebApp.ViewModels
 {
     public class LoginViewModel
     {
-        [Required]
-        [EmailAddress]
+        [RegularExpression(CommonHelper.RegexEmail, ErrorMessageResourceName = "InvalidEmail", ErrorMessageResourceType = typeof(Messages))]
+        [Required(ErrorMessageResourceName = "Emailrequired", ErrorMessageResourceType = typeof(Messages))]
         public string Email { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
+        [Required(ErrorMessageResourceName = "Passwordrequired", ErrorMessageResourceType = typeof(Messages))]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
 }
