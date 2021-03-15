@@ -367,7 +367,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                         obj.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.Encrypt(obj.ID));
                     }
 
-                    TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Jobs Load Successfully..!!";
+                    //TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Jobs Load Successfully..!!";
                     return Json(new { data = list });
                 }
                 catch (Exception ex)

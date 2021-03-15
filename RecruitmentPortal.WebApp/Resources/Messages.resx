@@ -117,8 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Emailrequired" xml:space="preserve">
+    <value>Email is Required</value>
+  </data>
   <data name="EndDateGreaterThanStartDate" xml:space="preserve">
     <value>End date must be greater than or equal to start date</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Please Provide valid Email Address</value>
+  </data>
+  <data name="Passwordrequired" xml:space="preserve">
+    <value>Password is Required</value>
   </data>
   <data name="PleaseSelect" xml:space="preserve">
     <value>--- Please Select ---</value>
