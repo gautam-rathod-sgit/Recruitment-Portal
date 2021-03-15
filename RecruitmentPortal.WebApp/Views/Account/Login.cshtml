@@ -1,5 +1,6 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.LoginViewModel
 @using RecruitmentPortal.WebApp.Resources
+@using RecruitmentPortal.WebApp.Helpers
 @{
     Layout = null;
 }
@@ -83,6 +84,17 @@
     $(document).ready(function () {
         var rememberMe = $('#rememberMe').is(":checked");
         $("#RememberMe").val(rememberMe);
+
+        var errormessage = '@TempData[EnumsHelper.NotifyType.Error.GetDescription()]';
+        var successmessage = '@TempData[EnumsHelper.NotifyType.Success.GetDescription()]';
+
+        if (errormessage !== "") {
+            notification("Error", errormessage, "error");
+        }
+
+        if (successmessage !== "") {
+            notification("Success", successmessage, "success");
+        }
     });
 
     function RememberMeChk() {

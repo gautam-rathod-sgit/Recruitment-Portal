@@ -132,4 +132,7 @@
   <data name="PleaseSelect" xml:space="preserve">
     <value>--- Please Select ---</value>
   </data>
+  <data name="SomethingWrong" xml:space="preserve">
+    <value>Something Went wrong. Please try again later.</value>
+  </data>
 </root>

@@ -7,6 +7,7 @@ using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.WebApp.Helpers;
 using RecruitmentPortal.WebApp.Interfaces;
+using RecruitmentPortal.WebApp.Resources;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -105,17 +106,21 @@ namespace RecruitmentPortal.WebApp.Controllers
                         TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User Logged In Successfully..!!";
                         return RedirectToAction("Index", "Home");
                     }
+                    else
+                    {
+                        ModelState.AddModelError("Email", "Invalid login attempt.");
+                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Invalid login attempt";
+                    }
                 }
                 else
                 {
-                    ModelState.AddModelError("Email", "Invalid login attempt.");
-                    TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Invalid login attempt";
+                    TempData[EnumsHelper.NotifyType.Error.GetDescription()] = Messages.SomethingWrong;
                 }
             }
             catch (Exception ex)
             {
                 TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
-                Console.WriteLine(ex.Message);
+                ModelState.AddModelError("Email", ex.Message);
             }
             return View(model);
         }

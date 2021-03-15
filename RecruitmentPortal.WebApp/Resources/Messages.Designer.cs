@@ -104,5 +104,14 @@ namespace RecruitmentPortal.WebApp.Resources {
                 return ResourceManager.GetString("PleaseSelect", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something Went wrong. Please try again later..
+        /// </summary>
+        public static string SomethingWrong {
+            get {
+                return ResourceManager.GetString("SomethingWrong", resourceCulture);
+            }
+        }
     }
 }
