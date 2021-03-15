@@ -72,7 +72,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     obj.EncryptedId = RSACSPSample.EncodeServerName((obj.ID).ToString());
                 }
 
-                TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Jobs Load Successfully..!!";
+               
                 return Json(new { data = list });
             }
             catch (Exception ex)
