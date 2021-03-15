@@ -54,16 +54,34 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// This method retrieves list of Job Categories
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string activeCandidate)
+        public async Task<IActionResult> Index()
         {
-            if(activeCandidate != null)
-            {
-                ViewBag.msg = activeCandidate;
-            }
-            categorylist = await _jobCategoryPageservices.getCategories();
-            return View(categorylist);
+            return View();
         }
 
+        public async Task<IActionResult> GetJobCategories()
+        {
+            List<JobCategoryViewModel> list = null;
+            try
+            {
+                categorylist = await _jobCategoryPageservices.getCategories();
+                list = categorylist.ToList();
+
+                foreach (var obj in list)
+                {
+                    obj.EncryptedId = RSACSPSample.EncodeServerName((obj.ID).ToString());
+                }
+
+                TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Jobs Load Successfully..!!";
+                return Json(new { data = list });
+            }
+            catch (Exception ex)
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                return Json(new { data = list });
+            }
+
+        }
         /// <summary>
         /// This method is used for adding new category [GET]
         /// </summary>
@@ -147,8 +165,8 @@ namespace RecruitmentPortal.WebApp.Controllers
                     bool counter = isCandidateActiveForJob(category.ID);
                     if (counter)
                     {
-                        TempData["deactivate"] = "Deactivation Failed !! Candidate with job is Active";
-                        return RedirectToAction("Index", new { activeCandidate = TempData["deactivate"]});
+                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Action Denied .Candidate is Active with items to be Deleted !!";
+                        return RedirectToAction("Index");
                     }
                     else
                     {
@@ -274,28 +292,47 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> DetailsJobCategory(string id, string s, string activeCandidate)
         {
-            if (activeCandidate != null)
-            {
-                ViewBag.active = activeCandidate;
-            }
-            if (s != null)
-            {
-                ViewData["msg"] = s;
+            //if (activeCandidate != null)
+            //{
+            //    ViewBag.active = activeCandidate;
+            //}
+            //if (s != null)
+            //{
+            //    ViewData["msg"] = s;
 
-            }
+            //}
 
+            //JobCategoryViewModel item = new JobCategoryViewModel();
+
+            //try
+            //{
+            //    item = await _jobCategoryPageservices.GetJobCategoryWithJobPostById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));                
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //}
+
+            return View();
+        }
+
+        public async Task<IActionResult> GetCategoryDetails(string id)
+        {
             JobCategoryViewModel item = new JobCategoryViewModel();
 
             try
             {
                 item = await _jobCategoryPageservices.GetJobCategoryWithJobPostById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
+                item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
+
+                return Json(new { data = item });
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-            }
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
 
-            return View(item);
+                return Json(new { data = item });
+            }
         }
     }
 }

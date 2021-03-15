@@ -1,16 +1,19 @@
 ﻿using RecruitmentPortal.Core.Entities;
+using RecruitmentPortal.WebApp.Models;
 using RecruitmentPortal.WebApp.ViewModels.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace RecruitmentPortal.WebApp.ViewModels
 {
-    public class JobApplicationViewModel : BaseViewModel
+    public class JobApplicationViewModel : EncyptionHelperModel
     {
-       
+        [ScaffoldColumn(false)]
+        public int ID { get; set; }
         public int round { get; set; }
         public string status { get; set; }
         public bool notified { get; set; }
