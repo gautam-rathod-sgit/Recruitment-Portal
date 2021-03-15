@@ -8,6 +8,7 @@
         new SelectListItem {Text="Selected",Value = "3" },
         new SelectListItem {Text="Rejected",Value = "4" },
     };
+    
 }
 <section class="content">
     <div class="row">
@@ -45,7 +46,7 @@
 
                         <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6 form-group">
                             <label>Application Type</label>
-                            @Html.DropDownList("srcApplicationType", typeList, Messages.PleaseSelect, new { @class = "form-control select2" })
+                            @Html.DropDownList("srcApplicationType", typeList, Messages.PleaseSelect, new { @class = "form-control select2" , @onchange = "myFunction()" })
                         </div>
 
                         <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6 form-group">
@@ -68,6 +69,7 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
+                    @*All Applications + New *@
                     <table id="datatable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -84,6 +86,55 @@
                             </tr>
                         </thead>
                     </table>
+
+                    @*Active*@
+                    <table id="active_datatable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Candidate Name</th>
+                                <th>Job Title</th>
+                                <th>Job Role</th>
+                                <th>Activated Date</th>
+                                <th>Status</th>
+                                <th><b>Actions</b></th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    @*Selected*@
+                    <table id="selected_datatable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Candidate Name</th>
+                                <th>Job Title</th>
+                                <th>Job Role</th>
+                                <th>Joining Date</th>
+                                <th>Mode of Commitment</th>
+                                <th>Offered CTC</th>
+                                <th>Status</th>
+                                <th><b>Actions</b></th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    @* Rejected*@
+                    <table id="rejected_datatable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Candidate Name</th>
+                                <th>Job Title</th>
+                                <th>Job Role</th>
+                                <th>Rejection Date</th>
+                                <th>Status</th>
+                                <th><b>Actions</b></th>
+                            </tr>
+                        </thead>
+                    </table>
+
+
+
+
+
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -93,6 +144,14 @@
 </section>
 
 <script>
+    function myFunction() {
+
+        var x = $("#srcApplicationType").val();
+        alert("You selected : " + x);
+    }
+
+
+
     $(document).ready(function () {
         $(".select2").select2();
         //Date picker
@@ -122,6 +181,7 @@
         }
         var sStartDate = getInputValueById('srcStartDate');
         var sEndDate = getInputValueById('srcEndDate');
+
 
         $('#datatable').DataTable({
             lengthChange: true,

@@ -1,58 +1,131 @@
-﻿@{
-    int rowcount = 0;
-}
+﻿@model IEnumerable<RecruitmentPortal.Core.Entities.ApplicationUser>
 
-@model IEnumerable<RecruitmentPortal.Core.Entities.ApplicationUser>
-@using RecruitmentPortal.WebApp.Helpers
+@using RecruitmentPortal.WebApp.Resources
 
-<div class="bg-gradient-gray-dark text-white d-flex justify-content-between pt-2">
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box box-default collapsed-box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-users"></i> Users </h3>
+                </div>
+                <!-- /.box-header -->
+                @*<div class="box-body">
+                    <div class="row">
+                        
+                    </div>
+                </div>*@
+            </div>
+            <!-- /.box -->
 
-    <h2 class="pl-2">All Interviewers : </h2>
-    <form asp-controller="Account" asp-action="Index" method="get">
-        <div class="mr-2">
-            <input type="text" name="SearchString" placeholder="Job Title/Email/Skype-ID" class="mt-2 mr-2">
-            <input class="btn btn-primary btn-sm" type="submit" value="Search" style="margin-top: -5px" />
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">All Users</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="datatable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                              @*  <th>User Name</th>*@
+                              @*  <th>Email</th>*@
+                                <th>Position</th>
+                                <th>Skype_ID</th>
+                                <th><b>Actions</b></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
         </div>
-    </form>
-
-</div>
-@if (Model.Count() > 0)
-{
-    <br />
-    <div class="d-flex justify-content-end">
-        <a asp-controller="Account" asp-action="Register" class="btn btn-info justify-content-end mr-4 mb-1">Add Interviewer</a>
     </div>
-    <table class="table table-sm table-bordered table-striped">
-        <tr><th>S.No.</th><th>Name</th><th>Email</th><th>Position</th><th>Skype-ID</th><th>Edit</th><th>Delete</th></tr>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@(rowcount+=1).</td>
-                <td>@user.UserName</td>
-                <td>@user.Email</td>
-                <td>@user.position</td>
-                <td>@user.skype_id</td>
-                <td>
-                    <form asp-action="UpdateUser" asp-controller="Account" asp-route-id="@user.Id">
-                        <button type="submit" class="btn btn-sm btn-primary w-100">
-                            Edit
-                        </button>
-                    </form>
-                </td>
-                <td>
-                    <form asp-action="DeleteUser" asp-controller="Account" asp-route-id="@user.Id">
-                        <button type="submit" class="btn btn-sm btn-danger">
-                            Delete
-                        </button>
-                    </form>
-                </td>
+</section>
 
-            </tr>
+<script>
+    $(document).ready(function () {
+        debugger;
+        bindDatatable();
+    });
+
+    function bindDatatable() {
+        //var sApplicationType = "";
+        //var sDegree = "";
+        //var applicationTypeElement = $('#srcApplicationType');
+        //var degreeElement = $('#srcDegree');
+        //if (applicationTypeElement.select2('data') && applicationTypeElement.select2('data')[0].id != '') {
+        //    sApplicationType = applicationTypeElement.select2('data')[0].text;
+        //}
+        //if (degreeElement.select2('data') && degreeElement.select2('data')[0].id != '') {
+        //    sDegree = degreeElement.select2('data')[0].text;
+        //}
+        //var sStartDate = getInputValueById('srcStartDate');
+        //var sEndDate = getInputValueById('srcEndDate');
+
+        $('#datatable').DataTable({
+            lengthChange: true,
+            searching: true,
+            ordering: false,
+            lengthMenu: [[5, 10, 25, 50, -1], [5,10, 25, 50, "All"]],
+            paging: true,
+            pagingType: "simple_numbers",
+            pageLength: 10,
+            fixedColumns: true,
+            responsive: true,
+            "bDestroy": true,
+            "ajax":{
+                "url": "@Url.Action("GetAllUsers", "Account")",
+                "type": "GET",
+                //"data": {
+                //    "startDate": sStartDate,
+                //    "endDate": sEndDate,
+                //    "applicationType": sApplicationType,
+                //    "degree": sDegree
+                //},
+                "datatype": "json"
+            },
+            "columns": [
+              //  { "data": "UserName", "name": "UserName"},
+             //   { "data": "Email", "name": "Email" },
+                { "data": "position", "name": "position" },
+                { "data": "skype_id", "name": "skype_id" },
+                {
+                    "sClass": "text-center",
+                    "mRender": function (data, type, row) {
+                        var edit = '<a href="#" title="Edit" onclick="openRecord(\'' + row.id + '\')"><i class="fa fa-edit"></i></a>';
+                        return edit;
+                    }
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+    }
+
+    @*function search() {
+        debugger;
+        var sStartDate = getInputValueById('srcStartDate');
+        var sEndDate = getInputValueById('srcEndDate');
+
+        var dStartDate = new Date(sStartDate);
+        var dEndDate = new Date(sEndDate);
+
+        if (dEndDate < dStartDate) {
+            notification("Error", '@Messages.EndDateGreaterThanStartDate', "error");
+            return;
         }
-    </table>
+        bindDatatable();
+    }*@
 
-}
-else
-{
-    <h4 class="text-gray text-center mt-4 text-capitalize"><strong>No Interviewers Yet.</strong></h4>
-}
+    //function reset() {
+    //    setInputValueById('srcApplicationType','');
+    //    setInputValueById('srcDegree','');
+    //    setInputValueById('srcStartDate','');
+    //    setInputValueById('srcEndDate', '');
+    //    bindDatatable();
+    //}
+
+    function openRecord(id) {
+        window.location.href = '@Url.Action("UpdateUser", "Account")?id=' + id;
+    }
+</script>

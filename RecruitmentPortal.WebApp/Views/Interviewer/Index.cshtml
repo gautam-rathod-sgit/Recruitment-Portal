@@ -49,10 +49,10 @@
                     <td>@item.mode_of_interview</td>
             
                     <td>
-                        @foreach (var data in item.InterviewerNames)
+                        @*@foreach (var data in item.InterviewerNames)
                         {
                             <p>@(i += 1).@data.Name</p>
-                        }
+                        }*@
                     </td>
             
                     <td>@Enum.GetName(typeof(RoundType), item.round)</td>

@@ -117,10 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
   <data name="EndDate" xml:space="preserve">
     <value>End Date</value>
   </data>
+  <data name="position" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="skype_id" xml:space="preserve">
+    <value>Skype_ID</value>
+  </data>
   <data name="StartDate" xml:space="preserve">
     <value>Start Date</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>User Name</value>
   </data>
 </root>

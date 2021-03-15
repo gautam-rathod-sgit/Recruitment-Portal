@@ -61,6 +61,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End Date.
         /// </summary>
         public static string EndDate {
@@ -70,11 +79,38 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        public static string position {
+            get {
+                return ResourceManager.GetString("position", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skype_ID.
+        /// </summary>
+        public static string skype_id {
+            get {
+                return ResourceManager.GetString("skype_id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Date.
         /// </summary>
         public static string StartDate {
             get {
                 return ResourceManager.GetString("StartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Name.
+        /// </summary>
+        public static string UserName {
+            get {
+                return ResourceManager.GetString("UserName", resourceCulture);
             }
         }
     }
