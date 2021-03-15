@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using RecruitmentPortal.WebApp.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace RecruitmentPortal.WebApp.ViewModels
 {
-    public class RegisterViewModel
+    public class RegisterViewModel : EncyptionHelperModel
     {
+        [ScaffoldColumn(false)]
+        public int Id { get; set; }
         [Required]
         [Display(Name = "UserName")]
         public string UserName { get; set; }

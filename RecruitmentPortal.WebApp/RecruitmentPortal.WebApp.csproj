@@ -11,6 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="package.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="package.json" />
     <None Include="Views\JobCategory\AddNewCategory.cshtml" />
     <None Include="Views\JobCategory\DetailsJobCategory.cshtml" />
     <None Include="Views\JobCategory\Index.cshtml" />
@@ -41,6 +46,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0">
       <PrivateAssets>all</PrivateAssets>

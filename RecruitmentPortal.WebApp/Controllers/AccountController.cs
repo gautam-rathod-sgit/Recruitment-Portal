@@ -121,9 +121,15 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// This method works for Registering the User [GET- Displays empty form]
         /// </summary>
         /// <returns></returns>
-        public IActionResult Register()
+        public async Task<IActionResult> Register(string id)
         {
-            return View();
+            RegisterViewModel model = new RegisterViewModel();
+            if (!string.IsNullOrEmpty(id))
+            {
+                int actualId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+                ApplicationUser userObj = await _userManager.FindByIdAsync(actualId.ToString());
+            }
+            return View(model);
         }
 
         /// <summary>
@@ -284,7 +290,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-    
+
         public async Task<IActionResult> DeleteUser(string id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);

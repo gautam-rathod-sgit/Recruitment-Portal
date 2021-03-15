@@ -1,4 +1,5 @@
-﻿@using RecruitmentPortal.WebApp.Helpers
+﻿@using RecruitmentPortal.WebApp.Resources
+@using RecruitmentPortal.WebApp.Helpers
 @{
     Layout = null;
 }
@@ -9,9 +10,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Recruitment Portal</title>
+    <title>@Labels.RecruitmentPortal</title>
+    <link rel="icon" type="image/png" href="~/favicon.png" />
     <partial name="AdminLTE/_Styles" />
+    @*<environment include="Development">
+            <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css'>
+            <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css'>
+            <link href="~/bundles/RecruitmentPortalCSSBundle.min.css" rel="stylesheet" />
+        </environment>*@
     <script src="~/Content/js/jQuery-2.2.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
 </head>
 <body class="sidebar-mini skin-yellow">
     <div class="wrapper">
@@ -30,6 +38,9 @@
         <div class="control-sidebar-bg" style="position: fixed;height: auto;"></div>
     </div>
     <partial name="AdminLTE/_Scripts" />
+    @*<environment exclude="Development">
+        <script src="~/bundles/RecruitmentPortalJSBundle.min.js"></script>
+    </environment>*@
 </body>
 </html>
 <script>

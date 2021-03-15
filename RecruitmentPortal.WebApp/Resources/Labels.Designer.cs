@@ -70,6 +70,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recruitment Portal.
+        /// </summary>
+        public static string RecruitmentPortal {
+            get {
+                return ResourceManager.GetString("RecruitmentPortal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Date.
         /// </summary>
         public static string StartDate {
