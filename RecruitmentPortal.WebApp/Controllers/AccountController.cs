@@ -99,17 +99,25 @@ namespace RecruitmentPortal.WebApp.Controllers
                 if (ModelState.IsValid)
                 {
                     ApplicationUser user = await _userManager.FindByEmailAsync(model.Email);
-                    var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
-                    if (result.Succeeded)
+                    if (user != null)
                     {
-                        _logger.LogInformation("User logged in.");
-                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User Logged In Successfully..!!";
-                        return RedirectToAction("Index", "Home");
+                        var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                        if (result.Succeeded)
+                        {
+                            _logger.LogInformation("User logged in.");
+                            TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User Logged In Successfully..!!";
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Email", "Invalid login attempt.");
+                            TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Invalid login attempt";
+                        }
                     }
                     else
                     {
-                        ModelState.AddModelError("Email", "Invalid login attempt.");
-                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Invalid login attempt";
+                        ModelState.AddModelError("Email", "Unregistered Email Address");
+                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Unregistered Email Address";
                     }
                 }
                 else
