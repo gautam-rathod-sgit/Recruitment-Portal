@@ -1,113 +1,145 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.JobCategoryViewModel
 @using RecruitmentPortal.WebApp.Helpers
+@using RecruitmentPortal.WebApp.Resources
 
-@{
-    ViewData["Title"] = "DetailsJobCategory";
-}
-@if (ViewData["msg"] != null)
-{
-    <script>window.onload = function () { alert("@ViewData["msg"] already exist !!") }</script>
-}
-@if (ViewBag.active != null)
-{
-    <script>window.onload = function () { alert("@ViewData["active"]!!") }</script>
-}
-<h1 class="bg-gradient-gray-dark text-white">Category : @Model.job_category_name</h1>
+@{ ViewData["Title"] = "DetailsJobCategory"; }
+<style>
+    .mybutton {
+        font-size: 25px;
+        border-radius: 3px;
+        color: #509bac;
+        margin-right: 5px;
+    }
 
-<hr />
-@if (Model.isActive == true)
-{
-    <a asp-action="AddNewJobPost" asp-controller="JobPost" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-primary">Add New Job</a>
-}
-else
-{
-    <a class="btn btn-secondary">Add New Job</a>
-}
-<a asp-action="Index" asp-controller="JobCategory" class="btn btn-primary">Back to List</a>
-@if (Model.JobPosts != null)
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Job Title</th>
-                <th>Location</th>
-                <th>Job Role</th>
-                <th>Vacancy</th>
-                <th>Job Type</th>
-                <th>Eligibility Criteria</th>
-                <th>Experience</th>
-                <th>Skills</th>
-                @if (User.Identity.IsAuthenticated)
+    .table > thead > tr > th {
+        border-bottom: 2px solid #ecf0f5;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        border-top: 1px solid #ecf0f5;
+    }
+
+    .disableClick {
+        pointer-events: none;
+        background-color: #808080;
+    }
+</style>
+
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- /.box -->
+
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">All Job Categories :</h3>
+                    <a asp-action="AddNewJobPost" asp-controller="JobPost" class="btn btn-primary pull-right ">Add Job</a>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="datatable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Job Title</th>
+                                <th>Location</th>
+                                <th>Job Role</th>
+                                <th>Vacancy</th>
+                                <th>Job Type</th>
+                                <th>Eligibility Criteria</th>
+                                <th>Experience</th>
+                                <th>Skills</th>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <th>Action</th>
+                                    <th>Edit</th>
+                                }
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        bindDatatable();
+    });
+
+    function bindDatatable() {
+
+        $('#datatable').DataTable({
+            lengthChange: true,
+            searching: true,
+            ordering: false,
+            lengthMenu: [[5, 10, 25, 50, -1], [5,10, 25, 50, "All"]],
+            paging: true,
+            pagingType: "simple_numbers",
+            pageLength: 10,
+            fixedColumns: true,
+            responsive: true,
+            "bDestroy": true,
+            "ajax": {
+                "url": "@Url.Action("GetJobCategories", "JobCategory")",
+                "type": "GET",
+                "data": {},
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "job_title", "name": "job_title" },
+                { "data": "location", "name": "location" },
+                { "data": "job_role", "name": "job_role" },
+                { "data": "vacancy", "name": "vacancy" },
+                { "data": "job_type", "name": "job_type" },
+                { "data": "eligibility_criteria", "name": "eligibility_criteria" },
+                { "data": "experience", "name": "experience" },
+                { "data": "skills", "name": "skills" },
+
+
                 {
-                    <th>Action</th>
-                    <th>Edit</th>
-                }
-            </tr>
-        </thead>
-        @foreach (var item in Model.JobPosts)
-        {
-
-            <tr>
-                <td>@item.job_title</td>
-                <td>@item.location</td>
-                <td>@item.job_role</td>
-                <td>@item.vacancy</td>
-                <td>@item.job_type</td>
-                <td>@item.eligibility_criteria</td>
-                <td>@item.experience</td>
-                <td>@item.skills</td>
-                @if (User.Identity.IsAuthenticated)
+                    "sClass": "text-center",
+                    "mRender": function (data, type, row) {
+                        var action = '';
+                        if (row.isActive) {
+                            action = '<a href="#" title="Deactivate" onclick="Deactivate(\'' + row.encryptedId + '\')"><i class="fa-check-square"></i></a>';
+                        } else {
+                            action = '<a href="#" title="Activate" onclick="Activate(\'' + row.encryptedId + '\')"><i class="fa fa-times-circle mybutton"></i></a>';
+                        }
+                        return action;
+                    }
+                },
                 {
-                    <td>
-                        @*@if (Model.isActive == true)
-                            {
-                                @Html.ActionLink("Delete", "DeleteJobPost", "JobPost", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), cid = RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-primary" })
-                            }
-                            else
-                            {
-                            <a class="btn btn-secondary">Delete</a>
-                            }*@
-                        @if (item.isActive == true)
-                        {
-                            @Html.ActionLink("Deactivate", "UpdateJobPost", "JobPost", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), cid = RSACSPSample.EncodeServerName((Model.ID).ToString()), deactivate = true }, new { @class = "btn btn-danger", @style = "width : 90px" })
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Activate", "UpdateJobPost", "JobPost", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), cid = RSACSPSample.EncodeServerName((Model.ID).ToString()), deactivate = false }, new { @class = "btn btn-success", @style = "width : 90px" })
-
-                        }
-                    </td>
-                    <td>
-                        @if (item.isActive == false)
-                        {
-                            <a class="btn btn-secondary">Edit</a>
-
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Edit", "UpdateJobPost", "JobPost", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), cid = RSACSPSample.EncodeServerName((Model.ID).ToString()),editMode = true }, new { @class = "btn btn-primary" })
-
-                        }
-                    </td>
+                    "sClass": "text-center",
+                    "mRender": function (data, type, row) {
+                        action = '<a href="#" title="Edit Post" onclick="Edit(\'' + row.encryptedId + '\' )"><i class="fa fa-edit mybutton"></i></a>';
+                        return action;
+                    }
                 }
+            ],
+            "order": [[0, "asc"]]
+        });
+    }
 
+    function AddJobPost(id) {
+        window.location.href = '@Url.Action("AddNewJobPost", "JobPost")?id=' + id;
+    }
+    function Activate(id, deactivate = false) {
+        window.location.href = '@Url.Action("UpdateJobPost", "JobPost")?id=' + id + '?deactivate=' + deactivate;
 
-            </tr>
-        }
+    }
+    function Deactivate(id, deactivate = true) {
+        window.location.href = '@Url.Action("UpdateJobPost", "JobPost")?id=' + id + '?deactivate=' + deactivate;
+    }
+    function Edit(jobPostId, editMode = true) {
+        //window.location.href = '@Url.Action("UpdateJobPost", "JobPost")?id=' + id + '?editMode=' + editMode;
 
-
-    </table>
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
+        var url = '@Html.Raw(Url.Action("UpdateJobPost", "JobPost", new { id = "jobPostId", editMode = "true" }))';
+        var params = url.replace('jobPostId', jobPostId);
+        window.location.href = params;
+    }
+    function popupForActivation() {
+        notification("Error", '@Messages.EnableEntity', "error");
+    }
+</script>

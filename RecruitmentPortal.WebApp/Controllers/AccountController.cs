@@ -399,5 +399,33 @@ namespace RecruitmentPortal.WebApp.Controllers
             return View();
         }
 
+
+        //-------For Interviewers tab
+        public IActionResult GetAllUsers()
+        {
+            IQueryable<ApplicationUser> ulist;
+            List<ApplicationUser> newList = new List<ApplicationUser>();
+
+            try
+            {
+                ulist = _userManager.Users;
+                newList = ulist.ToList();
+                //foreach (var item in newList)
+                //{
+                //    // item.Id = HttpUtility.UrlEncode(RSACSPSample.Encrypt(item.Id));
+                //    item.Id = Helpers.RSACSPSample.EncodeServerName(item.Id);
+                //
+
+                    return Json(new { data = newList });
+            }
+            catch (Exception ex)
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                return Json(new { data = newList });
+            }
+            
+        }
+
+
     }
 }
