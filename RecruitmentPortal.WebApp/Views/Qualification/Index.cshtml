@@ -3,95 +3,140 @@
 @{
     ViewData["Title"] = "Index";
 }
-@if (ViewData["msg"] != null)
-{
-    <script>window.onload = function () { alert("@ViewData["msg"] already exist !!") }</script>
-}
-@{ int rowNo = 0;
-}
-@{
-    if (ViewBag.active != null)
-    {
-        <script>window.onload = function () { alert("@ViewData["active"] !!") }</script>
+
+
+@{ int rowNo = 0; }
+<style>
+    .mybutton {
+        font-size: 25px;
+        border-radius: 3px;
+        color: #509bac;
+        margin-right: 5px;
     }
-}
 
-<div class="bg-gradient-gray-dark text-white d-flex justify-content-between pt-2">
+    .table > thead > tr > th {
+        border-bottom: 2px solid #ecf0f5;
+    }
 
-    <h2 class="pl-2">Degree List:</h2>
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        border-top: 1px solid #ecf0f5;
+    }
+</style>
 
-</div>
-<br />
-<p>
-    <a asp-action="AddNewDegree" class="btn btn-primary btn-sm">Add New Degree</a>
-</p>
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- /.box -->
 
-
-@foreach (var item in Model)
-{
-
-    <div class="container-fluid">
-        <div class="row mb-3" style="
-                border: 2px solid grey;
-                border-radius: 2px;
-                margin-bottom : 3px;
-                padding-bottom:10px;
-                font-family : Tahoma;
-
-            ">
-            <div class="col-md-6" style="border-right : 2px solid grey">
-                @(rowNo += 1).@item.degree_name<br />
-                <div class="btn box-shadow border w-20">
-                    @if (item.isActive == true)
-                    {
-                        @Html.ActionLink("Edit", "UpdateDegree", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), editMode = true }, new { @class = "btn btn-primary btn-sm mr-1" })
-                        @Html.ActionLink("Deactivate", "UpdateDegree", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = true }, new { @class = "mr-1 btn btn-danger w-30 btn-sm", @style = "width : 80px" })
-                        @Html.ActionLink("Add Department", "AddNewDept", "Qualification", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = true }, new { @class = "mr-1 btn btn-primary btn-sm" })
-                    }
-                    else
-                    {
-                        <a class="btn btn-secondary btn-sm">Edit</a>
-                        @Html.ActionLink("Activate", "UpdateDegree", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = false }, new { @class = "btn btn-success w-30 btn-sm", @style = "width : 80px" })
-                        <a class="btn btn-secondary btn-sm">Add Department</a>
-                    }
-
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">All Qualifications :</h3>
+                    <a asp-action="AddNewDegree" class="btn btn-primary pull-right">Add New Degree</a>
                 </div>
-            </div>
-            <div class="col-md-6" style="border-left : 2px solid grey">
-                <div class="row">
-                    <div class="col-md-12">
-                        @{int DeptNo = 0;}
-                        @foreach (var dept in item.Departments)
-                        {
-                            <div class="box-shadow">
-                                <div class="row" style="font-size : 16px ;">
-                                    <div class="col-md-6">
-                                        <p> @(DeptNo += 1). @dept.dept_name</p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        @if (User.Identity.IsAuthenticated && dept.isActive == true)
-                                        {
-                                            <div class="btn box-shadow border w-20">
-                                                @Html.ActionLink("Deactivate", "UpdateDept", "Qualification", new { id = RSACSPSample.EncodeServerName((dept.ID).ToString()), deactivated = true }, new { @class = "btn btn-danger btn-sm", @style = "width : 80px" })
-                                                @Html.ActionLink("Edit", "UpdateDept", "Qualification", new { id = RSACSPSample.EncodeServerName((dept.ID).ToString()), degree_id = RSACSPSample.EncodeServerName((item.ID).ToString()), editMode = true }, new { @class = "btn btn-primary btn-sm"})
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                        <div class="btn box-shadow border w-20">
-                                            @Html.ActionLink("Activate", "UpdateDept", "Qualification", new { id = RSACSPSample.EncodeServerName((dept.ID).ToString()), deactivated = false }, new { @class = "btn btn-success btn-sm", @style = "width : 80px" })
-                                            <a class="btn btn-secondary btn-sm">Edit</a>
-                                        </div>
-                                         }
-                                            </div>
-                                        </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="datatable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Degree</th>
+                                <th>Add Department</th>
+                                <th>Degree Action</th>
+                                <th>Department</th>
+                            </tr>
+                        </thead>
 
-                            </div>
-                        }
-                    </div>
+                    </table>
                 </div>
-
+                <!-- /.box-body -->
             </div>
         </div>
     </div>
-}
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        bindDatatable();
+    });
+
+    function bindDatatable() {
+
+        $('#datatable').DataTable({
+            lengthChange: true,
+            searching: true,
+            ordering: false,
+            lengthMenu: [[5, 10, 25, 50, -1], [5,10, 25, 50, "All"]],
+            paging: true,
+            pagingType: "simple_numbers",
+            pageLength: 10,
+            fixedColumns: true,
+            responsive: true,
+            "bDestroy": true,
+            "ajax": {
+                "url": "@Url.Action("GetAllDegrees", "Qualification")",
+                "type": "GET",
+                //"data": {},
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "degree_name", "name": "degree_name" },
+                {
+                    "sClass": "text-center",
+                    "mRender": function (data, type, row) {
+                        var action = '<a href="#" title="Add" onclick="AddDepartment(\''+ row.encryptedId +'\')" class="btn btn-success">Add Department</a>';
+                        return action;
+                    }
+                },
+                {
+                    "sClass": "text-center",
+                    "mRender": function (data, type, row) {
+                        var action = '';
+                        if (row.isActive) {
+                            action = '<a href="#" title="Edit" onclick="Edit(\'' + row.encryptedId + '\' )"><i class="fa fa-edit mybutton"></i></a>';
+                            action += '<a href="#" title="Deactivate" onclick="Deactivate(\'' + row.encryptedId + '\')"><i class="fa fa-check-square mybutton"></i></a>';
+                        } else {
+                            action = '<a href="#" title="Edit" onclick="Edit(\'' + row.encryptedId + '\')"><i class="fa fa-edit mybutton"></i></a>';
+                            action += '<a href="#" title="Activate" onclick="Activate(\'' + row.encryptedId + '\')"><i class="fa fa-times-circle mybutton"></i></a>';
+                        }
+                        return action;
+
+                    }
+                },
+                { "data": "dept_name", "name": "dept_name" }
+               
+
+                //{
+                //    "sClass": "text-center",
+                //    "mRender": function (data, type, row) {
+                //        var action = '<a href="#" title="Details" onclick="Details(\'' + row.encryptedId + '\')"><i class="fa fa-tasks"></i></a>';
+                //        return action;
+                //    }
+                //}
+            ],
+            "order": [[0, "asc"]]
+        });
+    }
+
+    function AddDepartment(id) {
+        window.location.href = '@Url.Action("AddNewDept", "Qualification")?id=' + id;
+    }
+    function Activate(degree_id, deactivate) {
+        var url = '@Html.Raw(Url.Action("UpdateDegree", "Qualification", new { id = "degree_id", deactivate = "false" }))';
+        var params = url.replace('degree_id', degree_id);
+        window.location.href = params;
+
+    }
+    function Deactivate(degree_id, deactivate) {
+         var url = '@Html.Raw(Url.Action("UpdateDegree", "Qualification", new { id = "degree_id", deactivate = "true" }))';
+        var params = url.replace('degree_id', degree_id);
+         window.location.href = params;
+    }
+    function Edit(degree_id, editMode) {
+        var url = '@Html.Raw(Url.Action("UpdateDegree", "Qualification", new { id = "degree_id", editMode = "true" }))';
+        var params = url.replace('degree_id', degree_id);
+        window.location.href = params;
+    }
+   
+    @*function Details(id) {
+        window.location.href = '@Url.Action("DetailsJobCategory", "JobCategory")?id=' + id;
+    }*@
+</script>

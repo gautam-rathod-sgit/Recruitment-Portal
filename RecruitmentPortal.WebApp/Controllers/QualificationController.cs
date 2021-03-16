@@ -11,11 +11,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace RecruitmentPortal.WebApp.Controllers
 {
     public class QualificationController : Controller
     {
+        #region private variables
+
         IQueryable<DegreeViewModel> degreeList;
         private readonly IDegreePage _degreePageServices;
         private string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
@@ -27,11 +30,14 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         //for taking image's property : media stuff
         private readonly IWebHostEnvironment _environment;
+        #endregion
+
+        #region constructor
         public QualificationController(IDepartmentPage departmentPageservices,
-            IWebHostEnvironment environment,
-            IDegreePage degreePageServices,
-             RecruitmentPortalDbContext dbContext,
-             UserManager<ApplicationUser> userManager)
+         IWebHostEnvironment environment,
+         IDegreePage degreePageServices,
+          RecruitmentPortalDbContext dbContext,
+          UserManager<ApplicationUser> userManager)
         {
             _degreePageServices = degreePageServices;
             _departmentPageservices = departmentPageservices;
@@ -39,14 +45,51 @@ namespace RecruitmentPortal.WebApp.Controllers
             _dbContext = dbContext;
             _userManager = userManager;
         }
+        #endregion
+
+        #region public methods
 
         /// <summary>
         /// SHOWING ALL THE DEGREE LIST WITH DEPARTMENTS
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string s, string activeCandidate)
+        //public async Task<IActionResult> Index(string s, string activeCandidate)
+        //{
+        //    try
+        //    {
+        //        if (s != null)
+        //            ViewData["msg"] = s;
+        //        if (activeCandidate != null)
+        //        {
+        //            ViewBag.active = activeCandidate;
+        //        }
+        //        degreeList = await _degreePageServices.GetAllDegreeWithDepartment();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+
+        //    return View(degreeList);
+        //}
+
+        public async Task<IActionResult> Index()
         {
+            return View();
+        }
+
+        /// <summary>
+        /// FOR FETCHING ALL DEGREES WITH THEIR DEPARTMENTS
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="activeCandidate"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> GetAllDegrees(string s, string activeCandidate)
+        {
+            IQueryable<DegreeViewModel> degreeList;
+            List<DegreeViewModel> newlist = new List<DegreeViewModel>();
+
             try
             {
                 if (s != null)
@@ -55,15 +98,25 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     ViewBag.active = activeCandidate;
                 }
+
                 degreeList = await _degreePageServices.GetAllDegreeWithDepartment();
+                newlist = degreeList.ToList();
+                foreach (var item in newlist)
+                {
+                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.Encrypt(item.ID));
+                    item.Departments.ToList();
+                }
+
+                return Json(new { data = newlist });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                return Json(new { data = newlist });
             }
-            
-            return View(degreeList);
         }
+
+
 
         /// <summary>
         /// ADDING NEW DEGREE [GET]
@@ -133,11 +186,11 @@ namespace RecruitmentPortal.WebApp.Controllers
                     //checking if any candidate is active with this degree
                     List<JobApplications> jobAppList = new List<JobApplications>();
                     var listofCandidates = _dbContext.Candidate.Where(x => x.degree.Contains(model.degree_name)).ToList();
-                    foreach(var item in listofCandidates)
+                    foreach (var item in listofCandidates)
                     {
                         var data = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).FirstOrDefault();
                         if (data != null)
-                        jobAppList.Add(data);
+                            jobAppList.Add(data);
                     }
                     var temp = jobAppList.Where(x => x.status == status_Pending).Any();
                     if (temp)
@@ -147,14 +200,14 @@ namespace RecruitmentPortal.WebApp.Controllers
                     if (isActiveCandidate)
                     {
                         TempData["deactivate"] = "Deactivation Failed !! Candidate with Degree is Active";
-                        return RedirectToAction("Index", "Qualification", new { activeCandidate = TempData["deactivate"]});
+                        return RedirectToAction("Index", "Qualification", new { activeCandidate = TempData["deactivate"] });
                     }
                     else
                     {
                         //deactivating Degree
                         model.isActive = false;
                         //deactivating department
-                        
+
                         using (_dbContext)
                         {
                             _dbContext.Department
@@ -181,7 +234,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                         model.isActive = true;
                         return RedirectToAction("UpdateDegreePost", "Qualification", model);
                     }
-                    
+
                 }
 
             }
@@ -209,7 +262,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
-           
+
             return RedirectToAction("Index", "Qualification");
         }
 
@@ -232,7 +285,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
-            
+
             return View(model);
         }
 
@@ -339,7 +392,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                         model.isActive = true;
                         return RedirectToAction("UpdateDeptPost", "Qualification", model);
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -365,9 +418,11 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
-            
+
             return RedirectToAction("Index", "Qualification");
         }
+
+        #endregion
 
     }
 }

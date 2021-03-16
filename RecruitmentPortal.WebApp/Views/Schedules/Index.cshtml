@@ -2,118 +2,62 @@
 @using RecruitmentPortal.Infrastructure.Data.Enum
 @using RecruitmentPortal.WebApp.Helpers
 
-<script src="~/lib//jquery//dist//jquery.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        //for removing 0 on fields
-        $("#round").val($(this).val() == 0 ? '' : $(this).val());
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box box-default boxPad">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        <i class="fa fa-info-circle"></i>
+                        Schedule Interview
+                    </h3>
+           
+                    <div class="box-tools pull-right">
+                        <input type="submit" value="Create" class="btn btn-primary mr-3" />
+                        <a asp-action="Details" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.jobAppId).ToString())" class="mr-3 btn btn-danger">Cancel</a>
+                    </div>
+                </div>
+            </div>
 
-        var alreadyBound = false;
-        $("#face").click(function () {
-            if (!alreadyBound) {
-                var element = '';
-                element += '<div class="form-group">';
-                element += '<label id = "location" class= "control-label required" > Location</label ><br>';
-                var input = '<input type="text" data-val="true" required data-val-location="The location field is not a valid." data-val-required="The location field is required." id="location" name="location" value="" style="width : 100%;height:40px;border-radius : 4px;border:0.5px solid #C7C6C5"/>';
-                element += input;
-                element += '</div >';
-                $("#facetoface").after(element);
-            }
-            alreadyBound = true;
-        });
+            <div class="box">
+                <div class="box-body">
+                    @using (Html.BeginForm("IndexPost", "Schedules", FormMethod.Post, new { @autocomplete = "off", @role = "form" }))
+                    {
+                        @Html.HiddenFor(m => m.ID)
+                        @Html.HiddenFor(m => m.candidateId)
 
-        $("#tele").click(function () {
-            $("#facetoface").next().remove("div");
-            alreadyBound = false;
-        });
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.candidate_name)
+                            @Html.TextBoxFor(m => m.candidate_name, new { @placeholder = "Name", @class = "form-control", @readonly = "readonly" })
+                            <div class="form-control-feedback">
+                                <i class="fa fa-envelope text-muted"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.position)
+                            @Html.TextBoxFor(m => m.position, new { @placeholder = "Position", @class = "form-control", @readonly = "readonly" })
+                            <div class="form-control-feedback">
+                                <i class="fa fa-envelope text-muted"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.datetime)
+                            @Html.TextBoxFor(m => m.datetime, new { @type = "date", @placeholder = "Date & Time", @class = "form-control datepicker", @Value = Model.datetime.Date })
+                            @Html.ValidationMessageFor(model => model.datetime, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.round)
+                            @Html.TextBoxFor(m => m.round, new { @type = "number", @placeholder = "Select number of Round", @class = "form-control" })
+                        </div>
 
-    });
+                    }
+                </div>
+            </div>
 
-</script>
 
-<h1 class="mb-2  bg-gradient-gray-dark text-white">Schedule Interview :</h1>
-
-<hr />
-<style type="text/css">
-    .required:after {
-        content: "*";
-        font-weight: bold;
-        color: red;
-    }
-</style>
-<div class="d-flex justify-content-end">
-    <div>
-        <a asp-action="Details" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.jobAppId).ToString())" class="mr-3 btn btn-primary">Back to List</a>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="IndexPost" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
-            <input type="hidden" value="@Model.ID" id="ID" name="ID" required />
-
-            <div class="form-group">
-                <label asp-for="candidate_name" class="control-label">Candidate Name :</label>
-                <input asp-for="candidate_name" class="form-control" readonly />
-                <span asp-validation-for="candidate_name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="position" class="control-label">Position :</label>
-                <input asp-for="position" class="form-control" readonly />
-                <span asp-validation-for="position" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="datetime" class="control-label required">Date & Time :</label>
-                <input asp-for="datetime" class="form-control" required placeholder=" " />
-                <span asp-validation-for="datetime" class="text-danger"></span>
-            </div>
-
-            @*<div class="form-group">
-                <label asp-for="round" class="control-label required">Round :</label>
-                <input id="round" asp-for="round" class="form-control" required min="0" step="1" oninput="validity.valid||(value='');" />
-                <span asp-validation-for="round" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <label asp-for="roundValue" class="control-label required">Interview Round : </label>
-                <select asp-for="roundValue" asp-items="Html.GetEnumSelectList<RoundType>()" class="form-control" required>
-                    <option selected="selected" value="">Please select</option>
-                </select>
-                <span asp-validation-for="roundValue" class="text-danger" />
-            </div>
 
 
-            @*interviewer selection*@
-            <div class="form-group">
-                <label asp-for="Multiinterviewer" class="control-label required">Interviewers :</label><span>(Hold CTRL for Multiselect)</span>
-                <select asp-for="Multiinterviewer" id="interviewer" name="Multiinterviewer"
-                        class="" multiple size="5" style="width : 375px; height : 150px" required
-                        asp-items="@(new SelectList(ViewBag.users,"Id", "UserName"))">
-                </select>
-                <span asp-validation-for="Multiinterviewer" class="text-danger"></span>
-            </div>
-            <div class="form-group" id="mode_select">
-                <label asp-for="mode_of_interview" class="control-label required">Mode of Interview : </label>
-                <input type="radio" name="mode_of_interview" value="Online" id="tele" class="ml-2" required /><span> Online</span>
-                <input type="radio" name="mode_of_interview" value="Face to Face" id="face" class="ml-2" /><span id="facetoface"> Face to Face</span>
-                @*@Html.RadioButtonFor(m => m.mode_of_interview, "Telephonic", new { @class = "ml-2" })Telephonic
-            @Html.RadioButtonFor(m => m.mode_of_interview, "Face to Face", new { @class = "ml-2" })Face to Face*@
-            </div>
 
-
-            <div class="form-group">
-                <label asp-for="statusvalue" class="control-label required">Interview Status : </label>
-                <select asp-for="statusvalue" asp-items="Html.GetEnumSelectList<StatusType>()" class="form-control" required>
-                    <option selected="selected" value="">Please select</option>
-                </select>
-                <span asp-validation-for="statusvalue" class="text-danger" />
-            </div>
-
-            <div class="form-group d-flex">
-                <input type="submit" value="Create" class="btn btn-primary mr-3" />
-                <a asp-action="Details" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.jobAppId).ToString())" class="mr-3 btn btn-danger">Cancel</a>
-
-            </div>
-        </form>
-    </div>
-</div>
+</section>

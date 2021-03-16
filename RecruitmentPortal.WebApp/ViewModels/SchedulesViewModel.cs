@@ -2,6 +2,7 @@
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data.Enum;
 using RecruitmentPortal.WebApp.Models;
+using RecruitmentPortal.WebApp.Resources;
 using RecruitmentPortal.WebApp.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,10 @@ namespace RecruitmentPortal.WebApp.ViewModels
     {
         [ScaffoldColumn(false)]
         public int ID { get; set; }
+        [Display(ResourceType = typeof(Labels), Name = "CandidateName")]
         public string candidate_name { get; set; }
+        
+        [Display(ResourceType = typeof(Labels), Name = "position")]
         public string position { get; set; }
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
