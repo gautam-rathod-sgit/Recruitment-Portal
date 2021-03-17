@@ -1,96 +1,12 @@
-﻿@*@model IEnumerable<RecruitmentPortal.WebApp.ViewModels.JobCategoryViewModel>
-    @using RecruitmentPortal.WebApp.Helpers
-    @{
-        ViewData["Title"] = "Index";
-    }
-    @{ int rowNo = 0; }
-    @{
-        if (ViewBag.msg != null)
-        {
-            <script>window.onload = function () { alert("@ViewData["msg"] !!") }</script>
-        }
-    }
-    <div class="bg-gradient-gray-dark text-white d-flex justify-content-between pt-2">
-
-        <h2 class="pl-2">Job Category :</h2>
-
-    </div>
-    <br />
-    <p>
-        <a asp-action="AddNewCategory" class="btn btn-primary">Add New Category</a>
-    </p>
-    @if (Model.Count() > 0)
-    {
-        <table class="table table-hover table-striped">
-            <thead>
-                <tr>
-                    <th>S.No.</th>
-                    <th>Name</th>
-                    <th>Add Job</th>
-                    <th>Action</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                <tr>
-                    <td>@(rowNo += 1)</td>
-                    <td>@item.job_category_name</td>
-
-                    @if (item.isActive == true)
-                    {
-                        <td>
-                            @Html.ActionLink("Add Job", "AddNewJobPost", "JobPost", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-primary" })
-                        </td>
-                        <td>
-                            @Html.ActionLink("Edit", "UpdateCategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), editMode = true }, new { @class = "btn btn-primary mr-1" })
-                            @Html.ActionLink("Deactivate", "UpdateCategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = true }, new { @class = "btn btn-danger", @style = "width : 100px" })
-
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            @Html.ActionLink("Add Job", null, null, null, new { @class = "btn btn-secondary" })
-                        </td>
-                        <td>
-                            @Html.ActionLink("Edit", null, null, null, new { @class = "btn btn-secondary mr-1" })
-                            @Html.ActionLink("Activate", "UpdateCategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), deactivate = false }, new { @class = "btn btn-success", @style = "width : 100px" })
-                        </td>
-                    }
-
-                <td>
-                    @Html.ActionLink("Details", "DetailsJobcategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()) }, new { @class = "btn btn-success" })
-                </td>
-                </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <h4 class="text-center text-gray">No Job Cateogries yet.</h4>
-    }*@
-
-@model IEnumerable<RecruitmentPortal.WebApp.ViewModels.JobCategoryViewModel>
+﻿@model IEnumerable<RecruitmentPortal.WebApp.ViewModels.JobCategoryViewModel>
 @using RecruitmentPortal.WebApp.Helpers
+@using RecruitmentPortal.WebApp.Resources
 
-@{ int rowNo = 0; }
+
 <style>
-    .mybutton {
-        font-size: 25px;
-        border-radius: 3px;
-        color: #509bac;
-        margin-right: 5px;
-    }
-
-    .table > thead > tr > th {
-        border-bottom: 2px solid #ecf0f5;
-    }
-
-    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-        border-top: 1px solid #ecf0f5;
+    .disableClick {
+        background-color: #808080;
+        color: white;
     }
 </style>
 
@@ -153,21 +69,30 @@
                 {
                     "sClass": "text-center",
                     "mRender": function (data, type, row) {
-                        var action = '<a href="#" title="Add" onclick="AddJobPost(\''+ row.encryptedId +'\')" class="btn btn-success">Add Job</a>';
-                        return action;
+                        if (row.isActive) {
+                            var action = '<a href="javascript:void(0);" title="Add" onclick="AddJobPost(\'' + row.encryptedId + '\')" class="btn btn-success">Add Job</a>';
+                            return action;
+                        }
+                        else {
+                            var action = '<a href="javascript:void(0);" title="Add" onclick="error()" class = "btn disableClick">Add Job</a>';
+                            return action;
+                        }
                     }
                 },
                 {
                     "sClass": "text-center",
                     "mRender": function (data, type, row) {
+                        var iconClass = (row.isActive) ? '<i class="fa fa-check-square actionbutton"></i>' : '<i class="fa fa-times-circle actionbutton"></i>';
                         var action = '';
-                        if (row.isActive) {
-                            action = '<a href="#" title="Edit" onclick="Edit(\'' + row.encryptedId + '\' )"><i class="fa fa-edit mybutton"></i></a>';
-                            action += '<a href="#" title="Deactivate" onclick="Deactivate(\'' + row.encryptedId + '\')"><i class="fa fa-check-square mybutton"></i></a>';
-                        } else {
-                            action = '<a href="#" title="Edit" onclick="Edit(\'' + row.encryptedId + '\')"><i class="fa fa-edit mybutton"></i></a>';
-                            action += '<a href="#" title="Activate" onclick="Activate(\'' + row.encryptedId + '\')"><i class="fa fa-times-circle mybutton"></i></a>';
-                        }
+                        action = '<a href="javascript:void(0);" title="Edit" onclick="Edit(\'' + row.encryptedId + '\' )" class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+                        action += ' <a href="javascript:void(0);" title="Activate/Deactivate" onclick="ChangeStatus(\'' + row.encryptedId + '\',\'' + row.isActive + '\')" class = "btn btn-primary btn-sm">' + iconClass +'</a>';
+                        //if (row.isActive) {
+                        //    action = '<a href="javascript:void(0);" title="Edit" onclick="Edit(\'' + row.encryptedId + '\' )" class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+                        //    action += ' <a href="javascript:void(0);" title="Deactivate" onclick="Deactivate(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-check-square actionbutton"></i></a>';
+                        //} else {
+                        //    action = '<a href="javascript:void(0);" title="Edit" onclick="error()" class = "btn disableClick btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+                        //    action += ' <a href="javascript:void(0);" title="Activate" onclick="Activate(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-times-circle actionbutton"></i></a>';
+                        //}
                         return action;
 
                     }
@@ -175,8 +100,8 @@
                 {
                     "sClass": "text-center",
                     "mRender": function (data, type, row) {
-                        var action = '<a href="#" title="Details" onclick="Details(\'' + row.encryptedId + '\')"><i class="fa fa-tasks"></i></a>';
-                        return action;
+                            var action = '<a href="javascript:void(0);" title="Details" onclick="Details(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-tasks actionbutton"></i></a>';
+                            return action;
                     }
                 }
             ],
@@ -184,26 +109,19 @@
         });
     }
 
-    function AddJobPost(id) {
-        window.location.href = '@Url.Action("AddNewJobPost", "JobPost")?id=' + id;
+    function AddJobPost(id, toIndex = true) {
+        window.location.href = '@Url.Action("AddNewJobPost", "JobPost")?id=' + id + '&toIndex=' + toIndex;
     }
-    function Activate(categoryId, deactivate) {
-        var url = '@Html.Raw(Url.Action("UpdateCategory", "JobCategory", new { id = "categoryId", deactivate = "false" }))';
-        var params = url.replace('categoryId', categoryId);
-        window.location.href = params;
-
+    function ChangeStatus(categoryId, status) {
+        window.location.href = '@Url.Action("UpdateCategory", "JobCategory")?id=' + categoryId + '&status=' + status;
     }
-    function Deactivate(categoryId, deactivate) {
-         var url = '@Html.Raw(Url.Action("UpdateCategory", "JobCategory", new { id = "categoryId", deactivate = "true" }))';
-         var params = url.replace('categoryId', categoryId);
-         window.location.href = params;
-    }
-    function Edit(categoryId, editMode) {
-        var url = '@Html.Raw(Url.Action("UpdateCategory", "JobCategory", new { id = "categoryId", editMode = "true" }))';
-        var params = url.replace('categoryId', categoryId);
-        window.location.href = params;
+    function Edit(categoryId, editMode = true) {
+        window.location.href = '@Url.Action("UpdateCategory", "JobCategory")?id=' + categoryId + '&editMode=' + editMode;
     }
     function Details(id) {
         window.location.href = '@Url.Action("DetailsJobCategory", "JobCategory")?id=' + id;
+    }
+     function error() {
+        notification("Error", '@Messages.EnableEntity', "error");
     }
 </script>

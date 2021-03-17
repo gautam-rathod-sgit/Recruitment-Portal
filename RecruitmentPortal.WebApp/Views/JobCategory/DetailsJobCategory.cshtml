@@ -1,27 +1,12 @@
-﻿@*@model RecruitmentPortal.WebApp.ViewModels.JobCategoryViewModel*@
+﻿@model RecruitmentPortal.WebApp.ViewModels.JobCategoryViewModel
 @using RecruitmentPortal.WebApp.Helpers
 @using RecruitmentPortal.WebApp.Resources
 
-@{ ViewData["Title"] = "DetailsJobCategory"; }
+@{ ViewBag.Title = "DetailsJobCategory"; }
 <style>
-    .mybutton {
-        font-size: 25px;
-        border-radius: 3px;
-        color: #509bac;
-        margin-right: 5px;
-    }
-
-    .table > thead > tr > th {
-        border-bottom: 2px solid #ecf0f5;
-    }
-
-    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-        border-top: 1px solid #ecf0f5;
-    }
-
     .disableClick {
-        pointer-events: none;
         background-color: #808080;
+        color:white;
     }
 </style>
 
@@ -34,8 +19,8 @@
                 <div class="box-header">
                     <h3 class="box-title"><b>Job Category Details :</b></h3>
                     <div class="d-flex pull-right">
-                        <a href='@Url.Action("AddNewJobPost","JobPost",new {id = @ViewBag.EncryptedId })' class="btn btn-primary  mr-1 ">Add Job</a>
-                        <a href='@Url.Action("Index","JobCategory")' class="btn btn-primary">Back to List</a>
+                        <a href='@Url.Action("AddNewJobPost","JobPost",new {id = Model.EncryptedId })' class="btn btn-primary  mr-1 ">Add Job</a>
+                        <a href='@Url.Action("Index","JobCategory")' class="btn btn-primary">Cancel</a>
                     </div>
                     
 
@@ -71,23 +56,6 @@
     });
 
     function bindDatatable() {
-
-       //$.ajax({
-        //    type: "GET",
-        //    url: '/names',
-        //    dataType: "json",
-        //    contentType: "application/json; charset=utf-8",
-        //    success: function (data) {
-        //        var myData = data.result.data;
-        //        $('#myTable').DataTable({
-        //            "data": myData,
-        //            "columns": [
-        //                { "data": "id" },
-        //                { "data": "name" },
-        //            ]
-        //        });
-        //    }
-        //})
         $('#datatable').DataTable({
             lengthChange: true,
             searching: true,
@@ -103,7 +71,7 @@
                 "url": "@Url.Action("GetCategoryDetails", "JobCategory")",
                 "type": "GET",
                 "data": {
-                    "id": "@ViewBag.EncryptedId"
+                    "id": "@Model.EncryptedId"
                 },
                 "datatype": "json"
             },
@@ -120,22 +88,24 @@
                 {
                     "sClass": "text-center",
                     "mRender": function (data, type, row) {
+                        var iconClass = (row.isActive) ? '<i class="fa fa-check-square actionbutton"></i>' : '<i class="fa fa-times-circle actionbutton"></i>';
                         var action = '';
-                        debugger;
-                        if (row.isActive) {
-                            action = '<a href="#" title="Deactivate" onclick="Deactivate(\'' + row.encryptedId +'\')"><i class="fa fa-check-square mybutton"></i></a>';
-                        } else {
-                            action = '<a href="#" title="Activate" onclick="Activate(\'' + row.encryptedId + '\')"><i class="fa fa-times-circle mybutton"></i></a>';
-                        }
+                        action = '<a href="javascript:void(0);" title="Activate/Deactivate" onclick="ChangeStatus(\'' + row.encryptedId + '\',\'' + row.categoryId + '\',\'' + row.isActive + '\')" class = "btn btn-primary btn-sm">' + iconClass + '</a>';
+                        
                         return action;
                     }
                 },
                 {
                     "sClass": "text-center",
                     "mRender": function (data, type, row) {
-                        debugger;
-                        var action = '<a href="#" title="Edit Post" onclick="Edit(\'' + row.encryptedId + '\' )"><i class="fa fa-edit mybutton"></i></a>';
-                        return action;
+                        if (row.isActive) {
+                            var action = '<a href="javascript:void(0);" title="Edit Post" onclick="Edit(\'' + row.encryptedId + '\' )" class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+                            return action;
+                        } else {
+                            var action = '<a href="javascript:void(0);" title="Edit Post" onclick="error()" class = "btn disableClick btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+                            return action;
+                        }
+
                     }
                 }
             ],
@@ -143,25 +113,16 @@
         });
     }
 
-    function Activate(jobPostId, deactivate) {
-        debugger;
-            var url = '@Html.Raw(Url.Action("UpdateJobPost","JobPost", new { id = "jobPostId", categoryId = ViewBag.EncryptedId, deactivate = false }))';
-            var params = url.replace("jobPostId", jobPostId)
-            window.location.href = params;
-        }
-    function Deactivate(jobPostId, deactivate) {
-            var url = '@Html.Raw(Url.Action("UpdateJobPost","JobPost", new { id = "jobPostId", categoryId = ViewBag.EncryptedId, deactivate = true }))';
-            var params = url.replace("jobPostId", jobPostId)
-            window.location.href = params;
-        }
-    function Edit(jobPostId, editMode) {
-            //window.location.href = '@Url.Action("UpdateJobPost", "JobPost")?id=' + id + '?editMode=' + editMode;
-
-            var url = '@Html.Raw(Url.Action("UpdateJobPost", "JobPost", new { id = "jobPostId", categoryId = ViewBag.EncryptedId, editMode = "true" }))';
-            var params = url.replace('jobPostId', jobPostId)
-            window.location.href = params;
-        }
-        function popupForActivation() {
-            notification("Error", '@Messages.EnableEntity', "error");
-        }
+    function error() {
+        notification("Error", '@Messages.EnableEntity', "error");
+    }
+    function ChangeStatus(jobPostId,categoryID, status) {
+        window.location.href = '@Url.Action("UpdateJobPost", "JobPost")?id=' + jobPostId + '&categoryId=' + categoryID + '&status=' + status;
+    }
+    function Edit(jobPostId, editMode = true) {
+        window.location.href = '@Url.Action("UpdateJobPost", "JobPost")?id=' + jobPostId + '&editMode=' + editMode;
+    }
+    function popupForActivation() {
+        notification("Error", '@Messages.EnableEntity', "error");
+    }
 </script>

@@ -18,9 +18,10 @@ using System.Web;
 
 namespace RecruitmentPortal.WebApp.Controllers
 {
-    public class JobCategoryController : Controller
+    public class JobCategoryController : BaseController
     {
-        private string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
+        #region Private Members
+        private readonly string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
 
         IQueryable<JobCategoryViewModel> categorylist;
         private readonly IJobCategoryPage _jobCategoryPageservices;
@@ -35,7 +36,9 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly IWebHostEnvironment _environment;
         private readonly RecruitmentPortalDbContext _dbContext;
 
+        #endregion
 
+        #region Constructor
         public JobCategoryController(IWebHostEnvironment environment,
             IJobCategoryPage jobCategoryPage,
               RecruitmentPortalDbContext dbContext,
@@ -48,8 +51,9 @@ namespace RecruitmentPortal.WebApp.Controllers
             _dbContext = dbContext;
             _userManager = userManager;
         }
+        #endregion
 
-
+        #region Public Methods
         /// <summary>
         /// This method retrieves list of Job Categories
         /// </summary>
@@ -151,13 +155,13 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UpdateCategory(string id, bool deactivate, bool editMode)
+        public async Task<IActionResult> UpdateCategory(string id, bool status, bool editMode)
         {
             JobCategoryViewModel category = new JobCategoryViewModel();
             try
             {
                 category = await _jobCategoryPageservices.getCategoryById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
-                if(deactivate)
+                if(status)
                 {
                     //setting final results of deactivating
                     category.isActive = false;
@@ -206,7 +210,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                         }
                     }
-                    
+                    TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Job Deactivated Successfully.";
                     return RedirectToAction("UpdateCategoryPost", category);
                 }
                 else
@@ -218,6 +222,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     else
                     {
                         category.isActive = true;
+                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Job Activated Successfully.";
                         return RedirectToAction("UpdateCategoryPost", category);
                     }
                     
@@ -294,30 +299,12 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="s"></param>
         /// <returns></returns>
         public ActionResult DetailsJobCategory(string id, string s, string activeCandidate)
-        {
-            //if (activeCandidate != null)
-            //{
-            //    ViewBag.active = activeCandidate;
-            //}
-            //if (s != null)
-            //{
-            //    ViewData["msg"] = s;
+        {           
 
-            //}
+            JobCategoryViewModel model = new JobCategoryViewModel();
+            model.EncryptedId = id;
 
-            //JobCategoryViewModel item = new JobCategoryViewModel();
-            //item.EncryptedId = id;
-            ViewBag.EncryptedId = id;
-            //try
-            //{
-            //    item = await _jobCategoryPageservices.GetJobCategoryWithJobPostById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));                
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine(ex.Message);
-            //}
-
-            return View();
+            return View(model);
         }
 
         public async Task<IActionResult> GetCategoryDetails(string id)
@@ -332,6 +319,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 foreach(var obj in item.JobPosts)
                 {
                     obj.EncryptedId = RSACSPSample.EncodeServerName((obj.ID).ToString());
+                    obj.categoryId = item.EncryptedId;
                 }
                 itemList = item.JobPosts;
                 return Json(new { data = itemList });
@@ -342,5 +330,6 @@ namespace RecruitmentPortal.WebApp.Controllers
                 return Json(new { data = itemList });
             }
         }
+        #endregion
     }
 }

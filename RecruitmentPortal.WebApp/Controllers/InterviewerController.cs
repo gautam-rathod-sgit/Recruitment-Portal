@@ -16,7 +16,7 @@ using System.Web;
 
 namespace RecruitmentPortal.WebApp.Controllers
 {
-    public class InterviewerController : Controller
+    public class InterviewerController : BaseController
     {
         private string time_format = "HH:mm tt";
         private string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
@@ -35,32 +35,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             _schedulesPage = schedulesPage;
             _candidatePageServices = candidatePage;
         }
-
-        /// <summary>
-        /// SHOWING ALL THE PENDING SCHEDULES FOR INTERVIEWER 
-        /// </summary>
-        /// <returns></returns>
-        //public async Task<IActionResult> Index(string SearchString)
-        //{
-        //    slist = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
-            
-        //    try
-        //    {
-        //        //filtering the schedules for getting only the incompleted schedules
-        //        slist = slist.Where(x => x.status != reqValue);
-        //        //Added search box test
-        //        if (!String.IsNullOrEmpty(SearchString))
-        //        {
-        //            slist = slist.Where(s => s.position.ToUpper().Contains(SearchString.ToUpper()));
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-
-        //    return View(slist);
-        //}
 
 
         /// <summary>

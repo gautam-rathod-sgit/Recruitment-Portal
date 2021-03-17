@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using RecruitmentPortal.Infrastructure.Data.Enum;
 using RecruitmentPortal.WebApp.Models;
+using RecruitmentPortal.WebApp.Resources;
 using RecruitmentPortal.WebApp.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -21,64 +22,71 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public DateTime apply_date { get; set; }
 
 
-        [Required(ErrorMessage = "Required.")]
-        [DisplayName("Candidate Name")]
+        [Display(ResourceType = typeof(Labels), Name = "CandidateName")]
+        [Required(ErrorMessageResourceName = "CandidateNameRequired", ErrorMessageResourceType = typeof(Messages))]
         public string name { get; set; }
 
-        [Required(ErrorMessage = "Required.")]
-        [EmailAddress(ErrorMessage = "Invalid email address.")]
-        [DisplayName("Email")]
+        [Display(ResourceType = typeof(Labels), Name = "Email")]
+        [Required(ErrorMessageResourceName = "Emailrequired", ErrorMessageResourceType = typeof(Messages))]
         public string email { get; set; }
 
         public bool emailConfirmed { get; set; }
         public string token { get; set; }
 
-        [DisplayName("Date of Birth")]
+        [Display(ResourceType = typeof(Labels), Name = "DateofBirth")]
+        [Required(ErrorMessageResourceName = "DateofBirthRequired", ErrorMessageResourceType = typeof(Messages))]
         public DateTime dob { get; set; }
 
 
-        [Required(ErrorMessage = "Required.")]
+        [Display(ResourceType = typeof(Labels), Name = "Phone")]
+        [Required(ErrorMessageResourceName = "PhoneRequired", ErrorMessageResourceType = typeof(Messages))]
         public double phone { get; set; }
 
-        //enum gender
-        //[EnumDataType(typeof(GenderType))]
+        [Display(ResourceType = typeof(Labels), Name = "Gender")]
+        [Required(ErrorMessageResourceName = "GenderRequired", ErrorMessageResourceType = typeof(Messages))]
         public string Gender { get; set; }
 
 
-        [Required(ErrorMessage = "Required.")]
-        [DisplayName("Experience")]
+        [Display(ResourceType = typeof(Labels), Name = "Experience")]
+        [Required(ErrorMessageResourceName = "ExperienceRequired", ErrorMessageResourceType = typeof(Messages))]
         public string experience { get; set; }
 
-        [DisplayName("Total Experience")]
+        [Display(ResourceType = typeof(Labels), Name = "TotalExperience")]
+        [Required(ErrorMessageResourceName = "TotalExperienceRequired", ErrorMessageResourceType = typeof(Messages))]
         public string total_experience { get; set; }
 
-        [DisplayName("Relevent Experience")]
+        [Display(ResourceType = typeof(Labels), Name = "ReleventExperience")]
+        [Required(ErrorMessageResourceName = "ReleventExperienceRequired", ErrorMessageResourceType = typeof(Messages))]
         public string relevent_experience { get; set; }
 
-        [DisplayName("Current CTC")]
+        [Display(ResourceType = typeof(Labels), Name = "CurrentCTC")]
+        [Required(ErrorMessageResourceName = "CurrentCTCRequired", ErrorMessageResourceType = typeof(Messages))]
         public double current_ctc { get; set; }
 
-        [DisplayName("Expected CTC")]
+        [Display(ResourceType = typeof(Labels), Name = "ExpectedCTC")]
+        [Required(ErrorMessageResourceName = "ExpectedCTCRequired", ErrorMessageResourceType = typeof(Messages))]
         public double expected_ctc { get; set; }
 
-        [DisplayName("Candidate Name")]
+        [Display(ResourceType = typeof(Labels), Name = "NoticePeriod")]
+        [Required(ErrorMessageResourceName = "NoticePeriodRequired", ErrorMessageResourceType = typeof(Messages))]
         public string notice_period { get; set; }
 
 
-        [Required(ErrorMessage = "Required.")]
-        [DisplayName("HSC %")]
+        [Display(ResourceType = typeof(Labels), Name = "HSC")]
+        [Required(ErrorMessageResourceName = "HSCPercentageRequired", ErrorMessageResourceType = typeof(Messages))]
         public float hsc_perc { get; set; }
 
-        [Required(ErrorMessage = "Required.")]
-        [DisplayName("SSC %")]
+        [Display(ResourceType = typeof(Labels), Name = "SSC")]
+        [Required(ErrorMessageResourceName = "SSCPercentageRequired", ErrorMessageResourceType = typeof(Messages))]
         public float ssc_perc { get; set; }
 
-        [DisplayName("Applying Through")]
+        [Display(ResourceType = typeof(Labels), Name = "ApplyingThrough")]
+        [Required(ErrorMessageResourceName = "ApplyingThroughRequired", ErrorMessageResourceType = typeof(Messages))]
         public string applying_through { get; set; }
 
 
-        //to be managed
-        [DisplayName("Degree")]
+        [Display(ResourceType = typeof(Labels), Name = "Degree")]
+        [Required(ErrorMessageResourceName = "DegreeRequired", ErrorMessageResourceType = typeof(Messages))]
         public string degree { get; set; }
         public int selectedDegree { get; set; }
         public int selectDept { get; set; }
@@ -86,7 +94,8 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
 
 
-        [Required(ErrorMessage = "Required.")]
+        [Display(ResourceType = typeof(Labels), Name = "Resume")]
+        [Required(ErrorMessageResourceName = "ResumeRequired", ErrorMessageResourceType = typeof(Messages))]
         public string resume { get; set; }
         public IFormFile File { get; set; }
 

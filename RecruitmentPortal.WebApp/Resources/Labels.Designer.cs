@@ -61,11 +61,56 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Applying Through.
+        /// </summary>
+        public static string ApplyingThrough {
+            get {
+                return ResourceManager.GetString("ApplyingThrough", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Candidate Name.
         /// </summary>
         public static string CandidateName {
             get {
                 return ResourceManager.GetString("CandidateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current CTC.
+        /// </summary>
+        public static string CurrentCTC {
+            get {
+                return ResourceManager.GetString("CurrentCTC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date of Birth.
+        /// </summary>
+        public static string DateofBirth {
+            get {
+                return ResourceManager.GetString("DateofBirth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Highest Qualification.
+        /// </summary>
+        public static string Degree {
+            get {
+                return ResourceManager.GetString("Degree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eligibility Criteria.
+        /// </summary>
+        public static string EligibilityCriteria {
+            get {
+                return ResourceManager.GetString("EligibilityCriteria", resourceCulture);
             }
         }
         
@@ -88,11 +133,119 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expected CTC.
+        /// </summary>
+        public static string ExpectedCTC {
+            get {
+                return ResourceManager.GetString("ExpectedCTC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Experience.
+        /// </summary>
+        public static string Experience {
+            get {
+                return ResourceManager.GetString("Experience", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gender.
+        /// </summary>
+        public static string Gender {
+            get {
+                return ResourceManager.GetString("Gender", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HSC %.
+        /// </summary>
+        public static string HSC {
+            get {
+                return ResourceManager.GetString("HSC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job Role.
+        /// </summary>
+        public static string JobRole {
+            get {
+                return ResourceManager.GetString("JobRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job Title.
+        /// </summary>
+        public static string JobTitle {
+            get {
+                return ResourceManager.GetString("JobTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job Type.
+        /// </summary>
+        public static string JobType {
+            get {
+                return ResourceManager.GetString("JobType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location.
+        /// </summary>
+        public static string Location {
+            get {
+                return ResourceManager.GetString("Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview Mode.
+        /// </summary>
+        public static string ModeofInterview {
+            get {
+                return ResourceManager.GetString("ModeofInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notice Period.
+        /// </summary>
+        public static string NoticePeriod {
+            get {
+                return ResourceManager.GetString("NoticePeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone.
+        /// </summary>
+        public static string Phone {
+            get {
+                return ResourceManager.GetString("Phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Position.
         /// </summary>
         public static string position {
             get {
                 return ResourceManager.GetString("position", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rating.
+        /// </summary>
+        public static string Rating {
+            get {
+                return ResourceManager.GetString("Rating", resourceCulture);
             }
         }
         
@@ -106,11 +259,65 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Relevent Experience.
+        /// </summary>
+        public static string ReleventExperience {
+            get {
+                return ResourceManager.GetString("ReleventExperience", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remark.
+        /// </summary>
+        public static string Remark {
+            get {
+                return ResourceManager.GetString("Remark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resume.
+        /// </summary>
+        public static string Resume {
+            get {
+                return ResourceManager.GetString("Resume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Round.
+        /// </summary>
+        public static string Round {
+            get {
+                return ResourceManager.GetString("Round", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skills.
+        /// </summary>
+        public static string Skills {
+            get {
+                return ResourceManager.GetString("Skills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skype_ID.
         /// </summary>
         public static string skype_id {
             get {
                 return ResourceManager.GetString("skype_id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SSC %.
+        /// </summary>
+        public static string SSC {
+            get {
+                return ResourceManager.GetString("SSC", resourceCulture);
             }
         }
         
@@ -124,11 +331,20 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Status.
         /// </summary>
-        public static string String1 {
+        public static string Status {
             get {
-                return ResourceManager.GetString("String1", resourceCulture);
+                return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Experience.
+        /// </summary>
+        public static string TotalExperience {
+            get {
+                return ResourceManager.GetString("TotalExperience", resourceCulture);
             }
         }
         
@@ -138,6 +354,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string UserName {
             get {
                 return ResourceManager.GetString("UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vacancy.
+        /// </summary>
+        public static string Vacancy {
+            get {
+                return ResourceManager.GetString("Vacancy", resourceCulture);
             }
         }
     }

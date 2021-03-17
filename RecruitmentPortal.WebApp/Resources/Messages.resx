@@ -117,6 +117,30 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ApplyingThroughRequired" xml:space="preserve">
+    <value>ApplyingThrough is Required</value>
+  </data>
+  <data name="CandidateNameRequired" xml:space="preserve">
+    <value>Candidate Name is Required</value>
+  </data>
+  <data name="CurrentCTCRequired" xml:space="preserve">
+    <value>Current CTC is Required</value>
+  </data>
+  <data name="DateofBirthRequired" xml:space="preserve">
+    <value>Date of Birth is Required</value>
+  </data>
+  <data name="DateTimeRequired" xml:space="preserve">
+    <value>Date &amp; Time is Required</value>
+  </data>
+  <data name="DeactivationFailed" xml:space="preserve">
+    <value>Can't Deactivate as Data is being used by Application.</value>
+  </data>
+  <data name="DegreeRequired" xml:space="preserve">
+    <value>Highest Qualification is Required</value>
+  </data>
+  <data name="EligibilityCriteriaRequired" xml:space="preserve">
+    <value>Eligibility Criteria is Required</value>
+  </data>
   <data name="Emailrequired" xml:space="preserve">
     <value>Email is Required</value>
   </data>
@@ -126,16 +150,82 @@
   <data name="EndDateGreaterThanStartDate" xml:space="preserve">
     <value>End date must be greater than or equal to start date</value>
   </data>
+  <data name="ExpectedCTCRequired" xml:space="preserve">
+    <value>Expected CTC is Required</value>
+  </data>
+  <data name="ExperienceRequired" xml:space="preserve">
+    <value>Experience is Required</value>
+  </data>
+  <data name="GenderRequired" xml:space="preserve">
+    <value>Gender is Required</value>
+  </data>
+  <data name="HSCPercentageRequired" xml:space="preserve">
+    <value>HSC Percentage is Required</value>
+  </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Please Provide valid Email Address</value>
+  </data>
+  <data name="JobRoleRequired" xml:space="preserve">
+    <value>Job Role is Required</value>
+  </data>
+  <data name="JobTitleRequired" xml:space="preserve">
+    <value>Job Title is Required</value>
+  </data>
+  <data name="JobTypeRequired" xml:space="preserve">
+    <value>Job Type is Required</value>
+  </data>
+  <data name="LocationRequired" xml:space="preserve">
+    <value>Location is Required</value>
+  </data>
+  <data name="ModeofInterviewRequired" xml:space="preserve">
+    <value>Mode of Interview is Required</value>
+  </data>
+  <data name="NoticePeriodRequired" xml:space="preserve">
+    <value>Notice Period is Required</value>
   </data>
   <data name="Passwordrequired" xml:space="preserve">
     <value>Password is Required</value>
   </data>
+  <data name="PhoneRequired" xml:space="preserve">
+    <value>Phone No. is Required</value>
+  </data>
   <data name="PleaseSelect" xml:space="preserve">
     <value>--- Please Select ---</value>
   </data>
+  <data name="RatingRequired" xml:space="preserve">
+    <value>Rating is Required</value>
+  </data>
+  <data name="ReleventExperienceRequired" xml:space="preserve">
+    <value>Relevent Experience is Required</value>
+  </data>
+  <data name="RemarkRequired" xml:space="preserve">
+    <value>Remark is Required</value>
+  </data>
+  <data name="ResumeRequired" xml:space="preserve">
+    <value>Resume is Required</value>
+  </data>
+  <data name="RoundRequired" xml:space="preserve">
+    <value>Round is Required</value>
+  </data>
+  <data name="SkillsRequired" xml:space="preserve">
+    <value>Skills is Required</value>
+  </data>
   <data name="SomethingWrong" xml:space="preserve">
     <value>Something Went wrong. Please try again later.</value>
+  </data>
+  <data name="SSCPercentageRequired" xml:space="preserve">
+    <value>SSC Percentage is Required</value>
+  </data>
+  <data name="StatusRequired" xml:space="preserve">
+    <value>Status is Required</value>
+  </data>
+  <data name="TotalExperienceRequired" xml:space="preserve">
+    <value>Total Experience is Required</value>
+  </data>
+  <data name="VacancyRequired" xml:space="preserve">
+    <value>Vacancy is Required</value>
+  </data>
+  <data name="ValidVacancyRequired" xml:space="preserve">
+    <value>Valid Vacancy is Required</value>
   </data>
 </root>

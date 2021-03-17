@@ -213,7 +213,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             if (user == null)
                 return RedirectToAction(nameof(ForgotThePasswordConfirmation));
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var callback = Url.Action(nameof(ResetPassword), "Account", new { token, email = user.Email }, Request.Scheme);
+            var callback = Url.Action(nameof(ResetPassword), "Login", new { token, email = user.Email }, Request.Scheme);
             //var message = new Message(new string[] { "codemazetest@gmail.com" }, "Reset password token",JToken.Parse(callback),null);
 
             UserEmailOptions options_new = new UserEmailOptions

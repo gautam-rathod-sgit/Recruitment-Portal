@@ -18,25 +18,30 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [ScaffoldColumn(false)]
         public int ID { get; set; }
 
-        [DisplayName("Candidate Name")]
+        [Display(ResourceType = typeof(Labels), Name = "CandidateName")]
+        [Required(ErrorMessageResourceName = "CandidateNameRequired", ErrorMessageResourceType = typeof(Messages))]
         public string candidate_name { get; set; }
 
-        [DisplayName("Candidate Name")]
+        [Display(ResourceType = typeof(Labels), Name = "JobRole")]
+        [Required(ErrorMessageResourceName = "JobTitleRequired", ErrorMessageResourceType = typeof(Messages))]
         public string position { get; set; }
 
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        [DisplayName("Candidate Name")]
+        [Display(ResourceType = typeof(Labels), Name = "JobRole")]
+        [Required(ErrorMessageResourceName = "DateTimeRequired", ErrorMessageResourceType = typeof(Messages))]
         public DateTime datetime { get; set; }
 
         public string time { get; set; }
 
         //enum round
         [EnumDataType(typeof(RoundType))]
+        [Display(ResourceType = typeof(Labels), Name = "Round")]
+        [Required(ErrorMessageResourceName = "RoundRequired", ErrorMessageResourceType = typeof(Messages))]
         public RoundType roundValue { get; set; }
         public int round { get; set; }
 
-        [DisplayName("Candidate Name")]
+        
         public string roundName { get; set; }
 
        
@@ -44,27 +49,33 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public List<string> Multiinterviewer { get; set; }
         //public string applying_through { get; set; }
 
-        [DisplayName("Interview Mode")]
+        [Display(ResourceType = typeof(Labels), Name = "ModeofInterview")]
+        [Required(ErrorMessageResourceName = "ModeofInterviewRequired", ErrorMessageResourceType = typeof(Messages))] 
         public string mode_of_interview { get; set; }
 
-        [DisplayName("Location")]
+        [Display(ResourceType = typeof(Labels), Name = "Location")]
+        [Required(ErrorMessageResourceName = "LocationRequired", ErrorMessageResourceType = typeof(Messages))]
         public string location { get; set; }
 
-        [DisplayName("Rating")]
+        [Display(ResourceType = typeof(Labels), Name = "Rating")]
+        [Required(ErrorMessageResourceName = "RatingRequired", ErrorMessageResourceType = typeof(Messages))]
         public float rating { get; set; }
 
 
-        [DisplayName("Remarks")]
+        [Display(ResourceType = typeof(Labels), Name = "Remark")]
+        [Required(ErrorMessageResourceName = "RemarkRequired", ErrorMessageResourceType = typeof(Messages))]
         public string remark { get; set; }
 
 
         //enum status
         [EnumDataType(typeof(StatusType))]
+        [Display(ResourceType = typeof(Labels), Name = "Status")]
+        [Required(ErrorMessageResourceName = "StatusRequired", ErrorMessageResourceType = typeof(Messages))]
         public StatusType statusvalue { get; set; }
 
         public int status { get; set; }
 
-        [DisplayName("Status")]
+       
         public string statusName { get; set; }
 
 
@@ -78,7 +89,8 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public int jobAppId { get; set; }
 
         //for jobrole
-        [DisplayName("Job Role")]
+        [Display(ResourceType = typeof(Labels), Name = "JobRole")]
+        [Required(ErrorMessageResourceName = "JobRoleRequired", ErrorMessageResourceType = typeof(Messages))]
         public string jobRole { get; set; }
 
         //for candidate data

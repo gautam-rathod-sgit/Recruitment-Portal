@@ -141,7 +141,82 @@
   <data name="CandidateName" xml:space="preserve">
     <value>Candidate Name</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
+  <data name="ApplyingThrough" xml:space="preserve">
+    <value>Applying Through</value>
+  </data>
+  <data name="CurrentCTC" xml:space="preserve">
+    <value>Current CTC</value>
+  </data>
+  <data name="DateofBirth" xml:space="preserve">
+    <value>Date of Birth</value>
+  </data>
+  <data name="Degree" xml:space="preserve">
+    <value>Highest Qualification</value>
+  </data>
+  <data name="EligibilityCriteria" xml:space="preserve">
+    <value>Eligibility Criteria</value>
+  </data>
+  <data name="ExpectedCTC" xml:space="preserve">
+    <value>Expected CTC</value>
+  </data>
+  <data name="Experience" xml:space="preserve">
+    <value>Experience</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="HSC" xml:space="preserve">
+    <value>HSC %</value>
+  </data>
+  <data name="JobRole" xml:space="preserve">
+    <value>Job Role</value>
+  </data>
+  <data name="JobTitle" xml:space="preserve">
+    <value>Job Title</value>
+  </data>
+  <data name="JobType" xml:space="preserve">
+    <value>Job Type</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="ModeofInterview" xml:space="preserve">
+    <value>Interview Mode</value>
+  </data>
+  <data name="NoticePeriod" xml:space="preserve">
+    <value>Notice Period</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="ReleventExperience" xml:space="preserve">
+    <value>Relevent Experience</value>
+  </data>
+  <data name="Remark" xml:space="preserve">
+    <value>Remark</value>
+  </data>
+  <data name="Resume" xml:space="preserve">
+    <value>Resume</value>
+  </data>
+  <data name="Round" xml:space="preserve">
+    <value>Round</value>
+  </data>
+  <data name="Skills" xml:space="preserve">
+    <value>Skills</value>
+  </data>
+  <data name="SSC" xml:space="preserve">
+    <value>SSC %</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="TotalExperience" xml:space="preserve">
+    <value>Total Experience</value>
+  </data>
+  <data name="Vacancy" xml:space="preserve">
+    <value>Vacancy</value>
   </data>
 </root>

@@ -1,12 +1,8 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.SchedulesViewModel
 @using RecruitmentPortal.Infrastructure.Data.Enum
 @using RecruitmentPortal.WebApp.Helpers
-<script src="~/lib//jquery//dist//jquery.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        //for removing 0 on fields
-        $("#rating").val($(this).val() == 0 ? '' : $(this).val());
-</script>
+@using RecruitmentPortal.WebApp.Resources
+
 <style type="text/css">
     .required:after {
         content: "*";
@@ -14,7 +10,71 @@
         color: red;
     }
 </style>
-<h4>Add Reviews:</h4>
+
+
+<section class="content">
+    @using (Html.BeginForm("Update_Schedule_POST", "JobPost", FormMethod.Post, new { @autocomplete = "off", @role = "form" }))
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box box-default boxPad">
+                    <div class="box-header">
+                        <h3 class="box-title"><i class="fa fa-info-circle"></i><b> Edit Job :</b></h3>
+                        <div class="box-tools pull-right">
+                            <input type="submit" value="Save" class="btn btn-primary" name="submit" />
+                            <input type="submit" value="Save &amp; Continue" name="submit" class="btn btn-primary" />
+                            @*<a href="@Url.Action("DetailsJobCategory", "JobCategory", new { id = @RSACSPSample.EncodeServerName((Model.JobCategoryId).ToString()) })" class="btn btn-primary">Cancel</a>*@
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="box-body">
+
+                        @Html.HiddenFor(m => m.candidate_name)
+                        @Html.HiddenFor(m => m.position)
+                        @Html.HiddenFor(m => m.datetime)
+                        @Html.HiddenFor(m => m.round)
+                        @Html.HiddenFor(m => m.mode_of_interview)
+                        @Html.HiddenFor(m => m.location)
+                        @Html.HiddenFor(m => m.candidateId)
+                        @Html.HiddenFor(m => m.ID)
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="form-group has-feedback has-feedback-left">
+                                    @Html.LabelFor(m => m.rating)
+                                    @Html.TextBoxFor(m => m.rating, new { @placeholder = "Job Title", @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.rating)
+                                </div>
+
+                                @*<div class="form-group has-feedback has-feedback-left">
+                                    @Html.LabelFor(m => m.remark)
+                                    @Html.TextBoxFor(m => m.remark, new { @placeholder = "Location", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.remark)
+                                </div>
+                                <div class="form-group has-feedback has-feedback-left">
+                                    @Html.LabelFor(m => m.statusvalue)
+                                    @Html.DropDownList("statusvalue", typeof(StatusType), Messages.PleaseSelect, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.statusvalue)
+                                </div>
+
+                                <div class="form-group has-feedback has-feedback-left">
+                                    @Html.LabelFor(m => m.vacancy)
+                                    @Html.TextBoxFor(m => m.vacancy, "{0:#.#}", new { @placeholder = "Vacancy", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.vacancy)
+                                </div>*@
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+<!--<h4>Add Reviews:</h4>
 <hr />
 <div class="d-flex justify-content-end">
     <div>
@@ -23,27 +83,19 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Update_Schedule_POST" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" value="@Model.candidate_name" id="candidate_name" name="candidate_name" />
-            <input type="hidden" value="@Model.position" id="position" name="position" />
-            <input type="hidden" value="@Model.datetime" id="datetime" name="datetime" />
-            <input type="hidden" value="@Model.round" id="round" name="round" />
-            @*<input type="hidden" value="@Model.applying_through" id="applying_through" name="applying_through" />*@
-            <input type="hidden" value="@Model.mode_of_interview" id="mode_of_interview" name="mode_of_interview" />
-            <input type="hidden" value="@Model.location" id="location" name="location" />
-            <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
-            <input type="hidden" value="@Model.ID" id="ID" name="ID" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>-->
+
             @* <input type="hidden" value="@Model.applicationId" id="applicationId" name="applicationId" />*@
 
 
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label asp-for="rating" class="control-label required">Rating : </label>
                 <input asp-for="rating" class="form-control" id="rating" type="number" required max="5" />
                 <span asp-validation-for="rating" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="remark" class="control-label required">Remarks : </label>
-                <input asp-for="remark" class="form-control" type="text" pattern="[a-zA-Z][a-zA-Z ]{2,}" required/>
+                <input asp-for="remark" class="form-control" type="text" pattern="[a-zA-Z][a-zA-Z ]{2,}" required />
                 <span asp-validation-for="remark" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -60,7 +112,7 @@
             </div>
         </form>
     </div>
-</div>
+</div>-->
 
 
 

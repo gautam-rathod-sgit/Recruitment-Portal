@@ -50,19 +50,6 @@
     });
 
     function bindDatatable() {
-        //var sApplicationType = "";
-        //var sDegree = "";
-        //var applicationTypeElement = $('#srcApplicationType');
-        //var degreeElement = $('#srcDegree');
-        //if (applicationTypeElement.select2('data') && applicationTypeElement.select2('data')[0].id != '') {
-        //    sApplicationType = applicationTypeElement.select2('data')[0].text;
-        //}
-        //if (degreeElement.select2('data') && degreeElement.select2('data')[0].id != '') {
-        //    sDegree = degreeElement.select2('data')[0].text;
-        //}
-        //var sStartDate = getInputValueById('srcStartDate');
-        //var sEndDate = getInputValueById('srcEndDate');
-
         $('#datatable').DataTable({
             lengthChange: true,
             searching: true,
@@ -93,7 +80,7 @@
                 {
                     "sClass": "text-center",
                     "mRender": function (data, type, row) {
-                        var edit = '<a href="#" title="Edit" onclick="openRecord(\'' + row.id + '\')"><i class="fa fa-edit"></i></a>';
+                        var edit = '<a href="#" title="Edit" onclick="openRecord(\'' + row.id + '\')" class="btn btn-primary"><i class="fa fa-edit"></i></a>';
                         return edit;
                     }
                 }

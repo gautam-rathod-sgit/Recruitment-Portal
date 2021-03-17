@@ -1,70 +1,92 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.JobPostViewModel
 @using RecruitmentPortal.WebApp.Helpers
 @{
-    ViewData["Title"] = "AddNewJobPost";
+    ViewBag.Title = "AddNewJobPost";
 }
 
 
-<h1  class="bg-gradient-gray-dark text-white">Add New Job</h1>
-<div class="d-flex justify-content-end">
-    
-        <a asp-action="DetailsJobCategory" asp-route-id="@RSACSPSample.EncodeServerName((Model.JobCategoryId).ToString())" asp-controller="JobCategory" class="btn btn-primary">Back to List</a>
+<section class="content">
+    @using (Html.BeginForm("AddNewJobPost", "JobPost", FormMethod.Post, new { @autocomplete = "off", @role = "form" }))
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box box-default boxPad">
+                    <div class="box-header">
+                        <h3 class="box-title"><i class="fa fa-info-circle"></i><b> Add Job :</b></h3>
+                        <div class="box-tools pull-right">
+                            <input type="submit" value="Save" class="btn btn-primary" name="submit" />
+                            @if (ViewBag.toIndex == true)
+                            {
+                                <a href="@Url.Action("Index", "JobCategory")" class="btn btn-primary">Cancel</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("DetailsJobCategory", "JobCategory", new { id = @RSACSPSample.EncodeServerName((Model.JobCategoryId).ToString()) })" class="btn btn-primary">Cancel</a>
+                            }
 
-</div>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="AddNewJobPost">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" value="@Model.JobCategoryId" id="JobCategoryId" name="JobCategoryId" />
-            <input type="hidden" value="@Model.ID" id="ID" name="ID" />
+                        </div>
+                    </div>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="job_title" class="control-label">Job Title</label>
-                <input asp-for="job_title" class="form-control" readonly />
-                <span asp-validation-for="job_title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="location" class="control-label">Location</label>
-                <input asp-for="location" class="form-control" required />
-                <span asp-validation-for="location" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="job_role" class="control-label">Job Role</label>
-                <input asp-for="job_role" class="form-control" required />
-                <span asp-validation-for="job_role" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="vacancy" class="control-label">Vacancy</label>
-                <input asp-for="vacancy" class="form-control" required min="0" />
-                <span asp-validation-for="vacancy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="job_type" class="control-label">Job Type</label>
-                <input asp-for="job_type" class="form-control" required />
-                <span asp-validation-for="job_type" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="eligibility_criteria" class="control-label">Eligibility Criteria</label>
-                <input asp-for="eligibility_criteria" class="form-control" required />
-                <span asp-validation-for="eligibility_criteria" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="experience" class="control-label">Experience</label>
-                <input asp-for="experience" class="form-control" required />
-                <span asp-validation-for="experience" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="skills" class="control-label">Skills</label>
-                <input asp-for="skills" class="form-control" required />
-                <span asp-validation-for="skills" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+                <div class="box">
+                    <div class="box-body">
 
+                        @Html.HiddenFor(m => m.ID)
+                        @Html.HiddenFor(m => m.JobCategoryId)
+                        <div class="row">
 
+                            <div class="col-md-6">
+                                <div class="form-group has-feedback has-feedback-left">
+                                    @Html.LabelFor(m => m.job_title)
+                                    @Html.TextBoxFor(m => m.job_title, new { @placeholder = "Job Title", @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.job_title)
+                                </div>
 
+                                <div class="form-group has-feedback has-feedback-left">
+                                    @Html.LabelFor(m => m.location)
+                                    @Html.TextBoxFor(m => m.location, new { @placeholder = "Location", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.location)
+                                </div>
+                                <div class="form-group has-feedback has-feedback-left">
+                                    @Html.LabelFor(m => m.job_role)
+                                    @Html.TextBoxFor(m => m.job_role, new { @placeholder = "Job Role", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.job_role)
+                                </div>
+
+                                <div class="form-group has-feedback has-feedback-left">
+                                    @Html.LabelFor(m => m.vacancy)
+                                    @Html.TextBoxFor(m => m.vacancy, "{0:#.#}", new { @placeholder = "Vacancy", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.vacancy)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group has-feedback has-feedback-left">
+                                    @Html.LabelFor(m => m.job_type)
+                                    @Html.TextBoxFor(m => m.job_type, new { @placeholder = "Job Type", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.job_type)
+                                </div>
+
+                                <div class="form-group has-feedback has-feedback-left">
+                                    @Html.LabelFor(m => m.eligibility_criteria)
+                                    @Html.TextBoxFor(m => m.eligibility_criteria, new { @placeholder = "Eligibility criteria", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.eligibility_criteria)
+                                </div>
+                                <div class="form-group has-feedback has-feedback-left">
+                                    @Html.LabelFor(m => m.experience)
+                                    @Html.TextBoxFor(m => m.experience, new { @placeholder = "Experience", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.experience)
+                                </div>
+
+                                <div class="form-group has-feedback">
+                                    @Html.LabelFor(m => m.skills)
+                                    @Html.TextBoxFor(m => m.skills, new { @placeholder = "Skills", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.skills)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>

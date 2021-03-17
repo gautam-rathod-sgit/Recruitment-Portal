@@ -1,141 +1,4 @@
-﻿@*
-
-    <div>
-        <h4>Schedule Details :</h4>
-        <hr />
-        <div class="d-flex justify-content-end">
-            <div class="mb-2">
-                <a asp-action="UpdateScheduleOfJobApplication" asp-controller="JobApplication" class="btn btn-primary btn-md mr-3"
-                   asp-route-id="@RSACSPSample.EncodeServerName((Model.jobAppId).ToString())"
-                   asp-route-scheduleId="@RSACSPSample.EncodeServerName((Model.ID).ToString()) " asp-route-to_schedule="true">
-                    Re-Schedule
-                </a>
-            </div>
-            <div class="mb-2">
-                <a asp-action="Download" asp-controller="Candidate" class="btn btn-success btn-md mr-3"
-                   asp-route-filename="@Model.candidate.resume">
-                    Download Resume
-                </a>
-            </div>
-            <div>
-                <a asp-action="Update_Schedule_GET" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-primary mr-3">Add Reviews</a>
-            </div>
-            <br />
-            @if (User.IsInRole("Admin"))
-            {
-                if (ViewBag.toAdminIndex != null || ViewBag.toAdminIndex == true)
-                {
-                    <div>
-                        <a asp-action="AdminIndex" asp-controller="Home" class="btn btn-secondary mr-3">Back to List</a>
-                    </div>
-                }
-                else
-                {
-                    <div>
-                        <a asp-action="Index" asp-controller="Interviewer" class="btn btn-secondary mr-3">Back to List</a>
-                    </div>
-                }
-
-            }
-            else
-            {
-                <div>
-                    <a asp-action="InterviewerIndex" asp-controller="Home" class="btn btn-secondary mr-3">Back to List</a>
-                </div>
-            }
-        </div>
-        <dl class="row">
-            <dt class="col-sm-2">
-                Candidate Name
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate_name)
-            </dd>
-            <dt class="col-sm-2">
-                Job Title
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.position)
-            </dd>
-            <dt class="col-sm-2">
-                Job Role
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.jobRole)
-            </dd>
-            <dt class="col-sm-2">
-                SSC (%)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.ssc_perc)
-            </dd>
-            <dt class="col-sm-2">
-                HSC (%)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.hsc_perc)
-            </dd>
-            <dt class="col-sm-2">
-                Education
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.degree)
-            </dd>
-            <dt class="col-sm-2">
-                Experience
-            </dt>
-            @if (Model.candidate.experience == "Fresher")
-            {
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.candidate.experience)
-                </dd>
-            }
-            else
-            {
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.candidate.experience)
-                </dd>
-                <dt class="col-sm-2">
-                    Total Experience
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.candidate.total_experience)
-                </dd>
-                <dt class="col-sm-2">
-                    Relevent Experience
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.candidate.relevent_experience)
-                </dd>
-                <dt class="col-sm-2">
-                    Current CTC
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.candidate.current_ctc)
-                </dd>
-                <dt class="col-sm-2">
-                    Expected CTC
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.candidate.expected_ctc)
-                </dd>
-                <dt class="col-sm-2">
-                    Notice Period
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.candidate.notice_period)
-                </dd>
-            }
-            <dt class="col-sm-2">
-                Applied Through
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.applying_through)
-            </dd>
-        </dl>
-    </div>*@
-
-@model RecruitmentPortal.WebApp.ViewModels.SchedulesViewModel
+﻿@model RecruitmentPortal.WebApp.ViewModels.SchedulesViewModel
 @using RecruitmentPortal.WebApp.Helpers
 @using RecruitmentPortal.Infrastructure.Data.Enum
 <style>
@@ -339,17 +202,15 @@
                         </div>
                         <!--/.row-->
                     </div>
-            </div>
-            <!-- /.box-body -->
+                </div>
+                <!-- /.box-body -->
             </form>
         </div>
-        </div>
-        <!-- /.box-body -->
-        </div>
-        </div>
-    </section>
+    </div>
+    <!-- /.box-body -->
+</section>
 
-    <script>
+<script>
     $(document).ready(function () {
 
     });
@@ -358,4 +219,4 @@
         window.location.href = '@Url.Action("ScheduleDetails", "Interviewer")?id=' + id;
     }
 
-    </script>
+</script>
