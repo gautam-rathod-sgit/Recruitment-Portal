@@ -54,26 +54,6 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        //public async Task<IActionResult> Index(string s, string activeCandidate)
-        //{
-        //    try
-        //    {
-        //        if (s != null)
-        //            ViewData["msg"] = s;
-        //        if (activeCandidate != null)
-        //        {
-        //            ViewBag.active = activeCandidate;
-        //        }
-        //        degreeList = await _degreePageServices.GetAllDegreeWithDepartment();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-
-        //    return View(degreeList);
-        //}
-
         public async Task<IActionResult> Index()
         {
             return View();
@@ -103,7 +83,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 newlist = degreeList.ToList();
                 foreach (var item in newlist)
                 {
-                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.Encrypt(item.ID));
+                    item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
                     item.Departments.ToList();
                 }
 

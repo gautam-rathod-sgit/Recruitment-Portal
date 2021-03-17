@@ -27,8 +27,8 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public string position { get; set; }
 
         [DataType(DataType.DateTime)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        [Display(ResourceType = typeof(Labels), Name = "JobRole")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [Display(ResourceType = typeof(Labels), Name = "DateTime")]
         [Required(ErrorMessageResourceName = "DateTimeRequired", ErrorMessageResourceType = typeof(Messages))]
         public DateTime datetime { get; set; }
 
@@ -44,13 +44,14 @@ namespace RecruitmentPortal.WebApp.ViewModels
         
         public string roundName { get; set; }
 
-       
-        [Required(ErrorMessage ="please choose the interviewers")]
+
+        [Display(ResourceType = typeof(Labels), Name = "Interviewer")]
+        [Required(ErrorMessageResourceName = "InterviewerRequired", ErrorMessageResourceType = typeof(Messages))]
         public List<string> Multiinterviewer { get; set; }
         //public string applying_through { get; set; }
 
-        [Display(ResourceType = typeof(Labels), Name = "ModeofInterview")]
-        [Required(ErrorMessageResourceName = "ModeofInterviewRequired", ErrorMessageResourceType = typeof(Messages))] 
+        [Display(ResourceType = typeof(Labels), Name = "InterviewMode")]
+        [Required(ErrorMessageResourceName = "InterviewModeRequired", ErrorMessageResourceType = typeof(Messages))]
         public string mode_of_interview { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "Location")]

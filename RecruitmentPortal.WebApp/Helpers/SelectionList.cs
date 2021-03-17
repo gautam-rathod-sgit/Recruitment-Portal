@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data;
+using RecruitmentPortal.Infrastructure.Data.Enum;
 using RecruitmentPortal.Infrastructure.Repository;
 using System;
 using System.Collections.Generic;
@@ -17,6 +19,28 @@ namespace RecruitmentPortal.WebApp.Helpers
             {
                 return _dbContext.Degree.Where(m => m.isActive).OrderBy(x => x.ID).ToList();
             }
+        }
+
+        public static SelectList GetRoundTypeList()
+        {
+            var enumData = from RoundType e in Enum.GetValues(typeof(RoundType))
+                           select new
+                           {
+                               ID = (int)e,
+                               Name = e.ToString()
+                           };
+            return new SelectList(enumData, "ID", "Name");
+        }
+
+        public static SelectList GetStatusTypeList()
+        {
+            var enumData = from StatusType e in Enum.GetValues(typeof(StatusType))
+                           select new
+                           {
+                               ID = (int)e,
+                               Name = e.ToString()
+                           };
+            return new SelectList(enumData, "ID", "Name");
         }
     }
 }

@@ -126,7 +126,7 @@
   <data name="RecruitmentPortal" xml:space="preserve">
     <value>Recruitment Portal</value>
   </data>
-  <data name="position" xml:space="preserve">
+  <data name="Position" xml:space="preserve">
     <value>Position</value>
   </data>
   <data name="skype_id" xml:space="preserve">
@@ -218,5 +218,19 @@
   </data>
   <data name="Vacancy" xml:space="preserve">
     <value>Vacancy</value>
+  <data name="DateTime" xml:space="preserve">
+    <value>Date &amp; Time</value>
+  </data>
+  <data name="Interviewer" xml:space="preserve">
+    <value>Interviewer Names</value>
+  </data>
+  <data name="RoundType" xml:space="preserve">
+    <value>Round Type</value>
+  </data>
+  <data name="InterviewMode" xml:space="preserve">
+    <value>Mode of Interview</value>
+  </data>
+  <data name="StatusValue" xml:space="preserve">
+    <value>Interview Status</value>
   </data>
 </root>

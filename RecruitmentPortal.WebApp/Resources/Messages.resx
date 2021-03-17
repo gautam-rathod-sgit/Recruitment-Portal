@@ -141,6 +141,12 @@
   <data name="EligibilityCriteriaRequired" xml:space="preserve">
     <value>Eligibility Criteria is Required</value>
   </data>
+  <data name="CandidateNameRequired" xml:space="preserve">
+    <value>Candidate Name is Required</value>
+  </data>
+  <data name="DateTimeRequired" xml:space="preserve">
+    <value>Date &amp; Time is Required</value>
+  </data>
   <data name="Emailrequired" xml:space="preserve">
     <value>Email is Required</value>
   </data>
@@ -161,6 +167,12 @@
   </data>
   <data name="HSCPercentageRequired" xml:space="preserve">
     <value>HSC Percentage is Required</value>
+  </data>
+  <data name="InterviewerRequired" xml:space="preserve">
+    <value>Please choose the Interviewer</value>
+  </data>
+  <data name="InterviewModeRequired" xml:space="preserve">
+    <value>Please Select the mode of Interview</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Please Provide valid Email Address</value>
@@ -210,6 +222,12 @@
   <data name="SkillsRequired" xml:space="preserve">
     <value>Skills is Required</value>
   </data>
+  <data name="PositionRequired" xml:space="preserve">
+    <value>Job Position is Required</value>
+  </data>
+  <data name="RoundTypeRequired" xml:space="preserve">
+    <value>Type of Round is Required</value>
+  </data>
   <data name="SomethingWrong" xml:space="preserve">
     <value>Something Went wrong. Please try again later.</value>
   </data>
@@ -227,5 +245,8 @@
   </data>
   <data name="ValidVacancyRequired" xml:space="preserve">
     <value>Valid Vacancy is Required</value>
+  </data>
+  <data name="StatusValueRequired" xml:space="preserve">
+    <value>Please Select InterviewStatus</value>
   </data>
 </root>
