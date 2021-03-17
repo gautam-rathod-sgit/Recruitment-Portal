@@ -21,26 +21,28 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [DisplayName("Candidate Name")]
         public string candidate_name { get; set; }
 
-        [DisplayName("Candidate Name")]
+        [DisplayName("Position")]
         public string position { get; set; }
 
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        [DisplayName("Candidate Name")]
+        [DisplayName("Date & Time")]
         public DateTime datetime { get; set; }
 
         public string time { get; set; }
 
         //enum round
         [EnumDataType(typeof(RoundType))]
+        [DisplayName("Round Type")]
         public RoundType roundValue { get; set; }
         public int round { get; set; }
 
-        [DisplayName("Candidate Name")]
+        
         public string roundName { get; set; }
 
        
         [Required(ErrorMessage ="please choose the interviewers")]
+        [DisplayName("Interviewer Name/Names")]
         public List<string> Multiinterviewer { get; set; }
         //public string applying_through { get; set; }
 

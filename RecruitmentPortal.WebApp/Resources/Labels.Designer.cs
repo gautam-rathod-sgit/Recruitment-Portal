@@ -70,6 +70,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date &amp; Time.
+        /// </summary>
+        public static string datetime {
+            get {
+                return ResourceManager.GetString("datetime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email.
         /// </summary>
         public static string Email {
@@ -84,6 +93,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string EndDate {
             get {
                 return ResourceManager.GetString("EndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer Names.
+        /// </summary>
+        public static string Multiinterviewer {
+            get {
+                return ResourceManager.GetString("Multiinterviewer", resourceCulture);
             }
         }
         
@@ -106,6 +124,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Round Type.
+        /// </summary>
+        public static string roundValue {
+            get {
+                return ResourceManager.GetString("roundValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skype_ID.
         /// </summary>
         public static string skype_id {
@@ -120,15 +147,6 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string StartDate {
             get {
                 return ResourceManager.GetString("StartDate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         

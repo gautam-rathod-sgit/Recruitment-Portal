@@ -49,6 +49,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         [HttpGet]
         public async  Task<IActionResult> Index(string id)
         {
+            ViewBag.RoundTypeList = SelectionList.GetRoundTypeList();
             SchedulesViewModel model = new SchedulesViewModel();
             List<ApplicationUser> allusers = new List<ApplicationUser>();
             int decrypted_id = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
