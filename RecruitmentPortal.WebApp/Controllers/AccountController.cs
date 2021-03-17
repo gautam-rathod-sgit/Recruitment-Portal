@@ -19,6 +19,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 {
     public class AccountController : Controller
     {
+        #region private variables
         private readonly UserManager<ApplicationUser> _userManager;
         //private readonly IAuthorize _authorize;
         private readonly RecruitmentPortalDbContext _dbContext;
@@ -29,14 +30,18 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         //for uploading Images/File : media stuff
         private readonly IWebHostEnvironment _environment;
+        #endregion
 
-
+        #region public variables
         public IEmailService _emailService { get; }
-        public AccountController(IWebHostEnvironment environment, SignInManager<ApplicationUser> signInManager,
-           ILogger<AccountController> logger,
-           IPasswordHasher<ApplicationUser> passwordHash,
+        #endregion
 
-           UserManager<ApplicationUser> userManager, IEmailService emailService, RoleManager<IdentityRole> roleManager, RecruitmentPortalDbContext dbContext)
+        #region constructor
+        public AccountController(IWebHostEnvironment environment, SignInManager<ApplicationUser> signInManager,
+          ILogger<AccountController> logger,
+          IPasswordHasher<ApplicationUser> passwordHash,
+
+          UserManager<ApplicationUser> userManager, IEmailService emailService, RoleManager<IdentityRole> roleManager, RecruitmentPortalDbContext dbContext)
         {
             _environment = environment;
             _userManager = userManager;
@@ -47,6 +52,10 @@ namespace RecruitmentPortal.WebApp.Controllers
             passwordHasher = passwordHash;
             _emailService = emailService;
         }
+
+        #endregion
+
+        #region public methods
 
 
         /// <summary>
@@ -295,17 +304,6 @@ namespace RecruitmentPortal.WebApp.Controllers
 
             return View(user);
         }
-        private void Errors(IdentityResult result)
-        {
-            foreach (IdentityError error in result.Errors)
-                ModelState.AddModelError("", error.Description);
-        }
-
-        /// <summary>
-        /// This method deletes User record from Database
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
 
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -424,16 +422,25 @@ namespace RecruitmentPortal.WebApp.Controllers
                 //    item.Id = Helpers.RSACSPSample.EncodeServerName(item.Id);
                 //
 
-                    return Json(new { data = newList });
+                return Json(new { data = newList });
             }
             catch (Exception ex)
             {
                 TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
                 return Json(new { data = newList });
             }
-            
-        }
 
+        }
+        #endregion
+
+
+        #region private methods
+        private void Errors(IdentityResult result)
+        {
+            foreach (IdentityError error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+        }
+        #endregion
 
     }
 }

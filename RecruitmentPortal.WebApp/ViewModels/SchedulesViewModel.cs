@@ -2,6 +2,7 @@
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data.Enum;
 using RecruitmentPortal.WebApp.Models;
+using RecruitmentPortal.WebApp.Resources;
 using RecruitmentPortal.WebApp.ViewModels.Base;
 using System;
 using System.Collections.Generic;
