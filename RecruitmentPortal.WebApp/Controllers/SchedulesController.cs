@@ -50,23 +50,28 @@ namespace RecruitmentPortal.WebApp.Controllers
         public async  Task<IActionResult> Index(string id)
         {
             ViewBag.RoundTypeList = SelectionList.GetRoundTypeList();
+            ViewBag.StatusTypeList = SelectionList.GetStatusTypeList();
             SchedulesViewModel model = new SchedulesViewModel();
             List<ApplicationUser> allusers = new List<ApplicationUser>();
-            int decrypted_id = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+            allusers = (from element in _dbContext.Users select element).ToList();
+            ViewBag.users = allusers;
+
             try
             {
-                //setting foreign key in schedule
-                model.candidateId = decrypted_id;
-                //getting job application ID
-                model.jobAppId = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == decrypted_id).ID;
-                //getting candidate name and position for readonly in view
-                model.candidate_name = _dbContext.Candidate.Where(x => x.ID == decrypted_id).FirstOrDefault().name;
-                var job_ID = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == decrypted_id).FirstOrDefault().job_Id;
-                model.position = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).job_title;
-
-                //getting dropdown of AspNetUsers from DB
-                allusers = (from element in _dbContext.Users select element).ToList();
-                ViewBag.users = allusers;
+                if (id != null)
+                {
+                    int decrypted_id = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+                    //setting foreign key in schedule
+                    model.candidateId = decrypted_id;
+                    //getting job application ID
+                    model.jobAppId = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == decrypted_id).ID;
+                    //getting candidate name and position for readonly in view
+                    model.candidate_name = _dbContext.Candidate.Where(x => x.ID == decrypted_id).FirstOrDefault().name;
+                    var job_ID = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == decrypted_id).FirstOrDefault().job_Id;
+                    model.position = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).job_title;
+                    model.EncryptedId = id;
+                    //getting dropdown of AspNetUsers from DB
+                }
             }
             catch(Exception ex)
             {

@@ -18,35 +18,40 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [ScaffoldColumn(false)]
         public int ID { get; set; }
 
-        [DisplayName("Candidate Name")]
+        [Display(ResourceType = typeof(Labels), Name = "CandidateName")]
+        [Required(ErrorMessageResourceName = "CandidateNameRequired", ErrorMessageResourceType = typeof(Messages))]
         public string candidate_name { get; set; }
 
-        [DisplayName("Position")]
+        [Display(ResourceType = typeof(Labels), Name = "Position")]
+        [Required(ErrorMessageResourceName = "PositionRequired", ErrorMessageResourceType = typeof(Messages))]
         public string position { get; set; }
 
         [DataType(DataType.DateTime)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        [DisplayName("Date & Time")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [Display(ResourceType = typeof(Labels), Name = "DateTime")]
+        [Required(ErrorMessageResourceName = "DateTimeRequired", ErrorMessageResourceType = typeof(Messages))]
         public DateTime datetime { get; set; }
 
         public string time { get; set; }
 
         //enum round
         [EnumDataType(typeof(RoundType))]
-        [DisplayName("Round Type")]
+        [Display(ResourceType = typeof(Labels), Name = "RoundType")]
+        [Required(ErrorMessageResourceName = "RoundTypeRequired", ErrorMessageResourceType = typeof(Messages))]
         public RoundType roundValue { get; set; }
         public int round { get; set; }
 
         
         public string roundName { get; set; }
 
-       
-        [Required(ErrorMessage ="please choose the interviewers")]
-        [DisplayName("Interviewer Name/Names")]
+
+        [Display(ResourceType = typeof(Labels), Name = "Interviewer")]
+        [Required(ErrorMessageResourceName = "InterviewerRequired", ErrorMessageResourceType = typeof(Messages))]
         public List<string> Multiinterviewer { get; set; }
         //public string applying_through { get; set; }
 
-        [DisplayName("Interview Mode")]
+        [Display(ResourceType = typeof(Labels), Name = "InterviewMode")]
+        [Required(ErrorMessageResourceName = "InterviewModeRequired", ErrorMessageResourceType = typeof(Messages))]
         public string mode_of_interview { get; set; }
 
         [DisplayName("Location")]
@@ -62,6 +67,8 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         //enum status
         [EnumDataType(typeof(StatusType))]
+        [Display(ResourceType = typeof(Labels), Name = "StatusValue")]
+        [Required(ErrorMessageResourceName = "StatusValueRequired", ErrorMessageResourceType = typeof(Messages))]
         public StatusType statusvalue { get; set; }
 
         public int status { get; set; }

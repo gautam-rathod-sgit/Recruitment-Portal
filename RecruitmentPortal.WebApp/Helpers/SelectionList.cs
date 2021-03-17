@@ -32,5 +32,15 @@ namespace RecruitmentPortal.WebApp.Helpers
             return new SelectList(enumData, "ID", "Name");
         }
 
+        public static SelectList GetStatusTypeList()
+        {
+            var enumData = from StatusType e in Enum.GetValues(typeof(StatusType))
+                           select new
+                           {
+                               ID = (int)e,
+                               Name = e.ToString()
+                           };
+            return new SelectList(enumData, "ID", "Name");
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public DateTime accept_date { get; set; }
 
         public DateTime joining_date { get; set; }
-        public string date { get; set; }
+        public DateTime date { get; set; }
 
         public string commitment_mode { get; set; }
         public string offered_ctc { get; set; }

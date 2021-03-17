@@ -72,9 +72,9 @@ namespace RecruitmentPortal.WebApp.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Date &amp; Time.
         /// </summary>
-        public static string datetime {
+        public static string DateTime {
             get {
-                return ResourceManager.GetString("datetime", resourceCulture);
+                return ResourceManager.GetString("DateTime", resourceCulture);
             }
         }
         
@@ -99,18 +99,27 @@ namespace RecruitmentPortal.WebApp.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Interviewer Names.
         /// </summary>
-        public static string Multiinterviewer {
+        public static string Interviewer {
             get {
-                return ResourceManager.GetString("Multiinterviewer", resourceCulture);
+                return ResourceManager.GetString("Interviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mode of Interview.
+        /// </summary>
+        public static string InterviewMode {
+            get {
+                return ResourceManager.GetString("InterviewMode", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Position.
         /// </summary>
-        public static string position {
+        public static string Position {
             get {
-                return ResourceManager.GetString("position", resourceCulture);
+                return ResourceManager.GetString("Position", resourceCulture);
             }
         }
         
@@ -126,9 +135,9 @@ namespace RecruitmentPortal.WebApp.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Round Type.
         /// </summary>
-        public static string roundValue {
+        public static string RoundType {
             get {
-                return ResourceManager.GetString("roundValue", resourceCulture);
+                return ResourceManager.GetString("RoundType", resourceCulture);
             }
         }
         
@@ -147,6 +156,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string StartDate {
             get {
                 return ResourceManager.GetString("StartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview Status.
+        /// </summary>
+        public static string StatusValue {
+            get {
+                return ResourceManager.GetString("StatusValue", resourceCulture);
             }
         }
         

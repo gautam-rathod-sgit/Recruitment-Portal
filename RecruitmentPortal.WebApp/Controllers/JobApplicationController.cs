@@ -187,10 +187,10 @@ namespace RecruitmentPortal.WebApp.Controllers
 
 
                 }
-               
+
 
                 newlist = newlist.Where(x => x.interview_Status == istatus).ToList();
-              
+
                 models = newlist.AsQueryable();
 
                 //Added search box test
@@ -221,18 +221,19 @@ namespace RecruitmentPortal.WebApp.Controllers
             //checking if candidate job application already exists
             try
             {
-                
+
                 var isRepeating = _dbContext.jobApplications.Where(x => x.candidateId == decrypted_key).Any();
                 if (isRepeating)
                 {
                     TempData["msg"] = getCandidateNameById(decrypted_key);
                     return RedirectToAction("AllApplications", "Candidate", new { Application_mode = status_Pending, conflict = TempData["msg"] });
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            
+
             //create jobapplication
             JobApplicationViewModel model = new JobApplicationViewModel();
             model.candidateId = decrypted_key;
@@ -244,11 +245,11 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 await _jobApplicationPage.AddJobApplications(model);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            
+
             return RedirectToAction("AllApplications", "Candidate", new { Application_mode = "Active" });
         }
 
@@ -259,74 +260,61 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="id"></param>
         /// <param name="conflict"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Details(string id, bool backToAll, int conflict, bool time_conflict = false)
+        public async Task<IActionResult> Details(string id)
         {
-            if (conflict != 0)
-                ViewData["msg"] = conflict;
-
-            if (time_conflict)
-            {
-                ViewBag.timeConflict = time_conflict;
-            }
-
-            if (backToAll)
-                ViewBag.backToAll = backToAll;
-            
             JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
             try
             {
-                jobApplicationModel = await _jobApplicationPage.getJobApplicationById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            
-            //getting candidate schedules
-            CandidateViewModel model = new CandidateViewModel();
-            model = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
-            //pushing candidate schedules to custom scheudules in job applicationViewmodel for view.
-            jobApplicationModel.Schedules = model.Schedules;
-            
-
-            //giving interviewer name list to each schedule in jobapplication 
-            try
-            {
-                if (jobApplicationModel.Schedules != null)
+                if (id != null)
                 {
-                    int i = 0;
-                    foreach (var schedule in jobApplicationModel.Schedules)
-                    {
-                        List<UserModel> listOfUser = getInterviewerNames(schedule.ID);
-                        jobApplicationModel.Schedules[i].InterviewerNames = listOfUser;
-                        //setting statusName using status int from ENUM
-                        jobApplicationModel.Schedules[i].statusName = Enum.GetName(typeof(StatusType), jobApplicationModel.Schedules[i].status);
-                        i++;
-                    }
+                    jobApplicationModel = await _jobApplicationPage.getJobApplicationById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
                 }
+
+                if (jobApplicationModel != null && id != null)
+                {
+                    //getting candidate schedules
+                    CandidateViewModel model = new CandidateViewModel();
+
+                    model = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
+
+                    //pushing candidate schedules to custom scheudules in job applicationViewmodel for view.
+
+                    jobApplicationModel.Schedules = model.Schedules;
+
+
+                    //giving interviewer name list to each schedule in jobapplication 
+                    if (jobApplicationModel.Schedules.Count > 0)
+                    {
+                        foreach (var schedule in jobApplicationModel.Schedules)
+                        {
+                            List<UserModel> listOfUser = getInterviewerNames(schedule.ID);
+                            schedule.InterviewerNames = listOfUser;
+                            schedule.statusName = Enum.GetName(typeof(StatusType), schedule.status);
+                        }
+                    }
+
+
+                    //getting candidate name
+                    jobApplicationModel.candidateName = getCandidateNameById(jobApplicationModel.candidateId);
+                    //getting position
+                    jobApplicationModel.position = getPositionByCandidateId(jobApplicationModel.candidateId);
+
+                    //----------riddhi--
+                    //getting job-role
+                    jobApplicationModel.job_Role = getJobRoleByCandidateId(jobApplicationModel.candidateId);
+                    //getting applied-date
+                    jobApplicationModel.date = model.apply_date;
+                    //getting experience fields
+                    //     jobApplicationModel.candidate.experience = model.experience;
+                    jobApplicationModel.candidate = model;
+                    jobApplicationModel.joining_date = DateTime.Now;
+                }
+
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                //Console.WriteLine(ex.Message);
             }
-
-
-            //getting candidate name
-            jobApplicationModel.candidateName = getCandidateNameById(jobApplicationModel.candidateId);
-            //getting position
-            jobApplicationModel.position = getPositionByCandidateId(jobApplicationModel.candidateId);
-
-            //----------riddhi--
-            //getting job-role
-            jobApplicationModel.job_Role = getJobRoleByCandidateId(jobApplicationModel.candidateId);
-            //getting applied-date
-            jobApplicationModel.date = model.apply_date.ToString();
-            //getting experience fields
-            //     jobApplicationModel.candidate.experience = model.experience;
-            jobApplicationModel.candidate = model;
-            jobApplicationModel.joining_date = DateTime.Now;
-
-            
             return View(jobApplicationModel);
         }
 
@@ -360,7 +348,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-            }  
+            }
             return View(jobApplicationModel);
         }
         /// <summary>
@@ -380,11 +368,11 @@ namespace RecruitmentPortal.WebApp.Controllers
                     return RedirectToAction("SendRejectionMailToCandidate", "Candidate", new { id = model.candidateId });
                 }
 
-                if (!model.flag_Edit )
-                {    
-                        model.status = model.flag_Accepted ? status_Complete : status_Pending;
-                        model.accept_date = DateTime.Now;
-                        await _jobApplicationPage.UpdateJobApplication(model);
+                if (!model.flag_Edit)
+                {
+                    model.status = model.flag_Accepted ? status_Complete : status_Pending;
+                    model.accept_date = DateTime.Now;
+                    await _jobApplicationPage.UpdateJobApplication(model);
                 }
                 else
                 {
@@ -442,7 +430,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     item.candidateName = getCandidateNameById(item.candidateId);
                     item.position = getPositionByCandidateId(item.candidateId);
                     item.job_Role = getJobRoleByCandidateId(item.candidateId);
-                    item.date = item.joining_date.ToString(date_format);
+                    item.date = item.joining_date;
                 }
                 models = newlist.AsQueryable();
 
@@ -456,7 +444,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
-           
+
             return View(models);
         }
         /// <summary>
@@ -486,7 +474,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                 //if(model.status == status_Rejected)
                 //{
-                    model.listOfRounds = getListOfRounds(model.candidateId);
+                model.listOfRounds = getListOfRounds(model.candidateId);
                 //}
             }
             catch (Exception ex)
@@ -531,7 +519,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     item.position = getPositionByCandidateId(item.candidateId);
                     item.job_Role = getJobRoleByCandidateId(item.candidateId);
                     item.candidate = await _candidatePage.getCandidateById(item.candidateId);
-                    
+
                 }
                 models = newlist.AsQueryable();
 
@@ -584,7 +572,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 //getting candidate
                 model = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -593,7 +581,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             SchedulesViewModel scheduleModel = new SchedulesViewModel();
             foreach (var item in model.Schedules)
             {
-                if(item.ID == schedule_ID)
+                if (item.ID == schedule_ID)
                 {
                     scheduleModel = item;
                 }
@@ -656,13 +644,14 @@ namespace RecruitmentPortal.WebApp.Controllers
                 await _schedulesPage.UpdateSchedule(model);
                 //redirecting to details of job Application
                 jobApplication = _dbContext.jobApplications.Where(x => x.candidateId == model.candidateId).FirstOrDefault();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-           
+
             //setting the back page  : schedule or active app's details page
-            if(goback == true)
+            if (goback == true)
             {
                 goback = false;
                 return RedirectToAction("ScheduleDetails", "Interviewer", new { scheduleId = RSACSPSample.EncodeServerName((model.ID).ToString()) });
@@ -681,7 +670,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> ConfirmJobApplication(string id)
         {
-            
+
             JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
             //getting the jobapplication
             try
@@ -693,7 +682,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
-            return RedirectToAction("ConfirmJobApplicationPost",jobApplicationModel);
+            return RedirectToAction("ConfirmJobApplicationPost", jobApplicationModel);
         }
         /// <summary>
         /// Post method for updating the confirmation into database.
@@ -703,7 +692,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         public async Task<IActionResult> ConfirmJobApplicationPost(JobApplicationViewModel model)
         {
             await _jobApplicationPage.UpdateJobApplication(model);
-            return RedirectToAction("SelectedJobApplicationsDetails","JobApplication", new { id = RSACSPSample.EncodeServerName((model.ID).ToString()) });
+            return RedirectToAction("SelectedJobApplicationsDetails", "JobApplication", new { id = RSACSPSample.EncodeServerName((model.ID).ToString()) });
         }
 
         public async Task<IActionResult> ReOpenJobApplication(string id)
@@ -713,7 +702,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             var model = _dbContext.jobApplications.Where(x => x.ID == Convert.ToInt32(RSACSPSample.DecodeServerName(id))).FirstOrDefault();
             model.status = status_Pending;
             model.start_date = DateTime.Now;
- 
+
             //removing the existing schedules of that candidate.
 
             //all data of ScheduleUser composite table
@@ -768,7 +757,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             string name = null;
             try
             {
-                name =  _dbContext.Candidate.AsNoTracking().FirstOrDefault(x => x.ID == id).name;
+                name = _dbContext.Candidate.AsNoTracking().FirstOrDefault(x => x.ID == id).name;
 
             }
             catch (Exception ex)
@@ -792,7 +781,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 job_ID = _dbContext.JobPostCandidate.AsNoTracking().FirstOrDefault(x => x.candidate_Id == id).job_Id;
                 position = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).job_title;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
