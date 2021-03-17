@@ -58,7 +58,10 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             return View();
         }
-
+        /// <summary>
+        /// method for getting all the job categories.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> GetJobCategories()
         {
             List<JobCategoryViewModel> list = null;
@@ -290,7 +293,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="id"></param>
         /// <param name="s"></param>
         /// <returns></returns>
-        public async Task<IActionResult> DetailsJobCategory(string id, string s, string activeCandidate)
+        public ActionResult DetailsJobCategory(string id, string s, string activeCandidate)
         {
             //if (activeCandidate != null)
             //{
@@ -303,7 +306,8 @@ namespace RecruitmentPortal.WebApp.Controllers
             //}
 
             //JobCategoryViewModel item = new JobCategoryViewModel();
-
+            //item.EncryptedId = id;
+            ViewBag.EncryptedId = id;
             //try
             //{
             //    item = await _jobCategoryPageservices.GetJobCategoryWithJobPostById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));                
@@ -318,20 +322,24 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         public async Task<IActionResult> GetCategoryDetails(string id)
         {
+            List<JobPostViewModel> itemList = new List<JobPostViewModel>();
             JobCategoryViewModel item = new JobCategoryViewModel();
 
             try
             {
                 item = await _jobCategoryPageservices.GetJobCategoryWithJobPostById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
                 item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
-
-                return Json(new { data = item });
+                foreach(var obj in item.JobPosts)
+                {
+                    obj.EncryptedId = RSACSPSample.EncodeServerName((obj.ID).ToString());
+                }
+                itemList = item.JobPosts;
+                return Json(new { data = itemList });
             }
             catch (Exception ex)
             {
                 TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
-
-                return Json(new { data = item });
+                return Json(new { data = itemList });
             }
         }
     }

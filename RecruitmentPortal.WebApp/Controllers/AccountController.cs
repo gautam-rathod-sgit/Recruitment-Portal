@@ -37,6 +37,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         #endregion
 
         #region Public Methods
+
         /// <summary>
         /// This Method fetches all Users(Interviewers) and display the list of them
         /// </summary>
@@ -142,12 +143,6 @@ namespace RecruitmentPortal.WebApp.Controllers
 
             return View(user);
         }
-
-        /// <summary>
-        /// This method deletes User record from Database
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
 
         public async Task<IActionResult> DeleteUser(string id)
         {

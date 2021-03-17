@@ -131,10 +131,6 @@
                         </thead>
                     </table>
 
-
-
-
-
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -145,9 +141,12 @@
 
 <script>
     function myFunction() {
-
         var x = $("#srcApplicationType").val();
         alert("You selected : " + x);
+
+        $x.DataTable();
+   
+
     }
 
 
@@ -182,7 +181,7 @@
         var sStartDate = getInputValueById('srcStartDate');
         var sEndDate = getInputValueById('srcEndDate');
 
-
+        
         $('#datatable').DataTable({
             lengthChange: true,
             searching: true,

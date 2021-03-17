@@ -135,13 +135,13 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="id"></param>
         /// <param name="cid"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UpdateJobPost(string id, string cid, bool deactivate, bool editMode)
+        public async Task<IActionResult> UpdateJobPost(string id, string categoryId, bool deactivate, bool editMode)
         {
             JobPostViewModel item = new JobPostViewModel();
             try
             {
                 item = await _jobPostPageservices.getJobPostById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
-                item.JobCategoryId = Convert.ToInt32(RSACSPSample.DecodeServerName(cid));
+                item.JobCategoryId = Convert.ToInt32(RSACSPSample.DecodeServerName(categoryId));
 
                 if (deactivate == true)
                 {
@@ -171,7 +171,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     if (isActiveCandidate)
                     {
                         TempData["deactivate"] = "Deactivation Failed !! Candidate with job is Active";
-                        return RedirectToAction("DetailsJobCategory", "JobCategory", new { activeCandidate = TempData["deactivate"], id = cid });
+                        return RedirectToAction("DetailsJobCategory", "JobCategory", new { activeCandidate = TempData["deactivate"], id = categoryId });
                     }
                     else
                     {
