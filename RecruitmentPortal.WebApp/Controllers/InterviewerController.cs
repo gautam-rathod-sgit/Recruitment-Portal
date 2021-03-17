@@ -67,13 +67,20 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// SHOWING ALL THE SCHEDULES FOR INTERVIEWER 
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string SearchString)
+        public async Task<IActionResult> Index()
         {
-            
+            return View();
+        }
 
+        /// <summary>
+        /// method for getting all the Schedules of Interviewer.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> GetSchedules()
+        {
             try
             {
-                JobApplications data = new JobApplications();
+                JobApplications allSchedules = new JobApplications();
                 List<SchedulesViewModel> schedulelist = new List<SchedulesViewModel>();
                 List<SchedulesViewModel> viewScheduleList = new List<SchedulesViewModel>();
 
@@ -88,18 +95,19 @@ namespace RecruitmentPortal.WebApp.Controllers
                     //schedulelist = upcoming_schedules.ToList();
                     foreach (var item in viewScheduleList)
                     {
-                        data = _dbContext.jobApplications.Where(x => x.candidateId == item.candidateId).FirstOrDefault();
+                        allSchedules = _dbContext.jobApplications.Where(x => x.candidateId == item.candidateId).FirstOrDefault();
 
                         //getting job application ID
                         item.jobAppId = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == item.candidateId).ID;
                         item.jobRole = getJobRoleByCandidateId(item.candidateId);
-
+                        item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
+                        item.roundName = Enum.GetName(typeof(StatusType), item.round);
                         //getting interviewer names of schedule
                         List<UserModel> listOfUser = getInterviewerNames(item.ID);
                         item.InterviewerNames = listOfUser;
 
                         //creating new schedule list 
-                        if (data.status == status_Pending)
+                        if (allSchedules.status == status_Pending)
                         {
                             schedulelist.Add(item);
                         }
@@ -112,27 +120,29 @@ namespace RecruitmentPortal.WebApp.Controllers
                     slist = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
                     //filtering the schedules for getting only the completed schedules for interviewer
                     slist = slist.Where(x => x.status == status_completed);
-                    foreach(var item in slist)
+                    foreach (var item in slist)
                     {
                         item.jobRole = getJobRoleByCandidateId(item.candidateId);
+                        item.roundName = Enum.GetName(typeof(RoundType), item.round);
+                        item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
                         schedulelist.Add(item);
                     }
                     slist = schedulelist.AsQueryable();
                 }
-
-                //Added search box test
-                if (!String.IsNullOrEmpty(SearchString))
-                {
-                    slist = slist.Where(s => s.position.ToUpper().Contains(SearchString.ToUpper()) || s.candidate_name.ToUpper().Contains(SearchString.ToUpper()));
-                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                return Json(new { data = slist });
             }
-
-            return View(slist);
+            return Json(new { data = slist });
         }
+
+        /// <summary>
+        /// gives the JobRole using candidate id for which that candidate has applied.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public string getJobRoleByCandidateId(int id)
         {
             int job_ID;
@@ -143,6 +153,11 @@ namespace RecruitmentPortal.WebApp.Controllers
 
             return job_role;
         }
+        /// <summary>
+        /// enlist all the interviewer names of particular schedule using schedule Id
+        /// </summary>
+        /// <param name="Sid"></param>
+        /// <returns></returns>
         public List<UserModel> getInterviewerNames(int Sid)
         {
             List<SchedulesUsers> allusers = new List<SchedulesUsers>();

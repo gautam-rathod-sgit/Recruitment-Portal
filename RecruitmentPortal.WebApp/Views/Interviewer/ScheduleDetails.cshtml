@@ -1,142 +1,361 @@
-﻿@model RecruitmentPortal.WebApp.ViewModels.SchedulesViewModel
-@using RecruitmentPortal.WebApp.Helpers
-@using RecruitmentPortal.Infrastructure.Data.Enum
-@{ 
-    int roundNo = Model.round;
-}
-<div>
-    <h4>Schedule Details :</h4>
-    <hr />
-    <div class="d-flex justify-content-end">
-        <div class="mb-2">
-            <a asp-action="UpdateScheduleOfJobApplication" asp-controller="JobApplication" class="btn btn-primary btn-md mr-3"
-               asp-route-id="@RSACSPSample.EncodeServerName((Model.jobAppId).ToString())"
-               asp-route-scheduleId="@RSACSPSample.EncodeServerName((Model.ID).ToString()) " asp-route-to_schedule="true">
-                Re-Schedule
-            </a>
-        </div>
-        <div class="mb-2">
-            <a asp-action="Download" asp-controller="Candidate" class="btn btn-success btn-md mr-3"
-               asp-route-filename="@Model.candidate.resume">
-                Download Resume
-            </a>
-        </div>
-        <div>
-            <a asp-action="Update_Schedule_GET" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-primary mr-3">Add Reviews</a>
-        </div>
-        <br />
-        @if (User.IsInRole("Admin"))
-        {
-            if (ViewBag.toAdminIndex != null || ViewBag.toAdminIndex == true)
+﻿@*
+
+    <div>
+        <h4>Schedule Details :</h4>
+        <hr />
+        <div class="d-flex justify-content-end">
+            <div class="mb-2">
+                <a asp-action="UpdateScheduleOfJobApplication" asp-controller="JobApplication" class="btn btn-primary btn-md mr-3"
+                   asp-route-id="@RSACSPSample.EncodeServerName((Model.jobAppId).ToString())"
+                   asp-route-scheduleId="@RSACSPSample.EncodeServerName((Model.ID).ToString()) " asp-route-to_schedule="true">
+                    Re-Schedule
+                </a>
+            </div>
+            <div class="mb-2">
+                <a asp-action="Download" asp-controller="Candidate" class="btn btn-success btn-md mr-3"
+                   asp-route-filename="@Model.candidate.resume">
+                    Download Resume
+                </a>
+            </div>
+            <div>
+                <a asp-action="Update_Schedule_GET" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-primary mr-3">Add Reviews</a>
+            </div>
+            <br />
+            @if (User.IsInRole("Admin"))
             {
-                <div>
-                    <a asp-action="AdminIndex" asp-controller="Home" class="btn btn-secondary mr-3">Back to List</a>
-                </div>
+                if (ViewBag.toAdminIndex != null || ViewBag.toAdminIndex == true)
+                {
+                    <div>
+                        <a asp-action="AdminIndex" asp-controller="Home" class="btn btn-secondary mr-3">Back to List</a>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <a asp-action="Index" asp-controller="Interviewer" class="btn btn-secondary mr-3">Back to List</a>
+                    </div>
+                }
+
             }
             else
             {
                 <div>
-                    <a asp-action="Index" asp-controller="Interviewer" class="btn btn-secondary mr-3">Back to List</a>
+                    <a asp-action="InterviewerIndex" asp-controller="Home" class="btn btn-secondary mr-3">Back to List</a>
                 </div>
             }
+        </div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                Candidate Name
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.candidate_name)
+            </dd>
+            <dt class="col-sm-2">
+                Job Title
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.position)
+            </dd>
+            <dt class="col-sm-2">
+                Job Role
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.candidate.jobRole)
+            </dd>
+            <dt class="col-sm-2">
+                SSC (%)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.candidate.ssc_perc)
+            </dd>
+            <dt class="col-sm-2">
+                HSC (%)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.candidate.hsc_perc)
+            </dd>
+            <dt class="col-sm-2">
+                Education
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.candidate.degree)
+            </dd>
+            <dt class="col-sm-2">
+                Experience
+            </dt>
+            @if (Model.candidate.experience == "Fresher")
+            {
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.candidate.experience)
+                </dd>
+            }
+            else
+            {
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.candidate.experience)
+                </dd>
+                <dt class="col-sm-2">
+                    Total Experience
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.candidate.total_experience)
+                </dd>
+                <dt class="col-sm-2">
+                    Relevent Experience
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.candidate.relevent_experience)
+                </dd>
+                <dt class="col-sm-2">
+                    Current CTC
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.candidate.current_ctc)
+                </dd>
+                <dt class="col-sm-2">
+                    Expected CTC
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.candidate.expected_ctc)
+                </dd>
+                <dt class="col-sm-2">
+                    Notice Period
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.candidate.notice_period)
+                </dd>
+            }
+            <dt class="col-sm-2">
+                Applied Through
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.candidate.applying_through)
+            </dd>
+        </dl>
+    </div>*@
 
-        }
-        else
-        {
-            <div>
-                <a asp-action="InterviewerIndex" asp-controller="Home" class="btn btn-secondary mr-3">Back to List</a>
+@model RecruitmentPortal.WebApp.ViewModels.SchedulesViewModel
+@using RecruitmentPortal.WebApp.Helpers
+@using RecruitmentPortal.Infrastructure.Data.Enum
+<style>
+    .mybutton {
+        font-size: 25px;
+        border-radius: 3px;
+        color: #509bac;
+        margin-right: 5px;
+    }
+
+    .table > thead > tr > th {
+        border-bottom: 2px solid #ecf0f5;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        border-top: 1px solid #ecf0f5;
+    }
+
+    .section {
+        background-color: white;
+    }
+</style>
+
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- /.box -->
+            <div class="box box-default boxPad">
+                <div class="box-header">
+
+                    <h3 class="box-title">
+                        <i class="fa fa-info-circle"></i>
+                        Schedule Details :
+                    </h3>
+
+                    <div class="box-tools pull-right">
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a href='@Url.Action("UpdateScheduleOfJobApplication", "JobApplication",
+                                    new
+                                    {
+                                        id = @RSACSPSample.EncodeServerName((Model.jobAppId).ToString())
+                                    ,
+                                        scheduleId = @RSACSPSample.EncodeServerName((Model.ID).ToString())
+                                    ,
+                                        to_schedule = "true"
+                                    }
+                                    )' class="btn btn-primary btn-sm">
+                                Re-Schedule
+                            </a>
+                        }
+                        <a href='@Url.Action("Download","Candidate",
+                                        new {filename = @Model.candidate.resume}
+                                        )' class="btn btn-primary  btn-sm">
+                            Download Resume
+                        </a>
+                        <a href='@Url.Action("Update_Schedule_GET","Interviewer",
+                                        new {id = @RSACSPSample.EncodeServerName((Model.ID).ToString())}
+                                        )' class="btn btn-primary btn-sm">
+                            Add Reviews
+                        </a>
+
+                        @*back button*@
+                        @if (User.IsInRole("Admin"))
+                        {
+                            if (ViewBag.toAdminIndex != null || ViewBag.toAdminIndex == true)
+                            {
+
+                                <a href='@Url.Action("AdminIndex","Home")' class="btn btn-primary btn-sm">
+                                    Back to List
+                                </a>
+                            }
+                            else
+                            {
+                                <a href='@Url.Action("Index","Interviewer")' class="btn btn-primary btn-sm">
+                                    Back to List
+                                </a>
+                            }
+
+                        }
+                        else
+                        {
+                            <a href='@Url.Action("Index","Interviewer")' class="btn btn-primary btn-sm">
+                                Back to List
+                            </a>
+                        }
+
+                    </div>
+                </div>
             </div>
-        }
-    </div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            Candidate Name
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.candidate_name)
-        </dd>
-        <dt class="col-sm-2">
-            Job Title
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.position)
-        </dd>
-        <dt class="col-sm-2">
-            Job Role
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.candidate.jobRole)
-        </dd>
-        <dt class="col-sm-2">
-            SSC (%)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.candidate.ssc_perc)
-        </dd>
-        <dt class="col-sm-2">
-            HSC (%)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.candidate.hsc_perc)
-        </dd>
-        <dt class="col-sm-2">
-            Education
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.candidate.degree)
-        </dd>
-        <dt class="col-sm-2">
-            Experience
-        </dt>
-        @if (Model.candidate.experience == "Fresher")
-        {
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.experience)
-            </dd>
-        }
-        else
-        {
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.experience)
-            </dd>
-            <dt class="col-sm-2">
-                Total Experience
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.total_experience)
-            </dd>
-            <dt class="col-sm-2">
-                Relevent Experience
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.relevent_experience)
-            </dd>
-            <dt class="col-sm-2">
-                Current CTC
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.current_ctc)
-            </dd>
-            <dt class="col-sm-2">
-                Expected CTC
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.expected_ctc)
-            </dd>
-            <dt class="col-sm-2">
-                Notice Period
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.notice_period)
-            </dd>
-        }
-        <dt class="col-sm-2">
-            Applied Through
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.candidate.applying_through)
-        </dd>
-    </dl>
-</div>
+
+            <!-- /.box-header -->
+
+            <form>
+                <div class="box box-default container p-2">
+                    <div class="box-body">
 
 
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(m => m.candidate_name)
+                                    @Html.TextBoxFor(m => m.candidate_name, new { @placeholder = "Candidate name", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidate_name)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(m => m.position)
+                                    @Html.TextBoxFor(m => m.position, new { @placeholder = "Job Title", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.position)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(m => m.candidate.jobRole)
+                                    @Html.TextBoxFor(m => m.candidate.jobRole, new { @placeholder = "Job Role", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidate.jobRole)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(m => m.candidate.ssc_perc)
+                                    @Html.TextBoxFor(m => m.candidate.ssc_perc, new { @placeholder = "SSC percentage", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidate.ssc_perc)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-2">
+                                    @Html.LabelFor(m => m.candidate.hsc_perc)
+                                    @Html.TextBoxFor(m => m.candidate.hsc_perc, new { @placeholder = "HSC percentage", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidate.hsc_perc)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-2">
+                                    @Html.LabelFor(m => m.candidate.degree)
+                                    @Html.TextBoxFor(m => m.candidate.degree, new { @placeholder = "Degree", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidate.degree)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.candidate.applying_through)
+                                    @Html.TextBoxFor(m => m.candidate.applying_through, new { @placeholder = "Applying Through", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidate.applying_through)
+                                </div>
+                                <!-- /.form-group -->
+                            </div>
+                            <!-- /.col -->
+
+
+                            <div class="col-md-6">
+                                @if (Model.candidate.experience == "Fresher")
+                                {
+                                    <div class="form-group mb-2">
+                                        @Html.LabelFor(m => m.candidate.experience)
+                                        @Html.TextBoxFor(m => m.candidate.experience, new { @placeholder = "Experience", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.experience)
+                                    </div>
+                                    <!-- /.form-group -->
+                                }
+                                else
+                                {
+                                    <div class="form-group mb-2">
+                                        @Html.LabelFor(m => m.candidate.experience)
+                                        @Html.TextBoxFor(m => m.candidate.experience, new { @placeholder = "Experience", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.experience)
+                                    </div>
+                                    <!-- /.form-group -->
+                                    <div class="form-group mb-2">
+                                        @Html.LabelFor(m => m.candidate.total_experience)
+                                        @Html.TextBoxFor(m => m.candidate.total_experience, new { @placeholder = "Total Experience", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.total_experience)
+                                    </div>
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.relevent_experience)
+                                        @Html.TextBoxFor(m => m.candidate.relevent_experience, new { @placeholder = "Relevent Experience", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.relevent_experience)
+                                    </div>
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.current_ctc)
+                                        @Html.TextBoxFor(m => m.candidate.current_ctc, new { @placeholder = "Current CTC", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.current_ctc)
+                                    </div>
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.expected_ctc)
+                                        @Html.TextBoxFor(m => m.candidate.expected_ctc, new { @placeholder = "Expected CTC", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.expected_ctc)
+                                    </div>
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.notice_period)
+                                        @Html.TextBoxFor(m => m.candidate.notice_period, new { @placeholder = "Notice Period", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.notice_period)
+                                    </div>
+                                    <!-- /.form-group -->
+                                }
+                            </div>
+                            <!-- /.col -->
+
+                        </div>
+                        <!--/.row-->
+                    </div>
+            </div>
+            <!-- /.box-body -->
+            </form>
+        </div>
+        </div>
+        <!-- /.box-body -->
+        </div>
+        </div>
+    </section>
+
+    <script>
+    $(document).ready(function () {
+
+    });
+
+    function Details(id) {
+        window.location.href = '@Url.Action("ScheduleDetails", "Interviewer")?id=' + id;
+    }
+
+    </script>
