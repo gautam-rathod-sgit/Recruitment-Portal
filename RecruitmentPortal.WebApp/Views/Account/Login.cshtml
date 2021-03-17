@@ -36,7 +36,7 @@
                 <b>@Labels.RecruitmentPortal</b>
             </div>
 
-            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @autocomplete = "off", @role = "form" }))
+            @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { @autocomplete = "off", @role = "form" }))
             {
                 @Html.HiddenFor(m => m.RememberMe)
                 <div class="form-group has-feedback has-feedback-left">

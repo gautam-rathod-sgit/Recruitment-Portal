@@ -20,7 +20,7 @@ using System.Web;
 
 namespace RecruitmentPortal.WebApp.Controllers
 {
-    public class CandidateController : Controller
+    public class CandidateController : BaseController
     {
         #region private variables
         IQueryable<CandidateViewModel> candidateList;

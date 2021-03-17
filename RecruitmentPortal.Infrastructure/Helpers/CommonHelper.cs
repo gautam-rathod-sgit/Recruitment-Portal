@@ -15,6 +15,7 @@ namespace RecruitmentPortal.Infrastructure.Helpers
         #endregion
 
         #region Methods
+        public static string UserId { get; set; }
         public static string ConnectionString { get; set; }
         #endregion
     }

@@ -1,11 +1,14 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Core.Repository;
 using RecruitmentPortal.Core.Repository.Base;
@@ -15,29 +18,32 @@ using RecruitmentPortal.Infrastructure.Repository;
 using RecruitmentPortal.Infrastructure.Repository.Base;
 using RecruitmentPortal.WebApp.Helpers;
 using RecruitmentPortal.WebApp.Interfaces;
+using RecruitmentPortal.WebApp.Mapper;
 using RecruitmentPortal.WebApp.Security;
 using RecruitmentPortal.WebApp.Services;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RecruitmentPortal.WebApp
 {
     public class Startup
     {
+        private MapperConfiguration _mapperConfiguration { get; }
+        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _mapperConfiguration = new MapperConfiguration(cfg => { cfg.AddProfile(new MapperProfile()); });
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => { options.LoginPath = "/Login/Login"; });
             services.AddControllersWithViews();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSession();
 
             //Adding service for DbContext
             //use Real Database
@@ -55,13 +61,30 @@ namespace RecruitmentPortal.WebApp
                 opts.Password.RequiredLength = 8;
             })
             .AddEntityFrameworkStores<RecruitmentPortalDbContext>()
-             .AddDefaultTokenProviders();  //for token generation
+            .AddDefaultTokenProviders();  //for token generation
 
             //for timspan of token
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
             opt.TokenLifespan = TimeSpan.FromHours(2));
 
+            //email
+            services.Configure<SMTPConfigModel>(Configuration.GetSection("SMTPConfig"));
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddSingleton<DataProtectionPurposeStrings>();
 
+            //services of automapper
+            services.AddAutoMapper(typeof(Startup));
+
+            //Url Encryption 
+            services.AddDataProtection();
+            services.AddMvc(options => options.EnableEndpointRouting = false);
+                //.AddJsonOptions(x => { x.SerializerSettings.ContractResolver = new DefaultContractResolver(); });
+            services.AddSingleton(sp => _mapperConfiguration.CreateMapper());
+            RegisterServices(services);
+        }
+
+        private void RegisterServices(IServiceCollection services)
+        {
             //services of upper generics
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); //for generic
 
@@ -89,26 +112,14 @@ namespace RecruitmentPortal.WebApp
             services.AddScoped<IJobApplicationPage, JobApplicationPageService>(); //for SchedulesViewmodel
             services.AddScoped<IJobPostCandidatePage, JobPostCandidatePageService>(); //for JobPostCandidateViewModel
             services.AddScoped<ISchedulesUsersPage, SchedulesUsersPageService>(); //for SchedulesUsersViewModel
-
-            //email
-            services.Configure<SMTPConfigModel>(Configuration.GetSection("SMTPConfig"));
-            services.AddTransient<IEmailService, EmailService>();
-            services.AddSingleton<DataProtectionPurposeStrings>();
-
-            //services of automapper
-            services.AddAutoMapper(typeof(Startup));
-            services.AddControllersWithViews();
-
-            //Url Encryption 
-            services.AddDataProtection();
-            services.AddMvc();
         }
-
-
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseRequestLocalization();
+            app.UseAuthorization();
+            app.UseAuthentication();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -118,17 +129,26 @@ namespace RecruitmentPortal.WebApp
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
+            app.UseSession();
 
-            app.UseRouting();
+            HttpHelper.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseRouting();
+            
 
-            app.UseEndpoints(endpoints =>
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //    name: "default",
+            //    pattern: "{controller=Home}/{action=Index}/{id?}");
+            //    endpoints.MapRazorPages();
+            //});
+
+            app.UseMvc(routes =>
             {
-                endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
