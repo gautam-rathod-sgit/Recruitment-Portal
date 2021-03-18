@@ -1,4 +1,5 @@
-﻿using RecruitmentPortal.WebApp.Models;
+﻿using RecruitmentPortal.Infrastructure.Helpers;
+using RecruitmentPortal.WebApp.Models;
 using RecruitmentPortal.WebApp.Resources;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public string job_role { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "Vacancy")]
-        [RegularExpression("([0-9]+)", ErrorMessageResourceName = "ValidVacancyRequired", ErrorMessageResourceType = typeof(Messages))]
+        [RegularExpression(CommonHelper.RegexNumber, ErrorMessageResourceName = "ValidVacancyRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "VacancyRequired", ErrorMessageResourceType = typeof(Messages))]
         public int vacancy { get; set; }
 

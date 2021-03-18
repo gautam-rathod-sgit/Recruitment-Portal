@@ -159,7 +159,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="Sid"></param>
         /// <returns></returns>
-        public async Task<IActionResult> ScheduleDetails(string scheduleId, bool toAdminIndex)
+        public async Task<IActionResult> ScheduleDetails(string scheduleId, bool toAdminIndex, bool toCompletedList)
         {
             if (toAdminIndex)
             {

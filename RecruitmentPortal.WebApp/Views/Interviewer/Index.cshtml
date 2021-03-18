@@ -101,8 +101,8 @@
         });
     }
 
-    function Details(id) {
-        window.location.href = '@Url.Action("ScheduleDetails", "Interviewer")?scheduleId=' + id;
+    function Details(id, toCompletedList = true) {
+        window.location.href = '@Url.Action("ScheduleDetails", "Interviewer")?scheduleId=' + id + '&toCompletedList' + toCompletedList;
     }
 
 </script>

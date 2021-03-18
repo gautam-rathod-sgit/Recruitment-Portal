@@ -626,8 +626,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             memory.Position = 0;
             return File(memory, GetContentType(path), Path.GetFileName(path));
-            //return File(path, MediaTypeNames.Application.Octet, Path.GetFileName(path));
-
         }
 
 

@@ -70,3 +70,23 @@
 .actionbutton {
     font-size: larger !important;
 }
+
+.modal-footer {
+    /*padding: 0px !important;   */
+    text-align: right !important;
+    background: none !important;
+    color: #99999B !important;
+    border:none !important;
+}
+
+.modal-footer2 {
+    padding: 0px !important; 
+    text-align: right !important;
+    background: none !important;
+    color: #99999B !important;
+    border: none !important;
+}
+
+.center {
+    transform: translate(-0%, -14%);
+}

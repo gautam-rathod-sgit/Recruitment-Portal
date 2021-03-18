@@ -1,4 +1,6 @@
-﻿using RecruitmentPortal.WebApp.Models;
+﻿using RecruitmentPortal.Infrastructure.Helpers;
+using RecruitmentPortal.WebApp.Models;
+using RecruitmentPortal.WebApp.Resources;
 using RecruitmentPortal.WebApp.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,10 @@ namespace RecruitmentPortal.WebApp.ViewModels
     {
         [ScaffoldColumn(false)]
         public int ID { get; set; }
+
+        [Display(ResourceType = typeof(Labels), Name = "JobCategory")]
+        [RegularExpression(CommonHelper.RegexText, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
+        [Required(ErrorMessageResourceName = "JobCategoryRequired", ErrorMessageResourceType = typeof(Messages))]
         public string job_category_name { get; set; }
         public bool isActive { get; set; }
 

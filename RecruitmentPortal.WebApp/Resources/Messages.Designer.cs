@@ -61,24 +61,6 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Candidate Name is Required.
-        /// </summary>
-        public static string CandidateNameRequired {
-            get {
-                return ResourceManager.GetString("CandidateNameRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Date &amp; Time is Required.
-        /// </summary>
-        public static string DateTimeRequired {
-            get {
-                return ResourceManager.GetString("DateTimeRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ApplyingThrough is Required.
         /// </summary>
         public static string ApplyingThroughRequired {
@@ -87,7 +69,14 @@ namespace RecruitmentPortal.WebApp.Resources {
             }
         }
         
-        
+        /// <summary>
+        ///   Looks up a localized string similar to Candidate Name is Required.
+        /// </summary>
+        public static string CandidateNameRequired {
+            get {
+                return ResourceManager.GetString("CandidateNameRequired", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Current CTC is Required.
@@ -107,6 +96,14 @@ namespace RecruitmentPortal.WebApp.Resources {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Date &amp; Time is Required.
+        /// </summary>
+        public static string DateTimeRequired {
+            get {
+                return ResourceManager.GetString("DateTimeRequired", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Can&apos;t Deactivate as Data is being used by Application..
@@ -163,24 +160,6 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please choose the Interviewer.
-        /// </summary>
-        public static string InterviewerRequired {
-            get {
-                return ResourceManager.GetString("InterviewerRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please Select the mode of Interview.
-        /// </summary>
-        public static string InterviewModeRequired {
-            get {
-                return ResourceManager.GetString("InterviewModeRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Expected CTC is Required.
         /// </summary>
         public static string ExpectedCTCRequired {
@@ -217,11 +196,38 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose the Interviewer.
+        /// </summary>
+        public static string InterviewerRequired {
+            get {
+                return ResourceManager.GetString("InterviewerRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please Select the mode of Interview.
+        /// </summary>
+        public static string InterviewModeRequired {
+            get {
+                return ResourceManager.GetString("InterviewModeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please Provide valid Email Address.
         /// </summary>
         public static string InvalidEmail {
             get {
                 return ResourceManager.GetString("InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job Category is Required.
+        /// </summary>
+        public static string JobCategoryRequired {
+            get {
+                return ResourceManager.GetString("JobCategoryRequired", resourceCulture);
             }
         }
         
@@ -316,15 +322,6 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type of Round is Required.
-        /// </summary>
-        public static string RoundTypeRequired {
-            get {
-                return ResourceManager.GetString("RoundTypeRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Rating is Required.
         /// </summary>
         public static string RatingRequired {
@@ -370,6 +367,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Type of Round is Required.
+        /// </summary>
+        public static string RoundTypeRequired {
+            get {
+                return ResourceManager.GetString("RoundTypeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skills is Required.
         /// </summary>
         public static string SkillsRequired {
@@ -384,15 +390,6 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string SomethingWrong {
             get {
                 return ResourceManager.GetString("SomethingWrong", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please Select InterviewStatus.
-        /// </summary>
-        public static string StatusValueRequired {
-            get {
-                return ResourceManager.GetString("StatusValueRequired", resourceCulture);
             }
         }
         
@@ -415,6 +412,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please Select InterviewStatus.
+        /// </summary>
+        public static string StatusValueRequired {
+            get {
+                return ResourceManager.GetString("StatusValueRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total Experience is Required.
         /// </summary>
         public static string TotalExperienceRequired {
@@ -429,6 +435,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string VacancyRequired {
             get {
                 return ResourceManager.GetString("VacancyRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valid Input Text Required.
+        /// </summary>
+        public static string ValidTextRequired {
+            get {
+                return ResourceManager.GetString("ValidTextRequired", resourceCulture);
             }
         }
         
