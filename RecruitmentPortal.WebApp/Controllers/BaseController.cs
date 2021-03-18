@@ -9,6 +9,7 @@ using RecruitmentPortal.WebApp.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace RecruitmentPortal.WebApp.Controllers
@@ -58,10 +59,9 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             var loggedInUser = HttpContext.User;
             var loggedInUserName = loggedInUser.Identity.Name;
+            var loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            string userName = loggedInUserName;
-
-            var logedInUser = BaseContext.GetDbContext().Users.FirstOrDefault(u => u.UserName == userName && u.EmailConfirmed);
+            var logedInUser = BaseContext.GetDbContext().Users.FirstOrDefault(u => u.Id == loggedUserId);
 
             if (logedInUser == null)
             {

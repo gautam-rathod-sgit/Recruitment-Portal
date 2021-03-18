@@ -78,11 +78,19 @@ namespace RecruitmentPortal.WebApp.Controllers
                         if (result.Succeeded)
                         {
                             _logger.LogInformation("User logged in.");
-                            var logedInUser = _dbContext.Users.FirstOrDefault(u => u.UserName == user.UserName && u.EmailConfirmed);
-                            TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User Logged In Successfully..!!";
-                            SessionHelper.UserId = logedInUser.Id;
-                            SessionHelper.WelcomeUser = logedInUser.UserName;
-                            return RedirectToAction("Index", "Home");
+                            var logedInUser = _dbContext.Users.FirstOrDefault(u => u.Id == user.Id);
+
+                            if (logedInUser != null)
+                            {
+                                TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User Logged In Successfully..!!";
+                                SessionHelper.UserId = logedInUser.Id;
+                                SessionHelper.WelcomeUser = logedInUser.UserName;
+                                return RedirectToAction("Index", "Home");
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("Email", "Invalid login attempt.");
+                            }
                         }
                         else
                         {
