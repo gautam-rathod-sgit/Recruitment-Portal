@@ -18,15 +18,17 @@ namespace RecruitmentPortal.WebApp.Controllers
 {
     public class SchedulesController : Controller
     {
-
+        #region private variables
         private readonly ISchedulesPage _schedulesPage;
         private readonly ISchedulesUsersPage _schedulesUsersPage;
-
         private readonly IWebHostEnvironment _environment;
         //for userid
         private readonly UserManager<ApplicationUser> _userManager;
         //for dropdown
         private readonly RecruitmentPortalDbContext _dbContext;
+        #endregion
+
+        #region Constructor
         public SchedulesController(ISchedulesPage schedulesPage,
              ISchedulesUsersPage schedulesUsersPage,
             IWebHostEnvironment environment,
@@ -38,16 +40,17 @@ namespace RecruitmentPortal.WebApp.Controllers
             _environment = environment;
             _userManager = userManager;
             _schedulesUsersPage = schedulesUsersPage;
-        } 
+        }
+        #endregion
 
-
+        #region public methods
         /// <summary>
         /// GET ACTION METHOD FOR SCHEDULE DETAILS INPUT USING FORM
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async  Task<IActionResult> Index(string id)
+        public async Task<IActionResult> Index(string id)
         {
             ViewBag.RoundTypeList = SelectionList.GetRoundTypeList();
             ViewBag.StatusTypeList = SelectionList.GetStatusTypeList();
@@ -73,7 +76,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     //getting dropdown of AspNetUsers from DB
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -92,7 +95,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             JobApplications jobAppModel = new JobApplications();
             Candidate candidateModel = new Candidate();
             SchedulesViewModel latestRecord = new SchedulesViewModel();
-            
+
             try
             {
                 //for getting the job application of candidate in current scenario 
@@ -100,17 +103,17 @@ namespace RecruitmentPortal.WebApp.Controllers
                 jobAppModel = _dbContext.jobApplications.Where(x => x.candidateId == model.candidateId).FirstOrDefault();
 
                 //checking for already existing round 
-                
+
                 allschedules = _dbContext.Schedules.Where(x => x.candidateId == model.candidateId).ToList();
-                foreach(var item in allschedules)
+                foreach (var item in allschedules)
                 {
-                    
+
 
                     if (item.round == model.round)
                     {
                         TempData["msg"] = model.round;
-                        return RedirectToAction("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName(jobAppModel.ID.ToString()) , conflict = TempData["msg"] });
-                    }  
+                        return RedirectToAction("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName(jobAppModel.ID.ToString()), conflict = TempData["msg"] });
+                    }
                 }
 
                 //checking if any schedule exists on same date and time with same interviewer
@@ -119,7 +122,6 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     return RedirectToAction("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName(jobAppModel.ID.ToString()), time_conflict = true });
                 }
-
 
                 //for new schedule Proceed
 
@@ -145,13 +147,12 @@ namespace RecruitmentPortal.WebApp.Controllers
                     await _schedulesUsersPage.AddNewSchedulesUsers(newModel);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
             return RedirectToAction("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName(jobAppModel.ID.ToString()) });
         }
-
 
         /// <summary>
         /// Actions returns true if any schedule exists for any specific interviewer in range of 15 minutes.
@@ -167,7 +168,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 DateTime startdate = dateValue;
                 DateTime enddate = item.datetime;
                 var Totalminutes = (int)startdate.Subtract(enddate).TotalMinutes;
-                
+
                 if (Math.Abs(Totalminutes) <= 15 && Math.Abs(Totalminutes) >= 0)
                 {
                     //checking if any any selected interviewer have any already round 
@@ -190,8 +191,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             return false;
         }
-
-
 
         /// <summary>
         /// fetching interviewer's names by Schedule ID with help of SchedulesUsers.
@@ -219,5 +218,10 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             return interviewer_names;
         }
+
+        #endregion
+
+
+
     }
 }

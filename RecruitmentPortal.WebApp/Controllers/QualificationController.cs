@@ -60,7 +60,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         }
 
         /// <summary>
-        /// FOR FETCHING ALL DEGREES WITH THEIR DEPARTMENTS
+        /// FOR FETCHING ALL DEGREES 
         /// </summary>
         /// <param name="s"></param>
         /// <param name="activeCandidate"></param>
@@ -79,7 +79,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     ViewBag.active = activeCandidate;
                 }
 
-                degreeList = await _degreePageServices.GetAllDegreeWithDepartment();
+                degreeList = await _degreePageServices.getDegrees();
                 newlist = degreeList.ToList();
                 foreach (var item in newlist)
                 {
@@ -95,8 +95,6 @@ namespace RecruitmentPortal.WebApp.Controllers
                 return Json(new { data = newlist });
             }
         }
-
-
 
         /// <summary>
         /// ADDING NEW DEGREE [GET]
@@ -246,6 +244,44 @@ namespace RecruitmentPortal.WebApp.Controllers
             return RedirectToAction("Index", "Qualification");
         }
 
+        /// <summary>
+        /// THIS METHOD IS USED TO FETCH DETAILS OF PARTICULAR Degree
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Details(string id)
+        {
+            DegreeViewModel model = new DegreeViewModel();
+            model.EncryptedId = id;
+
+            return View(model);
+        }
+       
+         public async Task<IActionResult> GetDegreeDetails(string id)
+        {
+            List<DepartmentViewModel> itemList = new List<DepartmentViewModel>();
+            DegreeViewModel item = new DegreeViewModel();
+
+            try
+            {
+                item = await _degreePageServices.GetDegreeWithDepartmentById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
+                item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
+                foreach (var obj in item.Departments)
+                {
+                    obj.EncryptedId = RSACSPSample.EncodeServerName((obj.ID).ToString());
+                    obj.DegreeId = item.EncryptedId;
+                }
+                itemList = item.Departments;
+                return Json(new { data = itemList });
+            }
+            catch (Exception ex)
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                return Json(new { data = itemList });
+            }
+        }
+
+
         //DEPARTMENT CRUD
 
         /// <summary>
@@ -259,7 +295,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             DepartmentViewModel model = new DepartmentViewModel();
             try
             {
-                model.DegreeId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+                model.DegreeId = RSACSPSample.DecodeServerName(id);
             }
             catch (Exception ex)
             {
@@ -279,7 +315,8 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             try
             {
-                DegreeViewModel degrees = await _degreePageServices.GetDegreeWithDepartmentById(model.DegreeId);
+                int decrypted_id = Convert.ToInt32(RSACSPSample.DecodeServerName(model.DegreeId));
+                DegreeViewModel degrees = await _degreePageServices.GetDegreeWithDepartmentById(decrypted_id);
                 foreach (var item in degrees.Departments)
                 {
                     if (item.dept_name == model.dept_name)

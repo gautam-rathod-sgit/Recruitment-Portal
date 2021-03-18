@@ -115,11 +115,29 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please Insert Degree.
+        /// </summary>
+        public static string DegreeNameRequired {
+            get {
+                return ResourceManager.GetString("DegreeNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Highest Qualification is Required.
         /// </summary>
         public static string DegreeRequired {
             get {
                 return ResourceManager.GetString("DegreeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please Insert Department.
+        /// </summary>
+        public static string DeptNameRequired {
+            get {
+                return ResourceManager.GetString("DeptNameRequired", resourceCulture);
             }
         }
         

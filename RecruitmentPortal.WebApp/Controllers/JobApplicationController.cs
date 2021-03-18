@@ -60,13 +60,18 @@ namespace RecruitmentPortal.WebApp.Controllers
         #endregion
 
         #region Public Methods
+
         /// <summary>
-        /// SHOWING ALL THE ACTIVE-JOB APPLICATION IN LIST FORM
+        /// For Showing list of Active Applications
         /// </summary>
         /// <param name="conflict"></param>
         /// <param name="SearchString"></param>
+        /// <param name="Application_mode"></param>
+        /// <param name="istatus"></param>
         /// <returns></returns>
-        //public async Task<IActionResult> Index(string conflict, string SearchString, string Application_mode)
+        //----riddhi----
+
+        //public async Task<IActionResult> Index(string conflict, string SearchString, string Application_mode, string istatus = "Scheduled")
         //{
         //    if (conflict != null)
         //    {
@@ -74,16 +79,26 @@ namespace RecruitmentPortal.WebApp.Controllers
         //    }
         //    try
         //    {
+        //        List<Schedules> mylist = new List<Schedules>();
         //        //creating a select list for selecting status type applications
         //        List<SelectListItem> ObjItem = new List<SelectListItem>()
         //        {
-        //          new SelectListItem {Text="All Applications",Value="All"},
-        //          new SelectListItem {Text="New",Value="Pending"},
-        //          new SelectListItem {Text="Active",Value="Active"},
-        //          new SelectListItem {Text="Selected",Value="Accepted"},
-        //          new SelectListItem {Text="Rejected",Value="Rejected"},
+        //        new SelectListItem {Text="All Applications",Value = mode_All},
+        //        new SelectListItem {Text="New",Value = mode_Pending},
+        //        new SelectListItem {Text="Active",Value = mode_Active },
+        //        new SelectListItem {Text="Selected",Value = mode_Selected},
+        //        new SelectListItem {Text="Rejected",Value = mode_Rejected},
         //        };
         //        ViewBag.menuSelect = ObjItem;
+
+        //        //creating a select list for selecting Interview Status
+        //        List<SelectListItem> ObjStatus = new List<SelectListItem>()
+        //        {
+        //        new SelectListItem {Text="Scheduled",Value="Scheduled"},
+        //        new SelectListItem {Text="Pending",Value="Pending"},
+        //        new SelectListItem {Text="Completed",Value="Completed"},
+        //        };
+        //        ViewBag.statusSelect = ObjStatus;
 
         //        var models = await _jobApplicationPage.getJobApplications();
         //        models = models.Where(x => x.status == status_Pending);
@@ -93,16 +108,16 @@ namespace RecruitmentPortal.WebApp.Controllers
         //        {
         //            item.candidateName = getCandidateNameById(item.candidateId);
         //            item.position = getPositionByCandidateId(item.candidateId);
+        //            item.job_Role = getJobRoleByCandidateId(item.candidateId);
+        //            item.interview_Status = getInterviewStatusByCandidateId(item.candidateId);
         //        }
+
+        //        newlist = newlist.Where(x => x.interview_Status == istatus).ToList();
         //        models = newlist.AsQueryable();
-        //        //Added search box test
-        //        if (!String.IsNullOrEmpty(SearchString))
-        //        {
-        //            models = models.Where(s => s.position.ToUpper().Contains(SearchString.ToUpper()));
-        //        }
+
         //        return View(models);
         //    }
-        //    catch(Exception ex)
+        //    catch (Exception ex)
         //    {
         //        Console.WriteLine(ex.Message);
         //    }
@@ -110,103 +125,60 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         //}
 
-        //----riddhi----
-        public async Task<IActionResult> Index(string conflict, string SearchString, string Application_mode, string istatus = "Scheduled")
+        public IActionResult Index()
         {
-            if (conflict != null)
-            {
-                ViewBag.msg = conflict;
-            }
+            return View();
+        }
+
+        /// <summary>
+        /// FOR SHOWING LIST OF ACTIVE APPLICATIONS
+        /// </summary>
+        /// <param name="Application_mode"></param>
+        /// <param name="istatus"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> GetActiveApplicationsList(string startDate, string endDate, string degree, string applicationType, string istatus = "Pending")
+        {
+            if (applicationType == null) applicationType = string.Empty;
+            if (degree == null) degree = string.Empty;
+            DateTime? sDate = !string.IsNullOrEmpty(startDate) ? Convert.ToDateTime(startDate) : (DateTime?)null;
+            DateTime? eDate = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : (DateTime?)null;
+
+            IQueryable<JobApplicationViewModel> modelList;
+            List<Schedules> mylist = new List<Schedules>();
+            List<JobApplicationViewModel> newlist = new List<JobApplicationViewModel>();
+            List<JobApplicationViewModel> filteredList = new List<JobApplicationViewModel>();
+
             try
             {
-                List<Schedules> mylist = new List<Schedules>();
-                //creating a select list for selecting status type applications
-                List<SelectListItem> ObjItem = new List<SelectListItem>()
+                modelList = await _jobApplicationPage.getJobApplications();
+                modelList = modelList.Where(x => x.status == status_Pending);
+                newlist = modelList.ToList();
+
+                foreach (var data in newlist)
                 {
-                new SelectListItem {Text="All Applications",Value = mode_All},
-                new SelectListItem {Text="New",Value = mode_Pending},
-                new SelectListItem {Text="Active",Value = mode_Active },
-                new SelectListItem {Text="Selected",Value = mode_Selected},
-                new SelectListItem {Text="Rejected",Value = mode_Rejected},
-                };
-                ViewBag.menuSelect = ObjItem;
-
-                //creating a select list for selecting Interview Status
-                List<SelectListItem> ObjStatus = new List<SelectListItem>()
-                {
-                new SelectListItem {Text="Scheduled",Value="Scheduled"},
-                new SelectListItem {Text="Pending",Value="Pending"},
-                new SelectListItem {Text="Completed",Value="Completed"},
-                };
-                ViewBag.statusSelect = ObjStatus;
-
-
-                var models = await _jobApplicationPage.getJobApplications();
-                models = models.Where(x => x.status == status_Pending);
-                List<JobApplicationViewModel> newlist = new List<JobApplicationViewModel>();
-                newlist = models.ToList();
-                foreach (var item in newlist)
-                {
-                    item.candidateName = getCandidateNameById(item.candidateId);
-                    item.position = getPositionByCandidateId(item.candidateId);
-                    item.job_Role = getJobRoleByCandidateId(item.candidateId);
-                    item.interview_Status = getInterviewStatusByCandidateId(item.candidateId);
-                    ////For Fetching Interview Status
-                    //mylist = _dbContext.Schedules.Where(x => x.candidateId == item.candidateId).ToList();
-                    //if (mylist.Count() > 1)
-                    //{
-                    //    var isAnyPending = mylist.Where(x => x.status == 2).Any();
-                    //    var isAllCompleted = mylist.All(x => x.status == 3);
-                    //    var isAllScheduled = mylist.All(x => x.status == 1);
-
-                    //    if (isAllScheduled)
-                    //    {
-                    //        item.interview_Status = Enum.GetName(typeof(StatusType), 1);
-                    //    }
-                    //    if (isAnyPending)
-                    //    {
-                    //        item.interview_Status = Enum.GetName(typeof(StatusType), 2);
-                    //    }
-                    //    if (isAllCompleted)
-                    //    {
-                    //        item.interview_Status = Enum.GetName(typeof(StatusType), 3);
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    if(mylist.Count == 0)
-                    //    {
-                    //        item.interview_Status = Enum.GetName(typeof(StatusType), 2);
-                    //    }
-                    //    else
-                    //    {
-                    //        item.interview_Status = Enum.GetName(typeof(StatusType), mylist.FirstOrDefault().status);
-
-                    //    }
-                    //}
-
-
+                    data.EncryptedId = RSACSPSample.EncodeServerName((data.ID).ToString());
+                    data.candidateName = getCandidateNameById(data.candidateId);
+                    data.position = getPositionByCandidateId(data.candidateId);
+                    data.job_Role = getJobRoleByCandidateId(data.candidateId);
+                    data.interview_Status = getInterviewStatusByCandidateId(data.candidateId);
                 }
-
 
                 newlist = newlist.Where(x => x.interview_Status == istatus).ToList();
+                filteredList = newlist.Where(m => (m.status.Contains(applicationType) || applicationType == null)
+                                                && (degree == null)
+                                               && (m.start_date >= sDate || sDate == null)
+                                               && (m.start_date <= eDate || eDate == null)).ToList();
 
-                models = newlist.AsQueryable();
-
-                //Added search box test
-                if (!String.IsNullOrEmpty(SearchString))
-                {
-                    models = models.Where(s => s.position.ToUpper().Contains(SearchString.ToUpper()));
-                }
-                return View(models);
+                return Json(new { data = filteredList });
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                return Json(new { data = filteredList });
             }
-            return View();
-
         }
+
+
 
 
 
@@ -321,7 +293,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
 
         /// <summary>
-        ///     updating Joining data/status of Active-JobApplication [GET] BUT IT'S NOT USED DEU TO MODAL POPUP FORM
+        /// Updating Joining data/status of Active-JobApplication [GET] BUT IT'S NOT USED DEU TO MODAL POPUP FORM
         /// </summary>
         /// <param name="id"></param>
         /// <param name="data"></param>
@@ -399,25 +371,20 @@ namespace RecruitmentPortal.WebApp.Controllers
             return RedirectToAction("AllApplications", "Candidate", new { Application_mode = status_Complete });
         }
         /// <summary>
-        /// Listing all the selected job application
+        /// FOR SHOWING LIST OF SELECTED JOB-APPLICATIONS
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> SelectedJobApplications(string SearchString, string Application_mode)
+        public async Task<IActionResult> SelectedJobApplications(string startDate, string endDate, string degree, string applicationType)
         {
+            if (applicationType == null) applicationType = string.Empty;
+            if (degree == null) degree = string.Empty;
+            DateTime? sDate = !string.IsNullOrEmpty(startDate) ? Convert.ToDateTime(startDate) : (DateTime?)null;
+            DateTime? eDate = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : (DateTime?)null;
+
             IQueryable<JobApplicationViewModel> models = null;
             List<JobApplicationViewModel> newlist = new List<JobApplicationViewModel>();
+            List<JobApplicationViewModel> filteredlist = new List<JobApplicationViewModel>();
             CandidateViewModel candidateModel = new CandidateViewModel();
-
-            //creating a select list for selecting status type applications
-            List<SelectListItem> ObjItem = new List<SelectListItem>()
-                {
-                  new SelectListItem {Text="All Applications",Value = mode_All},
-                  new SelectListItem {Text="New",Value = mode_Pending},
-                  new SelectListItem {Text="Active",Value = mode_Active},
-                  new SelectListItem {Text="Selected",Value = mode_Selected},
-                  new SelectListItem {Text="Rejected",Value = mode_Rejected},
-                };
-            ViewBag.menuSelect = ObjItem;
 
             try
             {
@@ -427,25 +394,25 @@ namespace RecruitmentPortal.WebApp.Controllers
                 newlist = models.ToList();
                 foreach (var item in newlist)
                 {
+                    item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
                     item.candidateName = getCandidateNameById(item.candidateId);
                     item.position = getPositionByCandidateId(item.candidateId);
                     item.job_Role = getJobRoleByCandidateId(item.candidateId);
                     item.date = item.joining_date;
                 }
-                models = newlist.AsQueryable();
+               // models = newlist.AsQueryable();
+                filteredlist = models.Where(m => (m.status.Contains(applicationType) || applicationType == null)
+                                                && (degree == null)
+                                               && (m.accept_date >= sDate || sDate == null)
+                                               && (m.accept_date <= eDate || eDate == null)).ToList();
 
-                //Added search box test
-                if (!String.IsNullOrEmpty(SearchString))
-                {
-                    models = models.Where(s => s.position.ToUpper().Contains(SearchString.ToUpper()));
-                }
+                return Json(new { data = filteredlist });
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                return Json(new { data = filteredlist });
             }
-
-            return View(models);
         }
         /// <summary>
         /// For displaying details of selected candidate application
@@ -512,14 +479,13 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                 //getting candidate name and job position with candidateId of JobApplication model
                 List<JobApplicationViewModel> newlist = new List<JobApplicationViewModel>();
-                newlist = models.ToList();
+                newlist = models.ToList(); 
                 foreach (var item in newlist)
                 {
                     item.candidateName = getCandidateNameById(item.candidateId);
                     item.position = getPositionByCandidateId(item.candidateId);
                     item.job_Role = getJobRoleByCandidateId(item.candidateId);
                     item.candidate = await _candidatePage.getCandidateById(item.candidateId);
-
                 }
                 models = newlist.AsQueryable();
 
