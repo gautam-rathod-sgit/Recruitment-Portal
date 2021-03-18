@@ -87,14 +87,7 @@ namespace RecruitmentPortal.WebApp.Resources {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to Candidate Name is Required.
-        /// </summary>
-        public static string CandidateNameRequired {
-            get {
-                return ResourceManager.GetString("CandidateNameRequired", resourceCulture);
-            }
-        }
+        
         
         /// <summary>
         ///   Looks up a localized string similar to Current CTC is Required.
@@ -114,14 +107,6 @@ namespace RecruitmentPortal.WebApp.Resources {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to Date &amp; Time is Required.
-        /// </summary>
-        public static string DateTimeRequired {
-            get {
-                return ResourceManager.GetString("DateTimeRequired", resourceCulture);
-            }
-        }
         
         /// <summary>
         ///   Looks up a localized string similar to Can&apos;t Deactivate as Data is being used by Application..
