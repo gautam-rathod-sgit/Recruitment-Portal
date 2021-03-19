@@ -39,7 +39,7 @@
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"><b>All Job Categories :</b></h3>
-                    <a class="btn btn-primary pull-right" @*data-toggle="#categorymodel" data-target="#categorymodel"*@ onclick="loadPartialView()">
+                    <a class="btn btn-primary pull-right" @*data-toggle="#categorymodel" data-target="#categorymodel"*@ onclick="loadPartialView('')">
                         Add New Category
                     </a>
                 </div>
@@ -147,20 +147,8 @@
 
 
     function loadPartialView(id) {
-        id = (id == undefined) ? null : id;
         var url = '@Url.Action("RenderJobCategoryView", "JobCategory")?id=' + id;
-
-        //$('#JobCategoryPartial').load(url, function () {
-            
-        //        debugger;
-        //        $.validator.unobtrusive.parse($('categoryform'))
-        //        var valid = $("#categoryform").valid();
-        //        if (valid) {
-        //            return true;
-        //        }
-        //        return false;
-            
-
+        $('#JobCategoryPartial').load(url, function () {
             $('#JobCategoryModel').modal({ show: true });
         });
     }

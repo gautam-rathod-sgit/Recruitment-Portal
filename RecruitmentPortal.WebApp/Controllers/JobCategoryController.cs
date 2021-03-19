@@ -349,15 +349,11 @@ namespace RecruitmentPortal.WebApp.Controllers
         public async Task<IActionResult> RenderJobCategoryView(string id)
         {
             JobCategoryViewModel model = new JobCategoryViewModel();
-            if(id == "null")
-            {
-                id = string.Empty;
-            }
             if (!string.IsNullOrEmpty(id))
             {
                 model = await _jobCategoryPageservices.getCategoryById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
             }
-                return PartialView("_JobCategory", model);
+            return PartialView("_JobCategory", model);
         }
         #endregion
     }
