@@ -585,7 +585,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 ViewData["error"] = "error";
             }
-            //return RedirectToAction("RejectedJobApplications","JobApplication");
             return RedirectToAction("AllApplications", "Candidate", new { Application_mode = status_Rejected });
         }
 

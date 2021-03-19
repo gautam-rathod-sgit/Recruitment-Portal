@@ -1,0 +1,40 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.JobCategoryViewModel
+
+@using (Html.BeginForm("AddNewCategory", "JobCategory", FormMethod.Post, new { id = "categoryform" }))
+{
+    @*@Html.HiddenFor(m => m.ID)*@
+    <input type="hidden" value="@Model.ID" id="ID" name="ID" />
+    @Html.HiddenFor(m => m.isActive)
+    <div class="form-group">
+        @*@Html.LabelFor(m => m.job_category_name)
+            @Html.TextBoxFor(m => m.job_category_name, new { @placeholder = "Category Name", @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.job_category_name, "", new { @class = "text-danger" })*@
+
+        <label asp-for="job_category_name"></label>
+        <input asp-for="job_category_name" class="form-control" placeholder="Email Address" />
+        <span asp-validation-for="job_category_name" class="text-danger"></span>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" onclick="return checkFormValid()">Save</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+}
+
+
+<script>
+    //$(document).ready(function () {
+    //    $("#categoryform").validate();
+    //    <a href="D:\Project-Shaligram\Recruitment Portal\CODE\latest\Recruitment-Portal\RecruitmentPortal.WebApp\ViewModels\RegisterViewModel.cs">D:\Project-Shaligram\Recruitment Portal\CODE\latest\Recruitment-Portal\RecruitmentPortal.WebApp\ViewModels\RegisterViewModel.cs</a>
+    //});
+
+    function checkFormValid() {
+        debugger;
+        $.validator.unobtrusive.parse($('categoryform'))
+        var valid = $("#categoryform").valid();
+        if (valid) {
+            return true;
+        }
+        return false;
+    }
+</script>

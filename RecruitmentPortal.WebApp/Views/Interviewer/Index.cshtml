@@ -31,7 +31,16 @@
 
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title"><b>Completed Schedules :</b></h3>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <h3 class="box-title"><b>All Schedules :</b></h3>
+
+                    }
+                    else
+                    {
+                        <h3 class="box-title"><b>Completed Schedules :</b></h3>
+
+                    }
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">

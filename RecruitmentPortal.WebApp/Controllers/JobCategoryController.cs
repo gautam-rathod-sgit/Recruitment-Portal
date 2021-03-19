@@ -79,7 +79,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     obj.EncryptedId = RSACSPSample.EncodeServerName((obj.ID).ToString());
                 }
 
-               
+
                 return Json(new { data = list });
             }
             catch (Exception ex)
@@ -117,8 +117,18 @@ namespace RecruitmentPortal.WebApp.Controllers
                         return View();
                     }
                 }
-                model.isActive = true;
-                await _jobCategoryPageservices.AddNewCategory(model);
+
+                if (model.ID != 0)
+                {
+                    return RedirectToAction("UpdateCategoryPost", model);
+                    //await _jobCategoryPageservices.UpdateCategory(model);
+                }
+                else
+                {
+                    model.isActive = true;
+                    await _jobCategoryPageservices.AddNewCategory(model);
+
+                }
             }
             catch (Exception ex)
             {
@@ -161,7 +171,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             try
             {
                 category = await _jobCategoryPageservices.getCategoryById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
-                if(status)
+                if (status)
                 {
                     //setting final results of deactivating
                     category.isActive = false;
@@ -225,9 +235,9 @@ namespace RecruitmentPortal.WebApp.Controllers
                         TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Job Activated Successfully.";
                         return RedirectToAction("UpdateCategoryPost", category);
                     }
-                    
+
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -241,14 +251,14 @@ namespace RecruitmentPortal.WebApp.Controllers
             List<JobApplications> jobAppList = new List<JobApplications>();
             bool isAvailable = false;
             var list = _dbContext.JobPost.Where(x => x.JobCategoryId == id).ToList();
-            foreach(var item in list)
+            foreach (var item in list)
             {
                 var listOfCandidates = _dbContext.JobPostCandidate.Where(x => x.job_Id == item.ID).ToList();
                 foreach (var values in listOfCandidates)
                 {
                     var data = _dbContext.jobApplications.Where(x => x.candidateId == values.candidate_Id).FirstOrDefault();
                     if (data != null)
-                    jobAppList.Add(data);
+                        jobAppList.Add(data);
                 }
                 var temp = jobAppList.Where(x => x.status == status_Pending).Any();
                 if (temp)
@@ -299,7 +309,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="s"></param>
         /// <returns></returns>
         public ActionResult DetailsJobCategory(string id, string s, string activeCandidate)
-        {           
+        {
 
             JobCategoryViewModel model = new JobCategoryViewModel();
             model.EncryptedId = id;
@@ -316,7 +326,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 item = await _jobCategoryPageservices.GetJobCategoryWithJobPostById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
                 item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
-                foreach(var obj in item.JobPosts)
+                foreach (var obj in item.JobPosts)
                 {
                     obj.EncryptedId = RSACSPSample.EncodeServerName((obj.ID).ToString());
                     obj.categoryId = item.EncryptedId;
@@ -329,6 +339,25 @@ namespace RecruitmentPortal.WebApp.Controllers
                 TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
                 return Json(new { data = itemList });
             }
+        }
+
+        /// <summary>
+        /// for Loading the popup for adding or edititng the category.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> RenderJobCategoryView(string id)
+        {
+            JobCategoryViewModel model = new JobCategoryViewModel();
+            if(id == "null")
+            {
+                id = string.Empty;
+            }
+            if (!string.IsNullOrEmpty(id))
+            {
+                model = await _jobCategoryPageservices.getCategoryById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
+            }
+                return PartialView("_JobCategory", model);
         }
         #endregion
     }
