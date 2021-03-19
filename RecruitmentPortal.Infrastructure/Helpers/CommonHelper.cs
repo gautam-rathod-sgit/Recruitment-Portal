@@ -13,7 +13,7 @@ namespace RecruitmentPortal.Infrastructure.Helpers
         public const string DateFormat = "dd/MM/yyyy";
         public const string TimeFormate = "HH:mm";
         public const string RegexNumber = "([0-9]+)";
-        public const string RegexText = "^[a-zA-Z0-9]+$";
+        public const string RegexText = "^[a-zA-Z0-9_ ]*$";
         #endregion
 
         #region Methods

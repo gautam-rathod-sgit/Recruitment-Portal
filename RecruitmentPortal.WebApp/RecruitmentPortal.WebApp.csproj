@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <None Include="package.json" />
-    <None Include="Views\JobCategory\AddNewCategory.cshtml" />
     <None Include="Views\JobCategory\DetailsJobCategory.cshtml" />
     <None Include="Views\JobCategory\Index.cshtml" />
     <None Include="Views\JobCategory\UpdateCategory.cshtml" />

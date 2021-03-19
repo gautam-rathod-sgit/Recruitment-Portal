@@ -6,7 +6,7 @@
 <style>
 </style>
 <!-- Modal for Adding Reviews -->
-<div class="modal fade bg-gradient-orange center" id="add-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+<div class="modal fade bg-gradient-orange center" id="reviewmodel" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -16,7 +16,7 @@
                 <h4 class="modal-title">Add Reviews:</h4>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("Update_Schedule_POST", "Interviewer", FormMethod.Post))
+                @using (Html.BeginForm("Update_Schedule_POST", "Interviewer", FormMethod.Post, new { id = "reviewform" }))
                 {
                     @Html.HiddenFor(m => m.candidate_name)
                     @Html.HiddenFor(m => m.position)
@@ -28,18 +28,18 @@
                     @Html.HiddenFor(m => m.ID)
                     <div class="form-group">
                         @Html.LabelFor(m => m.rating)
-                        @Html.TextBoxFor(m => m.rating, new { @placeholder = "Category Name", @class = "form-control" })
+                        @Html.TextBoxFor(m => m.rating, new { @placeholder = "Ratings", @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.rating, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group has-feedback has-feedback-left">
                         @Html.LabelFor(m => m.remark)
                         @Html.TextBoxFor(m => m.remark, new { @placeholder = "Location", @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.remark)
+                        @Html.ValidationMessageFor(m => m.remark, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group has-feedback has-feedback-left">
                         @Html.LabelFor(m => m.statusvalue)
                         @Html.DropDownList("statusvalue", Html.GetEnumSelectList(typeof(StatusType)), Messages.PleaseSelect, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.statusvalue)
+                        @Html.ValidationMessageFor(m => m.statusvalue, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="modal-footer modal-footer2">
@@ -89,7 +89,7 @@
                                         )' class="btn btn-primary  btn-sm">
                             Download Resume
                         </a>
-                        <a class="btn btn-primary btn-sm" data-toggle="#add-contact" data-target="#add-contact" onclick="openPopup()">
+                        <a class="btn btn-primary btn-sm" data-toggle="#reviewmodel" data-target="#reviewmodel" onclick="openPopup()">
                             Add Reviews
                         </a>
 
@@ -242,6 +242,14 @@
 </section>
 
 <script>
+
+    $(document).ready(function () {
+        //for reset validation of form
+        $('#reviewmodel').on('hidden.bs.modal', function () {
+            $('.field-validation-error').html("");
+        });
+    });
+
     function Details(id) {
         window.location.href = '@Url.Action("ScheduleDetails", "Interviewer")?id=' + id;
     }
@@ -260,7 +268,8 @@
     //Function for setting Flag_Accepted value as true
     function openPopup() {
         $("#Flag_Accepted").val(true);
-        $('#add-contact').modal('show');
+        $('#reviewmodel').modal('show');
     }
+
 
 </script>

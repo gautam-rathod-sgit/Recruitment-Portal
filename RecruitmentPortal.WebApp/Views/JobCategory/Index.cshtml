@@ -10,32 +10,18 @@
     }
 </style>
 <!-- Modal for Adding new Category -->
-<div class="modal fade in bg-gradient-orange" id="add-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+<div class="modal fade in bg-gradient-orange" id="JobCategoryModel" tabindex="-1" role="dialog" aria-labelledby="addCategoryLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-                <h4 class="modal-title">Add Category:</h4>
+                <h4 class="modal-title">Category Details:</h4>
             </div>
-            <div class="modal-body">
-                @using (Html.BeginForm("AddNewCategory", "JobCategory", FormMethod.Post))
-                {
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.job_category_name)
-                        @Html.TextBoxFor(m => m.job_category_name, new { @placeholder = "Category Name", @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.job_category_name, "", new { @class = "text-danger" })
-                    </div>
-
-                    <div class="modal-footer">
-
-                        <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                }
+            <div class="modal-body" id="JobCategoryPartial">
+                
             </div>
-            
         </div>
         <!-- /.modal-content -->
     </div>
@@ -53,7 +39,7 @@
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"><b>All Job Categories :</b></h3>
-                    <a class="btn btn-primary pull-right" data-toggle="#add-contact" data-target="#add-contact" onclick="openPopup()">
+                    <a class="btn btn-primary pull-right" @*data-toggle="#categorymodel" data-target="#categorymodel"*@ onclick="loadPartialView('')">
                         Add New Category
                     </a>
                 </div>
@@ -77,13 +63,17 @@
     </div>
 </section>
 
-<script>
-    $(document).ready(function () {
+<script type="text/javascript">
+    $(document).ready(function() {
         bindDatatable();
+
+        //for reset validation of form
+        //$('#categorymodel').on('hidden.bs.modal', function () {
+        //    $('.field-validation-error').html("");
+        //});
     });
 
     function bindDatatable() {
-
         $('#datatable').DataTable({
             lengthChange: true,
             searching: true,
@@ -121,7 +111,7 @@
                     "mRender": function (data, type, row) {
                         var iconClass = (row.isActive) ? '<i class="fa fa-check-square actionbutton"></i>' : '<i class="fa fa-times-circle actionbutton"></i>';
                         var action = '';
-                        action = '<a href="javascript:void(0);" title="Edit" onclick="Edit(\'' + row.encryptedId + '\' )" class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+                        action = '<a href="javascript:void(0);" title="Edit" onclick="loadPartialView(\'' + row.encryptedId + '\')"  class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
                         action += ' <a href="javascript:void(0);" title="Activate/Deactivate" onclick="ChangeStatus(\'' + row.encryptedId + '\',\'' + row.isActive + '\')" class = "btn btn-primary btn-sm">' + iconClass +'</a>';
                         return action;
 
@@ -156,18 +146,10 @@
     }
 
 
-    $(function () {
-        $('button[data-toggle="ajax-modal"]').click(function (event) {
-            var url = $(this).data('url');
-            $.get(url).done(function (data) {
-                $('#modal-placeholder').html(data);
-                $('#modal-placeholder > .modal').modal('show');
-            });
+    function loadPartialView(id) {
+        var url = '@Url.Action("RenderJobCategoryView", "JobCategory")?id=' + id;
+        $('#JobCategoryPartial').load(url, function () {
+            $('#JobCategoryModel').modal({ show: true });
         });
-    });
-    //Function for setting Flag_Accepted value as true
-    function openPopup() {
-        $("#Flag_Accepted").val(true);
-        $('#add-contact').modal('show');
     }
 </script>

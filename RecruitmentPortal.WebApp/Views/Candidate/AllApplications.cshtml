@@ -2,13 +2,13 @@
 @{
     var startDate = new DateTime(DateTime.Now.Date.Year, 1, 1);
     List<SelectListItem> typeList = new List<SelectListItem>()
-    {
+{
         new SelectListItem {Text="New",Value = "1" },
         new SelectListItem {Text="Active",Value = "2" },
         new SelectListItem {Text="Selected",Value = "3" },
         new SelectListItem {Text="Rejected",Value = "4" },
     };
-    
+
 }
 <section class="content">
     <div class="row">
@@ -46,7 +46,7 @@
 
                         <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6 form-group">
                             <label>Application Type</label>
-                            @Html.DropDownList("srcApplicationType", typeList, Messages.PleaseSelect, new { @class = "form-control select2" , @onchange = "myFunction()" })
+                            @Html.DropDownList("srcApplicationType", typeList, Messages.PleaseSelect, new { @class = "form-control select2", @onchange = "myFunction()" })
                         </div>
 
                         <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6 form-group">
@@ -56,7 +56,7 @@
 
                         <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6 form-group">
                             <input type="button" value="Search" class="btn btn-primary" onclick="search()" />
-                            <input type="button" value="Reset" id="Reset" class="btn btn-primary" onclick="reset()"/>
+                            <input type="button" value="Reset" id="Reset" class="btn btn-primary" onclick="reset()" />
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                     </table>
 
                     @*Active*@
-                    <table id="active_datatable" class="table table-bordered table-striped">
+                    <table id="src_2_datatable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Candidate Name</th>
@@ -139,17 +139,14 @@
     </div>
 </section>
 
-<script>
+<script type="text/javascript">
     function myFunction() {
-        var x = $("#srcApplicationType").val();
+        debugger;
+
         alert("You selected : " + x);
-
-        $x.DataTable();
-   
-
+        var y = $('src_' +x+ '_datatable');
+        y.bindDatatable();
     }
-
-
 
     $(document).ready(function () {
         $(".select2").select2();
@@ -168,6 +165,9 @@
     });
 
     function bindDatatable() {
+
+        var x = $("#srcApplicationType").val();
+
         var sApplicationType = "";
         var sDegree = "";
         var applicationTypeElement = $('#srcApplicationType');
@@ -181,8 +181,17 @@
         var sStartDate = getInputValueById('srcStartDate');
         var sEndDate = getInputValueById('srcEndDate');
 
-        
-        $('#datatable').DataTable({
+
+
+        if (x == 1) {newer
+        }else if (x == 2) {
+            active
+        }else if (x == 3) {
+            selected
+        } else if (x == 4) {
+            Rejeceted
+        } else {
+             $('#datatable').DataTable({
             lengthChange: true,
             searching: true,
             ordering: false,
@@ -224,7 +233,9 @@
             ],
             "order": [[0, "asc"]]
         });
-    }
+         }
+        }
+
 
     function search() {
         var sStartDate = getInputValueById('srcStartDate');
@@ -249,6 +260,6 @@
     }
 
     function openRecord(id) {
-        window.location.href = '@Url.Action("Details", "Candidate")?id=' + id; 
+        window.location.href = '@Url.Action("Details", "Candidate")?id=' + id;
     }
 </script>

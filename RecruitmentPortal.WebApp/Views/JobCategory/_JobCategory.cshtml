@@ -1,0 +1,33 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.JobCategoryViewModel
+
+@using (Html.BeginForm("AddNewCategory", "JobCategory", FormMethod.Post, new { role = "form", id = "categoryform" }))
+{
+    <input type="hidden" value="@Model.ID" id="ID" name="ID" />
+    @Html.HiddenFor(m => m.isActive)
+    <div class="form-group">
+        @Html.LabelFor(m => m.job_category_name)
+        @Html.TextBoxFor(m => m.job_category_name, new { @placeholder = "Category Name", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.job_category_name, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" onclick="return checkFormValid()">Save</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+}
+
+
+<script>
+    $(document).ready(function () {
+        $.validator.unobtrusive.parse($('#categoryform'));
+    });
+
+    function checkFormValid() {
+        var $form = $('form');
+        var x = $form.validate();
+        if ($form.valid()) {
+            return true;
+        }
+        return false;
+    }
+</script>

@@ -50,17 +50,14 @@
                                     @*<input class="form-control" asp-for="datetime" asp-format="{0:yyyy-MM-ddTHH:mm}" value="@Model.datetime"/>*@
                                 </div>
                                 <div class="form-group">
-                                    @Html.LabelFor(m => m.round)
-                                    @Html.TextBoxFor(m => m.round, new { @id = "round", @type = "number", @placeholder = "Select number of Round", @class = "form-control" })
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
                                     @Html.LabelFor(m => m.roundValue)
                                     @Html.DropDownListFor(m => m.roundValue, new SelectList(ViewBag.RoundTypeList, "Value", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
 
                                 </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.Multiinterviewer)
                                     @Html.ListBoxFor(m => m.Multiinterviewer, new MultiSelectList(ViewBag.users), new { @class = "form-control select2" })
