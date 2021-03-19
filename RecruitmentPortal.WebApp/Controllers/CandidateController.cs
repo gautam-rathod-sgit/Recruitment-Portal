@@ -38,6 +38,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         CandidateViewModel FinalData = new CandidateViewModel();
         private readonly ICandidatePage _candidatePageServices;
+        private readonly IJobApplicationPage _jobApplicationPage;
         private readonly IDegreePage _degreePageServices;
         private readonly IDepartmentPage _departmentPageservices;
         private readonly IJobPostCandidatePage _jobPostCandidatePage;
@@ -55,6 +56,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         #region Constructor
         public CandidateController(IWebHostEnvironment environment,
              ICandidatePage candidatePage,
+             IJobApplicationPage jobApplicationPage,
               IJobPostPage jobPostPageservices,
              IDegreePage degreePageServices,
              RecruitmentPortalDbContext dbContext,
@@ -64,6 +66,7 @@ namespace RecruitmentPortal.WebApp.Controllers
              UserManager<ApplicationUser> userManager)
         {
             _candidatePageServices = candidatePage;
+            _jobApplicationPage = jobApplicationPage;
             _environment = environment;
             _jobPostPageservices = jobPostPageservices;
             _userManager = userManager;
@@ -517,7 +520,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 newList = modelList.ToList();
                 foreach (var item in newList)
                 {
-                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName((item.ID).ToString()));
+                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.ID.ToString()));
                     JobPostCandidate model = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault();
                     item.jobName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
                     item.jobRole = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_role;
@@ -562,6 +565,252 @@ namespace RecruitmentPortal.WebApp.Controllers
                 return Json(new { data = filteredList });
             }
         }
+
+        /// <summary>
+        /// FOR SHOWING LIST OF ACTIVE APPLICATIONS
+        /// </summary>
+        /// <param name="Application_mode"></param>
+        /// <param name="istatus"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> GetActiveApplicationsList(string startDate, string endDate, string degree, string applicationType, string istatus = "Pending")
+        {
+            if (applicationType == null) applicationType = string.Empty;
+            if (degree == null) degree = string.Empty;
+            if (applicationType == "Active") applicationType = "Pending";
+            DateTime? sDate = !string.IsNullOrEmpty(startDate) ? Convert.ToDateTime(startDate) : (DateTime?)null;
+            DateTime? eDate = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : (DateTime?)null;
+
+            IQueryable<JobApplicationViewModel> modelList;
+            List<Schedules> mylist = new List<Schedules>();
+            List<JobApplicationViewModel> newlist = new List<JobApplicationViewModel>();
+            List<JobApplicationViewModel> filteredList = new List<JobApplicationViewModel>();
+
+            try
+            {
+                modelList = await _jobApplicationPage.getJobApplications();
+                //    modelList = modelList.Where(x => x.status == status_Pending);
+                newlist = modelList.ToList();
+
+                foreach (var data in newlist)
+                {
+                    data.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(data.ID.ToString()));
+                    data.candidateName = getCandidateNameById(data.candidateId);
+                    data.position = getPositionByCandidateId(data.candidateId);
+                    data.job_Role = getJobRoleByCandidateId(data.candidateId);
+                    data.interview_Status = getInterviewStatusByCandidateId(data.candidateId);
+                }
+
+                //newlist = newlist.Where(x => x.interview_Status == istatus).ToList();
+                filteredList = newlist.Where(m => (m.status.Contains(applicationType) || applicationType == null)
+                                               && (degree == string.Empty)
+                                               && (m.start_date >= sDate || sDate == null)
+                                               && (m.start_date <= eDate || eDate == null)).ToList();
+
+                return Json(new { data = filteredList });
+            }
+            catch (Exception ex)
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                return Json(new { data = filteredList });
+            }
+        }
+
+        /// <summary>
+        /// FOR SHOWING LIST OF SELECTED JOB-APPLICATIONS
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> SelectedJobApplications(string startDate, string endDate, string degree, string applicationType)
+        {
+            if (applicationType == null) applicationType = string.Empty;
+            if (degree == null) degree = string.Empty;
+            if (applicationType == "Selected") applicationType = "Accepted";
+            DateTime? sDate = !string.IsNullOrEmpty(startDate) ? Convert.ToDateTime(startDate) : (DateTime?)null;
+            DateTime? eDate = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : (DateTime?)null;
+
+            IQueryable<JobApplicationViewModel> models = null;
+            List<JobApplicationViewModel> newlist = new List<JobApplicationViewModel>();
+            List<JobApplicationViewModel> filteredlist = new List<JobApplicationViewModel>();
+            CandidateViewModel candidateModel = new CandidateViewModel();
+
+            try
+            {
+                models = await _jobApplicationPage.getJobApplications();
+                //models = models.Where(x => x.status == status_Complete);
+                //getting candidate name and job position with candidateId of JobApplication model
+                newlist = models.ToList();
+                foreach (var item in newlist)
+                {
+                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.ID.ToString()));
+                    item.candidateName = getCandidateNameById(item.candidateId);
+                    item.position = getPositionByCandidateId(item.candidateId);
+                    item.job_Role = getJobRoleByCandidateId(item.candidateId);
+                    item.date = item.joining_date;
+                }
+
+                filteredlist = newlist.Where(m => (m.status.Contains(applicationType) || applicationType == null)
+                                               && (degree == string.Empty)
+                                               && (m.accept_date >= sDate || sDate == null)
+                                               && (m.accept_date <= eDate || eDate == null))
+                                               .ToList();
+
+                return Json(new { data = filteredlist });
+            }
+            catch (Exception ex)
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                return Json(new { data = filteredlist });
+            }
+        }
+
+        /// <summary>
+        /// List of Rejected Candidates.
+        /// </summary>
+        /// <param name="SearchString"></param>
+        /// <param name="Application_mode"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> RejectedJobApplications(string startDate, string endDate, string degree, string applicationType)
+        {
+            if (applicationType == null) applicationType = string.Empty;
+            if (degree == null) degree = string.Empty;
+            DateTime? sDate = !string.IsNullOrEmpty(startDate) ? Convert.ToDateTime(startDate) : (DateTime?)null;
+            DateTime? eDate = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : (DateTime?)null;
+
+            IQueryable<JobApplicationViewModel> models = null;
+            List<JobApplicationViewModel> newList = new List<JobApplicationViewModel>();
+            List<JobApplicationViewModel> filteredlist = new List<JobApplicationViewModel>();
+
+            try
+            {
+                models = await _jobApplicationPage.getJobApplications();
+                models = models.Where(x => x.status == status_Rejected);
+                newList = models.ToList();
+
+                foreach (var item in newList)
+                {
+                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.ID.ToString()));
+                    item.candidateName = getCandidateNameById(item.candidateId);
+                    item.position = getPositionByCandidateId(item.candidateId);
+                    item.job_Role = getJobRoleByCandidateId(item.candidateId);
+                    item.candidate = await _candidatePageServices.getCandidateById(item.candidateId);
+                }
+
+                filteredlist = newList.Where(m => (m.status.Contains(applicationType) || applicationType == null)
+                                                && (degree == string.Empty)
+                                                && (m.accept_date >= sDate || sDate == null)
+                                                && (m.accept_date <= eDate || eDate == null))
+                                                .ToList();
+
+                return Json(new { data = filteredlist });
+            }
+
+            catch (Exception ex)
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                return Json(new { data = filteredlist });
+            }
+        }
+
+        /// <summary>
+        /// FETCHING CANDIDATE NAME USING CANDIDATE ID FROM DATABASE
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string getCandidateNameById(int id)
+        {
+            string name = null;
+            try
+            {
+                name = _dbContext.Candidate.AsNoTracking().FirstOrDefault(x => x.ID == id).name;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return name;
+        }
+        /// <summary>
+        /// FETCHING JOB POSITION USING CANDIDATE ID FROM DATABASE
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string getPositionByCandidateId(int id)
+        {
+            int job_ID;
+            string position = null;
+            try
+            {
+                job_ID = _dbContext.JobPostCandidate.AsNoTracking().FirstOrDefault(x => x.candidate_Id == id).job_Id;
+                position = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).job_title;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return position;
+        }
+        /// <summary>
+        /// FETCHING JOB ROLE USING CANDIDATE ID FROM DATABASE
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string getJobRoleByCandidateId(int id)
+        {
+            int job_ID;
+            string job_role = null;
+
+            job_ID = _dbContext.JobPostCandidate.AsNoTracking().FirstOrDefault(x => x.candidate_Id == id).job_Id;
+            job_role = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).job_role;
+
+            return job_role;
+
+        }
+
+        /// <summary>
+        /// For Fetching Interview Status By Candidate Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string getInterviewStatusByCandidateId(int id)
+        {
+
+            var mylist = _dbContext.Schedules.Where(x => x.candidateId == id).ToList();
+            string interview_status = null;
+            if (mylist.Count() > 1)
+            {
+                var isAnyPending = mylist.Where(x => x.status == 2).Any();
+                var isAllCompleted = mylist.All(x => x.status == 3);
+                var isAllScheduled = mylist.All(x => x.status == 1);
+
+
+                if (isAllScheduled)
+                {
+                    interview_status = Enum.GetName(typeof(StatusType), 1);
+                }
+                if (isAnyPending)
+                {
+                    interview_status = Enum.GetName(typeof(StatusType), 2);
+                }
+                if (isAllCompleted)
+                {
+                    interview_status = Enum.GetName(typeof(StatusType), 3);
+                }
+
+            }
+            else
+            {
+                if (mylist.Count == 0)
+                {
+                    interview_status = Enum.GetName(typeof(StatusType), 2);
+                }
+                else
+                {
+                    interview_status = Enum.GetName(typeof(StatusType), mylist.FirstOrDefault().status);
+                }
+            }
+            //}
+            return interview_status;
+        }
         #endregion
 
         #region Private Methods
@@ -594,7 +843,9 @@ namespace RecruitmentPortal.WebApp.Controllers
             };
         }
 
+
        
+
         #endregion
     }
 }

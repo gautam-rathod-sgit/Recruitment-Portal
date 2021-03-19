@@ -115,11 +115,20 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Degree.
+        /// </summary>
+        public static string DegreeName {
+            get {
+                return ResourceManager.GetString("DegreeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Department.
         /// </summary>
-        public static string Department {
+        public static string DepartmentName {
             get {
-                return ResourceManager.GetString("Department", resourceCulture);
+                return ResourceManager.GetString("DepartmentName", resourceCulture);
             }
         }
         

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data.Enum;
+using RecruitmentPortal.Infrastructure.Helpers;
 using RecruitmentPortal.WebApp.Models;
 using RecruitmentPortal.WebApp.Resources;
 using RecruitmentPortal.WebApp.ViewModels.Base;
@@ -27,9 +28,9 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public string position { get; set; }
 
         [DataType(DataType.DateTime)]
-        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         [Display(ResourceType = typeof(Labels), Name = "DateTime")]
         [Required(ErrorMessageResourceName = "DateTimeRequired", ErrorMessageResourceType = typeof(Messages))]
+      //  [RegularExpression(CommonHelper.DateFormat, ErrorMessageResourceName = "DateFormat", ErrorMessageResourceType = typeof(Messages))]
         public DateTime datetime { get; set; }
 
         public string time { get; set; }

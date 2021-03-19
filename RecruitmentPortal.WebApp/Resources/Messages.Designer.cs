@@ -115,6 +115,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please Insert Degree.
+        /// </summary>
+        public static string DegreeNameRequired {
+            get {
+                return ResourceManager.GetString("DegreeNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Highest Qualification is Required.
         /// </summary>
         public static string DegreeRequired {
@@ -124,11 +133,11 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Department is Required.
+        ///   Looks up a localized string similar to Please Insert Department.
         /// </summary>
-        public static string DepartmentRequired {
+        public static string DeptNameRequired {
             get {
-                return ResourceManager.GetString("DepartmentRequired", resourceCulture);
+                return ResourceManager.GetString("DeptNameRequired", resourceCulture);
             }
         }
         

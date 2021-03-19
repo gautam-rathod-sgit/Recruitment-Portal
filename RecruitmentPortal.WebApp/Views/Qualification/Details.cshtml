@@ -1,0 +1,113 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.DegreeViewModel
+@using RecruitmentPortal.WebApp.Helpers
+@using RecruitmentPortal.WebApp.Resources
+
+@{ ViewBag.Title = "Details"; }
+<style>
+    .disableClick {
+        background-color: #808080;
+        color: white;
+    }
+</style>
+
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- /.box -->
+
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title"><b>Degree Details :</b></h3>
+                    <div class="d-flex pull-right">
+                        <a href='@Url.Action("AddNewDept","Qualification",new {id = Model.EncryptedId })' class="btn btn-primary  mr-1 ">Add Department</a>
+                        <a href='@Url.Action("Index","Qualification")' class="btn btn-primary">Cancel</a>
+                    </div>
+
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="datatable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Degree</th>
+                                <th>Action</th>
+                                <th>Edit</th>
+
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+        bindDatatable();
+    });
+
+    function bindDatatable() {
+        $('#datatable').DataTable({
+            lengthChange: true,
+            searching: true,
+            ordering: false,
+            lengthMenu: [[5, 10, 25, 50, -1], [5,10, 25, 50, "All"]],
+            paging: true,
+            pagingType: "simple_numbers",
+            pageLength: 10,
+            fixedColumns: true,
+            responsive: true,
+            "bDestroy": true,
+            "ajax": {
+                "url": "@Url.Action("GetDegreeDetails", "Qualification")",
+                "type": "GET",
+                "data": {
+                    "id": "@Model.EncryptedId"
+                },
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "dept_name", "name": "dept_name" },
+                {
+                    "sClass": "text-center",
+                    "mRender": function (data, type, row) {
+                        var iconClass = (row.isActive) ? '<i class="fa fa-check-square actionbutton"></i>' : '<i class="fa fa-times-circle actionbutton"></i>';
+                        var action = '';
+                        action = '<a href="javascript:void(0);" title="Activate/Deactivate" onclick="ChangeStatus(\'' + row.encryptedId + '\',\'' + row.categoryId + '\',\'' + row.isActive + '\')" class = "btn btn-primary btn-sm">' + iconClass + '</a>';
+
+                        return action;
+                    }
+                },
+                {
+                    "sClass": "text-center",
+                    "mRender": function (data, type, row) {
+                        if (row.isActive) {
+                            var action = '<a href="javascript:void(0);" title="Edit Post" onclick="Edit(\'' + row.encryptedId + '\' )" class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+                            return action;
+                        } else {
+                            var action = '<a href="javascript:void(0);" title="Edit Post" onclick="error()" class = "btn disableClick btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+                            return action;
+                        }
+
+                    }
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+    }
+
+    function error() {
+        notification("Error", '@Messages.EnableEntity', "error");
+    }
+    function ChangeStatus(deptId,degreeID, status) {
+        window.location.href = '@Url.Action("UpdateDept", "Qualification")?id=' + deptId + '&categoryId=' + degreeID + '&status=' + status;
+    }
+    function Edit(deptId, editMode = true) {
+        window.location.href = '@Url.Action("UpdateDept", "Qualification")?id=' + deptId + '&editMode=' + editMode;
+    }
+    function popupForActivation() {
+        notification("Error", '@Messages.EnableEntity', "error");
+    }
+</script>

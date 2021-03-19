@@ -1,27 +1,47 @@
-﻿@model IEnumerable<RecruitmentPortal.WebApp.ViewModels.DegreeViewModel>
+﻿@model RecruitmentPortal.WebApp.ViewModels.DegreeViewModel
 @using RecruitmentPortal.WebApp.Helpers
-@{
-    ViewData["Title"] = "Index";
-}
+@using RecruitmentPortal.WebApp.Resources
 
 
-@{ int rowNo = 0; }
 <style>
-    .mybutton {
-        font-size: 25px;
-        border-radius: 3px;
-        color: #509bac;
-        margin-right: 5px;
-    }
-
-    .table > thead > tr > th {
-        border-bottom: 2px solid #ecf0f5;
-    }
-
-    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-        border-top: 1px solid #ecf0f5;
+    .disableClick {
+        background-color: #808080;
+        color: white;
     }
 </style>
+<!-- Modal for Adding new Degree -->
+<div class="modal fade in bg-gradient-orange" id="add-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Add Degree:</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("AddNewDegree", "Qualification", FormMethod.Post))
+                {
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.degree_name)
+                        @Html.TextBoxFor(m => m.degree_name, new { @placeholder = "Degree Name", @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.degree_name, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                }
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- Modal end -->
 
 <section class="content">
     <div class="row">
@@ -30,18 +50,20 @@
 
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">All Qualifications :</h3>
-                    <a asp-action="AddNewDegree" class="btn btn-primary pull-right">Add New Degree</a>
+                    <h3 class="box-title"><b>All Qualification Degrees :</b></h3>
+                    <a class="btn btn-primary pull-right" data-toggle="#add-contact" data-target="#add-contact" onclick="openPopup()">
+                        Add New Degree
+                    </a>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
                     <table id="datatable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Degree</th>
+                                <th>Name</th>
                                 <th>Add Department</th>
-                                <th>Degree Action</th>
-                                <th>Department</th>
+                                <th>Action</th>
+                                <th>Details</th>
                             </tr>
                         </thead>
 
@@ -53,7 +75,7 @@
     </div>
 </section>
 
-<script type="text/javascript">
+<script>
     $(document).ready(function () {
         bindDatatable();
     });
@@ -74,7 +96,7 @@
             "ajax": {
                 "url": "@Url.Action("GetAllDegrees", "Qualification")",
                 "type": "GET",
-                //"data": {},
+                "data": {},
                 "datatype": "json"
             },
             "columns": [
@@ -82,61 +104,68 @@
                 {
                     "sClass": "text-center",
                     "mRender": function (data, type, row) {
-                        var action = '<a href="#" title="Add" onclick="AddDepartment(\''+ row.encryptedId +'\')" class="btn btn-success">Add Department</a>';
-                        return action;
+                        if (row.isActive) {
+                            var action = '<a href="javascript:void(0);" title="Add" onclick="AddDepartment(\'' + row.encryptedId + '\')" class="btn btn-success">Add Department</a>';
+                            return action;
+                        }
+                        else {
+                            var action = '<a href="javascript:void(0);" title="Add" onclick="error()" class = "btn disableClick">Add Department</a>';
+                            return action;
+                        }
                     }
                 },
                 {
                     "sClass": "text-center",
                     "mRender": function (data, type, row) {
+                        var iconClass = (row.isActive) ? '<i class="fa fa-check-square actionbutton"></i>' : '<i class="fa fa-times-circle actionbutton"></i>';
                         var action = '';
-                        if (row.isActive) {
-                            action = '<a href="#" title="Edit" onclick="Edit(\'' + row.encryptedId + '\' )"><i class="fa fa-edit mybutton"></i></a>';
-                            action += '<a href="#" title="Deactivate" onclick="Deactivate(\'' + row.encryptedId + '\')"><i class="fa fa-check-square mybutton"></i></a>';
-                        } else {
-                            action = '<a href="#" title="Edit" onclick="Edit(\'' + row.encryptedId + '\')"><i class="fa fa-edit mybutton"></i></a>';
-                            action += '<a href="#" title="Activate" onclick="Activate(\'' + row.encryptedId + '\')"><i class="fa fa-times-circle mybutton"></i></a>';
-                        }
+                        action = '<a href="javascript:void(0);" title="Edit" onclick="Edit(\'' + row.encryptedId + '\' )" class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+                        action += ' <a href="javascript:void(0);" title="Activate/Deactivate" onclick="ChangeStatus(\'' + row.encryptedId + '\',\'' + row.isActive + '\')" class = "btn btn-primary btn-sm">' + iconClass +'</a>';
                         return action;
 
                     }
                 },
-                { "data": "dept_name", "name": "dept_name" }
-               
-
-                //{
-                //    "sClass": "text-center",
-                //    "mRender": function (data, type, row) {
-                //        var action = '<a href="#" title="Details" onclick="Details(\'' + row.encryptedId + '\')"><i class="fa fa-tasks"></i></a>';
-                //        return action;
-                //    }
-                //}
+                {
+                    "sClass": "text-center",
+                    "mRender": function (data, type, row) {
+                            var action = '<a href="javascript:void(0);" title="Details" onclick="Details(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-tasks actionbutton"></i></a>';
+                            return action;
+                    }
+                }
             ],
             "order": [[0, "asc"]]
         });
     }
 
-    function AddDepartment(id) {
-        window.location.href = '@Url.Action("AddNewDept", "Qualification")?id=' + id;
+    function AddDepartment(id, toIndex = true) {
+        window.location.href = '@Url.Action("AddNewDept", "Qualification")?id=' + id + '&toIndex=' + toIndex;
     }
-    function Activate(degree_id, deactivate) {
-        var url = '@Html.Raw(Url.Action("UpdateDegree", "Qualification", new { id = "degree_id", deactivate = "false" }))';
-        var params = url.replace('degree_id', degree_id);
-        window.location.href = params;
+    function ChangeStatus(degreeId, status) {
+        window.location.href = '@Url.Action("UpdateDegree", "Qualification")?id=' + degreeId + '&status=' + status;
+    }
+    function Edit(degreeId, editMode = true) {
+        window.location.href = '@Url.Action("UpdateDegree", "Qualification")?id=' + degreeId + '&editMode=' + editMode;
+    }
+    function Details(id) {
+        window.location.href = '@Url.Action("Details", "Qualification")?id=' + id;
+    }
+     function error() {
+        notification("Error", '@Messages.EnableEntity', "error");
+    }
 
+
+    $(function () {
+        $('button[data-toggle="ajax-modal"]').click(function (event) {
+            var url = $(this).data('url');
+            $.get(url).done(function (data) {
+                $('#modal-placeholder').html(data);
+                $('#modal-placeholder > .modal').modal('show');
+            });
+        });
+    });
+    //Function for setting Flag_Accepted value as true
+    function openPopup() {
+        $("#Flag_Accepted").val(true);
+        $('#add-contact').modal('show');
     }
-    function Deactivate(degree_id, deactivate) {
-         var url = '@Html.Raw(Url.Action("UpdateDegree", "Qualification", new { id = "degree_id", deactivate = "true" }))';
-        var params = url.replace('degree_id', degree_id);
-         window.location.href = params;
-    }
-    function Edit(degree_id, editMode) {
-        var url = '@Html.Raw(Url.Action("UpdateDegree", "Qualification", new { id = "degree_id", editMode = "true" }))';
-        var params = url.replace('degree_id', degree_id);
-        window.location.href = params;
-    }
-   
-    @*function Details(id) {
-        window.location.href = '@Url.Action("DetailsJobCategory", "JobCategory")?id=' + id;
-    }*@
 </script>

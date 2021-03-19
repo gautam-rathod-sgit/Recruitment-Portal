@@ -249,7 +249,10 @@
   <data name="ValidTextRequired" xml:space="preserve">
     <value>Valid Input Text Required</value>
   </data>
-  <data name="DepartmentRequired" xml:space="preserve">
-    <value>Department is Required</value>
+  <data name="DegreeNameRequired" xml:space="preserve">
+    <value>Please Insert Degree</value>
+  </data>
+  <data name="DeptNameRequired" xml:space="preserve">
+    <value>Please Insert Department</value>
   </data>
 </root>
