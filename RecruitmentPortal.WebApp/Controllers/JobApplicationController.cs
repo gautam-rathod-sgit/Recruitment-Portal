@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace RecruitmentPortal.WebApp.Controllers
 {
@@ -127,6 +128,8 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.DegreeList = SelectionList.GetDegreeList().Select(m => new { Id = m.ID, Name = m.degree_name });
+
             return View();
         }
 
@@ -136,51 +139,47 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="Application_mode"></param>
         /// <param name="istatus"></param>
         /// <returns></returns>
-        public async Task<IActionResult> GetActiveApplicationsList(string startDate, string endDate, string degree, string applicationType, string istatus = "Pending")
-        {
-            if (applicationType == null) applicationType = string.Empty;
-            if (degree == null) degree = string.Empty;
-            DateTime? sDate = !string.IsNullOrEmpty(startDate) ? Convert.ToDateTime(startDate) : (DateTime?)null;
-            DateTime? eDate = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : (DateTime?)null;
+        //public async Task<IActionResult> GetActiveApplicationsList(string startDate, string endDate, string degree, string applicationType, string istatus = "Pending")
+        //{
+        //    if (applicationType == null) applicationType = string.Empty;
+        //    if (degree == null) degree = string.Empty;
+        //    DateTime? sDate = !string.IsNullOrEmpty(startDate) ? Convert.ToDateTime(startDate) : (DateTime?)null;
+        //    DateTime? eDate = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : (DateTime?)null;
 
-            IQueryable<JobApplicationViewModel> modelList;
-            List<Schedules> mylist = new List<Schedules>();
-            List<JobApplicationViewModel> newlist = new List<JobApplicationViewModel>();
-            List<JobApplicationViewModel> filteredList = new List<JobApplicationViewModel>();
+        //    IQueryable<JobApplicationViewModel> modelList;
+        //    List<Schedules> mylist = new List<Schedules>();
+        //    List<JobApplicationViewModel> newlist = new List<JobApplicationViewModel>();
+        //    List<JobApplicationViewModel> filteredList = new List<JobApplicationViewModel>();
 
-            try
-            {
-                modelList = await _jobApplicationPage.getJobApplications();
-                modelList = modelList.Where(x => x.status == status_Pending);
-                newlist = modelList.ToList();
+        //    try
+        //    {
+        //        modelList = await _jobApplicationPage.getJobApplications();
+        //        modelList = modelList.Where(x => x.status == status_Pending);
+        //        newlist = modelList.ToList();
 
-                foreach (var data in newlist)
-                {
-                    data.EncryptedId = RSACSPSample.EncodeServerName((data.ID).ToString());
-                    data.candidateName = getCandidateNameById(data.candidateId);
-                    data.position = getPositionByCandidateId(data.candidateId);
-                    data.job_Role = getJobRoleByCandidateId(data.candidateId);
-                    data.interview_Status = getInterviewStatusByCandidateId(data.candidateId);
-                }
+        //        foreach (var data in newlist)
+        //        {
+        //            data.EncryptedId = RSACSPSample.EncodeServerName((data.ID).ToString());
+        //            data.candidateName = getCandidateNameById(data.candidateId);
+        //            data.position = getPositionByCandidateId(data.candidateId);
+        //            data.job_Role = getJobRoleByCandidateId(data.candidateId);
+        //            data.interview_Status = getInterviewStatusByCandidateId(data.candidateId);
+        //        }
 
-                newlist = newlist.Where(x => x.interview_Status == istatus).ToList();
-                filteredList = newlist.Where(m => (m.status.Contains(applicationType) || applicationType == null)
-                                                && (degree == null)
-                                               && (m.start_date >= sDate || sDate == null)
-                                               && (m.start_date <= eDate || eDate == null)).ToList();
+        //        newlist = newlist.Where(x => x.interview_Status == istatus).ToList();
+        //        filteredList = newlist.Where(m => (m.status.Contains(applicationType) || applicationType == null)
+        //                                        && (degree == null)
+        //                                       && (m.start_date >= sDate || sDate == null)
+        //                                       && (m.start_date <= eDate || eDate == null)).ToList();
 
-                return Json(new { data = filteredList });
-            }
-            catch (Exception ex)
-            {
-                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
-                return Json(new { data = filteredList });
-            }
-        }
-
-
-
-
+        //        return Json(new { data = filteredList });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+        //        return Json(new { data = filteredList });
+        //    }
+        //}
 
         /// <summary>
         /// Adding new Active-Job Application for proceeding
@@ -374,46 +373,47 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// FOR SHOWING LIST OF SELECTED JOB-APPLICATIONS
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> SelectedJobApplications(string startDate, string endDate, string degree, string applicationType)
-        {
-            if (applicationType == null) applicationType = string.Empty;
-            if (degree == null) degree = string.Empty;
-            DateTime? sDate = !string.IsNullOrEmpty(startDate) ? Convert.ToDateTime(startDate) : (DateTime?)null;
-            DateTime? eDate = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : (DateTime?)null;
+        //public async Task<IActionResult> SelectedJobApplications(string startDate, string endDate, string degree, string applicationType)
+        //{
+        //    if (applicationType == null) applicationType = string.Empty;
+        //    if (degree == null) degree = string.Empty;
+        //    DateTime? sDate = !string.IsNullOrEmpty(startDate) ? Convert.ToDateTime(startDate) : (DateTime?)null;
+        //    DateTime? eDate = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : (DateTime?)null;
 
-            IQueryable<JobApplicationViewModel> models = null;
-            List<JobApplicationViewModel> newlist = new List<JobApplicationViewModel>();
-            List<JobApplicationViewModel> filteredlist = new List<JobApplicationViewModel>();
-            CandidateViewModel candidateModel = new CandidateViewModel();
+        //    IQueryable<JobApplicationViewModel> models = null;
+        //    List<JobApplicationViewModel> newlist = new List<JobApplicationViewModel>();
+        //    List<JobApplicationViewModel> filteredlist = new List<JobApplicationViewModel>();
+        //    CandidateViewModel candidateModel = new CandidateViewModel();
 
-            try
-            {
-                models = await _jobApplicationPage.getJobApplications();
-                models = models.Where(x => x.status == status_Complete);
-                //getting candidate name and job position with candidateId of JobApplication model
-                newlist = models.ToList();
-                foreach (var item in newlist)
-                {
-                    item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
-                    item.candidateName = getCandidateNameById(item.candidateId);
-                    item.position = getPositionByCandidateId(item.candidateId);
-                    item.job_Role = getJobRoleByCandidateId(item.candidateId);
-                    item.date = item.joining_date;
-                }
-               // models = newlist.AsQueryable();
-                filteredlist = models.Where(m => (m.status.Contains(applicationType) || applicationType == null)
-                                                && (degree == null)
-                                               && (m.accept_date >= sDate || sDate == null)
-                                               && (m.accept_date <= eDate || eDate == null)).ToList();
+        //    try
+        //    {
+        //        models = await _jobApplicationPage.getJobApplications();
+        //        models = models.Where(x => x.status == status_Complete);
+        //        //getting candidate name and job position with candidateId of JobApplication model
+        //        newlist = models.ToList();
+        //        foreach (var item in newlist)
+        //        {
+        //            item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
+        //            item.candidateName = getCandidateNameById(item.candidateId);
+        //            item.position = getPositionByCandidateId(item.candidateId);
+        //            item.job_Role = getJobRoleByCandidateId(item.candidateId);
+        //            item.date = item.joining_date;
+        //        }
+        //       // models = newlist.AsQueryable();
+        //        filteredlist = models.Where(m => (m.status.Contains(applicationType) || applicationType == null)
+        //                                        && (degree == null)
+        //                                       && (m.accept_date >= sDate || sDate == null)
+        //                                       && (m.accept_date <= eDate || eDate == null)).ToList();
 
-                return Json(new { data = filteredlist });
-            }
-            catch (Exception ex)
-            {
-                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
-                return Json(new { data = filteredlist });
-            }
-        }
+        //        return Json(new { data = filteredlist });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+        //        return Json(new { data = filteredlist });
+        //    }
+        //}
+
         /// <summary>
         /// For displaying details of selected candidate application
         /// </summary>
@@ -451,56 +451,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// List of Rejected Candidates.
-        /// </summary>
-        /// <param name="SearchString"></param>
-        /// <param name="Application_mode"></param>
-        /// <returns></returns>
-        public async Task<IActionResult> RejectedJobApplications(string SearchString, string Application_mode)
-        {
-            IQueryable<JobApplicationViewModel> models = null;
-
-            //creating a select list for selecting status type applications
-            List<SelectListItem> ObjItem = new List<SelectListItem>()
-                {
-                  new SelectListItem {Text="All Applications",Value = mode_All},
-                  new SelectListItem {Text="New",Value = mode_Pending},
-                  new SelectListItem {Text="Active",Value = mode_Active},
-                  new SelectListItem {Text="Selected",Value = mode_Selected},
-                  new SelectListItem {Text="Rejected",Value = mode_Rejected},
-                };
-            ViewBag.menuSelect = ObjItem;
-
-            try
-            {
-                models = await _jobApplicationPage.getJobApplications();
-                models = models.Where(x => x.status == status_Rejected);
-
-                //getting candidate name and job position with candidateId of JobApplication model
-                List<JobApplicationViewModel> newlist = new List<JobApplicationViewModel>();
-                newlist = models.ToList(); 
-                foreach (var item in newlist)
-                {
-                    item.candidateName = getCandidateNameById(item.candidateId);
-                    item.position = getPositionByCandidateId(item.candidateId);
-                    item.job_Role = getJobRoleByCandidateId(item.candidateId);
-                    item.candidate = await _candidatePage.getCandidateById(item.candidateId);
-                }
-                models = newlist.AsQueryable();
-
-                //Added search box test
-                if (!String.IsNullOrEmpty(SearchString))
-                {
-                    models = models.Where(s => s.position.ToUpper().Contains(SearchString.ToUpper()));
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return View(models);
-        }
+        
 
         //================================================================================================
 
@@ -792,46 +743,48 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public string getInterviewStatusByCandidateId(int id)
-        {
+        //public string getInterviewStatusByCandidateId(int id)
+        //{
 
-            var mylist = _dbContext.Schedules.Where(x => x.candidateId == id).ToList();
-            string interview_status = null;
-            if (mylist.Count() > 1)
-            {
-                var isAnyPending = mylist.Where(x => x.status == 2).Any();
-                var isAllCompleted = mylist.All(x => x.status == 3);
-                var isAllScheduled = mylist.All(x => x.status == 1);
+        //    var mylist = _dbContext.Schedules.Where(x => x.candidateId == id).ToList();
+        //    string interview_status = null;
+        //    if (mylist.Count() > 1)
+        //    {
+        //        var isAnyPending = mylist.Where(x => x.status == 2).Any();
+        //        var isAllCompleted = mylist.All(x => x.status == 3);
+        //        var isAllScheduled = mylist.All(x => x.status == 1);
 
 
-                if (isAllScheduled)
-                {
-                    interview_status = Enum.GetName(typeof(StatusType), 1);
-                }
-                if (isAnyPending)
-                {
-                    interview_status = Enum.GetName(typeof(StatusType), 2);
-                }
-                if (isAllCompleted)
-                {
-                    interview_status = Enum.GetName(typeof(StatusType), 3);
-                }
+        //        if (isAllScheduled)
+        //        {
+        //            interview_status = Enum.GetName(typeof(StatusType), 1);
+        //        }
+        //        if (isAnyPending)
+        //        {
+        //            interview_status = Enum.GetName(typeof(StatusType), 2);
+        //        }
+        //        if (isAllCompleted)
+        //        {
+        //            interview_status = Enum.GetName(typeof(StatusType), 3);
+        //        }
 
-            }
-            else
-            {
-                if (mylist.Count == 0)
-                {
-                    interview_status = Enum.GetName(typeof(StatusType), 2);
-                }
-                else
-                {
-                    interview_status = Enum.GetName(typeof(StatusType), mylist.FirstOrDefault().status);
-                }
-            }
-            //}
-            return interview_status;
-        }
+        //    }
+        //    else
+        //    {
+        //        if (mylist.Count == 0)
+        //        {
+        //            interview_status = Enum.GetName(typeof(StatusType), 2);
+        //        }
+        //        else
+        //        {
+        //            interview_status = Enum.GetName(typeof(StatusType), mylist.FirstOrDefault().status);
+        //        }
+        //    }
+        //    //}
+        //    return interview_status;
+        //}
+
+        
         #endregion
     }
 }
