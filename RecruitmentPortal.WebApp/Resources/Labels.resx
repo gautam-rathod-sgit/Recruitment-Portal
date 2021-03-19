@@ -237,4 +237,7 @@
   <data name="JobCategory" xml:space="preserve">
     <value>Job Category</value>
   </data>
+  <data name="Department" xml:space="preserve">
+    <value>Department</value>
+  </data>
 </root>

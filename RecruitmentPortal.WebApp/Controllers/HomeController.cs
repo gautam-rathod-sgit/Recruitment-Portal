@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.Infrastructure.Data.Enum;
+using RecruitmentPortal.Infrastructure.Repository;
 using RecruitmentPortal.WebApp.Helpers;
 using RecruitmentPortal.WebApp.Interfaces;
 using RecruitmentPortal.WebApp.Models;
@@ -364,7 +366,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                     foreach (JobPostViewModel obj in list)
                     {
-                        obj.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.Encrypt(obj.ID));
+                        obj.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName((obj.ID).ToString()));
                     }
 
                     //TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Jobs Load Successfully..!!";
@@ -377,6 +379,68 @@ namespace RecruitmentPortal.WebApp.Controllers
                 }
             }
         }
+
+        /// <summary>
+        /// This method retrieves Application-Form which is used to apply for a particular job [GET]
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> ApplyForm(string id) //jobpost id
+        {
+
+            CandidateViewModel model = new CandidateViewModel();
+            try
+            {
+                model.jobpostID = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+
+                model.jobName = _dbContext.JobPost.FirstOrDefault(x => x.ID == model.jobpostID).job_title;
+
+                //fetching all the degrees for candidate to apply with.
+
+                ViewBag.ListOfDegree = SelectionList.GetDegreeList();
+                ViewBag.ReferenceSelect = SelectionList.GetReferenceTypeList();
+                ViewBag.NoticePeriod = SelectionList.GetNoticePeriodTypeList();
+
+            }
+            catch (Exception ex)
+            {
+                model = new CandidateViewModel();
+            }
+            return View(model);
+        }
+
+        public JsonResult GetDept(int Id)
+        {
+            using (RecruitmentPortalDbContext _dbContext = BaseContext.GetDbContext())
+            {
+            List<Department> DepartmentList = new List<Department>();
+
+            //Getting data from database Using EntityFramework Core
+            DepartmentList = _dbContext.Department.Where(a => a.DegreeId == Id).ToList();
+            DepartmentList = DepartmentList.Where(x => x.isActive == true).ToList();
+            if (DepartmentList != null)
+            {
+                //Inserting Select item in List
+                DepartmentList.Insert(0, new Department { ID = 0, dept_name = "Select Department" });
+
+            }
+            return Json(new SelectList(DepartmentList, "ID", "dept_name"));
+            }
+        }
+
+        public List<string> noticePeriodList()
+        {
+            List<string> periodList = new List<string>();
+            periodList.Add("Select");
+            periodList.Add("Immediate");
+            periodList.Add("15 Days");
+            periodList.Add("30 Days");
+            periodList.Add("60 Days");
+            periodList.Add("90 Days");
+            return periodList;
+        }
+
+
         #endregion
     }
 }

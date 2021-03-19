@@ -22,7 +22,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [Required(ErrorMessageResourceName = "CandidateNameRequired", ErrorMessageResourceType = typeof(Messages))]
         public string candidate_name { get; set; }
 
-        [Display(ResourceType = typeof(Labels), Name = "JobRole")]
+        [Display(ResourceType = typeof(Labels), Name = "Position")]
         [Required(ErrorMessageResourceName = "JobTitleRequired", ErrorMessageResourceType = typeof(Messages))]
         public string position { get; set; }
 

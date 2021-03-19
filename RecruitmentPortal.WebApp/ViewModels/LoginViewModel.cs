@@ -11,7 +11,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
     public class LoginViewModel
     {
         [RegularExpression(CommonHelper.RegexEmail, ErrorMessageResourceName = "InvalidEmail", ErrorMessageResourceType = typeof(Messages))]
-        [Required(ErrorMessageResourceName = "Emailrequired", ErrorMessageResourceType = typeof(Messages))]
+        [Required(ErrorMessageResourceName = "EmailRequired", ErrorMessageResourceType = typeof(Messages))]
         public string Email { get; set; }
 
         [Required(ErrorMessageResourceName = "Passwordrequired", ErrorMessageResourceType = typeof(Messages))]

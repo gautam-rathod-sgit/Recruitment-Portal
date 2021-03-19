@@ -21,6 +21,18 @@ namespace RecruitmentPortal.WebApp.Helpers
             }
         }
 
+        public static SelectList GetReferenceTypeList()
+        {
+            var enumData = from ReferenceType e in Enum.GetValues(typeof(ReferenceType))
+                           select new { ID = (int)e, Name = EnumExtension.DescriptionAttr(e) };
+            return new SelectList(enumData, "ID", "Name");
+        }
+        public static SelectList GetNoticePeriodTypeList()
+        {
+            var enumData = from NoticePeriodType e in Enum.GetValues(typeof(NoticePeriodType))
+                           select new { ID = (int)e, Name = EnumExtension.DescriptionAttr(e) };
+            return new SelectList(enumData, "ID", "Name");
+        }
         public static SelectList GetRoundTypeList()
         {
             var enumData = from RoundType e in Enum.GetValues(typeof(RoundType))

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace RecruitmentPortal.WebApp.Helpers
@@ -21,6 +22,20 @@ namespace RecruitmentPortal.WebApp.Helpers
 
             [Description("System Error Message")]
             SystemErrorMessage = 4
+        }
+
+        public enum NoticePeriodType
+        {
+            [Description("Immediate")]
+            Immediate,
+            [Description("15 Days")]
+            day15 = 15,
+            [Description("30 Days")]
+            day30 = 30,
+            [Description("60 Days")]
+            day60 = 60,
+            [Description("90 Days")]
+            day90 = 90,
         }
     }
 
@@ -50,5 +65,16 @@ namespace RecruitmentPortal.WebApp.Helpers
 
             return Convert.ToString(element);
         }
+        public static string DescriptionAttr<T>(this T source)
+        {
+            FieldInfo fi = source.GetType().GetField(source.ToString());
+
+            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(
+                typeof(DescriptionAttribute), false);
+
+            if (attributes != null && attributes.Length > 0) return attributes[0].Description;
+            else return source.ToString();
+        }
     }
+
 }

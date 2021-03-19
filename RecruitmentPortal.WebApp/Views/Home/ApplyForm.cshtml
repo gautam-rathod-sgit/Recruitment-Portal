@@ -1,0 +1,259 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.CandidateViewModel
+@using RecruitmentPortal.WebApp.Resources
+@using RecruitmentPortal.WebApp.Helpers
+<section class="content">
+    @using (Html.BeginForm("IndexPost", "Candidate", FormMethod.Post, new { @role = "form", @enctype = "multipart/form-data" }))
+    {
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box box-default boxPad">
+                    <div class="box-header">
+                        <h3 class="box-title"><i class="fa fa-info-circle"></i><b> Apply here :</b></h3>
+                        <div class="box-tools pull-right">
+                            <input type="submit" class="btn btn-primary" name="submit" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="box-body">
+
+                        @Html.HiddenFor(m => m.ID)
+                        @Html.HiddenFor(m => m.jobpostID)
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="col-lg-10 col-md-8">
+                                    <div class="form-group has-feedback has-feedback-left">
+                                        @Html.LabelFor(m => m.jobName)
+                                        @Html.TextBoxFor(m => m.jobName, new { @placeholder = "Job Title", @class = "form-control", @readonly = "readonly" })
+                                        @Html.ValidationMessageFor(m => m.jobName, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group has-feedback has-feedback-left">
+                                        @Html.LabelFor(m => m.name)
+                                        @Html.TextBoxFor(m => m.name, new { @placeholder = "Candidate Name", @class = "form-control"})
+                                        @Html.ValidationMessageFor(m => m.name, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group has-feedback has-feedback-left">
+                                        @Html.LabelFor(m => m.ssc_perc)
+                                        @Html.TextBoxFor(m => m.ssc_perc, "{0:#.#}", new { @placeholder = "Eligibility criteria", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ssc_perc, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Gender)
+                                        <div>
+                                            @Html.RadioButtonFor(m => m.Gender, "Male", new { @id = "Gender" })
+                                            @Html.Label("Male ")
+                                            @Html.RadioButtonFor(m => m.Gender, "Female", new { @id = "Gender" })
+                                            @Html.Label("Female ")
+                                            @Html.RadioButtonFor(m => m.Gender, "Other", new { @id = "Gender" })
+                                            @Html.Label("Other")
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group has-feedback ">
+                                        @Html.LabelFor(m => m.applying_through)
+                                        @Html.DropDownListFor(m => m.applying_through, new SelectList(ViewBag.ReferenceSelect, "Value", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
+                                    </div>
+
+                                    <div class="form-group has-feedback has-feedback-left degree_dept ">
+                                        @Html.LabelFor(m => m.selectedDegree)
+                                        @Html.DropDownListFor(m => m.selectedDegree, new SelectList(ViewBag.ListOfDegree, "ID", "degree_name"), Messages.PleaseSelect, new { @id = "getDepts", @class = "form-control select2" })
+                                    </div>
+                                    <div class="form-group has-feedback has-feedback-left">
+                                        @Html.LabelFor(m => m.File)
+                                        @Html.TextBoxFor(m => m.File, new { @type = "file", @id = "resume", @placeholder = "Experience", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.experience, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <div class="col-lg-10">
+                                    <div class="form-group has-feedback has-feedback-left">
+                                        @Html.LabelFor(m => m.email)
+                                        @Html.TextBoxFor(m => m.email, new { @placeholder = "Email", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.email, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group has-feedback has-feedback-left">
+                                        @Html.LabelFor(m => m.phone)
+                                        @Html.TextBoxFor(m => m.phone, "{0:#.#}", new { @placeholder = "Job Role", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.phone, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.dob)
+                                        @Html.TextBoxFor(m => m.dob, new { @type = "datetime", @placeholder = "Date & Time", @class = "form-control datepicker" })
+                                        @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group has-feedback has-feedback-left">
+                                        @Html.LabelFor(m => m.hsc_perc)
+                                        @Html.TextBoxFor(m => m.hsc_perc, "{0:#.#}", new { @placeholder = "Eligibility criteria", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.hsc_perc, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.experience)
+                                        <div>
+                                            @Html.RadioButtonFor(m => m.experience, "Fresher", new { @id = "fresher", @value = "Fresher" })
+                                            @Html.Label(" Fresher ")
+                                            @Html.RadioButtonFor(m => m.experience, "Experience", new { @id = "experienced", @value = "Experienced" })
+                                            @Html.Label(" Experience")
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group has-feedback has-feedback-left hiddenclass">
+                                        @Html.LabelFor(m => m.total_experience)
+                                        @Html.TextBoxFor(m => m.total_experience, new { @placeholder = "Total Experience", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.total_experience, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group has-feedback has-feedback-left hiddenclass">
+                                        @Html.LabelFor(m => m.relevent_experience)
+                                        @Html.TextBoxFor(m => m.relevent_experience, new { @placeholder = "Relevent Experience", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.relevent_experience, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group has-feedback has-feedback-left hiddenclass">
+                                        @Html.LabelFor(m => m.current_ctc)
+                                        @Html.TextBoxFor(m => m.current_ctc, new { @placeholder = "Current CTC", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.current_ctc, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group has-feedback has-feedback-left hiddenclass">
+                                        @Html.LabelFor(m => m.expected_ctc)
+                                        @Html.TextBoxFor(m => m.expected_ctc, new { @placeholder = "Expected CTC", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.expected_ctc, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group has-feedback has-feedback-left hiddenclass">
+                                        @Html.LabelFor(m => m.notice_period)
+                                        @Html.DropDownListFor(m => m.notice_period, new SelectList(ViewBag.NoticePeriod, "Value", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            endDate: '+0d',
+            autoclose: true
+        });
+
+        var resumeok = false;
+        $(".select2").select2();
+
+        //for setting degree dropdown to starting index
+        $("select#getDepts")[0].selectedIndex = 0;
+
+        //for removing 0 on fields
+        $(".form-control").val($(this).val() == 0 ? '' : $(this).val());
+
+        //for only pdf and docx
+        $('#resume').on('change', function (e) {
+            myfile = $(this).val();
+            var ext = myfile.split('.').pop();
+            if (ext == "pdf" || ext == "PDF" || ext == "docx" || ext == "DOCX" || ext == "doc" || ext == "DOC"
+                || ext == "jpeg" || ext == "JPEG" || ext == "jpg" || ext == "JPG" || ext == "png" || ext == "PNG" || ext == "Jpg" || ext == "Png") {
+                var resumeok = true;
+            } else {
+                $('#resume').after('<p style="color:red">File needs to be PDF or DOCX.</p>');
+                alert("File must be pdf or docx or png or jpg or jpeg !!");
+                $("#resume").val('');
+            }
+        });
+
+        //for hiding all 4
+        $(".hiddenclass").hide();
+
+
+        //for getting departments and dependent departments
+        $('#getDepts').change(function () {
+            debugger;
+            var url = '@Url.Action("GetDept", "Home")';
+            var ddlsource = $("#getDepts").val();
+
+            //callwebservice(url, { Id: ddlsource }, GetDeptCompleted, false, datatypeEnum.json, typeEnum.post);
+            //$.ajax({
+            //    url: url,
+            //    data: {
+            //        "id": ddlsource
+            //    },
+            //    success: function (data) {
+            //        debugger;
+            //        alert("hello");
+            //    },
+            //    error: function (data) {
+            //        alert(JSON.stringify(data));
+            //    }
+            //});
+
+
+
+            $.getJSON(url, { Id: ddlsource }, function (data) {
+                debugger;
+                if (data.length > 1) {
+                    debugger;
+
+                        var dept_drop = '';
+                        $('#SelectDept').remove(); //for removing if already existing dropdown exist of previous record
+                        dept_drop += '<select id="SelectDept" name="SelectDept" style="width:200px" required>';
+
+                        for (var i = 0; i < data.length; i++) {
+                            dept_drop += '<option value="' + data[i].value + '">' + data[i].text + '</option>';
+                        }
+                        debugger;
+                        dept_drop += '</select>';
+                        $('.degree_dept').append(dept_drop);
+                        debugger;
+
+                    }
+                    else {
+                        debugger;
+                            $("#DeptID").val(0);
+                            //$('.dept').nextAll('#SelectDept').remove();
+                            $('#SelectDept').remove();
+                    }
+                });
+        });
+
+
+        function GetDeptCompleted(data) {
+            debugger;
+        }
+
+        //for experienced stuff
+        var alreadyBound = false;
+        $("#experienced").click(function () {
+                $(".hiddenclass").show();
+        });
+
+        $("#fresher").click(function () {
+            $(".hiddenclass").hide();
+        });
+
+        //Display Only Date till today //
+        var dtToday = new Date();
+        var month = dtToday.getMonth() + 1;     // getMonth() is zero-based
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+
+        var maxDate = year + '-' + month + '-' + day;
+        $('#demo').attr('max', maxDate);
+
+
+    });
+
+</script>

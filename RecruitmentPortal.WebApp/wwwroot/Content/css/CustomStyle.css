@@ -90,3 +90,12 @@
 .center {
     transform: translate(-0%, -14%);
 }
+
+.asterisk:after {
+    content: "*";
+    font-weight: bold;
+    color: red;
+}
+.hiddenclass{
+    display:none;
+}

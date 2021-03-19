@@ -124,6 +124,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Department is Required.
+        /// </summary>
+        public static string DepartmentRequired {
+            get {
+                return ResourceManager.GetString("DepartmentRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Eligibility Criteria is Required.
         /// </summary>
         public static string EligibilityCriteriaRequired {
@@ -135,9 +144,9 @@ namespace RecruitmentPortal.WebApp.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Email is Required.
         /// </summary>
-        public static string Emailrequired {
+        public static string EmailRequired {
             get {
-                return ResourceManager.GetString("Emailrequired", resourceCulture);
+                return ResourceManager.GetString("EmailRequired", resourceCulture);
             }
         }
         

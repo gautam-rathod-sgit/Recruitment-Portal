@@ -141,7 +141,7 @@
   <data name="EligibilityCriteriaRequired" xml:space="preserve">
     <value>Eligibility Criteria is Required</value>
   </data>
-  <data name="Emailrequired" xml:space="preserve">
+  <data name="EmailRequired" xml:space="preserve">
     <value>Email is Required</value>
   </data>
   <data name="EnableEntity" xml:space="preserve">
@@ -248,5 +248,8 @@
   </data>
   <data name="ValidTextRequired" xml:space="preserve">
     <value>Valid Input Text Required</value>
+  </data>
+  <data name="DepartmentRequired" xml:space="preserve">
+    <value>Department is Required</value>
   </data>
 </root>

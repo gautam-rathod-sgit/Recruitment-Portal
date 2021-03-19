@@ -20,7 +20,7 @@ using System.Web;
 
 namespace RecruitmentPortal.WebApp.Controllers
 {
-    public class CandidateController : BaseController
+    public class CandidateController : Controller
     {
         #region private variables
         IQueryable<CandidateViewModel> candidateList;
@@ -81,82 +81,6 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="SearchString"></param>
         /// <returns></returns>
-        //public async Task<IActionResult> AllApplications(string SearchString, string Application_mode)
-        //{
-        //    if (Application_mode == mode_Pending)
-        //    {
-        //        return RedirectToAction("PendingApplications", "Candidate", new { Application_mode = Application_mode });
-        //    }
-        //    if (Application_mode == mode_Active)
-        //    {
-        //        return RedirectToAction("Index", "JobApplication", new { Application_mode = Application_mode });
-        //    }
-        //    if (Application_mode == mode_Selected)
-        //    {
-        //        return RedirectToAction("SelectedJobApplications", "JobApplication", new { Application_mode = Application_mode });
-        //    }
-        //    if (Application_mode == mode_Rejected)
-        //    {
-        //        return RedirectToAction("RejectedJobApplications", "JobApplication", new { Application_mode = Application_mode });
-        //    }
-
-        //    else
-        //    {
-        //        IQueryable<CandidateViewModel> modelList;
-        //        modelList = await _candidatePageServices.getCandidates();
-
-        //        //creating a select list for selecting status type applications
-        //        List<SelectListItem> ObjItem = new List<SelectListItem>()
-        //        {
-        //          new SelectListItem {Text="All Applications",Value = mode_All},
-        //          new SelectListItem {Text="New",Value = mode_Pending},
-        //          new SelectListItem {Text="Active",Value = mode_Active},
-        //          new SelectListItem {Text="Selected",Value = mode_Selected},
-        //          new SelectListItem {Text="Rejected",Value = mode_Rejected},
-        //        };
-        //        ViewBag.menuSelect = ObjItem;
-
-        //        try
-        //        {
-        //            List<CandidateViewModel> newList = new List<CandidateViewModel>();
-        //            newList = modelList.ToList();
-        //            foreach (var item in newList)
-        //            {
-        //                JobPostCandidate model = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault();
-        //                item.jobName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
-        //                item.jobRole = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_role;
-        //                item.isActive = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).Any();
-        //                item.isSelected = _dbContext.jobApplications.Where(x => x.candidateId == item.ID && x.status == status_Complete).Any();
-        //                item.isRejected = _dbContext.jobApplications.Where(x => x.candidateId == item.ID && x.status == status_Rejected).Any();
-
-        //                //getting job app id of candidates who have their records in job application table
-        //                var proceededCandidates = _dbContext.jobApplications.ToList();
-        //                var isPresent = proceededCandidates.Where(x => x.candidateId == item.ID).Any();
-        //                if (isPresent)
-        //                {
-        //                    item.JobAppId = proceededCandidates.Where(x => x.candidateId == item.ID).FirstOrDefault().ID;
-        //                }
-        //            }
-        //            modelList = newList.AsQueryable();
-
-
-        //            //for only verified candidate applications
-        //            modelList = modelList.Where(x => x.emailConfirmed == true);
-
-        //            //Added search box test
-        //            if (!String.IsNullOrEmpty(SearchString))
-        //            {
-        //                modelList = modelList.Where(s => s.jobName.ToUpper().Contains(SearchString.ToUpper()) || s.degree.ToUpper().Contains(SearchString.ToUpper()) || s.experience.ToUpper().Contains(SearchString.ToUpper()) || s.name.ToUpper().Contains(SearchString.ToUpper()));
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine(ex.Message);
-        //        }
-        //        return View(modelList);
-        //    }
-        //}
-
         public ActionResult AllApplications()
         {
             ViewBag.DegreeList = SelectionList.GetDegreeList().Select(m => new { Id = m.ID, Name = m.degree_name });
@@ -177,8 +101,6 @@ namespace RecruitmentPortal.WebApp.Controllers
                       new SelectListItem {Text="Rejected",Value = mode_Rejected},
                     };
             ViewBag.menuSelect = ObjItem;
-
-
 
             try
             {
@@ -208,75 +130,38 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                 Console.WriteLine(ex.Message);
             }
-
-            ////for sorting
-            //int pageSize = 4;
-            //return View(await PaginatedList<CandidateViewModel>.CreateAsync(modelList.AsNoTracking(), pageNumber ?? 1, pageSize));
             return View(modelList);
         }
 
-        /// <summary>
-        /// This method retrieves Application-Form which is used to apply for a particular job [GET]
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> Index(string id) //jobpost id
-        {
+        ///// <summary>
+        ///// This method retrieves Application-Form which is used to apply for a particular job [GET]
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <returns></returns>
+        //[HttpGet]
+        //public async Task<IActionResult> Index(string id) //jobpost id
+        //{
 
-            CandidateViewModel model = new CandidateViewModel();
-            try
-            {
-                model.jobpostID = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+        //    CandidateViewModel model = new CandidateViewModel();
+        //    try
+        //    {
+        //        model.jobpostID = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
 
-                model.jobName = _dbContext.JobPost.FirstOrDefault(x => x.ID == model.jobpostID).job_title;
-                //------------------------------------------------------------------------
-                //fetching all the degrees for candidate to apply with.
+        //        model.jobName = _dbContext.JobPost.FirstOrDefault(x => x.ID == model.jobpostID).job_title;
+              
+        //        //fetching all the degrees for candidate to apply with.
 
-                //getting data from database
-                List<Degree> DegreeList = new List<Degree>();
-                DegreeList = (from element in _dbContext.Degree select element).ToList();
-                DegreeList = DegreeList.Where(x => x.isActive == true).ToList();
+        //        ViewBag.ListOfDegree = SelectionList.GetDegreeList(); ;
+        //        ViewBag.ReferenceSelect = SelectionList.GetReferenceTypeList();          
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        model = new CandidateViewModel();
+        //    }
+        //    return View(model);
+        //}
 
-                //inserting into dropdown list
-                DegreeList.Insert(0, new Degree { ID = 0, degree_name = "Select Degree" });
-
-                //assigning degreelist to viewbag.listofdegree
-                ViewBag.ListOfDegree = DegreeList;
-
-                //creating a select list for selecting Hear about US field
-                List<SelectListItem> apply_through_items = new List<SelectListItem>()
-                    {
-                      new SelectListItem {Text="Select",Value="null"},
-                      new SelectListItem {Text="LinkedIn",Value="LinkedIn"},
-                      new SelectListItem {Text="Indeed",Value="Indeed"},
-                      new SelectListItem {Text="Naukri.com",Value="Naukri.com"},
-                      new SelectListItem {Text="Monster.com",Value="Monster.com"},
-                      new SelectListItem {Text="Reference",Value="Reference"},
-                      new SelectListItem {Text="Other",Value="Other"}
-                    };
-                ViewBag.ReferenceSelect = apply_through_items;
-                //--------------------------------------------------------------------------
-            }
-            catch (Exception ex)
-            {
-
-                model = new CandidateViewModel();
-            }
-            return View(model);
-        }
-
-        public List<string> noticePeriodList()
-        {
-            List<string> periodList = new List<string>();
-            periodList.Add("Select");
-            periodList.Add("Immediate");
-            periodList.Add("15 Days");
-            periodList.Add("30 Days");
-            periodList.Add("60 Days");
-            periodList.Add("90 Days");
-            return periodList;
-        }
+        
 
         /// <summary>
         /// This method stores the applicant's form-data to the database [POST]
@@ -349,6 +234,12 @@ namespace RecruitmentPortal.WebApp.Controllers
                 //assigning today's apply date 
                 model.apply_date = DateTime.Now;
 
+                //giving appying through
+                model.applying_through = Enum.GetName(typeof(ReferenceType), Convert.ToInt32(model.applying_through));
+
+                //giving notice period
+                model.notice_period = EnumExtension.DescriptionAttr(model.notice_period);
+
                 //Resume details fetching
                 //create a place in wwwroot for storing uploaded images
                 var uploads = Path.Combine(_environment.WebRootPath, "Resume");
@@ -391,26 +282,27 @@ namespace RecruitmentPortal.WebApp.Controllers
                     return RedirectToAction("UpdateJobPostPost","JobPost", new { model = jobPostModel, vacancy_overflow = true });
                 }
                 //--------------------------------------------------------------------------------------------
-
+                return RedirectToAction("SendOTPToMail", model);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
 
-            return RedirectToAction("SendOTPToMail", model);
+            TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Something went wrong !! Please try again later.";
+            return RedirectToAction("Index", "Home");
         }
 
         //    await _jobPostPageservices.UpdateJobPost(jobPostModel);
         //    return RedirectToAction("SendOTPToMail", model);
         //}
-        
 
 
 
 
-            ////For Rejecting New Candidate Application without Proceeding it
-            public async Task<IActionResult> RejectApplicant(string Cid)
+
+        ////For Rejecting New Candidate Application without Proceeding it
+        public async Task<IActionResult> RejectApplicant(string Cid)
         {
             int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid));
 
@@ -431,27 +323,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             return RedirectToAction("AllApplications", "Candidate");
         }
 
-        /// <summary>
-        /// This method returns the Department according to Selected Degree
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        public JsonResult GetDept(int Id)
-        {
-            List<Department> DepartmentList = new List<Department>();
-
-            //Getting data from database Using EntityFramework Core
-            DepartmentList = _dbContext.Department.Where(a => a.DegreeId == Id).ToList();
-            DepartmentList = DepartmentList.Where(x => x.isActive == true).ToList();
-            if (DepartmentList != null)
-            {
-                //Inserting Select item in List
-                DepartmentList.Insert(0, new Department { ID = 0, dept_name = "Select Department" });
-
-            }
-
-            return Json(new SelectList(DepartmentList, "ID", "dept_name"));
-        }
+        
 
         /// <summary>
         /// This method is for sending mail just put an smtp according to your mail server  
@@ -599,7 +471,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 ViewBag.backToAll = backToAll;
             }
-            int actualId = Convert.ToInt32(RSACSPSample.Decrypt(id));
+            int actualId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
             CandidateViewModel item = await _candidatePageServices.getCandidateById(actualId); 
             return View(item);
         }
@@ -645,7 +517,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 newList = modelList.ToList();
                 foreach (var item in newList)
                 {
-                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.Encrypt(item.ID));
+                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName((item.ID).ToString()));
                     JobPostCandidate model = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault();
                     item.jobName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
                     item.jobRole = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_role;
@@ -721,6 +593,8 @@ namespace RecruitmentPortal.WebApp.Controllers
             {".png", "image/png"}
             };
         }
+
+       
         #endregion
     }
 }
