@@ -54,7 +54,7 @@
                             @Html.DropDownList("srcDegree", new SelectList(ViewBag.DegreeList, "Id", "Name"), Messages.PleaseSelect, new { @class = "form-control select2" })
                         </div>
 
-                        <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6 form-group">
+                        <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6 form-group mt-25">
                             <input type="button" value="Search" class="btn btn-primary" onclick="search()" />
                             <input type="button" value="Reset" id="Reset" class="btn btn-primary" onclick="reset()" />
                         </div>
@@ -160,6 +160,7 @@
 
     function bindDatatable() {
         var x = $("#srcApplicationType").val();
+        
         setLocalValue('srcAppType', x);
         var applicationTypeName = "src_" + x + "_datatable";
         var sApplicationType = "";
@@ -174,6 +175,13 @@
         }
         var sStartDate = getInputValueById('srcStartDate');
         var sEndDate = getInputValueById('srcEndDate');
+        var degreeVal = parseInt(x);
+        //if (degreeVal !== NaN || degreeVal !== 1) {
+        //    $('#srcDegree').closest('div').show();
+        //}
+        //else {
+        //    $('#srcDegree').closest('div').hide();
+        //}
 
         if (applicationTypeName == "src_2_datatable") {
             $('#src_1_datatable').hide();
