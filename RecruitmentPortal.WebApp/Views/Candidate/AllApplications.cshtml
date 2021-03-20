@@ -2,7 +2,7 @@
 @{
     var startDate = new DateTime(DateTime.Now.Date.Year, 1, 1);
     List<SelectListItem> typeList = new List<SelectListItem>()
-{
+    {
         new SelectListItem {Text="New",Value = "1" },
         new SelectListItem {Text="Active",Value = "2" },
         new SelectListItem {Text="Selected",Value = "3" },
@@ -70,7 +70,7 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     @*All Applications + New *@
-                    <table id="datatable" class="table table-bordered table-striped">
+                    <table id="src_1_datatable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Candidate Name</th>
@@ -140,34 +140,6 @@
 </section>
 
 <script type="text/javascript">
-    //function AllApplicationChange() {
-    //    debugger;
-    //    var x = $("#srcApplicationType").val();
-    //    var name = $("src_" + x + "_datatable");
-    //    //$name.bindDatatable();
-    //}
-
-    //$('applicationTypeName').change(function () {
-    //    debugger;
-    //    loadData();
-
-    //});
-
-    //function loadData() {
-    //    var dropdownSelected = $('applicationTypeName').val()
-    //    var changeValue = {
-    //        "isDropdownSelected": dropdownSelected
-    //    }
-    //}
-
-    //$('applicationTypeName').change(function check() {
-    //    $("#datatable").hide();
-    //});
-    //function check() {
-    //    debugger;
-    //    $(#+'applicationTypeName').dataTable.show();
-    //}
-
     $(document).ready(function () {
         $(".select2").select2();
         //Date picker
@@ -181,16 +153,14 @@
             endDate: '+0d',
             autoclose: true
         });
-
+        $("#srcApplicationType").val(getLocalValue('srcAppType')).change();
         bindDatatable();
-        //check();
-     
     });
-    
+
 
     function bindDatatable() {
-        debugger;
         var x = $("#srcApplicationType").val();
+        setLocalValue('srcAppType', x);
         var applicationTypeName = "src_" + x + "_datatable";
         var sApplicationType = "";
         var sDegree = "";
@@ -205,9 +175,172 @@
         var sStartDate = getInputValueById('srcStartDate');
         var sEndDate = getInputValueById('srcEndDate');
 
-        if (applicationTypeName == "src_1_datatable" || applicationTypeName == "src__datatable") {
+        if (applicationTypeName == "src_2_datatable") {
+            $('#src_1_datatable').hide();
+            $('#src_1_datatable_wrapper').hide();
+            $('#src_3_datatable').hide();
+            $('#src_3_datatable_wrapper').hide();
+            $('#src_4_datatable').hide();
+            $('#src_4_datatable_wrapper').hide();
+            $('#src_2_datatable').show();
+            $('#src_2_datatable_wrapper').show();
+            //Binding datatable for "Active"
+            $('#src_2_datatable').DataTable({
+                lengthChange: true,
+                searching: true,
+                ordering: false,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                paging: true,
+                pagingType: "simple_numbers",
+                pageLength: 10,
+                fixedColumns: true,
+                responsive: true,
+                "bDestroy": true,
+                "ajax": {
+                    "url": "@Url.Action("GetActiveApplicationsList", "Candidate")",
+                    "type": "GET",
+                    "data": {
+                        "startDate": sStartDate,
+                        "endDate": sEndDate,
+                        "applicationType": sApplicationType,
+                        "degree": sDegree
+                    },
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "candidateName", "name": "candidateName" },
+                    { "data": "position", "name": "position" },
+                    { "data": "job_Role", "name": "job_Role" },
+                    { "data": "start_date", "name": "start_date" },
+                    { "data": "status", "name": "status" },
+                    {
+                        "sClass": "text-center",
+                        "mRender": function (data, type, row) {
+                            var edit = '<a href="javascript:void(0);" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
+                            return edit;
+                        }
+                    }
+                ],
+                "order": [[0, "asc"]]
+            });
+        }
+        else if (applicationTypeName == "src_3_datatable") {
+            $('#src_1_datatable').hide();
+            $('#src_1_datatable_wrapper').hide();
+            $('#src_2_datatable').hide();
+            $('#src_2_datatable_wrapper').hide();
+            $('#src_4_datatable').hide();
+            $('#src_4_datatable_wrapper').hide();
+            $('#src_3_datatable').show();
+            $('#src_3_datatable_wrapper').show();
+            //Binding datatable for "Selected"
+            $('#src_3_datatable').DataTable({
+                lengthChange: true,
+                searching: true,
+                ordering: false,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                paging: true,
+                pagingType: "simple_numbers",
+                pageLength: 10,
+                fixedColumns: true,
+                responsive: true,
+                "bDestroy": true,
+                "ajax": {
+                    "url": "@Url.Action("SelectedJobApplications", "Candidate")",
+                    "type": "GET",
+                    "data": {
+                        "startDate": sStartDate,
+                        "endDate": sEndDate,
+                        "applicationType": sApplicationType,
+                        "degree": sDegree
+                    },
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "candidateName", "name": "candidateName" },
+                    { "data": "position", "name": "position" },
+                    { "data": "job_Role", "name": "job_Role" },
+                    { "data": "joining_date", "name": "joining_date" },
+                    { "data": "offered_ctc", "name": "offered_ctc" },
+                    { "data": "commitment_mode", "name": "commitment_mode" },
+                    {
+                        "data": "status", "name": "status",
+                        "mRender": function (data, type, row) {
+                            var edit = (data == "Accepted") ? "Selected" : "Accepted";
+                            return edit;
+                        }
+                    },
+                    {
+                        "sClass": "text-center",
+                        "mRender": function (data, type, row) {
+                            var edit = '<a href="javascript:void(0);" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
+                            return edit;
+                        }
+                    }
+                ],
+                "order": [[0, "asc"]]
+            });
+        }
+        else if (applicationTypeName == "src_4_datatable") {
+            $('#src_1_datatable').hide();
+            $('#src_1_datatable_wrapper').hide();
+            $('#src_2_datatable').hide();
+            $('#src_2_datatable_wrapper').hide();
+            $('#src_3_datatable').hide();
+            $('#src_3_datatable_wrapper').hide();
+            $('#src_4_datatable').show();
+            $('#src_4_datatable_wrapper').show();
+            //Binding datatable for "Rejected"
+            $('#src_4_datatable').DataTable({
+                lengthChange: true,
+                searching: true,
+                ordering: false,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                paging: true,
+                pagingType: "simple_numbers",
+                pageLength: 10,
+                fixedColumns: true,
+                responsive: true,
+                "bDestroy": true,
+                "ajax": {
+                    "url": "@Url.Action("RejectedJobApplications", "Candidate")",
+                    "type": "GET",
+                    "data": {
+                        "startDate": sStartDate,
+                        "endDate": sEndDate,
+                        "applicationType": sApplicationType,
+                        "degree": sDegree
+                    },
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "candidateName", "name": "candidateName" },
+                    { "data": "position", "name": "position" },
+                    { "data": "job_Role", "name": "job_Role" },
+                    { "data": "rejection_date", "name": "rejection_date" },
+                    { "data": "status", "name": "status" },
+                    {
+                        "sClass": "text-center",
+                        "mRender": function (data, type, row) {
+                            var edit = '<a href="javascript:void(0);" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
+                            return edit;
+                        }
+                    }
+                ],
+                "order": [[0, "asc"]]
+            });
+        }
+        else {
+            $('#src_2_datatable').hide();
+            $('#src_2_datatable_wrapper').hide();
+            $('#src_3_datatable').hide();
+            $('#src_3_datatable_wrapper').hide();
+            $('#src_4_datatable').hide();
+            $('#src_4_datatable_wrapper').hide();
+            $('#src_1_datatable_wrapper').show();
+            $('#src_1_datatable').show();
             //Binding datatable for "All Applications + New"
-            $('#datatable').DataTable({
+            $('#src_1_datatable').DataTable({
                 lengthChange: true,
                 searching: true,
                 ordering: false,
@@ -242,134 +375,7 @@
                     {
                         "sClass": "text-center",
                         "mRender": function (data, type, row) {
-                            var edit = '<a href="#" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')"><i class="fa fa-edit"></i></a>';
-                            return edit;
-                        }
-                    }
-                ],
-                "order": [[0, "asc"]]
-            });
-        }
-        else if (applicationTypeName == "src_2_datatable") {
-            //Binding datatable for "Active"
-            $('#src_2_datatable').DataTable({
-                lengthChange: true,
-                searching: true,
-                ordering: false,
-                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-                paging: true,
-                pagingType: "simple_numbers",
-                pageLength: 10,
-                fixedColumns: true,
-                responsive: true,
-                "bDestroy": true,
-                "ajax": {
-                    "url": "@Url.Action("GetActiveApplicationsList", "Candidate")",
-                    "type": "GET",
-                    "data": {
-                        "startDate": sStartDate,
-                        "endDate": sEndDate,
-                        "applicationType": sApplicationType,
-                        "degree": sDegree
-                    },
-                    "datatype": "json"
-                },
-                "columns": [
-                    { "data": "candidateName", "name": "candidateName" },
-                    { "data": "position", "name": "position" },
-                    { "data": "job_Role", "name": "job_Role" },
-                    { "data": "start_date", "name": "start_date" },
-                    { "data": "status", "name": "status" },
-                    {
-                        "sClass": "text-center",
-                        "mRender": function (data, type, row) {
-                            var edit = '<a href="#" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')"><i class="fa fa-edit"></i></a>';
-                            return edit;
-                        }
-                    }
-                ],
-                "order": [[0, "asc"]]
-            });
-        }
-        else if (applicationTypeName == "src_3_datatable") {
-
-            //Binding datatable for "Selected"
-            $('#src_3_datatable').DataTable({
-                lengthChange: true,
-                searching: true,
-                ordering: false,
-                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-                paging: true,
-                pagingType: "simple_numbers",
-                pageLength: 10,
-                fixedColumns: true,
-                responsive: true,
-                "bDestroy": true,
-                "ajax": {
-                    "url": "@Url.Action("SelectedJobApplications", "Candidate")",
-                    "type": "GET",
-                    "data": {
-                        "startDate": sStartDate,
-                        "endDate": sEndDate,
-                        "applicationType": sApplicationType,
-                        "degree": sDegree
-                    },
-                    "datatype": "json"
-                },
-                "columns": [
-                    { "data": "candidateName", "name": "candidateName" },
-                    { "data": "position", "name": "position" },
-                    { "data": "job_Role", "name": "job_Role" },
-                    { "data": "joining_date", "name": "joining_date" },
-                    { "data": "offered_ctc", "name": "offered_ctc" },
-                    { "data": "commitment_mode", "name": "commitment_mode" },
-                    { "data": "status", "name": "status" },
-                    {
-                        "sClass": "text-center",
-                        "mRender": function (data, type, row) {
-                            var edit = '<a href="#" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')"><i class="fa fa-edit"></i></a>';
-                            return edit;
-                        }
-                    }
-                ],
-                "order": [[0, "asc"]]
-            });
-        }
-        else if (applicationTypeName == "src_4_datatable") {
-
-            //Binding datatable for "Rejected"
-            $('#src_4_datatable').DataTable({
-                lengthChange: true,
-                searching: true,
-                ordering: false,
-                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-                paging: true,
-                pagingType: "simple_numbers",
-                pageLength: 10,
-                fixedColumns: true,
-                responsive: true,
-                "bDestroy": true,
-                "ajax": {
-                    "url": "@Url.Action("RejectedJobApplications", "Candidate")",
-                    "type": "GET",
-                    "data": {
-                        "startDate": sStartDate,
-                        "endDate": sEndDate,
-                        "applicationType": sApplicationType,
-                        "degree": sDegree
-                    },
-                    "datatype": "json"
-                },
-                "columns": [
-                    { "data": "candidateName", "name": "candidateName" },
-                    { "data": "position", "name": "position" },
-                    { "data": "job_Role", "name": "job_Role" },
-                    { "data": "rejection_date", "name": "rejection_date" },
-                    { "data": "status", "name": "status" },
-                    {
-                        "sClass": "text-center",
-                        "mRender": function (data, type, row) {
-                            var edit = '<a href="#" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')"><i class="fa fa-edit"></i></a>';
+                            var edit = '<a href="javascript:void(0);" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
                             return edit;
                         }
                     }
@@ -398,10 +404,20 @@
         setInputValueById('srcDegree','');
         setInputValueById('srcStartDate','');
         setInputValueById('srcEndDate', '');
+        setLocalValue('srcAppType', '');
         bindDatatable();
     }
 
     function openRecord(id) {
         window.location.href = '@Url.Action("Details", "Candidate")?id=' + id;
+    }
+
+
+    function getLocalValue(key) {
+        return localStorage.getItem(key);
+    }
+
+    function setLocalValue(key, value) {
+        localStorage.setItem(key, value);
     }
 </script>

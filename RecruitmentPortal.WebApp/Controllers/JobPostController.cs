@@ -225,7 +225,6 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             try
             {
-                //model.ID = Convert.ToInt32(RSACSPSample.DecodeServerName(model.EncryptedId));
                 if (vacancy_overflow)
                 {
                     CandidateViewModel candidateModel = new CandidateViewModel();
