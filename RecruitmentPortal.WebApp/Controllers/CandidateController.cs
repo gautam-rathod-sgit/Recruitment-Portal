@@ -499,6 +499,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             memory.Position = 0;
             return File(memory, GetContentType(path), Path.GetFileName(path));
+            //return File(bytes, "application/json", fileName);
         }
 
 

@@ -159,3 +159,11 @@ function sidebarActiveLink() {
     $("li.nav-item").removeClass("active");
     $("li#" + window.controllerName).addClass("active");
 }
+
+function getLocalValue(key) {
+    return localStorage.getItem(key);
+}
+
+function setLocalValue(key, value) {
+    localStorage.setItem(key, value);
+}
