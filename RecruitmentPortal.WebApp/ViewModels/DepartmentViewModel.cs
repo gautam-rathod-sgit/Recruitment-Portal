@@ -18,6 +18,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public bool isActive { get; set; }
 
         //relationship with DegreeViewModel
-        public string DegreeId { get; set; }
+        public int DegreeId { get; set; }
+        public string EncryptedDegreeId { get; set; }
     }
 }

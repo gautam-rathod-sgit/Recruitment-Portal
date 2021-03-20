@@ -10,30 +10,37 @@
     }
 </style>
 <!-- Modal for Adding new Degree -->
-<div class="modal fade in bg-gradient-orange" id="add-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+<div class="modal fade in bg-gradient-orange" id="DegreeModal" tabindex="-1" role="dialog" aria-labelledby="addDegreeLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-                <h4 class="modal-title">Add Degree:</h4>
+                <h4 class="modal-title">Degree Details:</h4>
             </div>
-            <div class="modal-body">
-                @using (Html.BeginForm("AddNewDegree", "Qualification", FormMethod.Post))
-                {
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.degree_name)
-                        @Html.TextBoxFor(m => m.degree_name, new { @placeholder = "Degree Name", @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.degree_name, "", new { @class = "text-danger" })
-                    </div>
+            <div class="modal-body" id="DegreePartial">
 
-                    <div class="modal-footer">
+            </div>
 
-                        <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                }
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- Modal end -->
+<!-- Modal for Adding new Degree -->
+<div class="modal fade in bg-gradient-orange" id="DeptModal" tabindex="-1" role="dialog" aria-labelledby="addDeptLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Department Details:</h4>
+            </div>
+            <div class="modal-body" id="DeptPartial">
+
             </div>
 
         </div>
@@ -51,7 +58,7 @@
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"><b>All Qualification Degrees :</b></h3>
-                    <a class="btn btn-primary pull-right" data-toggle="#add-contact" data-target="#add-contact" onclick="openPopup()">
+                    <a class="btn btn-primary pull-right" onclick="loadDegreePartialView('')">
                         Add New Degree
                     </a>
                 </div>
@@ -105,7 +112,7 @@
                     "sClass": "text-center",
                     "mRender": function (data, type, row) {
                         if (row.isActive) {
-                            var action = '<a href="javascript:void(0);" title="Add" onclick="AddDepartment(\'' + row.encryptedId + '\')" class="btn btn-success">Add Department</a>';
+                            var action = '<a href="javascript:void(0);" title="Add" onclick="loadDeptPartialView(\'' + row.encryptedId + '\')" class="btn btn-success">Add Department</a>';
                             return action;
                         }
                         else {
@@ -119,7 +126,13 @@
                     "mRender": function (data, type, row) {
                         var iconClass = (row.isActive) ? '<i class="fa fa-check-square actionbutton"></i>' : '<i class="fa fa-times-circle actionbutton"></i>';
                         var action = '';
-                        action = '<a href="javascript:void(0);" title="Edit" onclick="Edit(\'' + row.encryptedId + '\' )" class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+                        if (row.isActive) {
+                            action = '<a href="javascript:void(0);" title="Edit" onclick="loadDegreePartialView(\'' + row.encryptedId + '\')"  class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+
+                        } else {
+                            action = '<a href="javascript:void(0);" title="Edit" onclick="error()"  class = "btn disableClick"><i class="fa fa-edit actionbutton"></i></a>';
+
+                        }
                         action += ' <a href="javascript:void(0);" title="Activate/Deactivate" onclick="ChangeStatus(\'' + row.encryptedId + '\',\'' + row.isActive + '\')" class = "btn btn-primary btn-sm">' + iconClass +'</a>';
                         return action;
 
@@ -143,9 +156,6 @@
     function ChangeStatus(degreeId, status) {
         window.location.href = '@Url.Action("UpdateDegree", "Qualification")?id=' + degreeId + '&status=' + status;
     }
-    function Edit(degreeId, editMode = true) {
-        window.location.href = '@Url.Action("UpdateDegree", "Qualification")?id=' + degreeId + '&editMode=' + editMode;
-    }
     function Details(id) {
         window.location.href = '@Url.Action("Details", "Qualification")?id=' + id;
     }
@@ -154,18 +164,17 @@
     }
 
 
-    $(function () {
-        $('button[data-toggle="ajax-modal"]').click(function (event) {
-            var url = $(this).data('url');
-            $.get(url).done(function (data) {
-                $('#modal-placeholder').html(data);
-                $('#modal-placeholder > .modal').modal('show');
-            });
+
+    function loadDegreePartialView(id) {
+        var url = '@Url.Action("RenderDegreeView", "Qualification")?id=' + id;
+        $('#DegreePartial').load(url, function () {
+            $('#DegreeModal').modal({ show: true });
         });
-    });
-    //Function for setting Flag_Accepted value as true
-    function openPopup() {
-        $("#Flag_Accepted").val(true);
-        $('#add-contact').modal('show');
+    }
+    function loadDeptPartialView(id, isParentCall = true) {
+        var url = '@Url.Action("RenderDeptView", "Qualification")?id=' + id + '&isParentCall=' + isParentCall;
+        $('#DeptPartial').load(url, function () {
+            $('#DeptModal').modal({ show: true });
+        });
     }
 </script>

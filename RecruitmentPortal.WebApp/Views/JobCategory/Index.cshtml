@@ -111,7 +111,13 @@
                     "mRender": function (data, type, row) {
                         var iconClass = (row.isActive) ? '<i class="fa fa-check-square actionbutton"></i>' : '<i class="fa fa-times-circle actionbutton"></i>';
                         var action = '';
-                        action = '<a href="javascript:void(0);" title="Edit" onclick="loadPartialView(\'' + row.encryptedId + '\')"  class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+                        if (row.isActive) {
+                            action = '<a href="javascript:void(0);" title="Edit" onclick="loadPartialView(\'' + row.encryptedId + '\')"  class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+
+                        } else {
+                            action = '<a href="javascript:void(0);" title="Edit" onclick="error()"  class = "btn disableClick"><i class="fa fa-edit actionbutton"></i></a>';
+
+                        }
                         action += ' <a href="javascript:void(0);" title="Activate/Deactivate" onclick="ChangeStatus(\'' + row.encryptedId + '\',\'' + row.isActive + '\')" class = "btn btn-primary btn-sm">' + iconClass +'</a>';
                         return action;
 
@@ -134,9 +140,6 @@
     }
     function ChangeStatus(categoryId, status) {
         window.location.href = '@Url.Action("UpdateCategory", "JobCategory")?id=' + categoryId + '&status=' + status;
-    }
-    function Edit(categoryId, editMode = true) {
-        window.location.href = '@Url.Action("UpdateCategory", "JobCategory")?id=' + categoryId + '&editMode=' + editMode;
     }
     function Details(id) {
         window.location.href = '@Url.Action("DetailsJobCategory", "JobCategory")?id=' + id;

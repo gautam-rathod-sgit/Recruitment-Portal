@@ -10,6 +10,30 @@
     }
 </style>
 
+
+<!-- Modal for Adding new Degree -->
+<div class="modal fade in bg-gradient-orange" id="DeptModal" tabindex="-1" role="dialog" aria-labelledby="addDeptLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Department Details:</h4>
+            </div>
+            <div class="modal-body" id="DeptPartial">
+
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- Modal end -->
+
+
+
 <section class="content">
     <div class="row">
         <div class="col-sm-12">
@@ -19,7 +43,6 @@
                 <div class="box-header">
                     <h3 class="box-title"><b>Degree Details :</b></h3>
                     <div class="d-flex pull-right">
-                        <a href='@Url.Action("AddNewDept","Qualification",new {id = Model.EncryptedId })' class="btn btn-primary  mr-1 ">Add Department</a>
                         <a href='@Url.Action("Index","Qualification")' class="btn btn-primary">Cancel</a>
                     </div>
 
@@ -32,7 +55,6 @@
                             <tr>
                                 <th>Degree</th>
                                 <th>Action</th>
-                                <th>Edit</th>
 
                             </tr>
                         </thead>
@@ -75,22 +97,13 @@
                     "mRender": function (data, type, row) {
                         var iconClass = (row.isActive) ? '<i class="fa fa-check-square actionbutton"></i>' : '<i class="fa fa-times-circle actionbutton"></i>';
                         var action = '';
-                        action = '<a href="javascript:void(0);" title="Activate/Deactivate" onclick="ChangeStatus(\'' + row.encryptedId + '\',\'' + row.categoryId + '\',\'' + row.isActive + '\')" class = "btn btn-primary btn-sm">' + iconClass + '</a>';
-
-                        return action;
-                    }
-                },
-                {
-                    "sClass": "text-center",
-                    "mRender": function (data, type, row) {
+                        action = '<a href="javascript:void(0);" title="Activate/Deactivate" onclick="ChangeStatus(\'' + row.encryptedId + '\',\'' + row.encryptedDegreeId + '\',\'' + row.isActive + '\')" class = "btn btn-primary btn-sm">' + iconClass + '</a>';
                         if (row.isActive) {
-                            var action = '<a href="javascript:void(0);" title="Edit Post" onclick="Edit(\'' + row.encryptedId + '\' )" class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
-                            return action;
+                            action += ' <a href="javascript:void(0);" title="Edit" onclick="loadPartialView(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
                         } else {
-                            var action = '<a href="javascript:void(0);" title="Edit Post" onclick="error()" class = "btn disableClick btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
-                            return action;
+                           action += ' <a href="javascript:void(0);" title="Edit Post" onclick="error()" class = "btn disableClick btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
                         }
-
+                        return action;
                     }
                 }
             ],
@@ -101,13 +114,17 @@
     function error() {
         notification("Error", '@Messages.EnableEntity', "error");
     }
-    function ChangeStatus(deptId,degreeID, status) {
-        window.location.href = '@Url.Action("UpdateDept", "Qualification")?id=' + deptId + '&categoryId=' + degreeID + '&status=' + status;
-    }
-    function Edit(deptId, editMode = true) {
-        window.location.href = '@Url.Action("UpdateDept", "Qualification")?id=' + deptId + '&editMode=' + editMode;
+    function ChangeStatus(deptId,DegreeID, status) {
+        window.location.href = '@Url.Action("UpdateDept", "Qualification")?id=' + deptId + '&degreeID=' + DegreeID + '&status=' + status;
     }
     function popupForActivation() {
         notification("Error", '@Messages.EnableEntity', "error");
+    }
+
+    function loadPartialView(id) {
+        var url = '@Url.Action("RenderDeptView", "Qualification")?id=' + id;
+        $('#DeptPartial').load(url, function () {
+            $('#DeptModal').modal({ show: true });
+        });
     }
 </script>
