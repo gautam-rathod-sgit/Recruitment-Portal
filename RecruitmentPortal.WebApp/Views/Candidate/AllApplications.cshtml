@@ -411,4 +411,13 @@
     function openRecord(id) {
         window.location.href = '@Url.Action("Details", "Candidate")?id=' + id;
     }
+
+
+    function getLocalValue(key) {
+        return localStorage.getItem(key);
+    }
+
+    function setLocalValue(key, value) {
+        localStorage.setItem(key, value);
+    }
 </script>
