@@ -16,7 +16,7 @@
                 <h4 class="modal-title">Reject Reason:</h4>
             </div>
             <div class="modal-body" id="rejectPopUp">
-               
+
             </div>
         </div>
         <!-- /.modal-content -->
@@ -41,27 +41,20 @@
 
                         @if (User.IsInRole("Admin"))
                         {
-                            <a href='@Url.Action("AddNewJobApplications", "JobApplication",
-                                    new
-                                    {
-                                        id = @RSACSPSample.EncodeServerName((Model.ID.ToString()))
-
-                                    }
-                                    )' class="btn btn-primary btn-sm">
+                            <a href='@Url.Action("AddNewJobApplications", "JobApplication",new { id = Model.EncryptedId })' class="btn btn-primary btn-sm">
                                 Proceed
                             </a>
                         }
-                        <a href='@Url.Action("Download","Candidate",
-                                        new {filename = @Model.resume}
-                                        )' class="btn btn-primary  btn-sm">
-                            Download Resume
-                        </a>
-                      
-                        @*<a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@Model.ID')">
-                             Reject
-                        </a>*@
+                        @if (Model.ID > 0)
+                        {
+                            <a href='@Url.Action("Download", "Candidate", new { filename = @Model.resume })' class="btn btn-primary  btn-sm">
+                                Download Resume
+                            </a>
+                        }
 
-                        @*back button*@
+                        @*<a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@Model.ID')">
+                                 Reject
+                            </a>*@
                         <a href='@Url.Action("AllApplications","Candidate")' class="btn btn-primary btn-sm">
                             Cancel
                         </a>

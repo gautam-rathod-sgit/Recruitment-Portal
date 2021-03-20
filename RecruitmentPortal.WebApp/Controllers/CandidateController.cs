@@ -498,20 +498,34 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Download(string filename)
         {
-            if (filename == null)
-                return Content("filename not present");
-
-            var path = Path.Combine(
-            Directory.GetCurrentDirectory(), "wwwroot" + @"\Resume", filename);
-
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
+            try
             {
-                await stream.CopyToAsync(memory);
+                if (filename == null)
+                    return Content("filename not present");
+
+                var path = Path.Combine(
+                Directory.GetCurrentDirectory(), "wwwroot" + @"\Resume", filename);
+
+                var memory = new MemoryStream();
+                using (var stream = new FileStream(path, FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+                memory.Position = 0;
+                return File(memory, GetContentType(path), Path.GetFileName(path));
             }
-            memory.Position = 0;
-            return File(memory, GetContentType(path), Path.GetFileName(path));
-            //return File(bytes, "application/json", fileName);
+            catch (FileNotFoundException ex)
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Cound not find requested file.";
+                throw new Exception("Cound not find requested file.");
+                //RedirectToAction("Details", "Candidate", new { id = id });
+            }
+            catch (Exception ex)
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "There is a problem with downloading file";
+                throw new Exception("There is a problem with downloading file");
+                //RedirectToAction("Details", "Candidate", new { id = id });
+            }
         }
 
 

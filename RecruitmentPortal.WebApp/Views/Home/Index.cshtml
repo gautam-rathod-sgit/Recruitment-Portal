@@ -2,15 +2,6 @@
     ViewData["Title"] = "Home Page";
 }
 
-@if (ViewData["msg"] != null)
-{
-    <script>window.onload = function () { alert("@ViewData["msg"] already Applied !!") }</script>
-}
-@if (ViewBag.status != null)
-{
-    <script>window.onload = function () { alert("@ViewBag.status") }</script>
-}
-
 <style>
     .table-striped > tbody > tr:nth-of-type(odd) {
         background-color: #ecf0f5;
@@ -106,7 +97,7 @@
                             + '                </div>'
                             + '            </div>'
                             + '            <div class="box-footer">'
-                            + '                <a href = "javascript:void(0);" title = "Apply" class="btn btn-info" onclick = "applyforJob(\'' + row.encryptedId + '\')">Apply</a>'
+                            + '                <a href = "javascript:void(0);" title = "Apply" class="btn btn-primary" onclick = "applyforJob(\'' + row.encryptedId + '\')">Apply</a>'
                             + '            </div>'
                             + '    </div>';
                         return download;

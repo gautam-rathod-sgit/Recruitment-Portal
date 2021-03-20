@@ -179,7 +179,18 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("AdminIndex", "Home");
+            }
+            if (User.IsInRole("Interviewer"))
+            {
+                return RedirectToAction("InterviewerIndex", "Home");
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public String GetEncryptedID(int Id)
@@ -231,7 +242,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
 
                 //notification jobapplicationViewModels.
-                        var notifyJobApplications = await _jobApplicationPage.getJobApplications();
+                var notifyJobApplications = await _jobApplicationPage.getJobApplications();
                 collection.selected_application = notifyJobApplications.Where(x => x.status == status_Complete && x.notified == false).ToList();
                 foreach (var item in collection.selected_application)
                 {
@@ -349,34 +360,24 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             IQueryable<JobPostViewModel> plist = null;
             List<JobPostViewModel> list = new List<JobPostViewModel>();
-            if (User.IsInRole("Admin"))
-            {
-                return RedirectToAction("AdminIndex", "Home");
-            }
-            if (User.IsInRole("Interviewer"))
-            {
-                return RedirectToAction("InterviewerIndex", "Home");
-            }
-            else
-            {
-                try
-                {
-                    plist = await _jobPostPage.getJobPost();
-                    list = plist.ToList();
 
-                    foreach (JobPostViewModel obj in list)
-                    {
-                        obj.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName((obj.ID).ToString()));
-                    }
+            try
+            {
+                plist = await _jobPostPage.getJobPost();
+                list = plist.ToList();
 
-                    //TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Jobs Load Successfully..!!";
-                    return Json(new { data = list });
-                }
-                catch (Exception ex)
+                foreach (JobPostViewModel obj in list)
                 {
-                    TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
-                    return Json(new { data = plist });
+                    obj.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName((obj.ID).ToString()));
                 }
+
+                //TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Jobs Load Successfully..!!";
+                return Json(new { data = list });
+            }
+            catch (Exception ex)
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                return Json(new { data = plist });
             }
         }
 
@@ -413,18 +414,18 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             using (RecruitmentPortalDbContext _dbContext = BaseContext.GetDbContext())
             {
-            List<Department> DepartmentList = new List<Department>();
+                List<Department> DepartmentList = new List<Department>();
 
-            //Getting data from database Using EntityFramework Core
-            DepartmentList = _dbContext.Department.Where(a => a.DegreeId == Id).ToList();
-            DepartmentList = DepartmentList.Where(x => x.isActive == true).ToList();
-            if (DepartmentList != null)
-            {
-                //Inserting Select item in List
-                DepartmentList.Insert(0, new Department { ID = 0, dept_name = "Select Department" });
+                //Getting data from database Using EntityFramework Core
+                DepartmentList = _dbContext.Department.Where(a => a.DegreeId == Id).ToList();
+                DepartmentList = DepartmentList.Where(x => x.isActive == true).ToList();
+                if (DepartmentList != null)
+                {
+                    //Inserting Select item in List
+                    DepartmentList.Insert(0, new Department { ID = 0, dept_name = "Select Department" });
 
-            }
-            return Json(new SelectList(DepartmentList, "ID", "dept_name"));
+                }
+                return Json(new SelectList(DepartmentList, "ID", "dept_name"));
             }
         }
 

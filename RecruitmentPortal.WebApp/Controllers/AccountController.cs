@@ -71,11 +71,21 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> UpdateUser(string id)
         {
-            ApplicationUser user = await _userManager.FindByIdAsync(id);
-            if (user != null)
-                return View(user);
-            else
-                return RedirectToAction("Index");
+            ApplicationUserViewModel model = new ApplicationUserViewModel();
+            if (!string.IsNullOrEmpty(id))
+            { 
+                ApplicationUser user = await _userManager.FindByIdAsync(id);
+                
+                if (user != null)
+                {
+                    model.UserId = Guid.Parse(user.Id);
+                    model.Email = user.Email;
+                    model.UserName = user.UserName;
+                    model.position = user.position;
+                    model.skype_id = model.skype_id;
+                }
+            }
+            return View(model);
         }
 
         /// <summary>
@@ -89,59 +99,51 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="UserName"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> UpdateUser(string id, string email, string password, string skype_id, string position, string UserName)
+        public async Task<IActionResult> UpdateUser(ApplicationUserViewModel model, string submit)
         {
-            ApplicationUser user = await _userManager.FindByIdAsync(id);
-
+            ApplicationUser user = await _userManager.FindByIdAsync(model.UserId.ToString());
+            
             try
             {
                 if (user != null)
                 {
+                    user.Email = model.Email;
+                    user.UserName = model.UserName;
+                    user.position = model.position;
+                    user.skype_id = model.skype_id;
+                    user.PasswordHash = passwordHasher.HashPassword(user, model.password);
 
-                    //checks for null
-                    if (!string.IsNullOrEmpty(email))
-                        user.Email = email;
-                    else
-                        ModelState.AddModelError("", "Email cannot be empty");
-
-                    if (!string.IsNullOrEmpty(password))
-                        user.PasswordHash = passwordHasher.HashPassword(user, password);
-                    else
-                        ModelState.AddModelError("", "Password cannot be empty");
-                    if (!string.IsNullOrEmpty(UserName))
-                        user.UserName = UserName;
-                    else
-                        ModelState.AddModelError("", "UserName cannot be empty");
-                    if (!string.IsNullOrEmpty(position))
-                        user.position = position;
-                    else
-                        ModelState.AddModelError("", "position cannot be empty");
-                    if (!string.IsNullOrEmpty(skype_id))
-                        user.skype_id = skype_id;
-                    else
-                        ModelState.AddModelError("", "skype_id cannot be empty");
-
-
-
-                    //updating user
-                    if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
+                    if ((await _userManager.UpdateAsync(user)).Succeeded)
                     {
-                        IdentityResult result = await _userManager.UpdateAsync(user);
-                        if (result.Succeeded)
-                            return RedirectToAction("Index");
-                        else
-                            Errors(result);
+                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User Updated Successfully!";
+                        RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "User not Updated!";
                     }
                 }
                 else
-                    ModelState.AddModelError("", "User Not Found");
+                {
+                    
+                    ModelState.AddModelError(model.UserName, "User Not Found");
+                }
+                switch (submit)
+                {
+                    case "Save":
+                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Job updated Successfully.";
+                        return RedirectToAction("Index", "Account");
+
+                    case "Save & Continue":
+                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Job updated Successfully.";
+                        return RedirectToAction("UpdateUser", "Account", new { id = model.UserId });
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
             }
-
-            return View(user);
+            return View(model);
         }
 
         public async Task<IActionResult> DeleteUser(string id)
@@ -153,24 +155,25 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     IdentityResult result = await _userManager.DeleteAsync(user);
                     if (result.Succeeded)
+                    {
+                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User Deleted Successfully!";
                         return RedirectToAction("Index");
+                    }
                     else
-                        Errors(result);
+                    {
+                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "User not Deleted..!!";
+                    }
                 }
                 else
-                    ModelState.AddModelError("", "User Not Found");
+                {
+                    ModelState.AddModelError(user.Email, "User Not Found");
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
             }
-
             return View("Index", _userManager.Users);
-        }
-        private void Errors(IdentityResult result)
-        {
-            foreach (IdentityError error in result.Errors)
-                ModelState.AddModelError("", error.Description);
         }
 
         public IActionResult GetAllUsers()
