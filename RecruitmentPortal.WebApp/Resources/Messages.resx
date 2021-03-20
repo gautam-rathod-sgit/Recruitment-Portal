@@ -255,4 +255,10 @@
   <data name="DeptNameRequired" xml:space="preserve">
     <value>Please Insert Department</value>
   </data>
+  <data name="SkypeIdRequired" xml:space="preserve">
+    <value>Skype Id is Required</value>
+  </data>
+  <data name="UserNameRequired" xml:space="preserve">
+    <value>User Name is Required</value>
+  </data>
 </root>

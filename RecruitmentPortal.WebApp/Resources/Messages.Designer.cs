@@ -403,6 +403,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Skype Id is Required.
+        /// </summary>
+        public static string SkypeIdRequired {
+            get {
+                return ResourceManager.GetString("SkypeIdRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Something Went wrong. Please try again later..
         /// </summary>
         public static string SomethingWrong {
@@ -444,6 +453,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string TotalExperienceRequired {
             get {
                 return ResourceManager.GetString("TotalExperienceRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Name is Required.
+        /// </summary>
+        public static string UserNameRequired {
+            get {
+                return ResourceManager.GetString("UserNameRequired", resourceCulture);
             }
         }
         
