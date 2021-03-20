@@ -1,167 +1,238 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.CandidateViewModel
 @using RecruitmentPortal.WebApp.Helpers
-@{
+@using RecruitmentPortal.Infrastructure.Data.Enum
+@using RecruitmentPortal.WebApp.Resources
 
-    string date_format = "dd-MM-yyyy";
-    string all_mode = "All";
-
-}
-
-
-<div>
-
-    <div class="row bg-gradient-gray-dark text-white">
-        <div class="col-md-5">
-            <h2 class="pl-2">Candidate Details :</h2>
-        </div>
-    </div>
-    <hr />
-    <div class="d-flex justify-content-end">
-        <div class="mb-2">
-            <a asp-action="Download" class="btn btn-primary btn-md mr-3"
-               asp-route-filename="@Model.resume">
-                Download Resume
-            </a>
-        </div>
-        <div>
-            @Html.ActionLink("Proceed", "AddNewJobApplications", "JobApplication", new { Cid = RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-success mr-3" })
-        </div>
-        <div>
-            @*@Html.ActionLink("Reject", "RejectApplicant", "Candidate", new { Cid = RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-danger mr-3" })*@
-            @if (Model.ID > 0)
-            {
-                <input type="button" class="btn btn-info btn-xs legitRipple" value="Reject" onclick="rejectCandidate()">
-            }
-        </div>
-        <br />
-        @if (ViewBag.backToAll == true)
-        {
-            <div>
-                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Back to List</a>
+<style>
+</style>
+<!-- Modal for Adding Rejection Reason -->
+<div class="modal fade bg-gradient-orange center" id="rejectmodel" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Reject Reason:</h4>
             </div>
-        }
-        else
-        {
-            <div>
-                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Pending" class="btn btn-secondary">Back to List</a>
+            <div class="modal-body" id="rejectPopUp">
+               
             </div>
-        }
-        
+        </div>
+        <!-- /.modal-content -->
     </div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            Candidate Name
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.name)
-        </dd>
-        <dt class="col-sm-2">
-            Email-ID
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.email)
-        </dd>
-
-        <dt class="col-sm-2">
-            Phone No.
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.phone)
-        </dd>
-        <dt class="col-sm-2">
-            Date of Birth
-        </dt>
-        <dd class="col-sm-10">
-            @Model.dob.ToString(date_format)
-        </dd>
-        <dt class="col-sm-2">
-            Gender
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-        <dt class="col-sm-2">
-            SSC (%)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ssc_perc)
-        </dd>
-        <dt class="col-sm-2">
-            HSC (%)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.hsc_perc)
-        </dd>
-        <dt class="col-sm-2">
-            Education
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.degree)
-        </dd>
-        <dt class="col-sm-2">
-            Experience
-        </dt>
-        @if (Model.experience == "Fresher")
-        {
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.experience)
-            </dd>
-        }
-        else
-        {
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.experience)
-            </dd>
-            <dt class="col-sm-2">
-                Total Experience
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.total_experience)
-            </dd>
-            <dt class="col-sm-2">
-                Relevent Experience
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.relevent_experience)
-            </dd>
-            <dt class="col-sm-2">
-                Current CTC
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.current_ctc)
-            </dd>
-            <dt class="col-sm-2">
-                Expected CTC
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.expected_ctc)
-            </dd>
-            <dt class="col-sm-2">
-                Notice Period
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.notice_period)
-            </dd>
-        }
-        <dt class="col-sm-2">
-            Apply Through
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.applying_through)
-        </dd>
-
-
-
-    </dl>
+    <!-- /.modal-dialog -->
 </div>
+<!-- Modal end -->
+
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- /.box -->
+            <div class="box box-default boxPad">
+                <div class="box-header">
+
+                    <h3 class="box-title">
+                        <i class="fa fa-info-circle"></i>
+                        Candidate Details :
+                    </h3>
+
+                    <div class="box-tools pull-right">
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a href='@Url.Action("AddNewJobApplications", "JobApplication",
+                                    new
+                                    {
+                                        id = @RSACSPSample.EncodeServerName((Model.ID.ToString()))
+
+                                    }
+                                    )' class="btn btn-primary btn-sm">
+                                Proceed
+                            </a>
+                        }
+                        <a href='@Url.Action("Download","Candidate",
+                                        new {filename = @Model.resume}
+                                        )' class="btn btn-primary  btn-sm">
+                            Download Resume
+                        </a>
+                      
+                        @*<a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@Model.ID')">
+                             Reject
+                        </a>*@
+
+                        @*back button*@
+                        <a href='@Url.Action("AllApplications","Candidate")' class="btn btn-primary btn-sm">
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- /.box-header -->
+
+            <form>
+                <div class="box box-default container p-2">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(m => m.name)
+                                    @Html.TextBoxFor(m => m.name, new { @placeholder = "Candidate name", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.name)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(m => m.email)
+                                    @Html.TextBoxFor(m => m.email, new { @placeholder = "Email", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.email)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(m => m.phone)
+                                    @Html.TextBoxFor(m => m.phone, new { @placeholder = "Phone", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.phone)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(m => m.dob)
+                                    @Html.TextBoxFor(m => m.dob, new { @placeholder = "Date of Birth", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.dob)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-2">
+                                    @Html.LabelFor(m => m.Gender)
+                                    @Html.TextBoxFor(m => m.Gender, new { @placeholder = "Gender", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Gender)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(m => m.ssc_perc)
+                                    @Html.TextBoxFor(m => m.ssc_perc, new { @placeholder = "SSC percentage", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.ssc_perc)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-2">
+                                    @Html.LabelFor(m => m.hsc_perc)
+                                    @Html.TextBoxFor(m => m.hsc_perc, new { @placeholder = "HSC percentage", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.hsc_perc)
+                                </div>
+
+                                <!-- /.form-group -->
+                                <div class="form-group mb-2">
+                                    @Html.LabelFor(m => m.degree)
+                                    @Html.TextBoxFor(m => m.degree, new { @placeholder = "Degree", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.degree)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.applying_through)
+                                    @Html.TextBoxFor(m => m.applying_through, new { @placeholder = "Applying Through", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.applying_through)
+                                </div>
+                                <!-- /.form-group -->
+                            </div>
+                            <!-- /.col -->
+
+
+                            <div class="col-md-6">
+                                @if (Model.experience == "Fresher")
+                                {
+                                    <div class="form-group mb-2">
+                                        @Html.LabelFor(m => m.experience)
+                                        @Html.TextBoxFor(m => m.experience, new { @placeholder = "Experience", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.experience)
+                                    </div>
+                                    <!-- /.form-group -->
+                                }
+                                else
+                                {
+                                    <div class="form-group mb-2">
+                                        @Html.LabelFor(m => m.experience)
+                                        @Html.TextBoxFor(m => m.experience, new { @placeholder = "Experience", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.experience)
+                                    </div>
+                                    <!-- /.form-group -->
+                                    <div class="form-group mb-2">
+                                        @Html.LabelFor(m => m.total_experience)
+                                        @Html.TextBoxFor(m => m.total_experience, new { @placeholder = "Total Experience", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.total_experience)
+                                    </div>
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.relevent_experience)
+                                        @Html.TextBoxFor(m => m.relevent_experience, new { @placeholder = "Relevent Experience", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.relevent_experience)
+                                    </div>
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.current_ctc)
+                                        @Html.TextBoxFor(m => m.current_ctc, new { @placeholder = "Current CTC", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.current_ctc)
+                                    </div>
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.expected_ctc)
+                                        @Html.TextBoxFor(m => m.expected_ctc, new { @placeholder = "Expected CTC", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.expected_ctc)
+                                    </div>
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.notice_period)
+                                        @Html.TextBoxFor(m => m.notice_period, new { @placeholder = "Notice Period", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.notice_period)
+                                    </div>
+                                    <!-- /.form-group -->
+                                }
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!--/.row-->
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </form>
+        </div>
+    </div>
+    <!-- /.box-body -->
+</section>
 
 <script>
-    function rejectCandidate()
-    {
-        bootbox.confirm("Are you sure you want to reject this record?", function (result) {
-            if (result === true) {
-                window.location.href = "@Url.Action("RejectApplicant", "Candidate")?id=" + '@Model.EncryptedId';
-            }
-        }, 'popup-confirmation');
+
+    $(document).ready(function () {
+        //for reset validation of form
+        $('#rejectmodel').on('hidden.bs.modal', function () {
+            $('.field-validation-error').html("");
+        });
+    });
+
+    function Details(id) {
+        window.location.href = '@Url.Action("Details", "Candidate")?id=' + id;
     }
+
+
+    $(function () {
+        $('button[data-toggle="ajax-modal"]').click(function (event) {
+            var url = $(this).data('url');
+            $.get(url).done(function (data) {
+                $('#modal-placeholder').html(data);
+                $('#modal-placeholder > .modal').modal('show');
+            });
+        });
+    });
+
+   // Function for setting Flag_Accepted value as true
+    function openPopup() {
+        $("#Flag_Rejected").val(true);
+        $('#rejectmodel').modal('show');
+    }
+
+
+    function loadPartialView(id) {
+        var url = '@Url.Action("RenderRejectionView", "Candidate")?id=' + id;
+        $('#JobCategoryPartial').load(url, function () {
+            $('#JobCategoryModel').modal({ show: true });
+        });
+    }
+
 </script>
