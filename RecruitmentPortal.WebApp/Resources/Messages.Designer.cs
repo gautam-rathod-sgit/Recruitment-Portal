@@ -133,7 +133,7 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please Insert Department.
+        ///   Looks up a localized string similar to Department is Required.
         /// </summary>
         public static string DeptNameRequired {
             get {

@@ -37,7 +37,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group has-feedback has-feedback-left">
-                                    @Html.LabelFor(m => m.job_title)
+                                    @Html.LabelFor(m => m.job_title,new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.job_title, new { @placeholder = "Job Title", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.job_title)
                                 </div>

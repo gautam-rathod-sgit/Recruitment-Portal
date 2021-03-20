@@ -34,22 +34,22 @@
                                 @Html.HiddenFor(m => m.candidateId)
 
                                 <div class="form-group">
-                                    @Html.LabelFor(m => m.candidate_name)
+                                    @Html.LabelFor(m => m.candidate_name, new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.candidate_name, new { @placeholder = "Name", @class = "form-control" })
 
                                 </div>
                                 <div class="form-group">
-                                    @Html.LabelFor(m => m.position)
+                                    @Html.LabelFor(m => m.position, new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.position, new { @placeholder = "Position", @class = "form-control" })
 
                                 </div>
                                 <div class="form-group">
-                                    @Html.LabelFor(m => m.datetime)
+                                    @Html.LabelFor(m => m.datetime, new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.datetime, new { @type = "datetime", @placeholder = "Date & Time", @class = "form-control datepicker" })
                                     @Html.ValidationMessageFor(model => model.datetime, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="form-group">
-                                    @Html.LabelFor(m => m.roundValue)
+                                    @Html.LabelFor(m => m.roundValue, new { @class = "asterisk" })
                                     @Html.DropDownListFor(m => m.roundValue, new SelectList(ViewBag.RoundTypeList, "Value", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
 
                                 </div>
@@ -58,17 +58,17 @@
                             <div class="col-md-6">
                                 
                                 <div class="form-group">
-                                    @Html.LabelFor(m => m.Multiinterviewer)
+                                    @Html.LabelFor(m => m.Multiinterviewer, new { @class = "asterisk" })
                                     @Html.ListBoxFor(m => m.Multiinterviewer, new MultiSelectList(ViewBag.users), new { @class = "form-control select2" })
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(m => m.statusvalue)
+                                    @Html.LabelFor(m => m.statusvalue, new { @class = "asterisk" })
                                     @Html.DropDownListFor(m => m.statusvalue, new SelectList(ViewBag.StatusTypeList, "Value", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(m => m.mode_of_interview)
+                                    @Html.LabelFor(m => m.mode_of_interview, new { @class = "asterisk" })
                                     <div class="col-10">
                                         @Html.Label("Online")
                                         @Html.RadioButtonFor(m => m.mode_of_interview, "Online", new { @id = "online" })

@@ -49,23 +49,23 @@
                             <div class="col-md-6">
                                 <div class="col-lg-10 col-md-8">
                                     <div class="form-group has-feedback has-feedback-left">
-                                        @Html.LabelFor(m => m.jobName)
+                                        @Html.LabelFor(m => m.jobName, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.jobName, new { @placeholder = "Job Title", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.jobName, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left">
-                                        @Html.LabelFor(m => m.name)
+                                        @Html.LabelFor(m => m.name, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.name, new { @placeholder = "Candidate Name", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.name, "", new { @class = "text-danger" })
                                     </div>
 
                                     <div class="form-group has-feedback has-feedback-left">
-                                        @Html.LabelFor(m => m.ssc_perc)
+                                        @Html.LabelFor(m => m.ssc_perc, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.ssc_perc, "{0:#.#}", new { @placeholder = "Eligibility criteria", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.ssc_perc, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.Gender)
+                                        @Html.LabelFor(m => m.Gender, new { @class = "asterisk" })
                                         <div>
                                             @Html.RadioButtonFor(m => m.Gender, "Male", new { @id = "Gender" })
                                             @Html.Label("Male ")
@@ -77,18 +77,20 @@
                                         </div>
                                     </div>
                                     <div class="form-group has-feedback ">
-                                        @Html.LabelFor(m => m.applying_through)
+                                        @Html.LabelFor(m => m.applying_through, new { @class = "asterisk" })
                                         @Html.DropDownListFor(m => m.applying_through, new SelectList(ViewBag.ReferenceSelect, "Value", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(m => m.applying_through, "", new { @class = "text-danger" })
                                     </div>
 
                                     <div class="form-group has-feedback has-feedback-left degree_dept ">
-                                        @Html.LabelFor(m => m.selectedDegree)
+                                        @Html.LabelFor(m => m.selectedDegree, new { @class = "asterisk" })
                                         @Html.DropDownListFor(m => m.selectedDegree, new SelectList(ViewBag.ListOfDegree, "ID", "degree_name"), Messages.PleaseSelect, new { @id = "getDepts", @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(m => m.selectedDegree, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.File)
+                                        @Html.LabelFor(m => m.File, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.File, new { @type = "file", @id = "resume", @placeholder = "Experience" })
-                                        @Html.ValidationMessageFor(m => m.experience, "", new { @class = "text-danger" })
+                                        @Html.ValidationMessageFor(m => m.File, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
 
@@ -98,27 +100,27 @@
                             <div class="col-md-6">
                                 <div class="col-lg-10 col-md-8">
                                     <div class="form-group has-feedback has-feedback-left">
-                                        @Html.LabelFor(m => m.email)
+                                        @Html.LabelFor(m => m.email, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.email, new { @placeholder = "Email", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.email, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left">
-                                        @Html.LabelFor(m => m.phone)
+                                        @Html.LabelFor(m => m.phone, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.phone, "{0:#.#}", new { @placeholder = "Job Role", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.phone, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.dob)
+                                        @Html.LabelFor(m => m.dob, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.dob, new { @type = "datetime", @placeholder = "Date & Time", @class = "form-control datepicker" })
                                         @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left">
-                                        @Html.LabelFor(m => m.hsc_perc)
+                                        @Html.LabelFor(m => m.hsc_perc, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.hsc_perc, "{0:#.#}", new { @placeholder = "Eligibility criteria", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.hsc_perc, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.experience)
+                                        @Html.LabelFor(m => m.experience, new { @class = "asterisk" })
                                         <div>
                                             @Html.RadioButtonFor(m => m.experience, "Fresher", new { @id = "fresher", @value = "Fresher" })
                                             @Html.Label(" Fresher ")
@@ -128,28 +130,29 @@
                                         </div>
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left hiddenclass">
-                                        @Html.LabelFor(m => m.total_experience)
+                                        @Html.LabelFor(m => m.total_experience, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.total_experience, new { @placeholder = "Total Experience", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.total_experience, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left hiddenclass">
-                                        @Html.LabelFor(m => m.relevent_experience)
+                                        @Html.LabelFor(m => m.relevent_experience, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.relevent_experience, new { @placeholder = "Relevent Experience", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.relevent_experience, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left hiddenclass">
-                                        @Html.LabelFor(m => m.current_ctc)
+                                        @Html.LabelFor(m => m.current_ctc, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.current_ctc, new { @placeholder = "Current CTC", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.current_ctc, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left hiddenclass">
-                                        @Html.LabelFor(m => m.expected_ctc)
+                                        @Html.LabelFor(m => m.expected_ctc, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.expected_ctc, new { @placeholder = "Expected CTC", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.expected_ctc, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left" id="noticePeriod">
-                                        @Html.LabelFor(m => m.notice_period)
+                                        @Html.LabelFor(m => m.notice_period, new { @class = "asterisk" })
                                         @Html.DropDownListFor(m => m.notice_period, new SelectList(ViewBag.NoticePeriod, "Text", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(m => m.notice_period, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                             </div>

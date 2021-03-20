@@ -29,48 +29,48 @@
 
                             <div class="col-md-6">
                                 <div class="form-group has-feedback has-feedback-left">
-                                    @Html.LabelFor(m => m.job_title)
+                                    @Html.LabelFor(m => m.job_title, new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.job_title, new { @placeholder = "Job Title", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.job_title)
                                 </div>
 
                                 <div class="form-group has-feedback has-feedback-left">
-                                    @Html.LabelFor(m => m.location)
+                                    @Html.LabelFor(m => m.location, new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.location, new { @placeholder = "Location", @class = "form-control" })
                                     @Html.ValidationMessageFor(m => m.location)
                                 </div>
                                 <div class="form-group has-feedback has-feedback-left">
-                                    @Html.LabelFor(m => m.job_role)
+                                    @Html.LabelFor(m => m.job_role, new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.job_role, new { @placeholder = "Job Role", @class = "form-control" })
                                     @Html.ValidationMessageFor(m => m.job_role)
                                 </div>
 
                                 <div class="form-group has-feedback has-feedback-left">
-                                    @Html.LabelFor(m => m.vacancy)
+                                    @Html.LabelFor(m => m.vacancy, new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.vacancy, "{0:#.#}", new { @placeholder = "Vacancy", @class = "form-control" })
                                     @Html.ValidationMessageFor(m => m.vacancy)
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group has-feedback has-feedback-left">
-                                    @Html.LabelFor(m => m.job_type)
+                                    @Html.LabelFor(m => m.job_type, new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.job_type, new { @placeholder = "Job Type", @class = "form-control" })
                                     @Html.ValidationMessageFor(m => m.job_type)
                                 </div>
 
                                 <div class="form-group has-feedback has-feedback-left">
-                                    @Html.LabelFor(m => m.eligibility_criteria)
+                                    @Html.LabelFor(m => m.eligibility_criteria, new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.eligibility_criteria, new { @placeholder = "Eligibility criteria", @class = "form-control" })
                                     @Html.ValidationMessageFor(m => m.eligibility_criteria)
                                 </div>
                                 <div class="form-group has-feedback has-feedback-left">
-                                    @Html.LabelFor(m => m.experience)
+                                    @Html.LabelFor(m => m.experience, new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.experience, new { @placeholder = "Experience", @class = "form-control" })
                                     @Html.ValidationMessageFor(m => m.experience)
                                 </div>
 
                                 <div class="form-group has-feedback">
-                                    @Html.LabelFor(m => m.skills)
+                                    @Html.LabelFor(m => m.skills, new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.skills, new { @placeholder = "Skills", @class = "form-control" })
                                     @Html.ValidationMessageFor(m => m.skills)
                                 </div>
