@@ -113,15 +113,14 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     if (item.job_category_name == model.job_category_name)
                     {
-                        ViewData["msg"] = model.job_category_name;
-                        return View();
+                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Job Category already exists !!";
+                        return View("Index");
                     }
                 }
 
                 if (model.ID != 0)
                 {
                     return RedirectToAction("UpdateCategoryPost", model);
-                    //await _jobCategoryPageservices.UpdateCategory(model);
                 }
                 else
                 {
@@ -137,28 +136,6 @@ namespace RecruitmentPortal.WebApp.Controllers
 
             return RedirectToAction("Index", "JobCategory");
         }
-
-        /// <summary>
-        /// This method is used for Deleting Job Category
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        //public async Task<IActionResult> DeleteCategory(string id)
-        //{
-        //    try
-        //    {
-        //        await _jobCategoryPageservices.DeleteCategory(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-
-        //    return RedirectToAction("Index", "JobCategory");
-        //}
-
-
-
 
         /// <summary>
         /// This method is used for Updating Job Category [GET]
@@ -278,6 +255,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             try
             {
+                
                 await _jobCategoryPageservices.UpdateCategory(model);
 
                 //now also need to change the job title of its job post as it's dependent on job category name

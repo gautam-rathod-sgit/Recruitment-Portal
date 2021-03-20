@@ -1,4 +1,5 @@
-﻿using RecruitmentPortal.WebApp.Models;
+﻿using RecruitmentPortal.Infrastructure.Helpers;
+using RecruitmentPortal.WebApp.Models;
 using RecruitmentPortal.WebApp.Resources;
 using RecruitmentPortal.WebApp.ViewModels.Base;
 using System;
@@ -14,6 +15,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [ScaffoldColumn(false)]
         public int ID { get; set; }
         [Display(ResourceType = typeof(Labels), Name = "DegreeName")]
+        [RegularExpression(CommonHelper.RegexText, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "DegreeNameRequired", ErrorMessageResourceType = typeof(Messages))]
         public string degree_name { get; set; }
         public bool isActive { get; set; }

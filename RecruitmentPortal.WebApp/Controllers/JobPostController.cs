@@ -101,7 +101,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     if (item.job_role == model.job_role && item.job_title == model.job_title)
                     {
-                        TempData["msg"] = model.job_role;
+                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Job Post already exists !!";
                         return RedirectToAction("DetailsJobCategory", "JobCategory", new { id = RSACSPSample.EncodeServerName((item.ID).ToString()), s = TempData["msg"] });
                     }
                 }

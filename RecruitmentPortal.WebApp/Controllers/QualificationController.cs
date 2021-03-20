@@ -119,12 +119,23 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     if (item.degree_name == model.degree_name)
                     {
-                        ViewData["msg"] = model.degree_name;
-                        return View();
+                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Degree already exists !!";
+                        return View("Index");
                     }
                 }
-                model.isActive = true;
-                await _degreePageServices.AddNewDegree(model);
+
+
+                if (model.ID != 0)
+                {
+                    return RedirectToAction("UpdateDegreePost", model);
+                    //await _jobCategoryPageservices.UpdateCategory(model);
+                }
+                else
+                {
+                    model.isActive = true;
+                    await _degreePageServices.AddNewDegree(model);
+                }
+                
             }
             catch (Exception ex)
             {
@@ -152,13 +163,13 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> UpdateDegree(string id, bool deactivate, bool editMode)
+        public async Task<IActionResult> UpdateDegree(string id, bool status, bool editMode)
         {
             DegreeViewModel model = new DegreeViewModel();
             try
             {
                 model = await _degreePageServices.getDegreeById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
-                if (deactivate)
+                if (status)
                 {
                     bool isActiveCandidate = false;
                     //checking if any candidate is active with this degree
@@ -177,8 +188,8 @@ namespace RecruitmentPortal.WebApp.Controllers
                     }
                     if (isActiveCandidate)
                     {
-                        TempData["deactivate"] = "Deactivation Failed !! Candidate with Degree is Active";
-                        return RedirectToAction("Index", "Qualification", new { activeCandidate = TempData["deactivate"] });
+                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Action Denied .Candidate is Active with items to be Deleted !!";
+                        return RedirectToAction("Index", "Qualification");
                     }
                     else
                     {
@@ -235,6 +246,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             try
             {
                 await _degreePageServices.UpdateDegree(model);
+                
             }
             catch (Exception ex)
             {
@@ -269,7 +281,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 foreach (var obj in item.Departments)
                 {
                     obj.EncryptedId = RSACSPSample.EncodeServerName((obj.ID).ToString());
-                    obj.DegreeId = item.EncryptedId;
+                    obj.EncryptedDegreeId = item.EncryptedId;
                 }
                 itemList = item.Departments;
                 return Json(new { data = itemList });
@@ -284,26 +296,6 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         //DEPARTMENT CRUD
 
-        /// <summary>
-        /// ADDING DEPARTMENT [GET]
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public IActionResult AddNewDept(string id)
-        {
-            DepartmentViewModel model = new DepartmentViewModel();
-            try
-            {
-                model.DegreeId = RSACSPSample.DecodeServerName(id);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            return View(model);
-        }
 
         /// <summary>
         /// ADDING DEPARTMENT [POST]
@@ -315,18 +307,27 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             try
             {
-                int decrypted_id = Convert.ToInt32(RSACSPSample.DecodeServerName(model.DegreeId));
-                DegreeViewModel degrees = await _degreePageServices.GetDegreeWithDepartmentById(decrypted_id);
+                
+                DegreeViewModel degrees = await _degreePageServices.GetDegreeWithDepartmentById(model.DegreeId);
                 foreach (var item in degrees.Departments)
                 {
                     if (item.dept_name == model.dept_name)
                     {
-                        TempData["msg"] = model.dept_name;
-                        return RedirectToAction("Index", "Qualification", new { s = TempData["msg"] });
+                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Department already exists !!";
+                        return RedirectToAction("Index", "Qualification");
                     }
                 }
-                model.isActive = true;
-                await _departmentPageservices.AddNewDepartment(model);
+                if (model.ID != 0)
+                {
+                    return RedirectToAction("UpdateDeptPost", model);
+                    //await _jobCategoryPageservices.UpdateCategory(model);
+                }
+                else
+                {
+                    model.isActive = true;
+                    await _departmentPageservices.AddNewDepartment(model);
+                }
+               
             }
             catch (Exception ex)
             {
@@ -362,7 +363,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="id"></param>
         /// <param name="dept_id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UpdateDept(string id, string degree_id, bool deactivated, bool editMode)
+        public async Task<IActionResult> UpdateDept(string id, string degreeID, bool status, bool editMode)
         {
             DepartmentViewModel model = new DepartmentViewModel();
             try
@@ -370,7 +371,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 model = await _departmentPageservices.getDepartmentById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
                 //model.DegreeId = Convert.ToInt32(RSACSPSample.DecodeServerName(degree_id));
 
-                if (deactivated)
+                if (status)
                 {
                     bool isActiveCandidate = false;
                     //checking if any candidate is active with this degree
@@ -389,8 +390,9 @@ namespace RecruitmentPortal.WebApp.Controllers
                     }
                     if (isActiveCandidate)
                     {
-                        TempData["deactivate"] = "Deactivation Failed !! Candidate with Department is Active";
-                        return RedirectToAction("Index", "Qualification", new { activeCandidate = TempData["deactivate"] });
+                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Action Denied .Candidate is Active with items to be Deleted !!";
+                        return RedirectToAction("Details", "Qualification", new { id = degreeID }); 
+
                     }
                     else
                     {
@@ -414,7 +416,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+               Console.WriteLine(ex.Message);
             }
             return View(model);
         }
@@ -429,16 +431,54 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             try
             {
-                await _departmentPageservices.UpdateDepartment(model);
+                    await _departmentPageservices.UpdateDepartment(model);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
 
-            return RedirectToAction("Index", "Qualification");
+            return RedirectToAction("Details", "Qualification",new { id = RSACSPSample.EncodeServerName((model.DegreeId).ToString())});
         }
 
+        /// <summary>
+        /// for Loading the popup for adding or edititng the Degree.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> RenderDegreeView(string id)
+        {
+            DegreeViewModel model = new DegreeViewModel();
+            if (!string.IsNullOrEmpty(id))
+            {
+                model = await _degreePageServices.getDegreeById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
+            }
+            return PartialView("_DegreeView", model);
+        }
+        /// <summary>
+        /// for Loading the popup for adding or edititng the Department.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> RenderDeptView(string id, bool isParentCall)
+        {
+            
+            DepartmentViewModel model = new DepartmentViewModel();
+            if (isParentCall)
+            {
+                model.DegreeId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(id))
+                {
+                    model = await _departmentPageservices.getDepartmentById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
+                    model.EncryptedDegreeId = RSACSPSample.EncodeServerName((model.DegreeId).ToString());
+                }
+            }
+            
+            return PartialView("_DepartmentView", model);
+        }
         #endregion
 
     }
