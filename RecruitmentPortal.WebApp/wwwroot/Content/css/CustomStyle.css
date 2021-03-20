@@ -99,3 +99,9 @@
 .hiddenclass{
     display:none;
 }
+.mt-25 {
+    margin-top: 25px !important;
+}
+.field-validation-error{
+    color:red;
+}

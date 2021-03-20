@@ -250,7 +250,7 @@
     <value>Valid Input Text Required</value>
   </data>
   <data name="DegreeNameRequired" xml:space="preserve">
-    <value>Please Insert Degree</value>
+    <value>Degree is Required</value>
   </data>
   <data name="DeptNameRequired" xml:space="preserve">
     <value>Please Insert Department</value>

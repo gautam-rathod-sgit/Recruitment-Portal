@@ -115,7 +115,7 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please Insert Degree.
+        ///   Looks up a localized string similar to Degree is Required.
         /// </summary>
         public static string DegreeNameRequired {
             get {
