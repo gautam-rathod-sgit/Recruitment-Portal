@@ -100,7 +100,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [Required(ErrorMessageResourceName = "DegreeRequired", ErrorMessageResourceType = typeof(Messages))]
         public int selectedDegree { get; set; }
 
-        [Display(ResourceType = typeof(Labels), Name = "Department")]
+        [Display(ResourceType = typeof(Labels), Name = "DepartmentName")]
         [Required(ErrorMessageResourceName = "DepartmentRequired", ErrorMessageResourceType = typeof(Messages))]
         public int selectDept { get; set; }
 
