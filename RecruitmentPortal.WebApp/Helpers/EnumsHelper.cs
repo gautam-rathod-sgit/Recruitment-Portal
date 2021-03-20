@@ -67,7 +67,8 @@ namespace RecruitmentPortal.WebApp.Helpers
         }
         public static string DescriptionAttr<T>(this T source)
         {
-            FieldInfo fi = source.GetType().GetField(source.ToString());
+           
+                FieldInfo fi = source.GetType().GetField(source.ToString());
 
             DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(
                 typeof(DescriptionAttribute), false);

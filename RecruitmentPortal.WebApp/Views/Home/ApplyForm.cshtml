@@ -1,8 +1,31 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.CandidateViewModel
 @using RecruitmentPortal.WebApp.Resources
-@using RecruitmentPortal.WebApp.Helpers
+
+
+
+<!-- Modal for OTP -->
+<div class="modal fade in bg-gradient-orange" id="ApplyFormModel" tabindex="-1" role="dialog" aria-labelledby="addApplyFormModel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Enter OTP:</h4>
+            </div>
+            <div class="modal-body" id="OTPbox">
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- Modal end -->
+
+
 <section class="content">
-    @using (Html.BeginForm("IndexPost", "Candidate", FormMethod.Post, new { @role = "form", @enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "applyform", @enctype = "multipart/form-data" }))
     {
 
         <div class="row">
@@ -11,7 +34,7 @@
                     <div class="box-header">
                         <h3 class="box-title"><i class="fa fa-info-circle"></i><b> Apply here :</b></h3>
                         <div class="box-tools pull-right">
-                            <input type="submit" class="btn btn-primary" name="submit" />
+                            <input type="submit" class="btn btn-primary" name="submit" onclick="submitData()" />
                         </div>
                     </div>
                 </div>
@@ -32,7 +55,7 @@
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left">
                                         @Html.LabelFor(m => m.name)
-                                        @Html.TextBoxFor(m => m.name, new { @placeholder = "Candidate Name", @class = "form-control"})
+                                        @Html.TextBoxFor(m => m.name, new { @placeholder = "Candidate Name", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.name, "", new { @class = "text-danger" })
                                     </div>
 
@@ -62,9 +85,9 @@
                                         @Html.LabelFor(m => m.selectedDegree)
                                         @Html.DropDownListFor(m => m.selectedDegree, new SelectList(ViewBag.ListOfDegree, "ID", "degree_name"), Messages.PleaseSelect, new { @id = "getDepts", @class = "form-control select2" })
                                     </div>
-                                    <div class="form-group has-feedback has-feedback-left">
+                                    <div class="form-group">
                                         @Html.LabelFor(m => m.File)
-                                        @Html.TextBoxFor(m => m.File, new { @type = "file", @id = "resume", @placeholder = "Experience", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.File, new { @type = "file", @id = "resume", @placeholder = "Experience" })
                                         @Html.ValidationMessageFor(m => m.experience, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -73,7 +96,7 @@
 
 
                             <div class="col-md-6">
-                                <div class="col-lg-10">
+                                <div class="col-lg-10 col-md-8">
                                     <div class="form-group has-feedback has-feedback-left">
                                         @Html.LabelFor(m => m.email)
                                         @Html.TextBoxFor(m => m.email, new { @placeholder = "Email", @class = "form-control" })
@@ -124,11 +147,10 @@
                                         @Html.TextBoxFor(m => m.expected_ctc, new { @placeholder = "Expected CTC", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.expected_ctc, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="form-group has-feedback has-feedback-left hiddenclass">
+                                    <div class="form-group has-feedback has-feedback-left" id="noticePeriod">
                                         @Html.LabelFor(m => m.notice_period)
-                                        @Html.DropDownListFor(m => m.notice_period, new SelectList(ViewBag.NoticePeriod, "Value", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
+                                        @Html.DropDownListFor(m => m.notice_period, new SelectList(ViewBag.NoticePeriod, "Text", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -148,7 +170,6 @@
             autoclose: true
         });
 
-        var resumeok = false;
         $(".select2").select2();
 
         //for setting degree dropdown to starting index
@@ -173,29 +194,13 @@
 
         //for hiding all 4
         $(".hiddenclass").hide();
-
+        $("#noticePeriod").hide();
 
         //for getting departments and dependent departments
         $('#getDepts').change(function () {
             debugger;
             var url = '@Url.Action("GetDept", "Home")';
             var ddlsource = $("#getDepts").val();
-
-            //callwebservice(url, { Id: ddlsource }, GetDeptCompleted, false, datatypeEnum.json, typeEnum.post);
-            //$.ajax({
-            //    url: url,
-            //    data: {
-            //        "id": ddlsource
-            //    },
-            //    success: function (data) {
-            //        debugger;
-            //        alert("hello");
-            //    },
-            //    error: function (data) {
-            //        alert(JSON.stringify(data));
-            //    }
-            //});
-
 
 
             $.getJSON(url, { Id: ddlsource }, function (data) {
@@ -233,27 +238,41 @@
         //for experienced stuff
         var alreadyBound = false;
         $("#experienced").click(function () {
-                $(".hiddenclass").show();
+            $(".hiddenclass").show();
+            $("#noticePeriod").show();
         });
 
         $("#fresher").click(function () {
             $(".hiddenclass").hide();
+            $("#noticePeriod").hide();
         });
-
-        //Display Only Date till today //
-        var dtToday = new Date();
-        var month = dtToday.getMonth() + 1;     // getMonth() is zero-based
-        var day = dtToday.getDate();
-        var year = dtToday.getFullYear();
-        if (month < 10)
-            month = '0' + month.toString();
-        if (day < 10)
-            day = '0' + day.toString();
-
-        var maxDate = year + '-' + month + '-' + day;
-        $('#demo').attr('max', maxDate);
 
 
     });
+
+        function loadPartialView(id) {
+        var url = '@Url.Action("RenderJobCategoryView", "JobCategory")?id=' + id;
+        $('#JobCategoryPartial').load(url, function () {
+            $('#JobCategoryModel').modal({ show: true });
+        });
+    }
+
+    function submitData() {
+        debugger;
+        var modelData = $("#applyform").serializeObject();
+         $.ajax({
+            type: "POST",
+             url: '@Url.Action("IndexPost","Candidate")',
+             data: JSON.stringify({ 'model': modelData }),
+             //data: { model : modelData },
+            //dataType: "text",
+            success: function (msg) {
+                alert(msg);
+            },
+            error: function (req, status, error) {
+                alert(msg);
+            }
+        });
+    }
 
 </script>

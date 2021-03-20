@@ -240,8 +240,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 //giving appying through
                 model.applying_through = Enum.GetName(typeof(ReferenceType), Convert.ToInt32(model.applying_through));
 
-                //giving notice period
-                model.notice_period = EnumExtension.DescriptionAttr(model.notice_period);
+
 
                 //Resume details fetching
                 //create a place in wwwroot for storing uploaded images
