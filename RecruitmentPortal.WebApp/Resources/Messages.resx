@@ -261,4 +261,7 @@
   <data name="UserNameRequired" xml:space="preserve">
     <value>User Name is Required</value>
   </data>
+  <data name="RejectionReasonRequired" xml:space="preserve">
+    <value>Rejection Reason is Required</value>
+  </data>
 </root>

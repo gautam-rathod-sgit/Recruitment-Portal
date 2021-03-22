@@ -323,18 +323,18 @@ namespace RecruitmentPortal.WebApp.Controllers
         public async Task<IActionResult> RejectApplicant(RejectReasonViewModel model)
         {
             CandidateViewModel candidateViewModel = new CandidateViewModel();
-            int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(model.CandidateId));
-            candidateViewModel = await _candidatePageServices.getCandidateById(decrypted_key);
-            candidateViewModel.isRejected = true;
-
-            int job_ID;
-            string rejection_reason = null;
-            job_ID = candidateViewModel.JobAppId;
-
-            rejection_reason = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).rejection_reason;
-
-            return RedirectToAction("AllApplications", "Candidate");
-
+            if (model.CandidateId != null)
+            {
+                int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(model.CandidateId.ToString()));
+                candidateViewModel = await _candidatePageServices.getCandidateById(decrypted_key);
+                candidateViewModel.isRejected = true;
+                
+                int job_ID;
+                job_ID = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == decrypted_key).ID;
+                model.JobAppId = job_ID;
+            }
+            return RedirectToAction("UpdateJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName(model.JobAppId.ToString()), rejected = true});
+           // return RedirectToAction("AllApplications", "Candidate");
         }
 
         
@@ -479,14 +479,10 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Details(string id, bool backToAll)
+        public async Task<IActionResult> Details(string id)
         {
             CandidateViewModel item = new CandidateViewModel();
 
-            if (backToAll)
-            {
-                ViewBag.backToAll = backToAll;
-            }
             int actualId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
             item = await _candidatePageServices.getCandidateById(actualId);
             
@@ -669,7 +665,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 newlist = models.ToList();
                 foreach (var item in newlist)
                 {
-                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.ID.ToString()));
+                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.candidateId.ToString()));
                     item.candidateName = getCandidateNameById(item.candidateId);
                     item.position = getPositionByCandidateId(item.candidateId);
                     item.job_Role = getJobRoleByCandidateId(item.candidateId);
@@ -716,7 +712,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                 foreach (var item in newList)
                 {
-                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.ID.ToString()));
+                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.candidateId.ToString()));
                     item.candidateName = getCandidateNameById(item.candidateId);
                     item.position = getPositionByCandidateId(item.candidateId);
                     item.job_Role = getJobRoleByCandidateId(item.candidateId);
@@ -878,7 +874,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
 
         /// <summary>
-        /// for Loading the popup for adding or edititng the category.
+        /// for Loading the popup for adding or edititng the Rejection reason.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -886,6 +882,8 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             RejectReasonViewModel model = new RejectReasonViewModel();
             model.CandidateId = id;
+           // int sample_id = Convert.ToInt32(RSACSPSample.DecodeServerName(model.CandidateId));
+           // model.JobAppId = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == sample_id).ID;
             return PartialView("_RejectionReasonView", model);
         }
         #endregion
