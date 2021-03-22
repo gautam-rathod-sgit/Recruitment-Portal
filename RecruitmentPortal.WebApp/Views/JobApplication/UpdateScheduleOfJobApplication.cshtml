@@ -1,132 +1,139 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.SchedulesViewModel
-@using RecruitmentPortal.Infrastructure.Data.Enum
+
 @using RecruitmentPortal.WebApp.Helpers
-<script src="~/lib//jquery//dist//jquery.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
 
-        var alreadyBound = false;
-        $("#face").click(function () {
-            if (!alreadyBound) {
-                var element = '';
-                element += '<div class="form-group">';
-                element += '<label id = "location" class= "control-label required" > Location</label ><br>';
-                var input = '<input type="text" data-val="true" required data-val-location="The location field is not a valid." data-val-required="The location field is required." id="location" name="location" value="" style="width : 100%;height:40px;border-radius : 4px;border:0.5px solid #C7C6C5"/>';
-                element += input;
-                element += '</div >';
-                $("#facetoface").after(element);
-            }
-            alreadyBound = true;
-        });
+@using RecruitmentPortal.WebApp.Resources
 
-        $("#tele").click(function () {
-            $("#facetoface").next().remove("div");
-            alreadyBound = false;
-        });
 
-    });
 
-</script>
-<style type="text/css">
-    .required:after {
-        content: "*";
-        font-weight: bold;
-        color: red;
+<section class="content">
+    @using (Html.BeginForm("UpdateScheduleOfJobApplicationPost", "JobApplication", FormMethod.Post, new { @autocomplete = "off", @role = "form" }))
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box box-default boxPad">
+                    <div class="box-header">
+                        <h3 class="box-title">
+                            <i class="fa fa-info-circle"></i>
+                            Schedule Interview
+                        </h3>
+
+                        <div class="box-tools pull-right">
+                            <input type="submit" value="Save" class="btn btn-primary" name="submit" />
+                            @if (ViewBag.goback == true)
+                            {
+
+
+                                <a href='@Url.Action("ScheduleDetails", "Interviewer", new { scheduleId = Model.EncryptedId})' class="btn btn-primary">Cancel</a>
+
+                            }
+                            else
+                            {
+
+                                <a href='@Url.Action("Details", "JobApplication", new { id = Model.EncryptedId})' class="btn btn-primary">Cancel</a>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="box-body">
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+
+                                @Html.HiddenFor(m => m.candidateId)
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.candidate_name, new { @class = "asterisk" })
+                                    @Html.TextBoxFor(m => m.candidate_name, new { @placeholder = "Name", @class = "form-control", @readonly = "readonly" })                                    @Html.ValidationMessageFor(m => m.candidate_name)
+                                    @Html.ValidationMessageFor(m => m.candidate_name)
+
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.position, new { @class = "asterisk" })
+                                    @Html.TextBoxFor(m => m.position, new { @placeholder = "Position", @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.position)
+
+
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.datetime, new { @class = "asterisk" })
+                                    @Html.TextBoxFor(m => m.datetime, new { @type = "datetime", @placeholder = "Date & Time", @class = "form-control datepicker" })
+                                    @Html.ValidationMessageFor(model => model.datetime, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.roundValue, new { @class = "asterisk" })
+                                    @Html.DropDownListFor(m => m.roundValue, new SelectList(ViewBag.RoundTypeList, "Value", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
+                                    @Html.ValidationMessageFor(model => model.roundValue)
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Multiinterviewer, new { @class = "asterisk" })
+                                    @Html.ListBoxFor(m => m.Multiinterviewer, new MultiSelectList(ViewBag.users), new { @class = "form-control select2" })
+                                    @Html.ValidationMessageFor(model => model.Multiinterviewer)
+
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.statusvalue, new { @class = "asterisk" })
+                                    @Html.DropDownListFor(m => m.statusvalue, new SelectList(ViewBag.StatusTypeList, "Value", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
+                                    @Html.ValidationMessageFor(model => model.statusvalue)
+
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.mode_of_interview, new { @class = "asterisk" })
+                                    <div class="col-10">
+                                        @Html.Label("Online")
+                                        @Html.RadioButtonFor(m => m.mode_of_interview, "Online", new { @id = "online" })
+                                        @Html.Label("Face to Face")
+                                        @Html.RadioButtonFor(m => m.mode_of_interview, "Face-To-Face", new { @id = "face" })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.mode_of_interview)
+
+                                </div>
+                                <div class="form-group hiddenclass">
+                                    @Html.LabelFor(m => m.location, new { @class = "asterisk" })
+                                    @Html.TextBoxFor(m => m.location, new { @placeholder = "Position", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.location)
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     }
-</style>
-<div class="row bg-gradient-gray-dark text-white">
-    <div class="col-md-5">
-        <h2 class="pl-2">Update Schedule :</h2>
-    </div>
-</div>
-<hr />
-
-<div class="d-flex justify-content-end">
-    <div>
-        @if (ViewBag.goback == true)
-        {
-            <a asp-action="ScheduleDetails" asp-controller="Interviewer" asp-route-scheduleId="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="mr-3 btn btn-primary">Back to List</a>
-        }
-        else
-        {
-            <a asp-action="Details" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.jobAppId).ToString())" class="mr-3 btn btn-primary">Back to List</a>
-
-        }
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="UpdateScheduleOfJobApplicationPost">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
-            <input type="hidden" value="@Model.ID" id="ID" name="ID" required />
-            <div class="form-group">
-                <label asp-for="candidate_name" class="control-label">Candidate Name</label>
-                <input asp-for="candidate_name" class="form-control" readonly />
-                <span asp-validation-for="candidate_name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="position" class="control-label">Position</label>
-                <input asp-for="position" class="form-control" readonly />
-                <span asp-validation-for="position" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="datetime" class="control-label required">Date Time </label>
-                <input asp-for="datetime" class="form-control" />
-                <span asp-validation-for="datetime" class="text-danger"></span>
-            </div>
-
-            @*<div class="form-group">
-            <label asp-for="round" class="control-label"></label>
-            <input asp-for="round" class="form-control" required min="0" step="1" oninput="validity.valid||(value='');" />
-            <span asp-validation-for="round" class="text-danger"></span>
-        </div>*@
-            <div class="form-group">
-                <label asp-for="roundValue" class="control-label required">Interview Round : </label>
-                <select asp-for="roundValue" asp-items="Html.GetEnumSelectList<RoundType>()" class="form-control" required>
-                    <option selected="selected" value="">Please select</option>
-                </select>
-                <span asp-validation-for="roundValue" class="text-danger" />
-            </div>
-
-            @*interviewer selection*@
-            <div class="form-group">
-                <label asp-for="Multiinterviewer" class="control-label required">Interviewers :</label><span>(Hold CTRL for Multiselect)</span>
-                <select asp-for="Multiinterviewer" id="interviewer" name="Multiinterviewer"
-                        class="" multiple size="5" style="width : 375px; height : 150px" required
-                        asp-items="@(new SelectList(ViewBag.users,"Id", "UserName"))">
-                </select>
-                <span asp-validation-for="Multiinterviewer" class="text-danger"></span>
-            </div>
-
-            <div class="form-group" id="mode_select">
-                <label asp-for="mode_of_interview" class="control-label required">Mode of Interview : </label>
-                <input type="radio" name="mode_of_interview" value="Telephonic" id="tele" class="ml-2" required /><span> Online</span>
-                <input type="radio" name="mode_of_interview" value="Face to Face" id="face" class="ml-2" /><span id="facetoface"> Face to Face</span>
-            </div>
+</section>
+<script>
 
 
-            <div class="form-group">
-                <label asp-for="statusvalue" class="control-label required">Interview Status : </label>
-                <select asp-for="statusvalue" asp-items="Html.GetEnumSelectList<StatusType>()" class="form-control" required>
-                    <option selected="selected" value="">Please select</option>
-                </select>
-                <span asp-validation-for="statusvalue" class="text-danger" />
-            </div>
-            <div class="form-group d-flex">
-                <input type="submit" value="Save" class="btn btn-primary mr-3" />
-                @if (ViewBag.goback == true)
-                {
-                    <a asp-action="ScheduleDetails" asp-controller="Interviewer" asp-route-scheduleId="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="mr-3 btn btn-danger">Cancel</a>
-                }
-                else
-                {
-                    <a asp-action="Details" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.jobAppId).ToString())" class="mr-3 btn btn-danger">Cancel</a>
-                }
-            </div>
-        </form>
-    </div>
-</div>
+    $(function () {
 
+        $(".select2").select2();
 
+        $(".hiddenclass").hide();
 
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            endDate: '+0d',
+            autoclose: true
+        });
+        $("#face").click(function () {
+            $(".hiddenclass").show();
+        });
+
+        $("#online").click(function () {
+            $(".hiddenclass").hide();
+        });
+    });
+</script>

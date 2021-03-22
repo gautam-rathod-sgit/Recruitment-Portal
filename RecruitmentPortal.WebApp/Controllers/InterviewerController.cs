@@ -75,7 +75,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                         item.jobAppId = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == item.candidateId).ID;
                         item.jobRole = getJobRoleByCandidateId(item.candidateId);
                         item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
-                        item.roundName = Enum.GetName(typeof(StatusType), item.round);
+                        item.roundName = Enum.GetName(typeof(RoundType), item.round);
                         //getting interviewer names of schedule
                         List<UserModel> listOfUser = getInterviewerNames(item.ID);
                         item.InterviewerNames = listOfUser;

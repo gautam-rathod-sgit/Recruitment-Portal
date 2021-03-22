@@ -85,8 +85,6 @@
         </div>
     </div>
 </section>
-
-<script src="~/lib//jquery//dist//jquery.min.js"></script>
 <script>
   
 
@@ -110,9 +108,6 @@
                 element += '<div class="form-group">';
                 element += '@Html.LabelFor(m => m.location)';
                 element += '@Html.TextBoxFor(m => m.location, new { @placeholder = "Location", @class = "form-control" })';
-                //element += '<label id = "location" class= "control-label required" > Location</label ><br>';
-                //var input = '<input type="text" data-val="true" required data-val-location="The location field is not a valid." data-val-required="The location field is required." id="location" name="location" value="" style="width : 100%;height:40px;border-radius : 4px;border:0.5px solid #C7C6C5"/>';
-                //element += input;
                 element += '</div >';
                 $("#face").after(element);
             }
@@ -123,12 +118,5 @@
             $("#face").next().remove("div");
             alreadyBound = false;
         });
-
-
     });
-
-   
-
-    
-
 </script>
