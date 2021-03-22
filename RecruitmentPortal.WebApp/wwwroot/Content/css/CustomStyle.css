@@ -105,3 +105,9 @@
 .field-validation-error{
     color:red;
 }
+
+.skin-yellow .sidebar-menu > li:hover > a, .skin-yellow .sidebar-menu > li.active > a {
+    color: #f39c12;
+    background: #000000;
+    border-left-color: #f39c12;
+}
