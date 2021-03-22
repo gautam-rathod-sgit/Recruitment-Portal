@@ -481,12 +481,15 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Details(string id, bool backToAll)
         {
+            CandidateViewModel item = new CandidateViewModel();
+
             if (backToAll)
             {
                 ViewBag.backToAll = backToAll;
             }
             int actualId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
-            CandidateViewModel item = await _candidatePageServices.getCandidateById(actualId); 
+            item = await _candidatePageServices.getCandidateById(actualId);
+            
             return View(item);
         }
 
@@ -619,7 +622,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                 foreach (var data in newlist)
                 {
-                    data.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(data.ID.ToString()));
+                    data.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(data.candidateId.ToString()));
                     data.candidateName = getCandidateNameById(data.candidateId);
                     data.position = getPositionByCandidateId(data.candidateId);
                     data.job_Role = getJobRoleByCandidateId(data.candidateId);
