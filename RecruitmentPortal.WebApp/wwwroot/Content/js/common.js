@@ -155,9 +155,9 @@ function getStatusCompleted(data) {
     waitingDialog.hide();
 }
 
-function sidebarActiveLink() {
-    $("li.nav-item").removeClass("active");
-    $("li#" + window.controllerName).addClass("active");
+function sidebarActiveLink(controllerName) {
+    //$('#sideBarMenu ul li').removeClass('active');
+    $('#sideBarMenu ul li:has(a[id="' + controllerName + '"])').addClass('active');
 }
 
 function getLocalValue(key) {

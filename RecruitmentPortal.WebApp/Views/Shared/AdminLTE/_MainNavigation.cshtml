@@ -1,52 +1,51 @@
 ﻿<aside class="main-sidebar sidebar-dark-orange">
     <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
+    <section class="sidebar" id="sideBarMenu">
         <ul class="sidebar-menu">
-            <li class="header">MENU NAVIGATION</li>
             @if (User.IsInRole("Admin"))
             {
-                <li class="nav-item ">
-                    <a href='@Url.Action("AdminIndex", "Home")' class="nav-link">
+                <li class="nav-item">
+                    <a href='@Url.Action("AdminIndex", "Home")' id="Home" class="nav-link" >
                         <i class="fa fa-dashboard"></i>
                         <span>
                             Dashboard
                         </span>
                     </a>
                 </li>
-                <li class="nav-item ">
-                    <a href='@Url.Action("Index", "Interviewer")' class="nav-link">
+                <li class="nav-item">
+                    <a href='@Url.Action("Index", "Interviewer")' id="Interviewer" class="nav-link">
                         <i class="fa fa-clipboard"></i>
                         <span>
                             Schedules
                         </span>
                     </a>
                 </li>
-                <li class="nav-item ">
-                    <a href='@Url.Action("Index", "JobCategory")' class="nav-link">
+                <li class="nav-item">
+                    <a href='@Url.Action("Index", "JobCategory")' id="JobCategory" class="nav-link">
                         <i class="fa fa-newspaper-o"></i>
                         <span>
                             Jobs
                         </span>
                     </a>
                 </li>
-                <li class="nav-item ">
-                    <a href='@Url.Action("Index", "Qualification")' class="nav-link">
+                <li class="nav-item">
+                    <a href='@Url.Action("Index", "Qualification")' id="Qualification" class="nav-link">
                         <i class="fa fa-graduation-cap"></i>
                         <span>
                             Qualifications
                         </span>
                     </a>
                 </li>
-                <li class="nav-item ">
-                    <a href='@Url.Action("Index", "Account")' class="nav-link">
+                <li class="nav-item">
+                    <a href='@Url.Action("Index", "Account")' id="Account" class="nav-link">
                         <i class="fa fa-users"></i>
                         <span>
                             Interviewers
                         </span>
                     </a>
                 </li>
-                <li class="nav-item ">
-                    <a href='@Url.Action("AllApplications", "Candidate")' class="nav-link">
+                <li class="nav-item">
+                    <a href='@Url.Action("AllApplications", "Candidate")' id="Candidate" class="nav-link">
                         <i class="fa fa-list-ol"></i>
                         <span>
                             All Applications
@@ -56,8 +55,8 @@
             }
             @if (User.IsInRole("Interviewer"))
             {
-                <li class="nav-item ">
-                    <a href='@Url.Action("InterviewerIndex", "Home")' class="nav-link">
+                <li class="nav-item">
+                    <a href='@Url.Action("InterviewerIndex", "Home")' id="Home" class="nav-link">
                         <i class="fa fa-dashboard"></i>
                         <span>
                             Dashboard
@@ -65,8 +64,8 @@
                     </a>
                 </li>
 
-                <li class="nav-item ">
-                    <a href='@Url.Action("Index", "Interviewer")' class="nav-link">
+                <li class="nav-item">
+                    <a href='@Url.Action("Index", "Interviewer")' id="Interviewer" class="nav-link">
                         <i class="fa fa-lock"></i>
                         <span>
                             Completed Schedules
@@ -76,8 +75,8 @@
             }
             @if (!User.IsInRole("Interviewer") && !User.IsInRole("Admin"))
             {
-                <li class="nav-item ">
-                    <a href='@Url.Action("Index", "Home")' class="nav-link">
+                <li class="nav-item">
+                    <a href='@Url.Action("Index", "Home")' id="Home" class="nav-link">
                         <i class="fa fa-home"></i>
                         <span>
                             Home

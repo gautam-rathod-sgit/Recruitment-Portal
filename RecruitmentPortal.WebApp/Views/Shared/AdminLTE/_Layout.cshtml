@@ -47,9 +47,10 @@
 </html>
 <script>
     $(document).ready(function () {
+        var controllerName = '@ViewContext.RouteData.Values["Controller"].ToString()';
         var errormessage = '@TempData[EnumsHelper.NotifyType.Error.GetDescription()]';
         var successmessage = '@TempData[EnumsHelper.NotifyType.Success.GetDescription()]';
-
+        sidebarActiveLink(controllerName);
         if (errormessage !== "") {
             notification("Error", errormessage, "error");
         }
