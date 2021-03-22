@@ -261,4 +261,10 @@
   <data name="UserNameRequired" xml:space="preserve">
     <value>User Name is Required</value>
   </data>
+  <data name="InvalidOTP" xml:space="preserve">
+    <value>OTP is Invalid</value>
+  </data>
+  <data name="SuccessfullyApplied" xml:space="preserve">
+    <value>Application Submitted Successfully</value>
+  </data>
 </root>

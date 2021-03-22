@@ -2,30 +2,8 @@
 @using RecruitmentPortal.WebApp.Resources
 
 
-
-<!-- Modal for OTP -->
-<div class="modal fade in bg-gradient-orange" id="ApplyFormModel" tabindex="-1" role="dialog" aria-labelledby="addApplyFormModel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-                <h4 class="modal-title">Enter OTP:</h4>
-            </div>
-            <div class="modal-body" id="OTPbox">
-
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- Modal end -->
-
-
 <section class="content">
-    @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "applyform", @enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("IndexPost", "Home", FormMethod.Post, new { @id = "applyform", @enctype = "multipart/form-data" }))
     {
 
         <div class="row">
@@ -34,7 +12,7 @@
                     <div class="box-header">
                         <h3 class="box-title"><i class="fa fa-info-circle"></i><b> Apply here :</b></h3>
                         <div class="box-tools pull-right">
-                            <input type="submit" class="btn btn-primary" name="submit" onclick="submitData()" />
+                            <input type="submit" value="Submit" class="btn btn-primary" name="submit" />
                         </div>
                     </div>
                 </div>
@@ -49,9 +27,9 @@
                             <div class="col-md-6">
                                 <div class="col-lg-10 col-md-8">
                                     <div class="form-group has-feedback has-feedback-left">
-                                        @Html.LabelFor(m => m.jobName, new { @class = "asterisk" })
-                                        @Html.TextBoxFor(m => m.jobName, new { @placeholder = "Job Title", @class = "form-control", @readonly = "readonly" })
-                                        @Html.ValidationMessageFor(m => m.jobName, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.jobpostName, new { @class = "asterisk" })
+                                        @Html.TextBoxFor(m => m.jobpostName, new { @placeholder = "Job Title", @class = "form-control", @readonly = "readonly" })
+                                        @Html.ValidationMessageFor(m => m.jobpostName, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left">
                                         @Html.LabelFor(m => m.name, new { @class = "asterisk" })
@@ -67,25 +45,28 @@
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.Gender, new { @class = "asterisk" })
                                         <div>
-                                            @Html.RadioButtonFor(m => m.Gender, "Male", new { @id = "Gender" })
+                                            @Html.RadioButtonFor(m => m.Gender, "Male")
                                             @Html.Label("Male ")
-                                            @Html.RadioButtonFor(m => m.Gender, "Female", new { @id = "Gender" })
+                                            @Html.RadioButtonFor(m => m.Gender, "Female")
                                             @Html.Label("Female ")
-                                            @Html.RadioButtonFor(m => m.Gender, "Other", new { @id = "Gender" })
+                                            @Html.RadioButtonFor(m => m.Gender, "Other")
                                             @Html.Label("Other")
-
                                         </div>
+                                        @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
+
                                     </div>
                                     <div class="form-group has-feedback ">
                                         @Html.LabelFor(m => m.applying_through, new { @class = "asterisk" })
                                         @Html.DropDownListFor(m => m.applying_through, new SelectList(ViewBag.ReferenceSelect, "Value", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
                                         @Html.ValidationMessageFor(m => m.applying_through, "", new { @class = "text-danger" })
+
                                     </div>
 
                                     <div class="form-group has-feedback has-feedback-left degree_dept ">
                                         @Html.LabelFor(m => m.selectedDegree, new { @class = "asterisk" })
                                         @Html.DropDownListFor(m => m.selectedDegree, new SelectList(ViewBag.ListOfDegree, "ID", "degree_name"), Messages.PleaseSelect, new { @id = "getDepts", @class = "form-control select2" })
                                         @Html.ValidationMessageFor(m => m.selectedDegree, "", new { @class = "text-danger" })
+
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.File, new { @class = "asterisk" })
@@ -128,6 +109,8 @@
                                             @Html.Label(" Experience")
 
                                         </div>
+                                        @Html.ValidationMessageFor(model => model.experience, "", new { @class = "text-danger" })
+
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left hiddenclass">
                                         @Html.LabelFor(m => m.total_experience, new { @class = "asterisk" })
@@ -153,6 +136,7 @@
                                         @Html.LabelFor(m => m.notice_period, new { @class = "asterisk" })
                                         @Html.DropDownListFor(m => m.notice_period, new SelectList(ViewBag.NoticePeriod, "Text", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
                                         @Html.ValidationMessageFor(m => m.notice_period, "", new { @class = "text-danger" })
+
                                     </div>
                                 </div>
                             </div>
@@ -164,6 +148,7 @@
 
     }
 </section>
+
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -196,36 +181,38 @@
         });
 
         //for hiding all 4
-        $(".hiddenclass").hide();
+        $(".hiddenclass").hide()
         $("#noticePeriod").hide();
 
         //for getting departments and dependent departments
         $('#getDepts').change(function () {
-            debugger;
+          
             var url = '@Url.Action("GetDept", "Home")';
             var ddlsource = $("#getDepts").val();
 
 
             $.getJSON(url, { Id: ddlsource }, function (data) {
-                debugger;
+             
                 if (data.length > 1) {
-                    debugger;
+               
 
                         var dept_drop = '';
-                        $('#SelectDept').remove(); //for removing if already existing dropdown exist of previous record
-                        dept_drop += '<select id="SelectDept" name="SelectDept" style="width:200px" required>';
+                    $('#SelectDept').remove(); //for removing if already existing dropdown exist of previous record
+
+                    dept_drop += '<select id="SelectDept" name="SelectDept" class="form-control select2">';
+
 
                         for (var i = 0; i < data.length; i++) {
                             dept_drop += '<option value="' + data[i].value + '">' + data[i].text + '</option>';
                         }
-                        debugger;
+                     
                         dept_drop += '</select>';
                         $('.degree_dept').append(dept_drop);
-                        debugger;
+                   
 
                     }
                     else {
-                        debugger;
+                     
                             $("#DeptID").val(0);
                             //$('.dept').nextAll('#SelectDept').remove();
                             $('#SelectDept').remove();
@@ -234,12 +221,9 @@
         });
 
 
-        function GetDeptCompleted(data) {
-            debugger;
-        }
 
         //for experienced stuff
-        
+
         $("#experienced").click(function () {
             $(".hiddenclass").show();
             $("#noticePeriod").show();
@@ -253,29 +237,5 @@
 
     });
 
-        function loadPartialView(id) {
-        var url = '@Url.Action("RenderJobCategoryView", "JobCategory")?id=' + id;
-        $('#JobCategoryPartial').load(url, function () {
-            $('#JobCategoryModel').modal({ show: true });
-        });
-    }
-
-    function submitData() {
-        debugger;
-        var modelData = $("#applyform").serializeObject();
-         $.ajax({
-            type: "POST",
-             url: '@Url.Action("IndexPost","Candidate")',
-             data: JSON.stringify({ 'model': modelData }),
-             //data: { model : modelData },
-            //dataType: "text",
-            success: function (msg) {
-                alert(msg);
-            },
-            error: function (req, status, error) {
-                alert(msg);
-            }
-        });
-    }
 
 </script>

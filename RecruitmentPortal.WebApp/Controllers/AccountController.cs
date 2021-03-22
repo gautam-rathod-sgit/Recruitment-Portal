@@ -24,15 +24,18 @@ namespace RecruitmentPortal.WebApp.Controllers
         //private readonly IAuthorize _authorize;
         private IPasswordHasher<ApplicationUser> passwordHasher;
         public IEmailService _emailService { get; }
+        private readonly RecruitmentPortalDbContext _dbContext;
         #endregion
 
         #region Constructor
         public AccountController(IPasswordHasher<ApplicationUser> passwordHash,
+            RecruitmentPortalDbContext dbContext,
            UserManager<ApplicationUser> userManager, IEmailService emailService)
         {
             _userManager = userManager;
             passwordHasher = passwordHash;
             _emailService = emailService;
+            _dbContext = dbContext;
         }
         #endregion
 
@@ -73,16 +76,16 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             ApplicationUserViewModel model = new ApplicationUserViewModel();
             if (!string.IsNullOrEmpty(id))
-            { 
+            {
                 ApplicationUser user = await _userManager.FindByIdAsync(id);
-                
+
                 if (user != null)
                 {
                     model.UserId = Guid.Parse(user.Id);
                     model.Email = user.Email;
                     model.UserName = user.UserName;
                     model.position = user.position;
-                    model.skype_id = model.skype_id;
+                    model.skype_id = user.skype_id;
                 }
             }
             return View(model);
@@ -102,7 +105,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         public async Task<IActionResult> UpdateUser(ApplicationUserViewModel model, string submit)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(model.UserId.ToString());
-            
+
             try
             {
                 if (user != null)
@@ -113,7 +116,10 @@ namespace RecruitmentPortal.WebApp.Controllers
                     user.skype_id = model.skype_id;
                     user.PasswordHash = passwordHasher.HashPassword(user, model.password);
 
-                    if ((await _userManager.UpdateAsync(user)).Succeeded)
+                    var result = await _userManager.UpdateAsync(user);
+                    _dbContext.SaveChanges();
+
+                    if (result.Succeeded)
                     {
                         TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User Updated Successfully!";
                         RedirectToAction("Index", "Home");
@@ -125,17 +131,17 @@ namespace RecruitmentPortal.WebApp.Controllers
                 }
                 else
                 {
-                    
+
                     ModelState.AddModelError(model.UserName, "User Not Found");
                 }
                 switch (submit)
                 {
                     case "Save":
-                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Job updated Successfully.";
+                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User updated Successfully.";
                         return RedirectToAction("Index", "Account");
 
                     case "Save & Continue":
-                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Job updated Successfully.";
+                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User updated Successfully.";
                         return RedirectToAction("UpdateUser", "Account", new { id = model.UserId });
                 }
             }

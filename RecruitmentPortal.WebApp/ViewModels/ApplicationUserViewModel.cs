@@ -13,7 +13,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public Guid UserId{ get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "UserName")]
-        [RegularExpression(CommonHelper.RegexText, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
+        [RegularExpression(CommonHelper.RegexUsername, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "UserNameRequired", ErrorMessageResourceType = typeof(Messages))]
         public string UserName { get; set; }
 

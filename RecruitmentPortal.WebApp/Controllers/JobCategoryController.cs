@@ -26,7 +26,6 @@ namespace RecruitmentPortal.WebApp.Controllers
         IQueryable<JobCategoryViewModel> categorylist;
         private readonly IJobCategoryPage _jobCategoryPageservices;
 
-        IQueryable<JobPostViewModel> postlist;
         private readonly IJobPostPage _jobPostPageservices;
 
         //for userid
@@ -89,14 +88,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
 
         }
-        /// <summary>
-        /// This method is used for adding new category [GET]
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult AddNewCategory()
-        {
-            return View();
-        }
 
         /// <summary>
         /// This method is used for adding new category [POST]
@@ -131,7 +122,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
             }
 
             return RedirectToAction("Index", "JobCategory");
@@ -218,7 +209,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
             }
 
             return View();
@@ -274,7 +265,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
             }
 
             return RedirectToAction("Index", "JobCategory");

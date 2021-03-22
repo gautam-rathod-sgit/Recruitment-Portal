@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.Infrastructure.Data.Enum;
@@ -11,12 +13,14 @@ using RecruitmentPortal.Infrastructure.Repository;
 using RecruitmentPortal.WebApp.Helpers;
 using RecruitmentPortal.WebApp.Interfaces;
 using RecruitmentPortal.WebApp.Models;
+using RecruitmentPortal.WebApp.Resources;
 using RecruitmentPortal.WebApp.Security;
 using RecruitmentPortal.WebApp.Services;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -35,27 +39,51 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ISchedulesPage _schedulesPage;
         private readonly IJobApplicationPage _jobApplicationPage;
-        private readonly ICandidatePage _candidatePage;
+        private readonly IJobPostCandidatePage _jobPostCandidatePage;
+        private readonly ICandidatePage _candidatePageServices;
+        private readonly IDegreePage _degreePageServices; 
+        private readonly IDepartmentPage _departmentPageservices;
+        private readonly IJobPostPage _jobPostPageservices;
         private readonly IDataProtector _Protector;
+        public IEmailService _emailService { get; }
+        private readonly IWebHostEnvironment _environment;
+
+
         #endregion
 
         #region Constructor
         public HomeController(ICandidatePage candidatePage,
+            IWebHostEnvironment environment,
             IJobApplicationPage jobApplicationPage,
             ISchedulesPage schedulesPage,
             UserManager<ApplicationUser> userManager,
+                         IDepartmentPage departmentPageservices,
+
+              IJobPostCandidatePage jobPostCandidatePage,
             ILogger<HomeController> logger,
-            RecruitmentPortalDbContext dbContext,
+                     IDegreePage degreePageServices,
+            RecruitmentPortalDbContext dbContext, 
+            IJobPostPage jobPostPageservices,
+
             IDataProtectionProvider dataProtectionProvider,
+             IEmailService emailService,
             DataProtectionPurposeStrings dataProtectionPurposeStrings,
             IJobPostPage jobPostPage)
         {
             _logger = logger;
+            _departmentPageservices = departmentPageservices;
+            _environment = environment;
+            _emailService = emailService;
+            _jobPostPageservices = jobPostPageservices;
+
             _dbContext = dbContext;
             _jobApplicationPage = jobApplicationPage;
             _schedulesPage = schedulesPage;
-            _candidatePage = candidatePage;
+            _candidatePageServices = candidatePage;
             _userManager = userManager;
+            _degreePageServices = degreePageServices;
+
+            _jobPostCandidatePage = jobPostCandidatePage;
             _jobPostPage = jobPostPage;
             _Protector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.JobPostIdRouteValue);
         }
@@ -68,114 +96,6 @@ namespace RecruitmentPortal.WebApp.Controllers
         //}
 
         #region Public Methods
-        /// <summary>
-        /// This method fetches Home Page
-        /// </summary>
-        /// <param name="SearchString"></param>
-        /// <param name="sortOrder"></param>
-        /// <param name="pageNumber"></param>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        //public async Task<IActionResult> Index(string SearchString, string sortOrder, int? pageNumber, string s)
-        //{
-        //    if (User.IsInRole("Admin"))
-        //    {
-        //        return RedirectToAction("AdminIndex", "Home");
-        //    }
-        //    if (User.IsInRole("Interviewer"))
-        //    {
-        //        return RedirectToAction("InterviewerIndex", "Home");
-        //    }
-        //    else
-        //    {
-        //        ////checking if vacancy of job completed or not
-        //        var vacancy = _dbContext.JobPost.FirstOrDefault(x => x.ID == newModel.job_Id).vacancy;
-        //        var count_post = _dbContext.JobPostCandidate.Where(x => x.job_Id == newModel.job_Id).Count();
-
-        //        if (vacancy <= count_post)
-        //        {
-        //            var jobPostModel = await JobPostPageService.getJobPostById(newModel.job_Id);
-        //            return RedirectToAction("DeactivateJobPost", new { model, jobPostModel });
-        //        }
-
-
-        //        //for candidate conflict
-        //        if (s != null)
-        //            ViewData["msg"] = s;
-
-        //        ViewData["CurrentSort"] = sortOrder;
-        //        ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "job_title" : "";
-        //        ViewData["LocationSortParm"] = String.IsNullOrEmpty(sortOrder) ? "location" : "";
-        //        ViewData["JobRoleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "job_role" : "";
-        //        ViewData["JobTypeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "job_type" : "";
-
-
-        //        IQueryable<JobPostViewModel> plist = await _jobPostPage.getJobPost();
-        //        //IEnumerable<JobPostViewModel> newlist;
-        //        //newlist = plist.ToList();
-        //        //foreach(var item in newlist)
-        //        //{
-        //        //    item.EncryptionId = _Protector.Protect(item.ID.ToString());
-        //        //}
-        //        //plist = newlist.AsQueryable();
-        //        //foreach(var item in plist)
-        //        //{
-        //        //    item.EncryptionId = _Protector.Protect(item.ID.ToString());
-        //        //}
-        //        //plist = plist.Select(c =>
-        //        //{
-        //        //    c.EncryptionId = _Protector.Protect(c.ID.ToString());
-        //        //});
-        //        try
-        //        {
-        //            if (!String.IsNullOrEmpty(SearchString))
-        //            {
-        //                plist = plist.Where(s => s.job_title.ToUpper().Contains(SearchString.ToUpper()) || s.location.ToUpper().Contains(SearchString.ToUpper()) || s.job_role.ToUpper().Contains(SearchString.ToUpper()) || s.job_type.ToUpper().Contains(SearchString.ToUpper()));
-        //            }
-
-        //            switch (sortOrder)
-        //            {
-        //                case "job_title":
-        //                    plist = plist.OrderByDescending(s => s.job_title);
-        //                    break;
-
-        //                case "location":
-        //                    plist = plist.OrderBy(s => s.location);
-        //                    break;
-
-        //                case "job_role":
-        //                    plist = plist.OrderByDescending(s => s.job_role);
-        //                    break;
-
-        //                case "job_type":
-        //                    plist = plist.OrderByDescending(s => s.job_type);
-        //                    break;
-
-        //                default:
-        //                    plist = plist.OrderBy(s => s.job_title);
-        //                    break;
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            Console.WriteLine(ex.Message);
-        //        }
-        //        //for sorting
-        //        int pageSize = 4;
-        //        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Jobs Load Successfully..!!";
-        //        return View(await PaginatedList<JobPostViewModel>.CreateAsync(plist.AsNoTracking(), pageNumber ?? 1, pageSize));
-        //    }
-        //}
-
-        //public IQueryable<JobPostViewModel> Addon(List<JobPostViewModel> newlist)
-        //{
-        //    foreach (var item in newlist)
-        //    {
-        //        item.EncryptionId = _Protector.Protect(item.ID.ToString());
-        //    }
-        //    return newlist.AsQueryable();
-        //}
 
         public ActionResult Index()
         {
@@ -221,22 +141,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
 
                 schedulelist = upcoming_schedules.ToList();
-                //foreach (var item in upcoming_schedules.ToList())
-                //{
-                //    //getting interviewers names
-                //    List<UserModel> listOfUser = getInterviewerNames(item.ID);
-                //    item.InterviewerNames = listOfUser;
 
-                //    //job role fetching
-                //    item.jobRole = getJobRoleByCandidateId(item.candidateId);
-
-                //    //fetching only pending schedules
-                //    data = _dbContext.jobApplications.Where(x => x.candidateId == item.candidateId).FirstOrDefault();
-                //    if (data.status == status_Pending)
-                //    {
-                //        schedulelist.Add(item);
-                //    }
-                //}
                 collection.upcoming_schedules = schedulelist;
 
 
@@ -291,7 +196,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             try
             {
                 jobApplication = await _jobApplicationPage.getJobApplicationById(id);
-                CandidateViewModel candidateDetail = await _candidatePage.getCandidateById(jobApplication.candidateId);
+                CandidateViewModel candidateDetail = await _candidatePageServices.getCandidateById(jobApplication.candidateId);
                 jobApplication.candidate = candidateDetail;
             }
             catch (Exception ex)
@@ -394,7 +299,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 model.jobpostID = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
 
-                model.jobName = _dbContext.JobPost.FirstOrDefault(x => x.ID == model.jobpostID).job_title;
+                model.jobpostName = _dbContext.JobPost.FirstOrDefault(x => x.ID == model.jobpostID).job_title;
 
                 //fetching all the degrees for candidate to apply with.
 
@@ -408,6 +313,219 @@ namespace RecruitmentPortal.WebApp.Controllers
                 model = new CandidateViewModel();
             }
             return View(model);
+        }
+
+        /// <summary>
+        /// This method stores the applicant's form-data to the database [POST]
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> IndexPost(CandidateViewModel model)
+        {
+            //checking if already applied for same job
+            var candidateList = await _candidatePageServices.getCandidates();
+
+            try
+            {
+                List<CandidateViewModel> list = new List<CandidateViewModel>();
+                list = candidateList.ToList();
+                foreach (var item in list)
+                {
+                    if (item.email == model.email)
+                    {
+                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = model.email + " already exists !!";
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+            }
+
+            try
+            {
+                //------------------------------------------------------------------------------------
+                //receiving dropdown value of degree
+                if (model.degree == "Select Degree")
+                {
+                    ModelState.AddModelError("", "Select Degree");
+                }
+                //getting data from database
+                List<Degree> DegreeList = new List<Degree>();
+                DegreeList = (from element in _dbContext.Degree select element).ToList();
+                DegreeList = DegreeList.Where(x => x.isActive == true).ToList();
+                //inserting into dropdown list
+                DegreeList.Insert(0, new Degree { ID = 0, degree_name = "Select Degree" });
+
+                //assigning degreelist to viewbag.listofdegree
+                ViewBag.ListOfDegree = DegreeList;
+                //------------------------------------------------------------------------------------
+
+
+                //getting selected value for degree
+                DegreeViewModel selectedDegree = await _degreePageServices.getDegreeById(model.selectedDegree);
+                string degreename = selectedDegree.degree_name;
+
+                if (model.selectDept != 0)
+                {
+                    DepartmentViewModel selectedDept = await _departmentPageservices.getDepartmentById(model.selectDept);
+                    string deptename = selectedDept.dept_name;
+
+                    model.degree = degreename + "(" + deptename + ")";
+                }
+                else
+                {
+                    model.degree = degreename;
+                }
+
+
+                //assigning today's apply date 
+                model.apply_date = DateTime.Now;
+
+                //giving appying through
+                model.applying_through = Enum.GetName(typeof(ReferenceType), Convert.ToInt32(model.applying_through));
+
+
+
+                //Resume details fetching
+                //create a place in wwwroot for storing uploaded images
+                var uploads = Path.Combine(_environment.WebRootPath, "Resume");
+                if (model.File != null)
+                {
+                    using (var fileStream = new FileStream(Path.Combine(uploads, model.File.FileName), FileMode.Create))
+                    {
+                        await model.File.CopyToAsync(fileStream);
+                    }
+                    model.resume = model.File.FileName;
+
+                }
+
+                model.emailConfirmed = false;
+                var latestRecord = await _candidatePageServices.AddNewCandidate(model);
+
+                //add to jobpostcandidate
+                JobPostCandidateViewModel newModel = new JobPostCandidateViewModel()
+                {
+                    job_Id = model.jobpostID,
+                    candidate_Id = latestRecord.ID
+                };
+                await _jobPostCandidatePage.AddNewJobPostCandidate(newModel);
+
+
+                //-----------------------------------------------------------------------------------------
+                //checking if vacancy of job completed or not, if vacancy fulfilled then deactivate the job
+
+                var vacancy = _dbContext.JobPost.FirstOrDefault(x => x.ID == newModel.job_Id).vacancy;
+                var count_post = _dbContext.JobPostCandidate.Where(x => x.job_Id == newModel.job_Id).Count();
+
+                if (vacancy == count_post)
+                {
+                    var jobPostModel = await _jobPostPageservices.getJobPostById(newModel.job_Id);
+
+                    //serializing the object into string
+                    TempData["candidate"] = JsonConvert.SerializeObject(latestRecord);
+                    TempData["jobpost"] = JsonConvert.SerializeObject(jobPostModel);
+
+                    return RedirectToAction("UpdateJobPostPost", "JobPost", new { model = jobPostModel, vacancy_overflow = true });
+                }
+                //--------------------------------------------------------------------------------------------
+                return RedirectToAction("SendOTPToMail", model);
+            }
+            catch (Exception ex)
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+            }
+
+            TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Something went wrong !! Please try again later.";
+            return RedirectToAction("Index", "Home");
+        }
+        /// <summary>
+        /// This method is for sending mail just put an smtp according to your mail server  
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> SendOTPToMail(CandidateViewModel model, bool vacancy_overflow = false)
+        {
+            //generate otp
+            string body = GenerateToken();
+
+            if (vacancy_overflow)
+            {
+                //getting candidate model for sending to confirm otp
+                CandidateViewModel candidateModel = new CandidateViewModel();
+                candidateModel = JsonConvert.DeserializeObject<CandidateViewModel>((string)TempData["candidateForEmailConfirmation"]);
+
+
+                UserEmailOptions options_new = new UserEmailOptions
+                {
+                    Subject = "Recruitment Portal : Confirm you Email for verifying your Application.",
+                    ToEmails = new List<string>() { candidateModel.email },
+                    Body = body
+                };
+                //sending mail to Receivers
+                try
+                {
+                    await _emailService.SendTestEmail(options_new);
+                    ViewData["token"] = body;
+                    ViewData["email"] = candidateModel.email;
+                }
+                catch (Exception ex)
+                {
+                    ViewData["error"] = "error";
+                }
+                return View(candidateModel);
+            }
+            else
+            {
+                UserEmailOptions optionss = new UserEmailOptions
+                {
+                    Subject = "Recruitment Portal : Confirm you Email for verifying your Application.",
+                    ToEmails = new List<string>() { model.email },
+                    Body = body
+                };
+                //sending mail to Receivers
+                try
+                {
+                    await _emailService.SendTestEmail(optionss);
+                    ViewData["token"] = body;
+                    ViewData["email"] = model.email;
+                }
+                catch (Exception ex)
+                {
+                    ViewData["error"] = "error";
+                }
+            }
+            return View(model);
+        }
+        /// <summary>
+        /// FUNCTION WILL GENERATE A RANDOM VALUE AND PASS AS OTP
+        /// </summary>
+        /// <returns></returns>
+        public string GenerateToken()
+        {
+            //sending otp on email.========================================================================================
+            Random rnd = new Random();
+            string otp = rnd.Next(1000, 9999).ToString();
+            return otp;
+        }
+
+        //if OTP entered Successfully
+        /// <summary>
+        /// if OTP entered Successfully this action will return true
+        /// </summary>
+        /// <param name="email_ID"></param>
+        /// <returns></returns>
+
+        public async Task<bool> EmailConfirmation(string email_ID)
+        {
+            var FinalData = await _candidatePageServices.getCandidateByEmailId(email_ID);
+            FinalData.emailConfirmed = true;
+            await _candidatePageServices.UpdateCandidate(FinalData);
+
+            TempData[EnumsHelper.NotifyType.Success.GetDescription()] = Messages.SuccessfullyApplied;
+            return true;
         }
 
         public JsonResult GetDept(int Id)

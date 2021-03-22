@@ -72,7 +72,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public double expected_ctc { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "NoticePeriod")]
-        [RegularExpression(CommonHelper.RegexText, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
+        //[RegularExpression(CommonHelper.RegexText, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "NoticePeriodRequired", ErrorMessageResourceType = typeof(Messages))]
         public string notice_period { get; set; }
 
@@ -88,7 +88,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public float ssc_perc { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "ApplyingThrough")]
-        [RegularExpression(CommonHelper.RegexText, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
+        //[RegularExpression(CommonHelper.RegexText, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "ApplyingThroughRequired", ErrorMessageResourceType = typeof(Messages))]
         public string applying_through { get; set; }
 
@@ -124,7 +124,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         //for getting the job position
         [Display(ResourceType = typeof(Labels), Name = "JobTitle")]
-        public string jobName { get; set; }
+        public string jobpostName { get; set; }
         //for getting the job role
         public string jobRole { get; set; }
 

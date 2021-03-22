@@ -1,0 +1,82 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.CandidateViewModel
+@using RecruitmentPortal.WebApp.Resources
+
+
+var data = @ViewData["token"];
+var email = @ViewData["email"];
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Log In - @Labels.RecruitmentPortal</title>
+    <link rel="icon" type="image/png" href="~/favicon.png" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+    <partial name="AdminLTE/_Styles" />
+    <script src="~/Content/js/jQuery-2.2.0.min.js"></script>
+    <script src="~/Content/js/jquery.validate.min.js"></script>
+    <script src="~/Content/js/jquery.validate.unobtrusive.min.js"></script>
+    <style>
+        .field-validation-error {
+            color: red !important;
+        }
+    </style>
+</head>
+
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-box-body">
+
+                <div class="form-group">
+                    <label for="OTP" class=" control-label">Enter OTP :</label>
+                    <div class=" form-control">
+                        <input type="number" class="form-control" id="token_input">
+                    </div>
+                </div>
+                <div class="social-auth-links text-center">
+                    <button type="submit" class="btn btn-block" style="background-color:#f58634;color: white;font-size: 18px;" onclick="verify()">
+                        Verify <i class="fa fa-arrow-circle-right"></i>
+                    </button>
+                </div>
+                <div class="social-auth-links text-center">
+                    <a href='@Url.Action("Index","Home")' class="btn btn-block btn-secondary">
+                        Back to Home
+                        <i class="fa fa-arrow-circle-left"></i>
+                    </a>
+                </div>
+        </div>
+    </div>
+    <partial name="AdminLTE/_Scripts" />
+</body>
+</html>
+
+
+<script type="text/javascript">
+     var redirectUrl = '@Url.Content("~/")' + "Home/Index";
+    var data =  @ViewData["token"];
+    function verify() {
+        if ($("#token_input").val() == data) {
+
+            @*ar url = '@Url.Action("EmailConfirmation", "Home")';*@
+            var url = '@Url.Content("~/")' + "Home/EmailConfirmation";
+            $.get(url, { email_ID: "@Model.email" }, function (res) {
+                if (res) {
+                    notification("Success", '@Messages.SuccessfullyApplied', "success");
+                    window.location.href = redirectUrl;
+                } else {
+                    notification("Error", '@Messages.SomethingWrong', "error");
+                    window.location.href = redirectUrl;
+                }
+
+            });
+        } else {
+            debugger;
+            notification("Error", '@Messages.InvalidOTP', "error");
+           location.reload();
+            }
+        }
+</script>

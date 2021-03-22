@@ -9,6 +9,7 @@ using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.Infrastructure.Data.Enum;
 using RecruitmentPortal.WebApp.Helpers;
 using RecruitmentPortal.WebApp.Interfaces;
+using RecruitmentPortal.WebApp.Resources;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -112,7 +113,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 foreach (var item in newList)
                 {
                     JobPostCandidate model = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault();
-                    item.jobName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
+                    item.jobpostName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
                     item.jobRole = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_role;
                     item.isActive = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).Any();
                 }
@@ -125,7 +126,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 //Added search box test
                 if (!String.IsNullOrEmpty(SearchString))
                 {
-                    modelList = modelList.Where(s => s.jobName.ToUpper().Contains(SearchString.ToUpper()) || s.degree.ToUpper().Contains(SearchString.ToUpper()) || s.experience.ToUpper().Contains(SearchString.ToUpper()) || s.name.ToUpper().Contains(SearchString.ToUpper()));
+                    modelList = modelList.Where(s => s.jobpostName.ToUpper().Contains(SearchString.ToUpper()) || s.degree.ToUpper().Contains(SearchString.ToUpper()) || s.experience.ToUpper().Contains(SearchString.ToUpper()) || s.name.ToUpper().Contains(SearchString.ToUpper()));
                 }
             }
             catch (Exception ex)
@@ -135,36 +136,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             return View(modelList);
         }
-
-        ///// <summary>
-        ///// This method retrieves Application-Form which is used to apply for a particular job [GET]
-        ///// </summary>
-        ///// <param name="id"></param>
-        ///// <returns></returns>
-        //[HttpGet]
-        //public async Task<IActionResult> Index(string id) //jobpost id
-        //{
-
-        //    CandidateViewModel model = new CandidateViewModel();
-        //    try
-        //    {
-        //        model.jobpostID = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
-
-        //        model.jobName = _dbContext.JobPost.FirstOrDefault(x => x.ID == model.jobpostID).job_title;
-              
-        //        //fetching all the degrees for candidate to apply with.
-
-        //        ViewBag.ListOfDegree = SelectionList.GetDegreeList(); ;
-        //        ViewBag.ReferenceSelect = SelectionList.GetReferenceTypeList();          
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        model = new CandidateViewModel();
-        //    }
-        //    return View(model);
-        //}
-
-        
+      
 
         /// <summary>
         /// This method stores the applicant's form-data to the database [POST]
@@ -183,18 +155,16 @@ namespace RecruitmentPortal.WebApp.Controllers
                 list = candidateList.ToList();
                 foreach (var item in list)
                 {
-                    //var job_ID = _dbContext.JobPostCandidate.FirstOrDefault(x => x.candidate_Id == item.ID).job_Id;
-                    //var job_ID = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault().job_Id;
                     if (item.email == model.email)
                     {
-                        TempData["msg1"] = model.email;
-                        return RedirectToAction("Index", "Home", new { s = TempData["msg1"] });
+                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = model.email + " already exists !!";
+                        return RedirectToAction("Index", "Home");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
             }
 
             try
@@ -288,19 +258,12 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
             }
 
             TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Something went wrong !! Please try again later.";
             return RedirectToAction("Index", "Home");
         }
-
-        //    await _jobPostPageservices.UpdateJobPost(jobPostModel);
-        //    return RedirectToAction("SendOTPToMail", model);
-        //}
-
-
-
 
 
         ////For Rejecting New Candidate Application without Proceeding it
@@ -440,6 +403,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             FinalData.emailConfirmed = true;
             await _candidatePageServices.UpdateCandidate(FinalData);
             ViewBag.msg = "Email Confirmed !";
+            TempData[EnumsHelper.NotifyType.Success.GetDescription()] = Messages.SuccessfullyApplied;
             return true;
         }
 
@@ -548,7 +512,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.ID.ToString()));
                     JobPostCandidate model = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == item.ID).FirstOrDefault();
-                    item.jobName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
+                    item.jobpostName = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_title;
                     item.jobRole = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == model.job_Id).job_role;
                     item.isActive = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).Any();
                     item.isSelected = _dbContext.jobApplications.Where(x => x.candidateId == item.ID && x.status == status_Complete).Any();

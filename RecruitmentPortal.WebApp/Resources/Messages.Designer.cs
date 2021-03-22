@@ -241,6 +241,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OTP is Invalid.
+        /// </summary>
+        public static string InvalidOTP {
+            get {
+                return ResourceManager.GetString("InvalidOTP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Job Category is Required.
         /// </summary>
         public static string JobCategoryRequired {
@@ -444,6 +453,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string StatusValueRequired {
             get {
                 return ResourceManager.GetString("StatusValueRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application Submitted Successfully.
+        /// </summary>
+        public static string SuccessfullyApplied {
+            get {
+                return ResourceManager.GetString("SuccessfullyApplied", resourceCulture);
             }
         }
         
