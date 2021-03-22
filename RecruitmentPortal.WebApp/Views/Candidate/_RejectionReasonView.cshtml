@@ -3,6 +3,7 @@
 
 @using (Html.BeginForm("RejectApplicant", "Candidate", FormMethod.Post, new { id = "rejectform" }))
 {
+    <input type="hidden" value="@Model.CandidateId" name="CandidateId" id="CandidateId"/>
     <div class="form-group">
            @Html.LabelFor(m => m.rejection_reason, new { @class = "asterisk" })
         @Html.TextBoxFor(m => m.rejection_reason, new { @placeholder = "Reason for Rejection", @class = "form-control" })
@@ -14,10 +15,6 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
 }
-
-
-
-
 
 <script>
     $(document).ready(function () {

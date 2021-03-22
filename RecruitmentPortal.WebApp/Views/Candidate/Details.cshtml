@@ -15,7 +15,7 @@
                 </button>
                 <h4 class="modal-title">Reject Reason:</h4>
             </div>
-            <div class="modal-body" id="rejectPopUp">
+            <div class="modal-body" id="_RejectionReasonView">
 
             </div>
         </div>
@@ -52,9 +52,10 @@
                             </a>
                         }
 
-                        @*<a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@Model.ID')">
+                        <a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@RSACSPSample.EncodeServerName(Model.ID.ToString())')">
                                  Reject
-                            </a>*@
+                        </a>
+
                         <a href='@Url.Action("AllApplications","Candidate")' class="btn btn-primary btn-sm">
                             Cancel
                         </a>
@@ -220,11 +221,10 @@
         $('#rejectmodel').modal('show');
     }
 
-
     function loadPartialView(id) {
-        var url = '@Url.Action("RenderRejectionView", "Candidate")?id=' + id;
-        $('#JobCategoryPartial').load(url, function () {
-            $('#JobCategoryModel').modal({ show: true });
+        var url = '@Url.Action("RenderRejectionView", "Candidate" )?id=' + id;
+        $('#_RejectionReasonView').load(url, function () {
+            $('#rejectmodel').modal({ show: true });
         });
     }
 

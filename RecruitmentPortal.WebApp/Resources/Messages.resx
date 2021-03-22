@@ -261,6 +261,9 @@
   <data name="UserNameRequired" xml:space="preserve">
     <value>User Name is Required</value>
   </data>
+  <data name="RejectionReasonRequired" xml:space="preserve">
+    <value>Rejection Reason is Required</value>
+  </data>
   <data name="InvalidOTP" xml:space="preserve">
     <value>OTP is Invalid</value>
   </data>

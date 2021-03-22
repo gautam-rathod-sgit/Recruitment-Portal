@@ -331,6 +331,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rejection Reason.
+        /// </summary>
+        public static string RejectionReason {
+            get {
+                return ResourceManager.GetString("RejectionReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Relevent Experience.
         /// </summary>
         public static string ReleventExperience {

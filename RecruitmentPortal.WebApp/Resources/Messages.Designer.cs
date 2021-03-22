@@ -358,6 +358,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rejection Reason is Required.
+        /// </summary>
+        public static string RejectionReasonRequired {
+            get {
+                return ResourceManager.GetString("RejectionReasonRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Relevent Experience is Required.
         /// </summary>
         public static string ReleventExperienceRequired {

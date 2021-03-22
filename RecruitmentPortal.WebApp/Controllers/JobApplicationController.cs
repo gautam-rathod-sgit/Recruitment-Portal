@@ -257,6 +257,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             DateTime thisDay = DateTime.Today;
             JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
+
             //getting the jobapplication
             try
             {
@@ -269,13 +270,16 @@ namespace RecruitmentPortal.WebApp.Controllers
                 if (rejected)
                 {
                     jobApplicationModel.status = status_Rejected;
+                    jobApplicationModel.flag_Rejected = true;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return View(jobApplicationModel);
+            // return View(jobApplicationModel);
+             return RedirectToAction("UpdateJobApplicationPost", "JobApplication", jobApplicationModel);
+          //  return RedirectToAction("SendRejectionMailToCandidate", "Candidate", new { id = jobApplicationModel.candidateId });
         }
         /// <summary>
         /// updating Joining data/status of Active-JobApplication [POST]
