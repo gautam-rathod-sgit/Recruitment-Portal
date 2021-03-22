@@ -11,7 +11,7 @@
             @Html.HiddenFor(m => m.JobPosts)
             @Html.HiddenFor(m => m.isActive)      
             <div class="form-group">
-                <label asp-for="job_category_name" class="control-label">Job Category</label>
+                <label asp-for="job_category_name" class="control-label required">Job Category</label>
                 <input asp-for="job_category_name" class="form-control" type="text" pattern="^[a-zA-Z0-9_ ]*$" required />
                 <span asp-validation-for="job_category_name" class="text-danger"></span>
             </div>

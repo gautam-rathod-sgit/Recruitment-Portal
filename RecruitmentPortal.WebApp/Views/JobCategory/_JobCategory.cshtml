@@ -5,7 +5,7 @@
     <input type="hidden" value="@Model.ID" id="ID" name="ID" />
     @Html.HiddenFor(m => m.isActive)
     <div class="form-group">
-        @Html.LabelFor(m => m.job_category_name)
+        @Html.LabelFor(m => m.job_category_name, new { @class = "asterisk" })
         @Html.TextBoxFor(m => m.job_category_name, new { @placeholder = "Category Name", @class = "form-control" })
         @Html.ValidationMessageFor(m => m.job_category_name, "", new { @class = "text-danger" })
     </div>

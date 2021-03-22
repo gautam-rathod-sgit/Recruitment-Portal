@@ -27,17 +27,17 @@
                     @Html.HiddenFor(m => m.candidateId)
                     @Html.HiddenFor(m => m.ID)
                     <div class="form-group">
-                        @Html.LabelFor(m => m.rating)
+                        @Html.LabelFor(m => m.rating, new { @class = "asterisk" })
                         @Html.TextBoxFor(m => m.rating, new { @placeholder = "Ratings", @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.rating, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group has-feedback has-feedback-left">
-                        @Html.LabelFor(m => m.remark)
+                        @Html.LabelFor(m => m.remark, new { @class = "asterisk" })
                         @Html.TextBoxFor(m => m.remark, new { @placeholder = "Location", @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.remark, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group has-feedback has-feedback-left">
-                        @Html.LabelFor(m => m.statusvalue)
+                        @Html.LabelFor(m => m.statusvalue, new { @class = "asterisk" })
                         @Html.DropDownList("statusvalue", Html.GetEnumSelectList(typeof(StatusType)), Messages.PleaseSelect, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.statusvalue, "", new { @class = "text-danger" })
                     </div>

@@ -243,4 +243,10 @@
   <data name="DepartmentName" xml:space="preserve">
     <value>Department</value>
   </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm Password</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
 </root>
