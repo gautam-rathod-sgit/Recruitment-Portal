@@ -5,6 +5,26 @@
 
 <style>
 </style>
+
+<!-- Modal for Accepting Application -->
+<div class="modal fade bg-gradient-orange center" id="acceptmodel" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Fill Details:</h4>
+            </div>
+            <div class="modal-body" id="_AcceptApplicationView">
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- Modal end -->
 <!-- Modal for Adding Rejection Reason -->
 <div class="modal fade bg-gradient-orange center" id="rejectmodel" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -52,8 +72,12 @@
                             </a>
                         }
 
+                        <a class="btn btn-primary btn-sm" data-toggle="#acceptmodel" data-target="#acceptmodel" onclick="loadAcceptPartialView('@RSACSPSample.EncodeServerName(Model.JobAppId.ToString())')">
+                            Accept
+                        </a>
+                        
                         <a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@RSACSPSample.EncodeServerName(Model.ID.ToString())')">
-                                 Reject
+                            Reject
                         </a>
 
                         <a href='@Url.Action("AllApplications","Candidate")' class="btn btn-primary btn-sm">
@@ -61,7 +85,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div>s
 
             <!-- /.box-header -->
 
@@ -215,7 +239,12 @@
         });
     });
 
-   // Function for setting Flag_Accepted value as true
+    ////Function for setting Flag_Accepted value as true
+    //function openPopupAccept() {
+    //    $("#Flag_Accepted").val(true);
+    //    $('#acceptmodel').modal('show');
+    //}
+   // Function for setting Flag_Reject value as true
     function openPopup() {
         $("#Flag_Rejected").val(true);
         $('#rejectmodel').modal('show');
@@ -227,5 +256,11 @@
             $('#rejectmodel').modal({ show: true });
         });
     }
-
+    
+    function loadAcceptPartialView(id) {
+        var url = '@Url.Action("RenderAcceptView", "Candidate")?id=' + id;
+        $('#_AcceptApplicationView').load(url, function () {
+            $('#acceptmodel').modal({ show: true });
+        });
+    }
 </script>

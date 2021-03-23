@@ -1,0 +1,71 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel
+
+
+@using (Html.BeginForm("UpdateJobApplicationPost", "JobApplication", FormMethod.Post, new { id = "acceptform" }))
+{
+    <input type="hidden" value="@Model.ID" name="ID" id="ID" />
+    <input type="hidden" value="@Model.candidateId" name="candidateId" id="candidateId" />
+    <input type="hidden" value="@Model.round" name="round" id="round" />
+    <input type="hidden" value="@Model.status" name="status" id="status" />
+    <input type="hidden" value="@Model.flag_Accepted" name="flag_Accepted" id="flag_Accepted" />
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.joining_date, new { @class = "asterisk" })
+        @Html.TextBoxFor(m => m.joining_date, new { @type = "datetime", @class = "form-control datepicker" })
+        @Html.ValidationMessageFor(model => model.joining_date, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.commitment_mode, new { @class = "asterisk" })
+        <div class="col-10">
+            @Html.Label("Cheques")
+            @Html.RadioButtonFor(m => m.commitment_mode, "Cheques", new { @id = "cheque" })
+            @Html.Label("Documents")
+            @Html.RadioButtonFor(m => m.commitment_mode, "Documents", new { @id = "doc" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.offered_ctc, new { @class = "asterisk" })
+        @Html.TextBoxFor(m => m.offered_ctc, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.offered_ctc, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.remarks, new { @class = "asterisk" })
+        @Html.TextBoxFor(m => m.remarks, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.remarks, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="modal-footer modal-footer2">
+        <button type="submit" class="btn btn-primary" onclick="return checkFormValid()">Save</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $.validator.unobtrusive.parse($('#acceptform'));
+    });
+
+    //for datepicker
+    $('.datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        endDate: '+0d',
+        autoclose: true
+    });
+
+    //for commitment mode radio btns
+    $("#cheque").click(function () {
+        $("#doc").next().remove("div");
+        alreadyBound = false;
+    });
+
+    function checkFormValid() {
+        var $form = $('form');
+        if ($form.valid()) {
+            return true;
+        }
+        return false;
+    }
+</script>

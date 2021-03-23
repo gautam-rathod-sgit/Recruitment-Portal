@@ -850,6 +850,16 @@ namespace RecruitmentPortal.WebApp.Controllers
            // model.JobAppId = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == sample_id).ID;
             return PartialView("_RejectionReasonView", model);
         }
+
+        public async Task<IActionResult> RenderAcceptView(string id)
+        {
+            CandidateViewModel model = new CandidateViewModel();
+            model.JobAppId = Convert.ToInt32(id);
+            // int sample_id = Convert.ToInt32(RSACSPSample.DecodeServerName(model.CandidateId));
+            // model.JobAppId = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == sample_id).ID;
+            return PartialView("_AcceptApplicationView", model);
+        }
+
         #endregion
     }
 }
