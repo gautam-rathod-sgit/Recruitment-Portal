@@ -321,7 +321,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> IndexPost(CandidateViewModel model)
+        public async Task<IActionResult> ApplyFormPost(CandidateViewModel model)
         {
             //checking if already applied for same job
             var candidateList = await _candidatePageServices.getCandidates();
@@ -517,7 +517,6 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="email_ID"></param>
         /// <returns></returns>
-
         public async Task<bool> EmailConfirmation(string email_ID)
         {
             var FinalData = await _candidatePageServices.getCandidateByEmailId(email_ID);
@@ -527,7 +526,10 @@ namespace RecruitmentPortal.WebApp.Controllers
             TempData[EnumsHelper.NotifyType.Success.GetDescription()] = Messages.SuccessfullyApplied;
             return true;
         }
+        #endregion
 
+
+        #region private methods
         public JsonResult GetDept(int Id)
         {
             using (RecruitmentPortalDbContext _dbContext = BaseContext.GetDbContext())
@@ -558,8 +560,8 @@ namespace RecruitmentPortal.WebApp.Controllers
             periodList.Add("90 Days");
             return periodList;
         }
-
-
         #endregion
+
+
     }
 }

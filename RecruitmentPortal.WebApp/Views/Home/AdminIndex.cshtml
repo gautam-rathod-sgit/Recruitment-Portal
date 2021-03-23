@@ -143,16 +143,6 @@
                 <td style="word-wrap: break-word">@item.job_Role</td>
                 <td id="joining_date">@item.joining_date.ToString(date_format)</td>
                 <td>
-                    @*@if (item.joining_date > cur_date)
-                        {
-                            <form asp-action="NotificationDetails" asp-controller="Home" asp-route-id="@RSACSPSample.EncodeServerName((item.ID).ToString())">
-                                <button id="btn-confirm" type="submit" class="btn btn-sm btn-secondary" disabled>
-                                    Click here
-                                </button>
-                            </form>
-                        }
-                        else
-                        {*@
                     <form asp-action="SelectedJobApplicationsDetails" asp-controller="JobApplication" asp-route-toAdminIndex="true" asp-route-editFromDashboard="true" asp-route-id="@RSACSPSample.EncodeServerName((item.ID).ToString())">
                         <button id="btn-confirm" type="submit" class="btn btn-sm btn-primary">
                             Click here

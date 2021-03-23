@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -22,6 +23,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         //private readonly IAuthorize _authorize;
         private readonly RecruitmentPortalDbContext _dbContext;
+        private IPasswordHasher<ApplicationUser> passwordHasher;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
 
@@ -34,12 +36,13 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         #region Constructor
         public LoginController(IWebHostEnvironment environment, SignInManager<ApplicationUser> signInManager,
-           ILogger<AccountController> logger,
+           ILogger<AccountController> logger, IPasswordHasher<ApplicationUser> passwordHash,
 
            UserManager<ApplicationUser> userManager, IEmailService emailService, RecruitmentPortalDbContext dbContext)
         {
             _environment = environment;
             _userManager = userManager;
+            passwordHasher = passwordHash;
             _signInManager = signInManager;
             _logger = logger;
             _dbContext = dbContext;
@@ -120,11 +123,36 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Register(string id)
         {
-            RegisterViewModel model = new RegisterViewModel();
+            ApplicationUserViewModel model = new ApplicationUserViewModel();
             if (!string.IsNullOrEmpty(id))
             {
-                int actualId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
-                ApplicationUser userObj = await _userManager.FindByIdAsync(actualId.ToString());
+                
+                ApplicationUser user = await _userManager.FindByIdAsync(id);
+                if (user != null)
+                {
+                    model.UserId = Guid.Parse(user.Id);
+                    model.Email = user.Email;
+                    model.UserName = user.UserName;
+                    model.position = user.position;
+                    model.skype_id = user.skype_id;
+
+                    //if (user.file != null)
+                    //{
+                    //    var path = Path.Combine(
+                    //Directory.GetCurrentDirectory(), "wwwroot" + @"\Resume", user.file);
+
+                    //    var memory = new MemoryStream();
+                    //    using (var stream = new FileStream(path, FileMode.Open))
+                    //    {
+                    //        await stream.CopyToAsync(memory);
+                    //    }
+                    //    memory.Position = 0;
+                    //    model.FileNew = File(memory, GetContentType(path), );
+                    //    new FormFile(memory, 0, 0, "name", Path.GetFileName(path));
+                    //}
+
+                }
+                model.editMode = true;
             }
             return View(model);
         }
@@ -135,56 +163,120 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(ApplicationUserViewModel model, string submit)
         {
-            try
+            if (model.editMode)
             {
-                //File details fetching
-                //create a place in wwwroot for storing uploaded files
-                var uploads = Path.Combine(_environment.WebRootPath, "Files");
-                if (model.FileNew != null)
+                try
                 {
-                    using (var fileStream = new FileStream(Path.Combine(uploads, model.FileNew.FileName), FileMode.Create))
+                    //File details fetching
+                    //create a place in wwwroot for storing uploaded files
+                    var uploads = Path.Combine(_environment.WebRootPath, "Files");
+                    if (model.FileNew != null)
                     {
-                        await model.FileNew.CopyToAsync(fileStream);
+                        using (var fileStream = new FileStream(Path.Combine(uploads, model.FileNew.FileName), FileMode.Create))
+                        {
+                            await model.FileNew.CopyToAsync(fileStream);
+                        }
+                        model.file = model.FileNew.FileName;
+
                     }
-                    model.file = model.FileNew.FileName;
 
-                }
-                if (ModelState.IsValid)
-                {
-
-                    ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email, position = model.position, skype_id = model.skype_id, file = model.file };
-
-                    var result = await _userManager.CreateAsync(user, model.Password);
-
-                    if (result.Succeeded)
+                    ApplicationUser user = await _userManager.FindByIdAsync(model.UserId.ToString());
+                    if (user != null)
                     {
+                        user.Email = model.Email;
+                        user.UserName = model.UserName;
+                        user.position = model.position;
+                        user.skype_id = model.skype_id;
+                        user.PasswordHash = passwordHasher.HashPassword(user, model.password);
 
-                        ViewBag.Succes = true;
-                        await _userManager.AddToRoleAsync(user, "Interviewer");
-                        user.LockoutEnabled = false;
-                        await _dbContext.SaveChangesAsync();
-                        return RedirectToAction("index", "Home");
+                        var result = await _userManager.UpdateAsync(user);
+                        _dbContext.SaveChanges();
+
+                        if (result.Succeeded)
+                        {
+                            TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User Updated Successfully!";
+                            RedirectToAction("Index", "Account");
+                        }
+                        else
+                        {
+                            TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "User not Updated!";
+                        }
                     }
                     else
                     {
 
-                        foreach (var error in result.Errors)
-                        {
-                            ModelState.TryAddModelError(error.Code, error.Description);
-                        }
-                        return View(model);
+                        ModelState.AddModelError(model.UserName, "User Not Found");
+                    }
+                    switch (submit)
+                    {
+                        case "Save":
+                            TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User updated Successfully.";
+                            return RedirectToAction("Index", "Account");
 
+                        case "Save & Continue":
+                            TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User updated Successfully.";
+                            return RedirectToAction("Register", "Login", new { id = model.UserId });
                     }
                 }
+                catch (Exception ex)
+                {
+                    TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                }
+                return View(model);
             }
-            catch (Exception ex)
+            else
             {
+                try
+                {
+                    //File details fetching
+                    //create a place in wwwroot for storing uploaded files
+                    var uploads = Path.Combine(_environment.WebRootPath, "Files");
+                    if (model.FileNew != null)
+                    {
+                        using (var fileStream = new FileStream(Path.Combine(uploads, model.FileNew.FileName), FileMode.Create))
+                        {
+                            await model.FileNew.CopyToAsync(fileStream);
+                        }
+                        model.file = model.FileNew.FileName;
 
-                Console.WriteLine(ex.Message);
+                    }
+                    if (ModelState.IsValid)
+                    {
+
+                        ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email, position = model.position, skype_id = model.skype_id, file = model.file };
+
+                        var result = await _userManager.CreateAsync(user, model.password);
+
+                        if (result.Succeeded)
+                        {
+
+                            ViewBag.Succes = true;
+                            await _userManager.AddToRoleAsync(user, "Interviewer");
+                            user.LockoutEnabled = false;
+                            await _dbContext.SaveChangesAsync();
+                            return RedirectToAction("Index", "Account");
+                        }
+                        else
+                        {
+
+                            foreach (var error in result.Errors)
+                            {
+                                ModelState.TryAddModelError(error.Code, error.Description);
+                            }
+                            return View(model);
+
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex.Message);
+                }
+                return View(model);
             }
-            return View(model);
         }
         /// <summary>
         /// This is logout method
@@ -268,6 +360,34 @@ namespace RecruitmentPortal.WebApp.Controllers
                 return View();
             }
             return RedirectToAction(nameof(ResetPasswordConfirmation));
+        }
+
+        /// <summary>
+        /// This method is a part of Download method. It restricts the resume that it should only in form of .pdf/.doc/.docx
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
+        /// <summary>
+        /// This method is a part of Download method. It restricts the resume that it should only in form of .pdf/.doc/.docx
+        /// </summary>
+        /// <returns></returns>
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+            {".pdf", "application/pdf"},
+            {".doc", "application/vnd.ms-word"},
+            {".docx", "application/vnd.ms-word"},
+            {".jpeg", "image/jpeg"},
+            {".jpg", "image/jpeg"},
+            {".png", "image/png"}
+            };
         }
 
         [HttpGet]

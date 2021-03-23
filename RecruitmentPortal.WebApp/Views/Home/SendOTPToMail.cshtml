@@ -30,11 +30,12 @@ var email = @ViewData["email"];
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-box-body">
-
+            @using (Html.BeginForm("", "", new { @autocomplete = "off", @role = "form" }))
+            {
                 <div class="form-group">
                     <label for="OTP" class=" control-label">Enter OTP :</label>
                     <div class=" form-control">
-                        <input type="number" class="form-control" id="token_input">
+                        <input type="number" id="token_input">
                     </div>
                 </div>
                 <div class="social-auth-links text-center">
@@ -43,11 +44,12 @@ var email = @ViewData["email"];
                     </button>
                 </div>
                 <div class="social-auth-links text-center">
-                    <a href='@Url.Action("Index","Home")' class="btn btn-block btn-secondary">
+                    <a href='@Url.Action("Index", "Home")' class="btn btn-block btn-secondary">
                         Back to Home
                         <i class="fa fa-arrow-circle-left"></i>
                     </a>
                 </div>
+            }
         </div>
     </div>
     <partial name="AdminLTE/_Scripts" />
@@ -58,25 +60,23 @@ var email = @ViewData["email"];
 <script type="text/javascript">
      var redirectUrl = '@Url.Content("~/")' + "Home/Index";
     var data =  @ViewData["token"];
-    function verify() {
+    function verify(e) {
         if ($("#token_input").val() == data) {
 
-            @*ar url = '@Url.Action("EmailConfirmation", "Home")';*@
             var url = '@Url.Content("~/")' + "Home/EmailConfirmation";
             $.get(url, { email_ID: "@Model.email" }, function (res) {
                 if (res) {
                     notification("Success", '@Messages.SuccessfullyApplied', "success");
                     window.location.href = redirectUrl;
                 } else {
-                    notification("Error", '@Messages.SomethingWrong', "error");
+                    notification("Error", '@Messages.SomethingWrong', "error"); 
                     window.location.href = redirectUrl;
                 }
 
             });
         } else {
             debugger;
-            notification("Error", '@Messages.InvalidOTP', "error");
-           location.reload();
+            alert("Invalid OTP");
             }
         }
 </script>

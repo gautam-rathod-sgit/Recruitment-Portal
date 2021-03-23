@@ -1,4 +1,5 @@
-﻿using RecruitmentPortal.Infrastructure.Helpers;
+﻿using Microsoft.AspNetCore.Http;
+using RecruitmentPortal.Infrastructure.Helpers;
 using RecruitmentPortal.WebApp.Resources;
 using System;
 using System.Collections.Generic;
@@ -30,11 +31,23 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public string Email { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "Password")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 8)]
         [Required(ErrorMessageResourceName = "Passwordrequired", ErrorMessageResourceType = typeof(Messages))]
         public string password { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "ConfirmPassword")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 8)]
         [Required(ErrorMessageResourceName = "Passwordrequired", ErrorMessageResourceType = typeof(Messages))]
         public string confirm_password { get; set; }
+
+        //For uploading file
+        //   [Required(ErrorMessage = "Required.")]
+        public string file { get; set; }
+
+        [Display(ResourceType = typeof(Labels), Name = "File")]
+        [Required(ErrorMessageResourceName = "FileRequired", ErrorMessageResourceType = typeof(Messages))]
+        public IFormFile FileNew { get; set; }
+
+        public bool editMode { get; set; }
     }
 }
