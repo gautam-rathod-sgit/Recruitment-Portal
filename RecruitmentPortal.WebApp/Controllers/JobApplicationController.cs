@@ -377,10 +377,10 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="JobApplicationId"></param>
         /// <param name="scheduleId"></param>
-        /// <param name="delete"></param>
+            /// <param name="delete"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> UpdateScheduleOfJobApplication(string id, string scheduleId, bool to_schedule, bool delete = false)
+        public async Task<IActionResult> UpdateScheduleOfJobApplication(string id, string scheduleId, bool to_schedule, bool remove = false)
         {
             if (to_schedule)
             {
@@ -388,13 +388,16 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
             CandidateViewModel model = new CandidateViewModel();
-
-            int JobApplicationId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+            int JobApplicationId = 0;
+            if (id != null)
+            {
+                JobApplicationId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+            }
             int schedule_ID = Convert.ToInt32(RSACSPSample.DecodeServerName((scheduleId)));
             //checking for deleting schedule action
             try
             {
-                if (delete == true)
+                if (remove == true)
                 {
                     await _schedulesPage.DeleteSchedule(schedule_ID);
                     return RedirectToAction("Index", "Interviewer");

@@ -270,4 +270,7 @@
   <data name="SuccessfullyApplied" xml:space="preserve">
     <value>Application Submitted Successfully</value>
   </data>
+  <data name="FileRequired" xml:space="preserve">
+    <value>File is Required</value>
+  </data>
 </root>

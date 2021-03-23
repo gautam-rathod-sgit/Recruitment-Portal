@@ -265,43 +265,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
-        ////For Rejecting New Candidate Application without Proceeding it
-        //public async Task<IActionResult> RejectApplicant(int Cid)
-        //{
-        //    CandidateViewModel candidateModel = new CandidateViewModel();
-        //    int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid.ToString()));
-        //    //int job_ID;
-        //    //string rejection_reason = null;
-        //    //  int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(model.CandidateId.ToString()));
-        //    candidateModel = await _candidatePageServices.getCandidateById(decrypted_key);
-        //    candidateModel.isRejected = true;
-
-        //    //job_ID = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId== model.CandidateId).ID;
-        //    //rejection_reason = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).rejection_reason;
-
-        //    return RedirectToAction("AllApplications", "Candidate");
-        //}
-
-        public async Task<IActionResult> RejectApplicant(RejectReasonViewModel model)
-        {
-            CandidateViewModel candidateViewModel = new CandidateViewModel();
-            if (model.CandidateId != null)
-            {
-                int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(model.CandidateId.ToString()));
-                candidateViewModel = await _candidatePageServices.getCandidateById(decrypted_key);
-                candidateViewModel.isRejected = true;
-                
-                int job_ID;
-                job_ID = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == decrypted_key).ID;
-                model.JobAppId = job_ID;
-            }
-            return RedirectToAction("UpdateJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName(model.JobAppId.ToString()), rejected = true});
-           // return RedirectToAction("AllApplications", "Candidate");
-        }
-
-        
-
         /// <summary>
         /// This method is for sending mail just put an smtp according to your mail server  
         /// </summary>
@@ -322,7 +285,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 UserEmailOptions options_new = new UserEmailOptions
                 {
                     Subject = "Recruitment Portal : Confirm you Email for verifying your Application.",
-                    ToEmails = new List<string>() { candidateModel.email},
+                    ToEmails = new List<string>() { candidateModel.email },
                     Body = body
                 };
                 //sending mail to Receivers
@@ -358,7 +321,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     ViewData["error"] = "error";
                 }
             }
-                      
+
             UserEmailOptions options = new UserEmailOptions
             {
                 Subject = "Recruitment Portal : Confirm you Email for verifying your Application.",
@@ -405,6 +368,43 @@ namespace RecruitmentPortal.WebApp.Controllers
             ViewBag.msg = "Email Confirmed !";
             TempData[EnumsHelper.NotifyType.Success.GetDescription()] = Messages.SuccessfullyApplied;
             return true;
+        }
+
+
+       
+        
+        ////For Rejecting New Candidate Application without Proceeding it
+        //public async Task<IActionResult> RejectApplicant(int Cid)
+        //{
+        //    CandidateViewModel candidateModel = new CandidateViewModel();
+        //    int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid.ToString()));
+        //    //int job_ID;
+        //    //string rejection_reason = null;
+        //    //  int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(model.CandidateId.ToString()));
+        //    candidateModel = await _candidatePageServices.getCandidateById(decrypted_key);
+        //    candidateModel.isRejected = true;
+
+        //    //job_ID = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId== model.CandidateId).ID;
+        //    //rejection_reason = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).rejection_reason;
+
+        //    return RedirectToAction("AllApplications", "Candidate");
+        //}
+
+        public async Task<IActionResult> RejectApplicant(RejectReasonViewModel model)
+        {
+            CandidateViewModel candidateViewModel = new CandidateViewModel();
+            if (model.CandidateId != null)
+            {
+                int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(model.CandidateId.ToString()));
+                candidateViewModel = await _candidatePageServices.getCandidateById(decrypted_key);
+                candidateViewModel.isRejected = true;
+                
+                int job_ID;
+                job_ID = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == decrypted_key).ID;
+                model.JobAppId = job_ID;
+            }
+            return RedirectToAction("UpdateJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName(model.JobAppId.ToString()), rejected = true});
+           // return RedirectToAction("AllApplications", "Candidate");
         }
 
         /// <summary>
@@ -490,6 +490,8 @@ namespace RecruitmentPortal.WebApp.Controllers
                 //RedirectToAction("Details", "Candidate", new { id = id });
             }
         }
+
+
 
 
         public async Task<IActionResult> GetApplicationsList(string startDate, string endDate, string applicationType, string degree)
@@ -699,6 +701,9 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
         }
 
+        #endregion
+
+        #region Private Methods
         /// <summary>
         /// FETCHING CANDIDATE NAME USING CANDIDATE ID FROM DATABASE
         /// </summary>
@@ -800,12 +805,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             //}
             return interview_status;
         }
-
-     
-
-        #endregion
-
-        #region Private Methods
         /// <summary>
         /// This method is a part of Download method. It restricts the resume that it should only in form of .pdf/.doc/.docx
         /// </summary>
@@ -846,8 +845,6 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             RejectReasonViewModel model = new RejectReasonViewModel();
             model.CandidateId = id;
-           // int sample_id = Convert.ToInt32(RSACSPSample.DecodeServerName(model.CandidateId));
-           // model.JobAppId = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == sample_id).ID;
             return PartialView("_RejectionReasonView", model);
         }
         #endregion

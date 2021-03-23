@@ -120,7 +120,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Register(string id)
         {
-            RegisterViewModel model = new RegisterViewModel();
+            ApplicationUserViewModel model = new ApplicationUserViewModel();
             if (!string.IsNullOrEmpty(id))
             {
                 int actualId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
@@ -135,7 +135,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(ApplicationUserViewModel model)
         {
             try
             {
@@ -156,7 +156,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                     ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email, position = model.position, skype_id = model.skype_id, file = model.file };
 
-                    var result = await _userManager.CreateAsync(user, model.Password);
+                    var result = await _userManager.CreateAsync(user, model.password);
 
                     if (result.Succeeded)
                     {

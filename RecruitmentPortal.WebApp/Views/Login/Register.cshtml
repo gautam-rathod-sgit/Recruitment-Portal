@@ -1,96 +1,109 @@
-﻿@model RecruitmentPortal.WebApp.ViewModels.RegisterViewModel
-@using RecruitmentPortal.WebApp.Resources
+﻿@model RecruitmentPortal.WebApp.ViewModels.ApplicationUserViewModel
 
 <section class="content">
-    <div class="row">
+    @using (Html.BeginForm("Register", "Login", FormMethod.Post, new { id = "updateform", @enctype = "multipart/form-data" }))
+    {
         <div class="col-sm-12">
+            <!-- /.box -->
             <div class="box box-default boxPad">
                 <div class="box-header">
-                    @if (Model.Id > 0)
-                    {
-                        <h3 class="box-title">
-                            <i class="fa fa-info-circle"></i>
-                            Edit User
-                        </h3>
-                    }
-                    else
-                    {
-                        <h3 class="box-title">
-                            <i class="fa fa-info-circle"></i>
-                            Add User
-                        </h3>
-                    }
+
+                    <h3 class="box-title">
+                        <i class="fa fa-info-circle"></i>
+                        Add User :
+                    </h3>
 
                     <div class="box-tools pull-right">
-                        <input type="submit" value="Save" class="btn btn-primary" name="submit" onclick="checkValidOrNot()" />
-                        <input type="submit" value="Save &amp; Continue" name="submit" class="btn btn-primary" onclick="checkValidOrNot()" />
-                        <a href="@Url.Action("Index", "Account")" class="btn btn-primary">Cancel</a>
+                        <input type="submit" value="Save" class="btn btn-primary" name="submit" />
+                        <a href="@Url.Action("Index", "Account", new { id = Model.UserId })" class="btn btn-primary">Cancel</a>
                     </div>
                 </div>
             </div>
 
-            <div class="box">
-                <div class="box-body">
-                    <form asp-action="Register" enctype="multipart/form-data" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group position-relative">
-                            <i class="fas fa-user text-gray position-absolute" style=" margin-left:87%; margin-top:4%"></i>
-                            <input asp-for="UserName" class="form-control" placeholder="UserName" required />
-                            <span asp-validation-for="UserName" class="text-danger"></span>
-                        </div>
-                        <div class="form-group position-relative">
-                            <i class="fas fa-envelope text-gray position-absolute" style=" margin-left:87%; margin-top:4%"></i>
-                            <input asp-for="Email" class="form-control" placeholder="Email" required />
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
-                        <div class="form-group position-relative">
-                            <i class="fas fa-briefcase text-gray position-absolute" style=" margin-left:87%; margin-top:4%"></i>
-                            <input asp-for="position" class="form-control" placeholder="Position" required />
-                            <span asp-validation-for="position" class="text-danger"></span>
-                        </div>
-                        <div class="form-group position-relative">
-                            <i class="fa fa-id-card text-gray position-absolute" style="margin-left: 87%; margin-top: 4%"></i>
-                            <input asp-for="skype_id" class="form-control" placeholder="Skype ID" required />
-                            <span asp-validation-for="skype_id" class="text-danger"></span>
-                        </div>
-                        <div class="form-group position-relative">
-                            <i class="fas fa-lock text-gray position-absolute" style="margin-left: 87%; margin-top: 4%"></i>
-                            <input asp-for="Password" class="form-control" placeholder="Password" required />
-                            <span asp-validation-for="Password" class="text-danger"></span>
-                        </div>
-                        <div class="form-group position-relative">
-                            <i class="fas fa-lock text-gray position-absolute" style="margin-left: 87%; margin-top: 4%"></i>
-                            <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" required />
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                        </div>
+            <!-- /.box-header -->
 
-                        <div class="form-group">
-                            <label asp-for="FileNew" class="control-label">Upload File:</label><br />
-                            <input asp-for="FileNew" id="file" type="file" />
-                            <span asp-validation-for="FileNew" class="text-danger"></span>
+
+            <div class="box box-default container p-2">
+                <div class="box-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(m => m.UserName)
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.UserName)
+                            </div>
+                            <!-- /.form-group -->
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(m => m.position)
+                                @Html.TextBoxFor(m => m.position, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.position)
+                            </div>
+                            <!-- /.form-group -->
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(m => m.skype_id)
+                                @Html.TextBoxFor(m => m.skype_id, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.skype_id)
+                            </div>
+                            <!-- /.form-group -->
+                            <div class="form-group mb-2">
+                                @Html.LabelFor(m => m.FileNew)
+                                @Html.TextBoxFor(m => m.FileNew, new { @type = "file", @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.FileNew)
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <input type="submit" value="Register" class="btn text-white" style="background-color:#ff5722; width:300px" />
+                        <!-- /.col -->
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(m => m.Email)
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Email)
+                            </div>
+                            <!-- /.form-group -->
+                            <div class="form-group mb-2">
+                                @Html.LabelFor(m => m.password)
+                                @Html.TextBoxFor(m => m.password, new { @type = "password", @class = "form-control", @id = "password" })
+                                @Html.ValidationMessageFor(m => m.password)
+                            </div>
+                            <div class="form-group mb-2">
+                                @Html.LabelFor(m => m.confirm_password)
+                                @Html.TextBoxFor(m => m.confirm_password, new { @type = "password", @class = "form-control", @id = "confirm_password" })
+                                @Html.ValidationMessageFor(m => m.confirm_password)
+                            </div>
+                            
                         </div>
-                    </form>
+                        <!-- /.col -->
+                    </div>
+                    <!--/.row-->
                 </div>
             </div>
+            <!-- /.box-body -->
         </div>
-    </div>
+    }
+    <!-- /.box-body -->
 </section>
 
-<script>
-    function checkValidOrNot() {
-        //var projectId = $('#ProjectId').val();
-        //var projectUnitId = $('#ProjectUnitId').val();
-        //var SelectedFlatNo = $('#SelectedFlatNo').val();
 
-        //if ((projectId != null && projectId != "") && (projectUnitId != null && projectUnitId != "")) {
-        //    if (SelectedFlatNo == null || SelectedFlatNo == '') {
-        //        notification("Error", 'Please Select Flat For Booking', "error");
-        //        return false;
-        //    }
-        //}
-        //return true;
-    }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#submit').click(function (event) {
+
+            data = $('#password').val();
+            var len = data.length;
+
+            if (len < 1) {
+                alert("Password cannot be blank");
+                // Prevent form submission
+                event.preventDefault();
+            }
+
+            if ($('#password').val() != $('#confirm_password').val()) {
+                alert("Password and Confirm Password don't match");
+                // Prevent form submission
+                event.preventDefault();
+            }
+
+        });
+    });
 </script>

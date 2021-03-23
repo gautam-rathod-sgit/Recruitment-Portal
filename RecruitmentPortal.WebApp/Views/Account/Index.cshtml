@@ -5,24 +5,17 @@
 <section class="content">
     <div class="row">
         <div class="col-sm-12">
-            <div class="box box-default collapsed-box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-users"></i> Users </h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="row">
-                        
-                    </div>
-                </div>
-            </div>
-            <!-- /.box -->
 
             <div class="box">
                 <div class="box-header">
-                    @*<h3 class="box-title">All Users</h3>*@
+                    <h3 class="box-title"><i class="fa fa-users"></i><b> Users :</b></h3>
+                    <a href='@Url.Action("Register", "Login")' class="btn btn-primary pull-right"S>
+                        Add Interviewer
+                    </a>
                 </div>
                 <!-- /.box-header -->
+
+            <!-- /.box -->
                 <div class="box-body">
                     <table id="datatable" class="table table-bordered table-striped">
                         <thead>
@@ -64,12 +57,6 @@
             "ajax":{
                 "url": "@Url.Action("GetAllUsers", "Account")",
                 "type": "GET",
-                //"data": {
-                //    "startDate": sStartDate,
-                //    "endDate": sEndDate,
-                //    "applicationType": sApplicationType,
-                //    "degree": sDegree
-                //},
                 "datatype": "json"
             },
             "columns": [
@@ -88,29 +75,6 @@
             "order": [[0, "asc"]]
         });
     }
-
-    @*function search() {
-        debugger;
-        var sStartDate = getInputValueById('srcStartDate');
-        var sEndDate = getInputValueById('srcEndDate');
-
-        var dStartDate = new Date(sStartDate);
-        var dEndDate = new Date(sEndDate);
-
-        if (dEndDate < dStartDate) {
-            notification("Error", '@Messages.EndDateGreaterThanStartDate', "error");
-            return;
-        }
-        bindDatatable();
-    }*@
-
-    //function reset() {
-    //    setInputValueById('srcApplicationType','');
-    //    setInputValueById('srcDegree','');
-    //    setInputValueById('srcStartDate','');
-    //    setInputValueById('srcEndDate', '');
-    //    bindDatatable();
-    //}
 
     function openRecord(id) {
         window.location.href = '@Url.Action("UpdateUser", "Account")?id=' + id;

@@ -252,4 +252,7 @@
   <data name="RejectionReason" xml:space="preserve">
     <value>Rejection Reason</value>
   </data>
+  <data name="File" xml:space="preserve">
+    <value>Upload Picture</value>
+  </data>
 </root>

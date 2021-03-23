@@ -33,12 +33,12 @@
                 <div class="box-header">
                     @if (User.IsInRole("Admin"))
                     {
-                        <h3 class="box-title"><b>All Schedules :</b></h3>
+                        <h3 class="box-title"><i class="fa fa-clipboard"></i><b> All Schedules :</b></h3>
 
                     }
                     else
                     {
-                        <h3 class="box-title"><b>Completed Schedules :</b></h3>
+                        <h3 class="box-title"><i class="fa fa-clipboard"></i><b> Completed Schedules :</b></h3>
 
                     }
                 </div>
@@ -71,7 +71,7 @@
     });
 
     function bindDatatable() {
-      
+
         $('#datatable').DataTable({
             lengthChange: true,
             searching: true,
@@ -100,8 +100,9 @@
                 {
                     "sClass": "text-center",
                     "mRender": function (data, type, row) {
-                        debugger;
-                        var action = '<a href="javascript:void(0);" title="Details" onclick="Details(\'' + row.encryptedId +'\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit actionbutton"></i></a>';
+                        var action = '';
+                        action += '<a href="javascript:void(0);" title="Details" onclick="Details(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
+                        action += ' <a href="javascript:void(0);" title="Delete" onclick="Delete(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>';
                         return action;
                     }
                 },
@@ -112,6 +113,9 @@
 
     function Details(id, toCompletedList = true) {
         window.location.href = '@Url.Action("ScheduleDetails", "Interviewer")?scheduleId=' + id + '&toCompletedList' + toCompletedList;
+    }
+    function Delete(id, remove = true) {
+        window.location.href = '@Url.Action("UpdateScheduleOfJobApplication", "JobApplication")?scheduleId=' + id + '&remove=' + remove;
     }
 
 </script>
