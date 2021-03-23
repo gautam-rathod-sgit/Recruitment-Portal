@@ -253,6 +253,9 @@
     <value>Rejection Reason</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>Upload Picture</value>
+    <value>Upload File</value>
+  </data>
+  <data name="ProfilePicture" xml:space="preserve">
+    <value>Profile Picture</value>
   </data>
 </root>

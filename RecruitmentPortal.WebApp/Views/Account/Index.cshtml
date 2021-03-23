@@ -9,7 +9,7 @@
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"><i class="fa fa-users"></i><b> Users :</b></h3>
-                    <a href='@Url.Action("Register", "Login")' class="btn btn-primary pull-right"S>
+                    <a href='@Url.Action("Register", "Account")' class="btn btn-primary pull-right"S>
                         Add Interviewer
                     </a>
                 </div>
@@ -77,6 +77,6 @@
     }
 
     function Edit(id) {
-        window.location.href = '@Url.Action("Register", "Login")?id=' + id;
+        window.location.href = '@Url.Action("Register", "Account")?id=' + id;
     }
 </script>

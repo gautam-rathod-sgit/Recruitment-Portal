@@ -377,24 +377,26 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     await _jobApplicationPage.UpdateJobApplication(model);
                 }
+
+                if (model.flag_Edit)
+                {
+                    if (!model.editFromMenu)
+                    {
+                        return RedirectToAction("SelectedJobApplicationsDetails", "JobApplication", new { id = RSACSPSample.EncodeServerName((model.ID).ToString()) });
+
+                    }
+                    else
+                    {
+                        return RedirectToAction("SelectedJobApplicationsDetails", "JobApplication", new { id = RSACSPSample.EncodeServerName((model.ID).ToString()), toAdminIndex = true });
+
+                    }
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            if (model.flag_Edit)
-            {
-                if (!model.editFromMenu)
-                {
-                    return RedirectToAction("SelectedJobApplicationsDetails", "JobApplication", new { id = RSACSPSample.EncodeServerName((model.ID).ToString()) });
-
-                }
-                else
-                {
-                    return RedirectToAction("SelectedJobApplicationsDetails", "JobApplication", new { id = RSACSPSample.EncodeServerName((model.ID).ToString()), toAdminIndex = true });
-
-                }
-            }
+            
             return RedirectToAction("AllApplications", "Candidate", new { Application_mode = status_Complete });
         }
        
@@ -404,20 +406,17 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> SelectedJobApplicationsDetails(string id, bool backToAll, bool toAdminIndex = false)
-        {
-            if (backToAll)
-            {
-                ViewBag.backToAll = backToAll;
-            }
-            if (toAdminIndex)
-            {
-                ViewBag.toAdminIndex = toAdminIndex;
-                toAdminIndex = false;
-            }
+        public async Task<IActionResult> SelectedJobApplicationsDetails(string id, bool toAdminIndex = false)
+        {  
+           
             JobApplicationViewModel model = new JobApplicationViewModel();
             try
             {
+                if (toAdminIndex)
+                {
+                    ViewBag.toAdminIndex = toAdminIndex;
+                    toAdminIndex = false;
+                }
                 model = await _jobApplicationPage.getJobApplicationById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
                 model.position = getPositionByCandidateId(model.candidateId);
                 model.job_Role = getJobRoleByCandidateId(model.candidateId);

@@ -33,17 +33,19 @@ namespace RecruitmentPortal.WebApp.Controllers
         private string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
         private string status_Complete = Enum.GetName(typeof(JobApplicationStatus), 2);
         readonly int reqValue = Convert.ToInt32(Enum.Parse(typeof(StatusType), "Completed"));
+        IQueryable<SchedulesViewModel> allScheduleList;
         private readonly RecruitmentPortalDbContext _dbContext;
         private readonly IJobPostPage _jobPostPage;
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ISchedulesPage _schedulesPage;
-        private readonly IJobApplicationPage _jobApplicationPage;
         private readonly IJobPostCandidatePage _jobPostCandidatePage;
         private readonly ICandidatePage _candidatePageServices;
-        private readonly IDegreePage _degreePageServices; 
+        private readonly IDegreePage _degreePageServices;
         private readonly IDepartmentPage _departmentPageservices;
         private readonly IJobPostPage _jobPostPageservices;
+        private readonly IJobApplicationPage _jobApplicationPage;
+
         private readonly IDataProtector _Protector;
         public IEmailService _emailService { get; }
         private readonly IWebHostEnvironment _environment;
@@ -62,7 +64,8 @@ namespace RecruitmentPortal.WebApp.Controllers
               IJobPostCandidatePage jobPostCandidatePage,
             ILogger<HomeController> logger,
                      IDegreePage degreePageServices,
-            RecruitmentPortalDbContext dbContext, 
+            RecruitmentPortalDbContext dbContext,
+       
             IJobPostPage jobPostPageservices,
 
             IDataProtectionProvider dataProtectionProvider,
@@ -101,11 +104,11 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             if (User.IsInRole("Admin"))
             {
-                return RedirectToAction("AdminIndex", "Home");
+                return RedirectToAction("AdminIndex", "Account");
             }
             if (User.IsInRole("Interviewer"))
             {
-                return RedirectToAction("InterviewerIndex", "Home");
+                return RedirectToAction("InterviewerIndex", "Account");
             }
             else
             {
@@ -118,71 +121,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             return _Protector.Protect(Id.ToString());
         }
 
-        ///<summary>
-        ///This method fetches Home page for Admin
-        ///</summary>
-        ///<returns></returns>
-        public async Task<IActionResult> AdminIndex()
-        {
-
-            //counter part
-            AdminPanelViewModel collection = new AdminPanelViewModel();
-            try
-            {
-                collection.ApplicationCount = _dbContext.Candidate.Where(x => x.emailConfirmed == true).Count();
-                collection.ActiveApplicationCount = _dbContext.jobApplications.ToList().Where(x => x.status == status_Pending).Count();
-                collection.InterviewerCount = _dbContext.Users.Count();
-                collection.SelectedCount = _dbContext.jobApplications.Where(x => x.status == status_Complete).Count();
-
-                //upcoming schedules scheduleviewmodels
-                var upcoming_schedules = await _schedulesPage.GetAllSchedules();
-                upcoming_schedules = upcoming_schedules.Where(x => x.status != reqValue);
-                List<SchedulesViewModel> schedulelist = new List<SchedulesViewModel>();
-
-
-                schedulelist = upcoming_schedules.ToList();
-
-                collection.upcoming_schedules = schedulelist;
-
-
-
-                //notification jobapplicationViewModels.
-                var notifyJobApplications = await _jobApplicationPage.getJobApplications();
-                collection.selected_application = notifyJobApplications.Where(x => x.status == status_Complete && x.notified == false).ToList();
-                foreach (var item in collection.selected_application)
-                {
-                    item.candidateName = _dbContext.Candidate.Where(x => x.ID == item.candidateId).FirstOrDefault().name;
-                    item.position = getPositionByCandidateId(item.candidateId);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            return View(collection);
-        }
-
-        ///<summary>
-        ///This method fetches Home page for Interviewer
-        ///</summary>
-        ///<returns></returns>
-        public async Task<IActionResult> InterviewerIndex()
-        {
-            //Counter Part
-            InterviewerPanelViewModel collection = new InterviewerPanelViewModel();
-
-
-            var pending_schedules = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
-
-            //filtering the schedules for getting only the incompleted schedules
-
-            collection.pending_schedules = pending_schedules.Where(x => x.status != reqValue).ToList();
-            collection.PendingScheduleCount = pending_schedules.Where(x => x.status != reqValue).ToList().Count();
-            collection.CompletedScheduleCount = pending_schedules.Where(x => x.status == reqValue).Count();
-
-            return View(collection);
-        }
 
 
         ///<summary>
@@ -244,24 +182,14 @@ namespace RecruitmentPortal.WebApp.Controllers
             return RedirectToAction("AdminIndex", "Home", new { });
         }
 
-        ///<summary>
-        ///FETCHING JOB POSITION USING CANDIDATE ID FROM DATABASE
-        ///</summary>
-        ///<param name = "id" ></ param >
-        ///< returns ></ returns >
-        public string getPositionByCandidateId(int id)
-        {
-            var job_ID = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == id).FirstOrDefault().job_Id;
-            var position = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).job_title;
-            return position;
-        }
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<IActionResult> GetJobsList()
+        public async Task<IActionResult> GetJoballScheduleList()
         {
             IQueryable<JobPostViewModel> plist = null;
             List<JobPostViewModel> list = new List<JobPostViewModel>();
@@ -285,6 +213,8 @@ namespace RecruitmentPortal.WebApp.Controllers
                 return Json(new { data = plist });
             }
         }
+
+
 
         /// <summary>
         /// This method retrieves Application-Form which is used to apply for a particular job [GET]
@@ -530,6 +460,47 @@ namespace RecruitmentPortal.WebApp.Controllers
 
 
         #region private methods
+        /// <summary>
+        /// gives the JobRole using candidate id for which that candidate has applied.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string getJobRoleByCandidateId(int id)
+        {
+            int job_ID;
+            string job_role = null;
+
+            job_ID = _dbContext.JobPostCandidate.AsNoTracking().FirstOrDefault(x => x.candidate_Id == id).job_Id;
+            job_role = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).job_role;
+
+            return job_role;
+        }
+        /// <summary>
+        /// enlist all the interviewer names of particular schedule using schedule Id
+        /// </summary>
+        /// <param name="Sid"></param>
+        /// <returns></returns>
+        public List<UserModel> getInterviewerNames(int Sid)
+        {
+            List<SchedulesUsers> allusers = new List<SchedulesUsers>();
+            List<UserModel> interviewer_names = new List<UserModel>();
+            try
+            {
+                allusers = _dbContext.SchedulesUsers.Where(x => x.scheduleId == Sid).ToList();
+                foreach (var user in allusers)
+                {
+                    UserModel userModel = new UserModel();
+                    userModel.Name = _dbContext.Users.Where(x => x.Id == user.UserId).FirstOrDefault().UserName;
+                    userModel.Id = _dbContext.Users.Where(x => x.Id == user.UserId).FirstOrDefault().Id;
+                    interviewer_names.Add(userModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return interviewer_names;
+        }
         public JsonResult GetDept(int Id)
         {
             using (RecruitmentPortalDbContext _dbContext = BaseContext.GetDbContext())
