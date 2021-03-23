@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -134,6 +135,22 @@ namespace RecruitmentPortal.WebApp.Controllers
                     model.UserName = user.UserName;
                     model.position = user.position;
                     model.skype_id = user.skype_id;
+
+                    //if (user.file != null)
+                    //{
+                    //    var path = Path.Combine(
+                    //Directory.GetCurrentDirectory(), "wwwroot" + @"\Resume", user.file);
+
+                    //    var memory = new MemoryStream();
+                    //    using (var stream = new FileStream(path, FileMode.Open))
+                    //    {
+                    //        await stream.CopyToAsync(memory);
+                    //    }
+                    //    memory.Position = 0;
+                    //    model.FileNew = File(memory, GetContentType(path), );
+                    //    new FormFile(memory, 0, 0, "name", Path.GetFileName(path));
+                    //}
+
                 }
                 model.editMode = true;
             }
@@ -343,6 +360,34 @@ namespace RecruitmentPortal.WebApp.Controllers
                 return View();
             }
             return RedirectToAction(nameof(ResetPasswordConfirmation));
+        }
+
+        /// <summary>
+        /// This method is a part of Download method. It restricts the resume that it should only in form of .pdf/.doc/.docx
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
+        /// <summary>
+        /// This method is a part of Download method. It restricts the resume that it should only in form of .pdf/.doc/.docx
+        /// </summary>
+        /// <returns></returns>
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+            {".pdf", "application/pdf"},
+            {".doc", "application/vnd.ms-word"},
+            {".docx", "application/vnd.ms-word"},
+            {".jpeg", "image/jpeg"},
+            {".jpg", "image/jpeg"},
+            {".png", "image/png"}
+            };
         }
 
         [HttpGet]
