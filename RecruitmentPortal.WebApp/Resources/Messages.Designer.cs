@@ -61,15 +61,6 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allowed Extensions for file is .jpeg, .jpg, .png.
-        /// </summary>
-        public static string AllowImageExtensions {
-            get {
-                return ResourceManager.GetString("AllowImageExtensions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ApplyingThrough is Required.
         /// </summary>
         public static string ApplyingThroughRequired {
@@ -349,7 +340,7 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Phone No. is Required.
+        ///   Looks up a localized string similar to Phone No is Required.
         /// </summary>
         public static string PhoneRequired {
             get {
@@ -381,6 +372,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string RatingRequired {
             get {
                 return ResourceManager.GetString("RatingRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reference is Required.
+        /// </summary>
+        public static string ReferenceRequired {
+            get {
+                return ResourceManager.GetString("ReferenceRequired", resourceCulture);
             }
         }
         
@@ -525,6 +525,51 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string VacancyRequired {
             get {
                 return ResourceManager.GetString("VacancyRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valid Candidate Name is SRequired.
+        /// </summary>
+        public static string ValidCandidateNameRequired {
+            get {
+                return ResourceManager.GetString("ValidCandidateNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valid CTC is Required.
+        /// </summary>
+        public static string ValidCTCRequired {
+            get {
+                return ResourceManager.GetString("ValidCTCRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HSC % must be greater than 0.
+        /// </summary>
+        public static string ValidHSCRequired {
+            get {
+                return ResourceManager.GetString("ValidHSCRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone No must be equal to 10 digits.
+        /// </summary>
+        public static string ValidPhoneRequired {
+            get {
+                return ResourceManager.GetString("ValidPhoneRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SSC % must be greater than 0.
+        /// </summary>
+        public static string ValidSSCRequired {
+            get {
+                return ResourceManager.GetString("ValidSSCRequired", resourceCulture);
             }
         }
         

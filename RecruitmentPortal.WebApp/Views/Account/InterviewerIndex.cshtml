@@ -1,0 +1,121 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.InterviewerPanelViewModel
+@using RecruitmentPortal.WebApp.Helpers
+@using RecruitmentPortal.Infrastructure.Data.Enum
+
+<br />
+<div class="container-fluid">
+    <div class="row">
+        @*------col-------*@
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-red">
+                <div class="inner">
+                    <h3>@Model.PendingScheduleCount</h3>
+
+                    <p>Pending Schedules</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-clipboard text-white"></i>
+                </div>
+            </div>
+        </div>
+        @*------col-------*@
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <h3>@Model.CompletedScheduleCount</h3>
+
+                    <p>Completed Schedules</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-check text-white"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Upcoming schedule list-->
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- /.box -->
+
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title"><i class="fa fa-clipboard"></i><b> Upcoming Schedules :</b></h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="datatable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Candidate Name</th>
+                                <th>Job Position</th>
+                                <th>Mode of Interview</th>
+                                <th>Round</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        bindDatatable();
+
+    });
+
+    function bindDatatable() {
+
+        $('#datatable').DataTable({
+            lengthChange: true,
+            searching: true,
+            ordering: false,
+            lengthMenu: [[5, 10, 25, 50, -1], [5,10, 25, 50, "All"]],
+            paging: true,
+            pagingType: "simple_numbers",
+            pageLength: 5,
+            fixedColumns: true,
+            responsive: true,
+            "bDestroy": true,
+            "ajax": {
+                "url": "@Url.Action("getAdminIndexScheduleData", "Home")",
+                "type": "GET",
+                "data": {},
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "candidate_name", "name": "candidate_name" },
+                { "data": "position", "name": "position" },
+
+                { "data": "mode_of_interview", "name": "mode_of_interview" },
+                { "data": "roundName", "name": "roundName" },
+
+
+
+                {
+                    "sClass": "text-center",
+                    "mRender": function (data, type, row) {
+                        var action = '';
+                        action += '<a href="javascript:void(0);" title="Details" onclick="ScheduleDetails(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
+                        return action;
+                    }
+                },
+            ],
+            "order": [[0, "asc"]]
+        });
+    }
+
+     function ScheduleDetails(id, toAdminIndex = true) {
+        window.location.href = '@Url.Action("ScheduleDetails", "Interviewer")?scheduleId=' + id + '&toAdminIndex=' + toAdminIndex;
+    }
+</script>

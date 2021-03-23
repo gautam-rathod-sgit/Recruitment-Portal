@@ -29,7 +29,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         private readonly ICandidatePage _candidatePageServices;
         private readonly UserManager<ApplicationUser> _userManager;
         public InterviewerController(UserManager<ApplicationUser> userManager, ICandidatePage candidatePage, RecruitmentPortalDbContext dbContext, ISchedulesPage schedulesPage)
-        {          
+        {
             _dbContext = dbContext;
             _userManager = userManager;
             _schedulesPage = schedulesPage;
@@ -208,7 +208,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
 
                 Console.WriteLine(ex.Message);
-            }         
+            }
             return View(model);
         }
 
@@ -227,7 +227,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                 Console.WriteLine(ex.Message);
             }
-            return RedirectToAction("ScheduleDetails",new {scheduleId = RSACSPSample.EncodeServerName((model.ID).ToString()) });
+            return RedirectToAction("ScheduleDetails", new { scheduleId = RSACSPSample.EncodeServerName((model.ID).ToString()) });
         }
     }
 }
