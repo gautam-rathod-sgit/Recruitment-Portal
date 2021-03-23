@@ -24,7 +24,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
 
         [Display(ResourceType = typeof(Labels), Name = "CandidateName")]
-        [RegularExpression(CommonHelper.RegexText, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
+        [RegularExpression(CommonHelper.RegexText, ErrorMessageResourceName = "ValidCandidateNameRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "CandidateNameRequired", ErrorMessageResourceType = typeof(Messages))]
         public string name { get; set; }
 
@@ -42,7 +42,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
 
         [Display(ResourceType = typeof(Labels), Name = "Phone")]
-        [RegularExpression(CommonHelper.RegExTelephone, ErrorMessageResourceName = "PhoneRequired", ErrorMessageResourceType = typeof(Messages))]
+        [RegularExpression(CommonHelper.RegExTelephone, ErrorMessageResourceName = "ValidPhoneRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "PhoneRequired", ErrorMessageResourceType = typeof(Messages))]
         public double phone { get; set; }
 
@@ -64,10 +64,14 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public string relevent_experience { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "CurrentCTC")]
+        [MinLength(1)]
+        [RegularExpression(CommonHelper.RegexNumber, ErrorMessageResourceName = "ValidCTCRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "CurrentCTCRequired", ErrorMessageResourceType = typeof(Messages))]
         public double current_ctc { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "ExpectedCTC")]
+        [MinLength(1)]
+        [RegularExpression(CommonHelper.RegexNumber, ErrorMessageResourceName = "ValidCTCRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "ExpectedCTCRequired", ErrorMessageResourceType = typeof(Messages))]
         public double expected_ctc { get; set; }
 
@@ -78,18 +82,19 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
 
         [Display(ResourceType = typeof(Labels), Name = "HSC")]
-        [RegularExpression(CommonHelper.RegexNumber, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
+        [Range(1, 100)]
+        [RegularExpression(CommonHelper.RegexNumber, ErrorMessageResourceName = "ValidSSCRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "HSCPercentageRequired", ErrorMessageResourceType = typeof(Messages))]
         public float hsc_perc { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "SSC")]
-        [RegularExpression(CommonHelper.RegexNumber, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
+        [Range(1, 100)]
+        [RegularExpression(CommonHelper.RegexNumber, ErrorMessageResourceName = "ValidSSCRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "SSCPercentageRequired", ErrorMessageResourceType = typeof(Messages))]
         public float ssc_perc { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "ApplyingThrough")]
-        //[RegularExpression(CommonHelper.RegexText, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
-        [Required(ErrorMessageResourceName = "ApplyingThroughRequired", ErrorMessageResourceType = typeof(Messages))]
+        [Required(ErrorMessageResourceName = "ReferenceRequired", ErrorMessageResourceType = typeof(Messages))]
         public string applying_through { get; set; }
 
 

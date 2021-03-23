@@ -70,10 +70,10 @@
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.mode_of_interview, new { @class = "asterisk" })
                                     <div class="col-10">
-                                        @Html.Label("Online")
                                         @Html.RadioButtonFor(m => m.mode_of_interview, "Online", new { @id = "online" })
-                                        @Html.Label("Face to Face")
+                                        @Html.Label("Online ")
                                         @Html.RadioButtonFor(m => m.mode_of_interview, "Face-To-Face", new { @id = "face" })
+                                        @Html.Label("Face to Face")
 
                                     </div>
                                 </div>

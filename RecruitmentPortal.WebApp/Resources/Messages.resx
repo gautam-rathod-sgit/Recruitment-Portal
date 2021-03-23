@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApplyingThroughRequired" xml:space="preserve">
-    <value>ApplyingThrough is Required</value>
+  <data name="ReferenceRequired" xml:space="preserve">
+    <value>Reference is Required</value>
   </data>
   <data name="CandidateNameRequired" xml:space="preserve">
     <value>Candidate Name is Required</value>
@@ -193,7 +193,7 @@
     <value>Password is Required</value>
   </data>
   <data name="PhoneRequired" xml:space="preserve">
-    <value>Phone No. is Required</value>
+    <value>Phone No is Required</value>
   </data>
   <data name="PleaseSelect" xml:space="preserve">
     <value>--- Please Select ---</value>
@@ -272,5 +272,20 @@
   </data>
   <data name="FileRequired" xml:space="preserve">
     <value>File is Required</value>
+  </data>
+  <data name="ValidCandidateNameRequired" xml:space="preserve">
+    <value>Valid Candidate Name is SRequired</value>
+  </data>
+  <data name="ValidCTCRequired" xml:space="preserve">
+    <value>Valid CTC is Required</value>
+  </data>
+  <data name="ValidHSCRequired" xml:space="preserve">
+    <value>HSC % must be greater than 0</value>
+  </data>
+  <data name="ValidPhoneRequired" xml:space="preserve">
+    <value>Phone No must be equal to 10 digits</value>
+  </data>
+  <data name="ValidSSCRequired" xml:space="preserve">
+    <value>SSC % must be greater than 0</value>
   </data>
 </root>

@@ -86,6 +86,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         //creating a list for interviewer names
         public List<UserModel> InterviewerNames { get; set; }
+        public string allInterviewersNames { get; set; }
 
         //for jobapplication ID
         public int jobAppId { get; set; }

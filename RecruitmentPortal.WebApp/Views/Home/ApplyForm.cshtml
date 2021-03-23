@@ -124,12 +124,12 @@
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left hiddenclass">
                                         @Html.LabelFor(m => m.current_ctc, new { @class = "asterisk" })
-                                        @Html.TextBoxFor(m => m.current_ctc, new { @placeholder = "Current CTC", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.current_ctc, "{0:#.#}", new { @placeholder = "Current CTC", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.current_ctc, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left hiddenclass">
                                         @Html.LabelFor(m => m.expected_ctc, new { @class = "asterisk" })
-                                        @Html.TextBoxFor(m => m.expected_ctc, new { @placeholder = "Expected CTC", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.expected_ctc, "{0:#.#}", new { @placeholder = "Expected CTC", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.expected_ctc, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left" id="noticePeriod">
@@ -154,9 +154,10 @@
 
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
+            startDate: new Date(),
             endDate: '+0d',
             autoclose: true
-        });
+        }).datepicker("setDate", new Date());
 
         $(".select2").select2();
 
@@ -164,7 +165,7 @@
         $("select#getDepts")[0].selectedIndex = 0;
 
         //for removing 0 on fields
-        $(".form-control").val($(this).val() == 0 ? '' : $(this).val());
+       // $(".form-control").val($(this).val() == 0 ? '' : $(this).val());
 
         //for only pdf and docx
         $('#resume').on('change', function (e) {
@@ -186,15 +187,15 @@
 
         //for getting departments and dependent departments
         $('#getDepts').change(function () {
-          
+
             var url = '@Url.Action("GetDept", "Home")';
             var ddlsource = $("#getDepts").val();
 
 
             $.getJSON(url, { Id: ddlsource }, function (data) {
-             
+
                 if (data.length > 1) {
-               
+
 
                         var dept_drop = '';
                     $('#SelectDept').remove(); //for removing if already existing dropdown exist of previous record
@@ -205,14 +206,14 @@
                         for (var i = 0; i < data.length; i++) {
                             dept_drop += '<option value="' + data[i].value + '">' + data[i].text + '</option>';
                         }
-                     
+
                         dept_drop += '</select>';
                         $('.degree_dept').append(dept_drop);
-                   
+
 
                     }
                     else {
-                     
+
                             $("#DeptID").val(0);
                             //$('.dept').nextAll('#SelectDept').remove();
                             $('#SelectDept').remove();

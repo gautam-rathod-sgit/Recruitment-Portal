@@ -28,12 +28,12 @@
                     @Html.HiddenFor(m => m.ID)
                     <div class="form-group">
                         @Html.LabelFor(m => m.rating, new { @class = "asterisk" })
-                        @Html.TextBoxFor(m => m.rating, new { @placeholder = "Ratings", @class = "form-control" })
+                        @Html.TextBoxFor(m => m.rating, "{0:#.#}", new { @placeholder = "Ratings", @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.rating, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group has-feedback has-feedback-left">
                         @Html.LabelFor(m => m.remark, new { @class = "asterisk" })
-                        @Html.TextBoxFor(m => m.remark, new { @placeholder = "Location", @class = "form-control" })
+                        @Html.TextBoxFor(m => m.remark, new { @placeholder = "Remarks", @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.remark, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group has-feedback has-feedback-left">
@@ -99,7 +99,7 @@
                             if (ViewBag.toAdminIndex != null || ViewBag.toAdminIndex == true)
                             {
 
-                                <a href='@Url.Action("AdminIndex","Home")' class="btn btn-primary btn-sm">
+                                <a href='@Url.Action("AdminIndex","Account")' class="btn btn-primary btn-sm">
                                     Cancel
                                 </a>
                             }
@@ -112,8 +112,8 @@
 
                         }
                         else
-                        {
-                            <a href='@Url.Action("Index","Interviewer")' class="btn btn-primary btn-sm">
+                        {  
+                            <a href='@Url.Action("InterviewerIndex","Account")' class="btn btn-primary btn-sm">
                                 Cancel
                             </a>
                         }
