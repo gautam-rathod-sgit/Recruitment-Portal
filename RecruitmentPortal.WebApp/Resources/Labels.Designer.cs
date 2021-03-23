@@ -187,7 +187,7 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload Picture.
+        ///   Looks up a localized string similar to Upload File.
         /// </summary>
         public static string File {
             get {
@@ -318,6 +318,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string Position {
             get {
                 return ResourceManager.GetString("Position", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Profile Picture.
+        /// </summary>
+        public static string ProfilePicture {
+            get {
+                return ResourceManager.GetString("ProfilePicture", resourceCulture);
             }
         }
         

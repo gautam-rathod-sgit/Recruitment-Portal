@@ -1,128 +1,139 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.ApplicationUserViewModel
+@using RecruitmentPortal.WebApp.Resources
 
 <section class="content">
     @using (Html.BeginForm("Register", "Login", FormMethod.Post, new { id = "updateform", @enctype = "multipart/form-data" }))
     {
-        <div class="col-sm-12">
-            <!-- /.box -->
-            <div class="box box-default boxPad">
-                <div class="box-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- /.box -->
+                <div class="box box-default boxPad">
+                    <div class="box-header">
+                        <h3 class="box-title">
+                            <i class="fa fa-info-circle"></i>
+                            Add User
+                        </h3>
 
-                    <h3 class="box-title">
-                        <i class="fa fa-info-circle"></i>
-                        Add User :
-                    </h3>
-
-                    @if (Model.editMode)
-                    {
                         <div class="box-tools pull-right">
-                            <input type="submit" value="Save" class="btn btn-primary" name="submit" id="submit"/>
-                            <input type="submit" value="Save &amp; Continue" name="submit" class="btn btn-primary" id="submit"/>
-                            <a href="@Url.Action("Index", "Account", new { id = Model.UserId })" class="btn btn-primary">Cancel</a>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="box-tools pull-right">
-                            <input type="submit" value="Save" class="btn btn-primary" name="submit" id="submit" />
-                            <a href="@Url.Action("Index", "Account", new { id = Model.UserId })" class="btn btn-primary">Cancel</a>
-                        </div>
-                    }
-
-
-
-                </div>
-            </div>
-
-            <!-- /.box-header -->
-
-
-            <div class="box box-default container p-2">
-                <div class="box-body">
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            @if (Model.editMode)
+                            <input type="submit" value="Save" class="btn btn-primary" name="submit" onclick="return submitFormData()" />
+                            @if (Model.UserId != Guid.Empty)
                             {
-                                @Html.HiddenFor(m => m.editMode)
-                                <input type="hidden" value="@Model.UserId" name="UserId" id="UserId" />
+                                <input type="submit" value="Save &amp; Continue" name="submit" class="btn btn-primary" onclick="return submitFormData()" />
                             }
-                            <div class="form-group mb-3">
-                                @Html.LabelFor(m => m.UserName)
-                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.UserName)
-                            </div>
-                            <!-- /.form-group -->
-                            <div class="form-group mb-3">
-                                @Html.LabelFor(m => m.position)
-                                @Html.TextBoxFor(m => m.position, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.position)
-                            </div>
-                            <!-- /.form-group -->
-                            <div class="form-group mb-3">
-                                @Html.LabelFor(m => m.skype_id)
-                                @Html.TextBoxFor(m => m.skype_id, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.skype_id)
-                            </div>
-                            <!-- /.form-group -->
-                            <div class="form-group mb-2">
-                                @Html.LabelFor(m => m.FileNew)
-                                @Html.TextBoxFor(m => m.FileNew, new { @type = "file", @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.FileNew)
-                            </div>
+                            <a href="@Url.Action("Index", "Account", new { id = Model.UserId })" class="btn btn-primary">Cancel</a>
                         </div>
-                        <!-- /.col -->
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                @Html.LabelFor(m => m.Email)
-                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Email)
-                            </div>
-                            <!-- /.form-group -->
-                            <div class="form-group mb-2">
-                                @Html.LabelFor(m => m.password)
-                                @Html.TextBoxFor(m => m.password, new { @type = "password", @class = "form-control", @id = "password" })
-                                @Html.ValidationMessageFor(m => m.password)
-                            </div>
-                            <div class="form-group mb-2">
-                                @Html.LabelFor(m => m.confirm_password)
-                                @Html.TextBoxFor(m => m.confirm_password, new { @type = "password", @class = "form-control", @id = "confirm_password" })
-                                @Html.ValidationMessageFor(m => m.confirm_password)
-                            </div>
-                            
-                        </div>
-                        <!-- /.col -->
                     </div>
-                    <!--/.row-->
                 </div>
+
+                <!-- /.box-header -->
+
+
+                <div class="box box-default container p-2">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.HiddenFor(m => m.UserId)
+                                @Html.HiddenFor(m => m.editMode)
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(m => m.UserName)
+                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.UserName)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(m => m.position)
+                                    @Html.TextBoxFor(m => m.position, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.position)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(m => m.skype_id)
+                                    @Html.TextBoxFor(m => m.skype_id, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.skype_id)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-2">
+                                    @Html.LabelFor(m => m.FileNew)
+                                    @Html.TextBoxFor(m => m.FileNew, new { @type = "file" })
+                                    @Html.ValidationMessageFor(m => m.FileNew)
+                                    <div class="text-danger">Maximum allowed file size is <strong>3MB</strong>.</div>
+                                    <div class="text-danger">Allowed Extensions for file size is <strong> .jpeg, .jpg, .png</strong>.</div>
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(m => m.Email)
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Email)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-2">
+                                    @Html.LabelFor(m => m.password)
+                                    @Html.TextBoxFor(m => m.password, new { @type = "password", @class = "form-control", @id = "password" })
+                                    @Html.ValidationMessageFor(m => m.password)
+                                </div>
+                                <div class="form-group mb-2">
+                                    @Html.LabelFor(m => m.confirm_password)
+                                    @Html.TextBoxFor(m => m.confirm_password, new { @type = "password", @class = "form-control", @id = "confirm_password" })
+                                    @Html.ValidationMessageFor(m => m.confirm_password)
+                                </div>
+
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!--/.row-->
+                    </div>
+                </div>
+                <!-- /.box-body -->
             </div>
-            <!-- /.box-body -->
         </div>
     }
     <!-- /.box-body -->
 </section>
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('#submit').click(function (event) {
-
-            data = $('#password').val();
-            var len = data.length;
-
-            if (len < 1) {
-                alert("Password cannot be blank");
-                // Prevent form submission
-                event.preventDefault();
-            }
-
-            if ($('#password').val() != $('#confirm_password').val()) {
-                alert("Password and Confirm Password don't match");
-                // Prevent form submission
-                event.preventDefault();
-            }
-
-        });
+        $.validator.unobtrusive.parse($('#updateform'));
     });
+
+    $('#FileNew').on('change', function (e) {
+        $file = $("#FileNew");
+        var $filePath = $.trim($file.val());
+        var f = this.files[0];
+        if (f.size > 3145728 || f.fileSize > 3145728) {
+            //show an alert to the user
+            notification("Error", '@Messages.MaxSize3MB',"error");
+            //reset file upload control
+            this.value = null;
+            return;
+        }
+        var $ext = $filePath.split(".").pop().toLowerCase();
+        var $allow = new Array("png", "jpg", "jpeg");
+        if ($.inArray($ext, $allow) == -1) {
+            notification("Error", '@Messages.AllowImageExtensions', "error");
+            this.value = null;
+            return;
+        }
+    });
+
+    function submitFormData() {
+        var $form = $('form');
+        isvalid = 1;
+        var newpwd = $('#password').val();
+        var confpwd = $('#confirm_password').val();
+        if ($form.valid()) {
+            if (newpwd != confpwd) {
+                $("#Reassign_password").empty();
+                $("#Reassign_confirm_password").empty();
+                $('#password').after('<span class="field-validation-error" id="Reassign_password" role="alert">Password and Confirm Password must be Same.</span>');
+                $('#confirm_password').after('<span class="field-validation-error" id="Reassign_confirm_password" role="alert">Password and Confirm Password must be Same.</span>');
+                isvalid = 0;
+            }
+            if (isvalid === 1) {
+                return true;
+            }
+        }
+        return false;
+    }
 </script>

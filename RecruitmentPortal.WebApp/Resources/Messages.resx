@@ -273,4 +273,10 @@
   <data name="FileRequired" xml:space="preserve">
     <value>File is Required</value>
   </data>
+  <data name="AllowImageExtensions" xml:space="preserve">
+    <value>Allowed Extensions for file is .jpeg, .jpg, .png</value>
+  </data>
+  <data name="MaxSize3MB" xml:space="preserve">
+    <value>Maximum allowed file size is 3 MB</value>
+  </data>
 </root>

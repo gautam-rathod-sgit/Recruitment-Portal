@@ -272,7 +272,6 @@ namespace RecruitmentPortal.WebApp.Controllers
                 }
                 catch (Exception ex)
                 {
-
                     Console.WriteLine(ex.Message);
                 }
                 return View(model);
