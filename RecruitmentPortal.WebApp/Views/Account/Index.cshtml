@@ -67,7 +67,7 @@
                 {
                     "sClass": "text-center",
                     "mRender": function (data, type, row) {
-                        var edit = '<a href="#" title="Edit" onclick="openRecord(\'' + row.id + '\')" class="btn btn-primary"><i class="fa fa-edit"></i></a>';
+                        var edit = '<a href="#" title="Edit" onclick="Edit(\'' + row.id + '\')" class="btn btn-primary"><i class="fa fa-edit"></i></a>';
                         return edit;
                     }
                 }
@@ -76,7 +76,7 @@
         });
     }
 
-    function openRecord(id) {
-        window.location.href = '@Url.Action("UpdateUser", "Account")?id=' + id;
+    function Edit(id) {
+        window.location.href = '@Url.Action("Register", "Login")?id=' + id;
     }
 </script>

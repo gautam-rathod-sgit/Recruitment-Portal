@@ -25,17 +25,20 @@ namespace RecruitmentPortal.WebApp.Controllers
         private IPasswordHasher<ApplicationUser> passwordHasher;
         public IEmailService _emailService { get; }
         private readonly RecruitmentPortalDbContext _dbContext;
+        //for uploading Images/File : media stuff
+        private readonly IWebHostEnvironment _environment;
         #endregion
 
         #region Constructor
         public AccountController(IPasswordHasher<ApplicationUser> passwordHash,
-            RecruitmentPortalDbContext dbContext,
+            RecruitmentPortalDbContext dbContext, IWebHostEnvironment environment,
            UserManager<ApplicationUser> userManager, IEmailService emailService)
         {
             _userManager = userManager;
             passwordHasher = passwordHash;
             _emailService = emailService;
             _dbContext = dbContext;
+            _environment = environment;
         }
         #endregion
 
@@ -67,90 +70,104 @@ namespace RecruitmentPortal.WebApp.Controllers
             return View(plist);
         }
 
-        /// <summary>
-        /// This method is used for Updating registered User's Data [GET - Fetches User data]
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public async Task<IActionResult> UpdateUser(string id)
-        {
-            ApplicationUserViewModel model = new ApplicationUserViewModel();
-            if (!string.IsNullOrEmpty(id))
-            {
-                ApplicationUser user = await _userManager.FindByIdAsync(id);
+        ///// <summary>
+        ///// This method is used for Updating registered User's Data [GET - Fetches User data]
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <returns></returns>
+        //public async Task<IActionResult> UpdateUser(string id)
+        //{
+        //    ApplicationUserViewModel model = new ApplicationUserViewModel();
+        //    if (!string.IsNullOrEmpty(id))
+        //    {
+        //        ApplicationUser user = await _userManager.FindByIdAsync(id);
 
-                if (user != null)
-                {
-                    model.UserId = Guid.Parse(user.Id);
-                    model.Email = user.Email;
-                    model.UserName = user.UserName;
-                    model.position = user.position;
-                    model.skype_id = user.skype_id;
-                }
-            }
-            return View(model);
-        }
+        //        if (user != null)
+        //        {
+        //            model.UserId = Guid.Parse(user.Id);
+        //            model.Email = user.Email;
+        //            model.UserName = user.UserName;
+        //            model.position = user.position;
+        //            model.skype_id = user.skype_id;
+        //        }
+        //    }
+        //    return View(model);
+        //}
 
-        /// <summary>
-        ///This method is used for Updating registered User's Data [POST- Save updated data to the Database]
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
-        /// <param name="skype_id"></param>
-        /// <param name="position"></param>
-        /// <param name="UserName"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> UpdateUser(ApplicationUserViewModel model, string submit)
-        {
-            ApplicationUser user = await _userManager.FindByIdAsync(model.UserId.ToString());
+        ///// <summary>
+        /////This method is used for Updating registered User's Data [POST- Save updated data to the Database]
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <param name="email"></param>
+        ///// <param name="password"></param>
+        ///// <param name="skype_id"></param>
+        ///// <param name="position"></param>
+        ///// <param name="UserName"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //public async Task<IActionResult> UpdateUser(ApplicationUserViewModel model, string submit)
+        //{
+            
 
-            try
-            {
-                if (user != null)
-                {
-                    user.Email = model.Email;
-                    user.UserName = model.UserName;
-                    user.position = model.position;
-                    user.skype_id = model.skype_id;
-                    user.PasswordHash = passwordHasher.HashPassword(user, model.password);
+        //    try
+        //    {
+        //        //File details fetching
+        //        //create a place in wwwroot for storing uploaded files
+        //        var uploads = Path.Combine(_environment.WebRootPath, "Files");
+        //        if (model.FileNew != null)
+        //        {
+        //            using (var fileStream = new FileStream(Path.Combine(uploads, model.FileNew.FileName), FileMode.Create))
+        //            {
+        //                await model.FileNew.CopyToAsync(fileStream);
+        //            }
+        //            model.file = model.FileNew.FileName;
 
-                    var result = await _userManager.UpdateAsync(user);
-                    _dbContext.SaveChanges();
+        //        }
 
-                    if (result.Succeeded)
-                    {
-                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User Updated Successfully!";
-                        RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "User not Updated!";
-                    }
-                }
-                else
-                {
+        //        ApplicationUser user = await _userManager.FindByIdAsync(model.UserId.ToString());
+        //        if (user != null)
+        //        {
+        //            user.Email = model.Email;
+        //            user.UserName = model.UserName;
+        //            user.position = model.position;
+        //            user.skype_id = model.skype_id;
+        //            user.PasswordHash = passwordHasher.HashPassword(user, model.password);
 
-                    ModelState.AddModelError(model.UserName, "User Not Found");
-                }
-                switch (submit)
-                {
-                    case "Save":
-                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User updated Successfully.";
-                        return RedirectToAction("Index", "Account");
+        //            var result = await _userManager.UpdateAsync(user);
+        //            _dbContext.SaveChanges();
 
-                    case "Save & Continue":
-                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User updated Successfully.";
-                        return RedirectToAction("UpdateUser", "Account", new { id = model.UserId });
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
-            }
-            return View(model);
-        }
+        //            if (result.Succeeded)
+        //            {
+        //                TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User Updated Successfully!";
+        //                RedirectToAction("Index", "Home");
+        //            }
+        //            else
+        //            {
+        //                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "User not Updated!";
+        //            }
+        //        }
+        //        else
+        //        {
+
+        //            ModelState.AddModelError(model.UserName, "User Not Found");
+        //        }
+        //        switch (submit)
+        //        {
+        //            case "Save":
+        //                TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User updated Successfully.";
+        //                return RedirectToAction("Index", "Account");
+
+        //            case "Save & Continue":
+        //                TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User updated Successfully.";
+        //                return RedirectToAction("UpdateUser", "Account", new { id = model.UserId });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+        //    }
+        //    return View(model);
+        //}
 
         public async Task<IActionResult> DeleteUser(string id)
         {

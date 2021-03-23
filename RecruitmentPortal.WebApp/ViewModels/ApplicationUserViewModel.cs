@@ -47,5 +47,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [Display(ResourceType = typeof(Labels), Name = "File")]
         [Required(ErrorMessageResourceName = "FileRequired", ErrorMessageResourceType = typeof(Messages))]
         public IFormFile FileNew { get; set; }
+
+        public bool editMode { get; set; }
     }
 }

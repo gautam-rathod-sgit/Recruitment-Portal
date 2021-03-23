@@ -13,10 +13,24 @@
                         Add User :
                     </h3>
 
-                    <div class="box-tools pull-right">
-                        <input type="submit" value="Save" class="btn btn-primary" name="submit" />
-                        <a href="@Url.Action("Index", "Account", new { id = Model.UserId })" class="btn btn-primary">Cancel</a>
-                    </div>
+                    @if (Model.editMode)
+                    {
+                        <div class="box-tools pull-right">
+                            <input type="submit" value="Save" class="btn btn-primary" name="submit" id="submit"/>
+                            <input type="submit" value="Save &amp; Continue" name="submit" class="btn btn-primary" id="submit"/>
+                            <a href="@Url.Action("Index", "Account", new { id = Model.UserId })" class="btn btn-primary">Cancel</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="box-tools pull-right">
+                            <input type="submit" value="Save" class="btn btn-primary" name="submit" id="submit" />
+                            <a href="@Url.Action("Index", "Account", new { id = Model.UserId })" class="btn btn-primary">Cancel</a>
+                        </div>
+                    }
+
+
+
                 </div>
             </div>
 
@@ -28,6 +42,11 @@
 
                     <div class="row">
                         <div class="col-md-6">
+                            @if (Model.editMode)
+                            {
+                                @Html.HiddenFor(m => m.editMode)
+                                <input type="hidden" value="@Model.UserId" name="UserId" id="UserId" />
+                            }
                             <div class="form-group mb-3">
                                 @Html.LabelFor(m => m.UserName)
                                 @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
