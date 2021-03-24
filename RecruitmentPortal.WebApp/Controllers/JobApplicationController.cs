@@ -180,6 +180,9 @@ namespace RecruitmentPortal.WebApp.Controllers
         }
 
 
+
+
+
         /// <summary>
         /// for details of Application status on details click
         /// </summary>
@@ -188,7 +191,78 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Details(string id)
         {
+
             JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
+            int actualId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+            jobApplicationModel = await _jobApplicationPage.getJobApplicationById(actualId);
+            jobApplicationModel.EncryptedCandidateId = RSACSPSample.EncodeServerName(jobApplicationModel.candidateId.ToString());
+            jobApplicationModel.EncryptedJobId = RSACSPSample.EncodeServerName(id);
+            // return View(jobApplicationModel);
+
+            // jobApplicationModel = await _jobApplicationPage.getJobApplicationById(jobApplicationModel.candidateId);
+
+
+
+            //try
+            //{
+            //    if (id != null)
+            //    {
+            //        jobApplicationModel = await _jobApplicationPage.getJobApplicationById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
+            //    }
+
+            //    if (jobApplicationModel != null && id != null)
+            //    {
+            //        //getting candidate schedules
+            //        CandidateViewModel model = new CandidateViewModel();
+
+            //        model = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
+
+            //        //pushing candidate schedules to custom scheudules in job applicationViewmodel for view.
+
+            //        jobApplicationModel.Schedules = model.Schedules;
+
+
+            //        //giving interviewer name list to each schedule in jobapplication 
+            //        if (jobApplicationModel.Schedules.Count > 0)
+            //        {
+            //            foreach (var schedule in jobApplicationModel.Schedules)
+            //            {
+            //                List<UserModel> listOfUser = getInterviewerNames(schedule.ID);
+            //                schedule.InterviewerNames = listOfUser;
+            //                schedule.statusName = Enum.GetName(typeof(StatusType), schedule.status);
+            //            }
+            //        }
+
+
+            //        //getting candidate name
+            //        jobApplicationModel.candidateName = getCandidateNameById(jobApplicationModel.candidateId);
+            //        //getting position
+            //        jobApplicationModel.position = getPositionByCandidateId(jobApplicationModel.candidateId);
+
+            //        //----------riddhi--
+            //        //getting job-role
+            //        jobApplicationModel.job_Role = getJobRoleByCandidateId(jobApplicationModel.candidateId);
+            //        //getting applied-date
+            //        jobApplicationModel.date = model.apply_date;
+            //        //getting experience fields
+            //        //     jobApplicationModel.candidate.experience = model.experience;
+            //        jobApplicationModel.candidate = model;
+            //        jobApplicationModel.joining_date = DateTime.Now;
+            //    }
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    //Console.WriteLine(ex.Message);
+            //}
+
+            return View(jobApplicationModel);
+        }
+
+        public async Task<IActionResult> GetActiveAppDetailsList(string id)
+        {
+            JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
+            CandidateViewModel model = new CandidateViewModel();
             try
             {
                 if (id != null)
@@ -199,8 +273,6 @@ namespace RecruitmentPortal.WebApp.Controllers
                 if (jobApplicationModel != null && id != null)
                 {
                     //getting candidate schedules
-                    CandidateViewModel model = new CandidateViewModel();
-
                     model = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
 
                     //pushing candidate schedules to custom scheudules in job applicationViewmodel for view.
@@ -218,8 +290,6 @@ namespace RecruitmentPortal.WebApp.Controllers
                             schedule.statusName = Enum.GetName(typeof(StatusType), schedule.status);
                         }
                     }
-
-
                     //getting candidate name
                     jobApplicationModel.candidateName = getCandidateNameById(jobApplicationModel.candidateId);
                     //getting position
@@ -230,20 +300,19 @@ namespace RecruitmentPortal.WebApp.Controllers
                     jobApplicationModel.job_Role = getJobRoleByCandidateId(jobApplicationModel.candidateId);
                     //getting applied-date
                     jobApplicationModel.date = model.apply_date;
-                    //getting experience fields
-                    //     jobApplicationModel.candidate.experience = model.experience;
                     jobApplicationModel.candidate = model;
                     jobApplicationModel.joining_date = DateTime.Now;
                 }
 
+                return Json(new { data = jobApplicationModel });
             }
             catch (Exception ex)
             {
-                //Console.WriteLine(ex.Message);
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
+                return Json(new { data = jobApplicationModel });
             }
-            return View(jobApplicationModel);
-        }
 
+        }
 
 
         /// <summary>

@@ -64,6 +64,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 if (id != null)
                 {
                     int decrypted_id = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+                    
                     //setting foreign key in schedule
                     model.candidateId = decrypted_id;
                     //getting job application ID

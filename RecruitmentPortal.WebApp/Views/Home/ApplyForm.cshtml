@@ -13,6 +13,7 @@
                         <h3 class="box-title"><i class="fa fa-info-circle"></i><b> Apply here :</b></h3>
                         <div class="box-tools pull-right">
                             <input type="submit" value="Submit" class="btn btn-primary" name="submit" />
+                            <a href='@Url.Action("Index", "Home")' class="btn btn-primary">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -66,8 +67,12 @@
                                         @Html.LabelFor(m => m.selectedDegree, new { @class = "asterisk" })
                                         @Html.DropDownListFor(m => m.selectedDegree, new SelectList(ViewBag.ListOfDegree, "ID", "degree_name"), Messages.PleaseSelect, new { @id = "getDepts", @class = "form-control select2" })
                                         @Html.ValidationMessageFor(m => m.selectedDegree, "", new { @class = "text-danger" })
-
                                     </div>
+
+                                    <div class="form-group has-feedback has-feedback-left department_div ">
+                                        
+                                    </div>
+
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.File, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.File, new { @type = "file", @id = "resume", @placeholder = "Experience" })
@@ -124,12 +129,12 @@
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left hiddenclass">
                                         @Html.LabelFor(m => m.current_ctc, new { @class = "asterisk" })
-                                        @Html.TextBoxFor(m => m.current_ctc, "{0:#.#}", new { @placeholder = "Current CTC", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.current_ctc, new { @placeholder = "Current CTC", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.current_ctc, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left hiddenclass">
                                         @Html.LabelFor(m => m.expected_ctc, new { @class = "asterisk" })
-                                        @Html.TextBoxFor(m => m.expected_ctc, "{0:#.#}", new { @placeholder = "Expected CTC", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.expected_ctc, new { @placeholder = "Expected CTC", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.expected_ctc, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left" id="noticePeriod">
@@ -151,21 +156,23 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-
+        var today = new Date();
+        var currDate = today.getDate();
+        var currMonth = today.getMonth();
+        var currYear = today.getFullYear();
+        var dateStr = currDate + "/" + currMonth + "/" + currYear;
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
-            startDate: new Date(),
+            defaultDate: today,
             endDate: '+0d',
             autoclose: true
-        }).datepicker("setDate", new Date());
+        });
+        $('.datepicker').val(dateStr);
 
         $(".select2").select2();
 
         //for setting degree dropdown to starting index
         $("select#getDepts")[0].selectedIndex = 0;
-
-        //for removing 0 on fields
-       // $(".form-control").val($(this).val() == 0 ? '' : $(this).val());
 
         //for only pdf and docx
         $('#resume').on('change', function (e) {
@@ -185,46 +192,7 @@
         $(".hiddenclass").hide()
         $("#noticePeriod").hide();
 
-        //for getting departments and dependent departments
-        $('#getDepts').change(function () {
-
-            var url = '@Url.Action("GetDept", "Home")';
-            var ddlsource = $("#getDepts").val();
-
-
-            $.getJSON(url, { Id: ddlsource }, function (data) {
-
-                if (data.length > 1) {
-
-
-                        var dept_drop = '';
-                    $('#SelectDept').remove(); //for removing if already existing dropdown exist of previous record
-
-                    dept_drop += '<select id="SelectDept" name="SelectDept" class="form-control select2">';
-
-
-                        for (var i = 0; i < data.length; i++) {
-                            dept_drop += '<option value="' + data[i].value + '">' + data[i].text + '</option>';
-                        }
-
-                        dept_drop += '</select>';
-                        $('.degree_dept').append(dept_drop);
-
-
-                    }
-                    else {
-
-                            $("#DeptID").val(0);
-                            //$('.dept').nextAll('#SelectDept').remove();
-                            $('#SelectDept').remove();
-                    }
-                });
-        });
-
-
-
         //for experienced stuff
-
         $("#experienced").click(function () {
             $(".hiddenclass").show();
             $("#noticePeriod").show();
@@ -234,9 +202,30 @@
             $(".hiddenclass").hide();
             $("#noticePeriod").hide();
         });
-
-
     });
 
-
+     //for getting departments and dependent departments
+    $('#getDepts').change(function () {
+        var url = '@Url.Action("GetDept", "Home")';
+        var ddlsource = $("#getDepts").val();
+        $.getJSON(url, { Id: ddlsource }, function (data) {
+            if (data.length > 1) {
+                var dept_drop = '';
+                $('#SelectDept').remove(); //for removing if already existing dropdown exist of previous record
+                dept_drop += '<select id="SelectDept" name="SelectDept" class="form-control select2">';
+                    for (var i = 0; i < data.length; i++) {
+                        dept_drop += '<option value="' + data[i].value + '">' + data[i].text + '</option>';
+                    }
+                dept_drop += '</select>';
+                $('.department_div').empty();
+                $('.department_div').append(dept_drop);
+            }
+            else {
+                    $("#DeptID").val(0);
+                    //$('.dept').nextAll('#SelectDept').remove();
+                    $('#SelectDept').remove();
+            }
+        });
+        setTimeout(function () { $('#SelectDept').select2(); }, 1000);
+    });
 </script>

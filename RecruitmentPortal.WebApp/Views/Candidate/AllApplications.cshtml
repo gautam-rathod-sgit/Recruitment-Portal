@@ -160,7 +160,7 @@
 
     function bindDatatable() {
         var x = $("#srcApplicationType").val();
-        
+
         setLocalValue('srcAppType', x);
         var applicationTypeName = "src_" + x + "_datatable";
         var sApplicationType = "";
@@ -224,7 +224,7 @@
                     {
                         "sClass": "text-center",
                         "mRender": function (data, type, row) {
-                            var edit = '<a href="javascript:void(0);" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
+                            var edit = '<a href="javascript:void(0);" title="Edit" onclick="openRecordActive(\'' + row.encryptedJobId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
                             return edit;
                         }
                     }
@@ -269,8 +269,8 @@
                     { "data": "position", "name": "position" },
                     { "data": "job_Role", "name": "job_Role" },
                     { "data": "joining_date", "name": "joining_date" },
-                    { "data": "offered_ctc", "name": "offered_ctc" },
                     { "data": "commitment_mode", "name": "commitment_mode" },
+                    { "data": "offered_ctc", "name": "offered_ctc" },
                     {
                         "data": "status", "name": "status",
                         "mRender": function (data, type, row) {
@@ -372,7 +372,7 @@
                 },
                 "columns": [
                     { "data": "name", "name": "name" },
-                    { "data": "jobName", "name": "jobName" },
+                    { "data": "jobpostName", "name": "jobpostName" },
                     { "data": "jobRole", "name": "jobRole" },
                     { "data": "ssc_perc", "name": "ssc_perc" },
                     { "data": "hsc_perc", "name": "hsc_perc" },
@@ -418,6 +418,10 @@
 
     function openRecord(id) {
         window.location.href = '@Url.Action("Details", "Candidate")?id=' + id;
+    }
+    
+    function openRecordActive(id) {
+        window.location.href = '@Url.Action("Details", "JobApplication")?id=' + id;
     }
 
 

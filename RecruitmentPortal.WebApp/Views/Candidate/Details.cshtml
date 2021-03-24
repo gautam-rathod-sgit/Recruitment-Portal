@@ -5,8 +5,29 @@
 
 <style>
 </style>
+
+<!-- Modal for Accepting Application -->
+<!--<div class="modal fade bg-gradient-orange center" id="acceptmodel" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Fill Details:</h4>
+            </div>
+            <div class="modal-body" id="_AcceptApplicationView">
+
+            </div>
+        </div>-->
+        <!-- /.modal-content -->
+    <!--</div>-->
+    <!-- /.modal-dialog -->
+<!--</div>-->
+<!-- Modal end -->
+
 <!-- Modal for Adding Rejection Reason -->
-<div class="modal fade bg-gradient-orange center" id="rejectmodel" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+<!--<div class="modal fade bg-gradient-orange center" id="rejectmodel" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -18,11 +39,11 @@
             <div class="modal-body" id="_RejectionReasonView">
 
             </div>
-        </div>
+        </div>-->
         <!-- /.modal-content -->
-    </div>
+    <!--</div>-->
     <!-- /.modal-dialog -->
-</div>
+<!--</div>-->
 <!-- Modal end -->
 
 <section class="content">
@@ -39,7 +60,7 @@
 
                     <div class="box-tools pull-right">
 
-                        @if (User.IsInRole("Admin"))
+                        @if (User.IsInRole("Admin") )
                         {
                             <a href='@Url.Action("AddNewJobApplications", "JobApplication",new { id = Model.EncryptedId })' class="btn btn-primary btn-sm">
                                 Proceed
@@ -52,16 +73,20 @@
                             </a>
                         }
 
-                        <a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@RSACSPSample.EncodeServerName(Model.ID.ToString())')">
-                                 Reject
+                        @*<a class="btn btn-primary btn-sm" data-toggle="#acceptmodel" data-target="#acceptmodel" onclick="loadAcceptPartialView('@RSACSPSample.EncodeServerName(Model.ID.ToString())')">
+                            Accept
                         </a>
+                        
+                        <a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@RSACSPSample.EncodeServerName(Model.ID.ToString())')">
+                            Reject
+                        </a>*@
 
                         <a href='@Url.Action("AllApplications","Candidate")' class="btn btn-primary btn-sm">
                             Cancel
                         </a>
                     </div>
                 </div>
-            </div>
+            </div>s
 
             <!-- /.box-header -->
 
@@ -215,17 +240,30 @@
         });
     });
 
-   // Function for setting Flag_Accepted value as true
-    function openPopup() {
-        $("#Flag_Rejected").val(true);
-        $('#rejectmodel').modal('show');
-    }
+   // //Function for setting Flag_Accepted value as true
+   // function openPopupAccept() {
+   //     $("#Flag_Accepted").val(true);
+   //     $('#acceptmodel').modal('show');
+   // }
+   //// Function for setting Flag_Reject value as true
+   // function openPopup() {
+   //     $("#Flag_Rejected").val(true);
+   //     $('#rejectmodel').modal('show');
+   // }
 
-    function loadPartialView(id) {
+    @*function loadPartialView(id) {
         var url = '@Url.Action("RenderRejectionView", "Candidate" )?id=' + id;
         $('#_RejectionReasonView').load(url, function () {
             $('#rejectmodel').modal({ show: true });
         });
     }
+    
+    function loadAcceptPartialView(id) {
+        var url = '@Url.Action("RenderAcceptView", "Candidate")?id=' + id;
+        $('#_AcceptApplicationView').load(url, function () {
+            $('#acceptmodel').modal({ show: true });
+            $("#flag_Accepted").val(true);
+        });
+    }*@
 
 </script>

@@ -1,24 +1,310 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel
 @using RecruitmentPortal.WebApp.Helpers
 @using RecruitmentPortal.Infrastructure.Data.Enum
-@if (ViewData["msg"] != null)
-{
-    <script>window.onload = function () { alert("Schedule @ViewData["msg"] for candidate already exist !!") }</script>
-}
-@if (ViewBag.timeConflict == true)
-{
-    <script>window.onload = function () { alert("Schedule already exist with Date & Time !!") }</script>
-}
-@{
-    string isFresher = "Fresher";
-    string date_format = "dd-MM-yyyy";
-    string all_mode = "All";
+@using RecruitmentPortal.WebApp.Resources
 
-}
-<script src="~/lib//jquery//dist//jquery.min.js"></script>
-<script>
+@*@if (ViewData["msg"] != null)
+    {
+        <script>window.onload = function () { alert("Schedule @ViewData["msg"] for candidate already exist !!") }</script>
+    }
+    @if (ViewBag.timeConflict == true)
+    {
+        <script>window.onload = function () { alert("Schedule already exist with Date & Time !!") }</script>
+    }*@
+
+@*@{
+        string isFresher = "Fresher";
+        string date_format = "dd-MM-yyyy";
+        string all_mode = "All";
+
+    }*@
+
+<style type="text/css">
+    .required:after {
+        content: "*";
+        font-weight: bold;
+        color: red;
+    }
+</style>
+
+ @*Modal for Accepting Application*@ 
+<div class="modal fade bg-gradient-orange center" id="acceptmodel" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Fill Details:</h4>
+            </div>
+            <div class="modal-body" id="_AcceptApplicationView">
+
+            </div>
+        </div>
+ @*/.modal-content*@ 
+</div>
+ @*/.modal-dialog*@ 
+</div>
+ @*Modal end*@ 
+ @*Modal for Adding Rejection Reason*@ 
+<div class="modal fade bg-gradient-orange center" id="rejectmodel" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Reject Reason:</h4>
+            </div>
+            <div class="modal-body" id="_RejectionReasonView">
+
+            </div>
+        </div>
+ @*/.modal-content*@ 
+</div>
+ @*/.modal-dialog*@ 
+</div>
+ @*Modal end*@ 
+
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- /.box -->
+            <div class="box box-default boxPad">
+                <div class="box-header">
+
+                    <h3 class="box-title">
+                        <i class="fa fa-info-circle"></i>
+                        Candidate Details :
+                    </h3>
+
+                    <div class="box-tools pull-right">
+
+                        
+
+                        <form asp-action="Index" asp-controller="Schedules" asp-route-id='@Model.EncryptedCandidateId' method="get">
+                            @if (Model.Schedules == null)
+                            {
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    Start Scheduling
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    Next Schedule
+                                </button>
+                            }
+                        </form>
+
+                        @*@if (Model.ID > 0 && @Model.candidate.resume != null)
+                        {
+                            <a href='@Url.Action("Download", "Candidate", new { filename = @Model.candidate.resume })' class="btn btn-primary  btn-sm">
+                                Download Resume
+                            </a>
+                        }*@
+                        <a class="btn btn-primary btn-sm" data-toggle="#acceptmodel" data-target="#acceptmodel" onclick="loadAcceptPartialView('@RSACSPSample.EncodeServerName(Model.ID.ToString())')">
+                            Accept
+                        </a>
+
+                        <a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@RSACSPSample.EncodeServerName(Model.ID.ToString())')">
+                            Reject
+                        </a>
+
+                        @*<a href='@Url.Action("AllApplications","Candidate", new { id = RSACSPSample.EncodeServerName(Model.ID.ToString())})' class="btn btn-primary btn-sm">
+                            Cancel
+                        </a>*@
+
+
+                        @* Button trigger modal For Accepting Application*@
+                        <!--<button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#add-contact" onclick="openPopup()">
+                            Accept
+                        </button>-->
+                        @*  Button trigger modal For Rejecting Application*@
+                        <!--<button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#delete-contact" onclick="openPopupReject()">
+                            Reject
+                        </button>-->
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- /.box-header -->
+
+            <form>
+                <div class="box box-default container p-2">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.candidateName, new { @class = "asterisk", @readonly = true })
+                                    @Html.TextBoxFor(m => m.candidateName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidateName)
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.position, new { @class = "asterisk", @readonly = true })
+                                    @Html.TextBoxFor(m => m.position, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.position)
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.job_Role, new { @class = "asterisk", @readonly = true })
+                                    @Html.TextBoxFor(m => m.job_Role, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.job_Role)
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.date, new { @class = "asterisk", @readonly = true })
+                                    @Html.TextBoxFor(m => m.date, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.date)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                @if (Model.candidate != null)
+                                {
+                                @if (Model.candidate.experience == "Fresher")
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.experience, new { @class = "asterisk", @readonly = true })
+                                        @Html.TextBoxFor(m => m.candidate.experience, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.experience)
+                                    </div>
+                                }
+
+                                else
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.experience, new { @class = "asterisk", @readonly = true })
+                                        @Html.TextBoxFor(m => m.candidate.experience, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.experience)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.total_experience, new { @class = "asterisk", @readonly = true })
+                                        @Html.TextBoxFor(m => m.candidate.total_experience, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.total_experience)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.relevent_experience, new { @class = "asterisk", @readonly = true })
+                                        @Html.TextBoxFor(m => m.candidate.relevent_experience, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.relevent_experience)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.current_ctc, new { @class = "asterisk", @readonly = true })
+                                        @Html.TextBoxFor(m => m.candidate.current_ctc, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.current_ctc)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.expected_ctc, new { @class = "asterisk", @readonly = true })
+                                        @Html.TextBoxFor(m => m.candidate.expected_ctc, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.expected_ctc)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.notice_period, new { @class = "asterisk", @readonly = true })
+                                        @Html.TextBoxFor(m => m.candidate.notice_period, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.notice_period)
+                                    </div>
+                                }
+                                }
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!--/.row-->
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </form>
+        </div>
+    </div>
+    <!-- /.box-body -->
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box">
+                <div class="box-body">
+                    @*//@if (Model.Schedules.Count() > 0)
+                    {*@
+                        <table id="datatable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Round</th>
+                                    <th>Interviewer</th>
+                                    <th>Rating</th>
+                                    <th>Remarks</th>
+                                    <th>Date-Time</th>
+                                    <th>Status</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    @*}
+                    else
+                    {
+                        <h4 class="text-gray text-center mt-4 text-capitalize">
+                            <strong>
+                                No Interview Schedules Yet.<br />
+                                Click on Start Scheduling.
+                            </strong>
+                        </h4>
+                    }*@
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</section>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        bindDatatable();
+    });
+
+    function bindDatatable() {
+
+        $('#datatable').DataTable({
+                lengthChange: true,
+                searching: true,
+                ordering: false,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                paging: true,
+                pagingType: "simple_numbers",
+                pageLength: 10,
+                fixedColumns: true,
+                responsive: true,
+                "bDestroy": true,
+                "ajax": {
+                    "url": "@Url.Action("GetActiveAppDetailsList", "JobApplication")",
+                    "type": "GET",
+                    "data": {   },
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "roundName", "name": "roundName" },
+                    { "data": "InterviewerNames", "name": "InterviewerNames" },
+                    { "data": "rating", "name": "rating" },
+                    { "data": "remark", "name": "remark" },
+                    { "data": "statusName", "name": "statusName" },
+                    { "data": "datetime", "name": "datetime" },
+                    {
+                        "sClass": "text-center",
+                        "mRender": function (data, type, row) {
+                            var edit = '<a href="javascript:void(0);" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
+                            return edit;
+                        }
+                    }
+                ],
+                "order": [[0, "asc"]]
+            });
+
+    }
+
+
+
     $(function () {
-        debugger;
         $('button[data-toggle="ajax-modal"]').click(function (event) {
             var url = $(this).data('url');
             $.get(url).done(function (data) {
@@ -42,277 +328,69 @@
         $('#demo').attr('min', maxDate);
     });
 
-    //Function for setting Flag_Accepted value as true
-    function openPopup() {
-        debugger;
-        $("#Flag_Accepted").val(true);
-        $('#add-contact').modal('show');
+    ////Function for setting Flag_Accepted value as true
+    //function openPopup() {
+    //    debugger;
+    //    $("#Flag_Accepted").val(true);
+    //    $('#add-contact').modal('show');
+    //}
+
+    ////Function for setting Flag_Rejected value as true
+    //function openPopupReject() {
+    //    debugger;
+    //    $("#Flag_Rejected").val(true);
+    //    $('#delete-contact').modal('show');
+    //}
+
+     function openRecord(id) {
+        window.location.href = '@Url.Action("UpdateScheduleOfJobApplication", "JobApplication")?id=' + id;
     }
 
-    //Function for setting Flag_Rejected value as true
-    function openPopupReject() {
-        debugger;
-        $("#Flag_Rejected").val(true);
-        $('#delete-contact').modal('show');
+
+     function loadPartialView(id) {
+        var url = '@Url.Action("RenderRejectionView", "Candidate" )?id=' + id;
+        $('#_RejectionReasonView').load(url, function () {
+            $('#rejectmodel').modal({ show: true });
+        });
+    }
+
+    function loadAcceptPartialView(id) {
+        var url = '@Url.Action("RenderAcceptView", "Candidate")?id=' + id;
+        $('#_AcceptApplicationView').load(url, function () {
+            $('#acceptmodel').modal({ show: true });
+            $("#flag_Accepted").val(true);
+        });
     }
 
 </script>
-<style type="text/css">
-    .required:after {
-        content: "*";
-        font-weight: bold;
-        color: red;
+
+
+
+
+
+@*<table class="table table-sm table-bordered  table-striped" style="table-layout: fixed; width: 100%">
+    <tr><th>Round No.</th><th>Interviewer</th><th>Rating</th><th>Remarks</th><th>Status</th><th>Date-Time</th><th>Action</th></tr>
+    @foreach (var user in Model.Schedules)
+    {
+        var i = 0;
+        <tr>
+            <td>@Enum.GetName(typeof(RoundType), user.round)</td>
+            <td>
+                @foreach (var item in user.InterviewerNames)
+                {
+                    <p>@(i += 1).@item.Name</p>
+                }
+            </td>
+            <td>@user.rating</td>
+            <td style="word-wrap: break-word">@user.remark</td>
+            <td><b>@user.statusName</b></td>
+            <td>@user.datetime</td>
+            <td>
+                @Html.ActionLink("Edit", "UpdateScheduleOfJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((Model.ID).ToString()), scheduleId = RSACSPSample.EncodeServerName((user.ID).ToString()) }, new { @class = "btn btn-primary mr-2" })
+                @Html.ActionLink("Delete", "UpdateScheduleOfJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((Model.ID).ToString()), scheduleId = RSACSPSample.EncodeServerName((user.ID).ToString()), delete = true }, new { @class = "btn btn-danger mr-2" })
+            </td>
+
+
+        </tr>
     }
-</style>
-
-
-<!-- Modal for Accepting -->
-<div class="modal fade" id="add-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addContactLabel">Fill Details:</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form asp-action="UpdateJobApplicationPost">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" value="@Model.ID" id="ID" name="ID" />
-                    <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
-                    <input type="hidden" value="@Model.round" id="round" name="round" />
-                    <input type="hidden" value="@Model.status" id="status" name="status" />
-                    <input type="hidden" value="@Model.flag_Accepted" id="Flag_Accepted" name="Flag_Accepted" />
-                    <div class="form-group">
-                        <label asp-for="joining_date" class="control-label required">Joining Date:</label>
-                        <input asp-for="joining_date" required class="form-control" type="date" id="demo" placeholder="dd/mm/yyyy" />
-                        <span asp-validation-for="joining_date" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="commitment_mode" class="control-label required">Commitment Mode: </label>
-                        <input type="radio" id="commitment_mode" name="commitment_mode" value="Cheques" required> Cheques &nbsp;
-                        <input type="radio" id="commitment_mode" name="commitment_mode" value="Documents"> Documents &nbsp;
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="offered_ctc" class="control-label required">Job Offer CTC:</label>
-                        <input asp-for="offered_ctc" required class="form-control" type="number" step=".01" min="0" />
-                        <span asp-validation-for="offered_ctc" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="remarks" class="control-label required">Remarks:</label>
-                        <input asp-for="remarks" required class="form-control" type="text" pattern="[a-zA-Z][a-zA-Z ]{2,}" />
-                        <span asp-validation-for="remarks" class="text-danger"></span>
-                    </div>
-                    <div>
-                        <button type="submit" class="btn btn-success" id="submit-btn">Accept</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal end -->
-<!-- Modal for Rejecting -->
-<div class="modal fade" id="delete-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addContactLabel">Fill Details:</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form asp-action="UpdateJobApplicationPost">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" value="@Model.ID" id="ID" name="ID" />
-                    <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
-                    <input type="hidden" value="@Model.round" id="round" name="round" />
-                    <input type="hidden" value="@Model.status" id="status" name="status" />
-                    <input type="hidden" value="@Model.flag_Rejected" id="Flag_Rejected" name="Flag_Rejected" />
-                    <div class="form-group">
-                        <label asp-for="rejection_reason" class="control-label">Rejection Reason:</label>
-                        <input asp-for="rejection_reason" required class="form-control" type="text" id="demo" />
-                        <span asp-validation-for="rejection_reason" class="text-danger"></span>
-                    </div>
-
-                    <div>
-                        <button type="submit" class="btn btn-success" id="submit-btn">Save</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal end -->
-
-<div>
-    <div class="row bg-gradient-gray-dark text-white">
-        <div class="col-md-5">
-            <h2 class="pl-2">Application Status :</h2>
-        </div>
-    </div>
-    <hr />
-    <div class="d-flex justify-content-end">
-        <form asp-action="Index" asp-controller="Schedules" asp-route-id="@RSACSPSample.EncodeServerName(( Model.candidateId).ToString())" method="get">
-            @if (Model.Schedules.Count() == 0)
-            {
-                <button type="submit" class="btn btn-primary mr-2">
-                    Start Scheduling
-                </button>
-            }
-            else
-            {
-                <button type="submit" class="btn btn-primary mr-2">
-                    Next Schedule
-                </button>
-            }
-
-        </form>
-        <form>
-            <!-- Button trigger modal For Accepting Application-->
-            <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#add-contact" onclick="openPopup()">
-                Accept
-            </button>
-            <!-- Button trigger modal For Rejecting Application-->
-            <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#delete-contact" onclick="openPopupReject()">
-                Reject
-            </button>
-
-
-            @*@Html.ActionLink("Accept", "UpdateJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((Model.ID).ToString()), complete = true }, new { @class = "btn btn-success mr-2" })*@
-            @* @Html.ActionLink("Reject", "UpdateJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((Model.ID).ToString()), rejected = true }, new { @class = "btn btn-danger mr-2" })*@
-        </form>
-        @if (ViewBag.backToAll == true)
-        {
-            <div>
-                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Back to List</a>
-            </div>
-        }
-        else
-        {
-            <div>
-                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Active" class="btn btn-secondary">Back to List</a>
-            </div>
-        }
-    </div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            Candidate Name :
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.candidateName)
-        </dd>
-        <dt class="col-sm-2">
-            Job Title :
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.position)
-        </dd>
-        <dt class="col-sm-2">
-            Job Role :
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.job_Role)
-        </dd>
-        <dt class="col-sm-2">
-            Applied Date :
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.date)
-        </dd>
-
-
-        @if (Model.candidate.experience == isFresher)
-        {
-            <dt class="col-sm-2">
-                Experience :
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.experience)
-            </dd>
-        }
-        else
-        {
-            <dt class="col-sm-2">
-                Experience :
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.experience)
-            </dd>
-            <dt class="col-sm-2">
-                Total Experience :
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.total_experience)
-            </dd>
-            <dt class="col-sm-2">
-                Relevent Experience :
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.relevent_experience)
-            </dd>
-            <dt class="col-sm-2">
-                Current CTC :
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.current_ctc)
-            </dd>
-            <dt class="col-sm-2">
-                Expected CTC :
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.expected_ctc)
-            </dd>
-            <dt class="col-sm-2">
-                Notice Period :
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.candidate.notice_period)
-            </dd>
-        }
-    </dl>
-</div>
-
-@if (Model.Schedules.Count() > 0)
-{
-    <table class="table table-sm table-bordered  table-striped" style="table-layout: fixed; width: 100%">
-        <tr><th>Round No.</th><th>Interviewer</th><th>Rating</th><th>Remarks</th><th>Status</th><th>Date-Time</th><th>Action</th></tr>
-        @foreach (var user in Model.Schedules)
-        {
-            var i = 0;
-            <tr>
-                <td>@Enum.GetName(typeof(RoundType), user.round)</td>
-                <td>
-                    @foreach (var item in user.InterviewerNames)
-                    {
-                        <p>@(i += 1).@item.Name</p>
-                    }
-                </td>
-                <td>@user.rating</td>
-                <td style="word-wrap: break-word">@user.remark</td>
-                <td><b>@user.statusName</b></td>
-                <td>@user.datetime</td>
-                <td>
-                    @Html.ActionLink("Edit", "UpdateScheduleOfJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((Model.ID).ToString()), scheduleId = RSACSPSample.EncodeServerName((user.ID).ToString()) }, new { @class = "btn btn-primary mr-2" })
-                    @Html.ActionLink("Delete", "UpdateScheduleOfJobApplication", "JobApplication", new { id = RSACSPSample.EncodeServerName((Model.ID).ToString()), scheduleId = RSACSPSample.EncodeServerName((user.ID).ToString()), delete = true }, new { @class = "btn btn-danger mr-2" })
-                </td>
-
-
-            </tr>
-        }
-    </table>
-}
-else
-{
-    <h4 class="text-gray text-center mt-4 text-capitalize">
-        <strong>
-            No Interview Schedules Yet.<br />
-            Click on Start Scheduling.
-        </strong>
-    </h4>
-}
+</table>*@

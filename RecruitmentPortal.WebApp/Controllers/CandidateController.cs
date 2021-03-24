@@ -584,6 +584,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                 foreach (var data in newlist)
                 {
+                    data.EncryptedJobId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(data.ID.ToString()));
                     data.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(data.candidateId.ToString()));
                     data.candidateName = getCandidateNameById(data.candidateId);
                     data.position = getPositionByCandidateId(data.candidateId);
@@ -847,6 +848,14 @@ namespace RecruitmentPortal.WebApp.Controllers
             model.CandidateId = id;
             return PartialView("_RejectionReasonView", model);
         }
+
+        public async Task<IActionResult> RenderAcceptView(string id)
+        {
+            JobApplicationViewModel model = new JobApplicationViewModel();
+            model.candidateId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+            return PartialView("_AcceptApplicationView", model);
+        }
+
         #endregion
     }
 }

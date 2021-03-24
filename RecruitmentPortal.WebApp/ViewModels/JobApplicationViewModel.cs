@@ -68,6 +68,9 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         //for storing names of schedule done for rejected candidates
         public List<string> listOfRounds { get; set; }
+        public string EncryptedJobId { get; set; }
+        public string EncryptedCandidateId { get; set; }
+
 
         [Display]
         public string allRounds { get; set; }
