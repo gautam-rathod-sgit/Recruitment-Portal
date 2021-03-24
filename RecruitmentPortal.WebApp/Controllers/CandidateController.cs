@@ -85,9 +85,13 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="SearchString"></param>
         /// <returns></returns>
-        public ActionResult AllApplications()
+        public ActionResult AllApplications(string ApplicationType)
         {
             ViewBag.DegreeList = SelectionList.GetDegreeList().Select(m => new { Id = m.ID, Name = m.degree_name });
+
+            if (ApplicationType != null)
+                ViewBag.ApplicationType = ApplicationType;
+
             return View();
         }
         public async Task<IActionResult> PendingApplications(string SearchString, string Application_mode)

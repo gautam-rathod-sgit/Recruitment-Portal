@@ -41,6 +41,7 @@
     <None Include="wwwroot\js\pages\dashboard.js" />
     <None Include="wwwroot\js\pages\dashboard2.js" />
     <None Include="wwwroot\js\pages\dashboard3.js" />
+    <None Include="wwwroot\Templates\ResetPasswordEmailTemplate.html" />
   </ItemGroup>
 
   <ItemGroup>

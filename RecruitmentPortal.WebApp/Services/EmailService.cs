@@ -48,7 +48,7 @@ namespace RecruitmentPortal.WebApp.Services
             {
                 Host = _smtpConfig.Host,
                 Port = _smtpConfig.Port,
-                EnableSsl = _smtpConfig.EnableSSL,
+                EnableSsl = false,
                 UseDefaultCredentials = _smtpConfig.UserDefaultCredentials,
                 Credentials = networkCredentials
             };

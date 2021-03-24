@@ -160,6 +160,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email has been sent ..
+        /// </summary>
+        public static string EmailSent {
+            get {
+                return ResourceManager.GetString("EmailSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Activate Item for Editing.
         /// </summary>
         public static string EnableEntity {
@@ -201,6 +210,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string FileRequired {
             get {
                 return ResourceManager.GetString("FileRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string ForgotPassword {
+            get {
+                return ResourceManager.GetString("ForgotPassword", resourceCulture);
             }
         }
         
@@ -327,6 +345,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string NoticePeriodRequired {
             get {
                 return ResourceManager.GetString("NoticePeriodRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password Changed Successfully.
+        /// </summary>
+        public static string PasswordChanged {
+            get {
+                return ResourceManager.GetString("PasswordChanged", resourceCulture);
             }
         }
         
@@ -543,6 +570,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string ValidCTCRequired {
             get {
                 return ResourceManager.GetString("ValidCTCRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valid Email is Required.
+        /// </summary>
+        public static string ValidEmailRequired {
+            get {
+                return ResourceManager.GetString("ValidEmailRequired", resourceCulture);
             }
         }
         

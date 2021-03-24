@@ -568,7 +568,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             _dbContext.Schedules.RemoveRange(collection);
             _dbContext.SaveChanges();
 
-            return RedirectToAction("AllApplications", "Candidate", new { Application_mode = activeMode });
+            return RedirectToAction("AllApplications", "Candidate", new { ApplicationType = "Selected" });
         }
 
 

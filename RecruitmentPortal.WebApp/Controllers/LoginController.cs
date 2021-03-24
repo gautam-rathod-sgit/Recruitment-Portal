@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -152,26 +153,35 @@ namespace RecruitmentPortal.WebApp.Controllers
                 return View(forgotPasswordModel);
             var user = await _userManager.FindByEmailAsync(forgotPasswordModel.Email);
             if (user == null)
-                return RedirectToAction(nameof(ForgotThePasswordConfirmation));
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var callback = Url.Action(nameof(ResetPassword), "Login", new { token, email = user.Email }, Request.Scheme);
-            //var message = new Message(new string[] { "codemazetest@gmail.com" }, "Reset password token",JToken.Parse(callback),null);
-
-            UserEmailOptions options_new = new UserEmailOptions
             {
-                Subject = "Recruitment Portal : Password Reset Token",
-                ToEmails = new List<string>() { user.Email },
-                Body = callback
-            };
+                ModelState.AddModelError("Email", "Registered user not found with email address.");
+                return View(forgotPasswordModel);
+            }
+            else
+            {
+                //return RedirectToAction(nameof(ForgotThePasswordConfirmation));
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var link = Url.Action(nameof(ResetPassword), "Login", new { token, email = user.Email }, Request.Scheme);
+                //var message = new Message(new string[] { "codemazetest@gmail.com" }, "Reset password token",JToken.Parse(callback),null);
+
+                string ResetPasswordPath = _environment.WebRootPath + "/Templates/ResetPasswordEmailTemplate.html";
+                string bodyTemplate = System.IO.File.ReadAllText(ResetPasswordPath);
+
+                bodyTemplate = bodyTemplate.Replace("[@FirstName]", forgotPasswordModel.Email);
+                bodyTemplate = bodyTemplate.Replace("[@link]", link);
 
 
-            await _emailService.SendTestEmail(options_new);
-            return RedirectToAction(nameof(ForgotThePasswordConfirmation));
-        }
+                UserEmailOptions options_new = new UserEmailOptions
+                {
+                    Subject = "Recruitment Portal : Password Reset Token",
+                    ToEmails = new List<string>() { user.Email },
+                    Body = bodyTemplate
+                };
 
-        public IActionResult ForgotThePasswordConfirmation()
-        {
-            return View();
+                await _emailService.SendTestEmail(options_new);
+                ModelState.AddModelError("Email", "Email For Reset Passsword has been sent. Please check your email.");
+                return View();
+            }
         }
 
         //for reset password
@@ -190,7 +200,10 @@ namespace RecruitmentPortal.WebApp.Controllers
                 return View(resetPasswordModel);
             var user = await _userManager.FindByEmailAsync(resetPasswordModel.Email);
             if (user == null)
-                RedirectToAction(nameof(ResetPasswordConfirmation));
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Something went Wrong !! Please Try Again Later";
+                return RedirectToAction("Login", "Login");
+            }
             var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.Password);
             if (!resetPassResult.Succeeded)
             {
@@ -200,7 +213,8 @@ namespace RecruitmentPortal.WebApp.Controllers
                 }
                 return View();
             }
-            return RedirectToAction(nameof(ResetPasswordConfirmation));
+            TempData[EnumsHelper.NotifyType.Success.GetDescription()] = Messages.PasswordChanged;
+            return RedirectToAction("Login","Login");
         }
 
         /// <summary>
@@ -229,12 +243,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             {".jpg", "image/jpeg"},
             {".png", "image/png"}
             };
-        }
-
-        [HttpGet]
-        public IActionResult ResetPasswordConfirmation()
-        {
-            return View();
         }
         #endregion
     }

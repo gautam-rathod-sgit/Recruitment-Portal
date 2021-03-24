@@ -276,4 +276,10 @@
   <data name="Rejectdate" xml:space="preserve">
     <value>Rejection date</value>
   </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Forgot Password</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
 </root>
