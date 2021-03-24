@@ -281,7 +281,7 @@
                     {
                         "sClass": "text-center",
                         "mRender": function (data, type, row) {
-                            var edit = '<a href="javascript:void(0);" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
+                            var edit = '<a href="javascript:void(0);" title="Edit" onclick="openRecordFinal(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
                             return edit;
                         }
                     }
@@ -330,7 +330,7 @@
                     {
                         "sClass": "text-center",
                         "mRender": function (data, type, row) {
-                            var edit = '<a href="javascript:void(0);" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
+                            var edit = '<a href="javascript:void(0);" title="Edit" onclick="openRecordFinal(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
                             return edit;
                         }
                     }
@@ -419,10 +419,14 @@
     function openRecord(id) {
         window.location.href = '@Url.Action("Details", "Candidate")?id=' + id;
     }
-    
+
     function openRecordActive(id) {
         window.location.href = '@Url.Action("Details", "JobApplication")?id=' + id;
     }
+    function openRecordFinal(id) {
+       window.location.href = '@Url.Action("SelectedJobApplicationsDetails", "JobApplication")?id=' + id;
+    }
+
 
 
     function getLocalValue(key) {

@@ -42,10 +42,10 @@
                     <input type="hidden" value="@ViewBag.toAdminIndex" id="editFromMenu" name="editFromMenu" />
 
 
-                    <div class="form-group">
-                        <label asp-for="joining_date" class="control-label asterisk">Joining Date:</label>
-                        <input asp-for="joining_date" required class="form-control" type="date" id="demo" placeholder="dd/mm/yyyy" />
-                        <span asp-validation-for="joining_date" class="text-danger"></span>
+                    <div class="form-group mb-2">
+                        @Html.LabelFor(m => m.joining_date)
+                        @Html.TextBoxFor(m => m.joining_date, new { @type = "datetime",   @placeholder = "Joining Date", @class = "form-control datepicker" })
+                        @Html.ValidationMessageFor(m => m.joining_date)
                     </div>
                     <div>
                         <button type="submit" class="btn btn-success" id="submit-btn">Save</button>
@@ -142,7 +142,7 @@
                                     @if (Model.joining_date <= DateTime.Today)
                                     {
                                         <!-- Button trigger modal For Rejecting Application-->
-                                        <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#delete-contact" onclick="openPopupReject()">
+                                        <button type="button" class="btn btn-danger mr-2" data-toggle="#delete-contact" data-target="#delete-contact" onclick="openPopupReject()">
                                             Reject
                                         </button>
                                     }
@@ -196,7 +196,7 @@
                                asp-route-filename="@Model.candidate.resume">
                                 Download Resume
                             </a>
-                            <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-secondary">Cancel</a>
+                            <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-primary">Cancel</a>
                         }
 
 
