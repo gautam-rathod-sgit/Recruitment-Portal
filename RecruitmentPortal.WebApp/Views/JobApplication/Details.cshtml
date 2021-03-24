@@ -79,10 +79,8 @@
                     </h3>
 
                     <div class="box-tools pull-right">
-
-                        
-
-                        <form asp-action="Index" asp-controller="Schedules" asp-route-id='@Model.EncryptedCandidateId' method="get">
+                        @using (Html.BeginForm("Index", "Schedules", FormMethod.Get, new { @id = Model.EncryptedCandidateId, @autocomplete = "off", @role = "form" }))
+                        {
                             @if (Model.Schedules == null)
                             {
                                 <button type="submit" class="btn btn-primary btn-sm">
@@ -95,14 +93,16 @@
                                     Next Schedule
                                 </button>
                             }
-                        </form>
 
-                        @*@if (Model.ID > 0 && @Model.candidate.resume != null)
+                        }
+                   
+
+                        @if (Model.ID > 0 && @Model.candidate.resume != null)
                         {
                             <a href='@Url.Action("Download", "Candidate", new { filename = @Model.candidate.resume })' class="btn btn-primary  btn-sm">
                                 Download Resume
                             </a>
-                        }*@
+                        }
                         <a class="btn btn-primary btn-sm" data-toggle="#acceptmodel" data-target="#acceptmodel" onclick="loadAcceptPartialView('@RSACSPSample.EncodeServerName(Model.ID.ToString())')">
                             Accept
                         </a>
@@ -112,18 +112,18 @@
                         </a>
 
                         @*<a href='@Url.Action("AllApplications","Candidate", new { id = RSACSPSample.EncodeServerName(Model.ID.ToString())})' class="btn btn-primary btn-sm">
-                            Cancel
-                        </a>*@
+            Cancel
+        </a>*@
 
 
                         @* Button trigger modal For Accepting Application*@
                         <!--<button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#add-contact" onclick="openPopup()">
-                            Accept
-                        </button>-->
+        Accept
+    </button>-->
                         @*  Button trigger modal For Rejecting Application*@
                         <!--<button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#delete-contact" onclick="openPopupReject()">
-                            Reject
-                        </button>-->
+        Reject
+    </button>-->
 
                     </div>
                 </div>
@@ -152,9 +152,9 @@
                                     @Html.ValidationMessageFor(m => m.job_Role)
                                 </div>
                                 <div class="form-group">
-                                    @Html.LabelFor(m => m.date, new { @class = "asterisk", @readonly = true })
-                                    @Html.TextBoxFor(m => m.date, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(m => m.date)
+                                    @Html.LabelFor(m => m.candidate.apply_date, new { @class = "asterisk", @readonly = true })
+                                    @Html.TextBoxFor(m => m.candidate.apply_date, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidate.apply_date)
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -279,12 +279,12 @@
                 "ajax": {
                     "url": "@Url.Action("GetActiveAppDetailsList", "JobApplication")",
                     "type": "GET",
-                    "data": {   },
+                    "data": { "id": "@Model.EncryptedJobId" },
                     "datatype": "json"
                 },
                 "columns": [
                     { "data": "roundName", "name": "roundName" },
-                    { "data": "InterviewerNames", "name": "InterviewerNames" },
+                    { "data": "interviewerNames", "name": "interviewerNames" },
                     { "data": "rating", "name": "rating" },
                     { "data": "remark", "name": "remark" },
                     { "data": "statusName", "name": "statusName" },
