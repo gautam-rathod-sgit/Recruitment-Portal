@@ -189,6 +189,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="id"></param>
         /// <param name="conflict"></param>
         /// <returns></returns>
+        [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
             JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
@@ -203,6 +204,23 @@ namespace RecruitmentPortal.WebApp.Controllers
               jobApplicationModel.candidate = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
 
             return View(jobApplicationModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Details(JobApplicationViewModel model)
+        {
+            //JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
+            //int actualId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+            //jobApplicationModel = await _jobApplicationPage.getJobApplicationById(actualId);
+            //jobApplicationModel.EncryptedCandidateId = RSACSPSample.EncodeServerName(jobApplicationModel.candidateId.ToString());
+            //jobApplicationModel.EncryptedJobId = id;
+            //jobApplicationModel.candidateName = getCandidateNameById(jobApplicationModel.candidateId);
+            //jobApplicationModel.position = getPositionByCandidateId(jobApplicationModel.candidateId);
+            //jobApplicationModel.job_Role = getJobRoleByCandidateId(jobApplicationModel.candidateId);
+
+            //jobApplicationModel.candidate = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
+
+            return View(model);
         }
 
         public async Task<IActionResult> GetActiveAppDetailsList(string id)
