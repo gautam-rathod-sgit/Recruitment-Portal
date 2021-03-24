@@ -264,17 +264,17 @@
                                 {
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.commitment_mode)
-                                        @Html.TextBoxFor(m => m.commitment_mode, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.commitment_mode, new { @placeholder = "Commitment Mode", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.commitment_mode)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.offered_ctc)
-                                        @Html.TextBoxFor(m => m.offered_ctc, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.offered_ctc, new { @placeholder = "Offered CTC", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.offered_ctc)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.remarks)
-                                        @Html.TextBoxFor(m => m.remarks, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.remarks, new { @placeholder = "Remarks", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.remarks)
                                     </div>
                                 }
@@ -311,7 +311,7 @@
                                     {
                                         <div class="form-group">
                                             @Html.LabelFor(m => m.allRounds)
-                                            @Html.TextBoxFor(m => m.allRounds, new { @value = "No Rounds Available", @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.allRounds, new { @placeholder = "No Rounds Available", @class = "form-control" })
                                         </div>
                                     }
                                     @if (Model.rejection_reason != null)
@@ -401,7 +401,7 @@
                                     {
                                         <div class="form-group">
                                             @Html.LabelFor(m => m.allRounds)
-                                            @Html.TextBoxFor(m => m.allRounds, new { @value = "No Rounds Available", @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.allRounds, new { @placeholder = "No Rounds Available", @class = "form-control" })
                                         </div>
                                     }
                                 }
