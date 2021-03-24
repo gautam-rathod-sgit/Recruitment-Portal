@@ -95,20 +95,17 @@
                                 </button>
                             }
 
-
-
-
                             @if (Model.ID > 0 && @Model.candidate.resume != null)
                             {
                                 <a href='@Url.Action("Download", "Candidate", new { filename = @Model.candidate.resume })' class="btn btn-primary  btn-sm">
                                     Download Resume
                                 </a>
                             }
-                            <a class="btn btn-primary btn-sm" data-toggle="#acceptmodel" data-target="#acceptmodel" onclick="loadAcceptPartialView('@RSACSPSample.EncodeServerName(Model.ID.ToString())')">
+                            <a class="btn btn-primary btn-sm" data-toggle="#acceptmodel" data-target="#acceptmodel" onclick="loadAcceptPartialView('@Model.EncryptedJobId')">
                                 Accept
                             </a>
 
-                            <a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@RSACSPSample.EncodeServerName(Model.ID.ToString())')">
+                            <a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@Model.EncryptedCandidateId')">
                                 Reject
                             </a>
 
