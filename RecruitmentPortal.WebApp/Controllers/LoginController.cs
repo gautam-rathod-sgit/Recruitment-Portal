@@ -168,7 +168,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 string bodyTemplate = System.IO.File.ReadAllText(ResetPasswordPath);
 
                 bodyTemplate = bodyTemplate.Replace("[@FirstName]", forgotPasswordModel.Email);
-                bodyTemplate = bodyTemplate.Replace("[@link]", link);
+                bodyTemplate = bodyTemplate.Replace("[@link]", "<a href=\"" + link + "\">Link</a>");
 
 
                 UserEmailOptions options_new = new UserEmailOptions
@@ -189,6 +189,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         public IActionResult ResetPassword(string token, string email)
         {
             var model = new ResetPasswordModel { Token = token, Email = email };
+
             return View(model);
         }
 
@@ -205,6 +206,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 return RedirectToAction("Login", "Login");
             }
             var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.Password);
+            var toker = resetPasswordModel.Token;
             if (!resetPassResult.Succeeded)
             {
                 foreach (var error in resetPassResult.Errors)
