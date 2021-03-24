@@ -156,6 +156,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     case "Save & Continue":
                         TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Schedule updated Successfully.";
                         return RedirectToAction("Index", "Schedules", new { id = RSACSPSample.EncodeServerName(latestRecord.candidateId.ToString()) });
+                        //return RedirectToAction("Index", "Schedules", new { id = RSACSPSample.EncodeServerName(latestRecord.ID.ToString())});
                 }
 
             }

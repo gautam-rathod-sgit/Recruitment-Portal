@@ -7,7 +7,7 @@
     <input type="hidden" value="@Model.candidateId" name="candidateId" id="candidateId" />
     <input type="hidden" value="@Model.round" name="round" id="round" />
     <input type="hidden" value="@Model.status" name="status" id="status" />
-    <input type="hidden" value="@Model.flag_Accepted" name="flag_Accepted" id="flag_Accepted" />
+    <input type="hidden" value=true name="flag_Accepted" id="flag_Accepted" />
 
     <div class="form-group">
         @Html.LabelFor(m => m.joining_date, new { @class = "asterisk" })
