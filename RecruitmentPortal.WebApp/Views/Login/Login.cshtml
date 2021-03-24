@@ -81,6 +81,10 @@
                 </div>
             }
         </div>
+        <div class="toast__container">
+            <div class="toast__cell">
+            </div>
+        </div>
     </div>
     <partial name="AdminLTE/_Scripts" />
 </body>
@@ -95,5 +99,14 @@
     function RememberMeChk() {
         var rememberMe = $('#rememberMe').is(":checked");
         $("#RememberMe").val(rememberMe);
+    }
+    var errormessage = '@TempData[EnumsHelper.NotifyType.Error.GetDescription()]';
+    var successmessage = '@TempData[EnumsHelper.NotifyType.Success.GetDescription()]';
+    if (errormessage !== "") {
+        notification("Error", errormessage, "error");
+    }
+
+    if (successmessage !== "") {
+        notification("Success", successmessage, "success");
     }
 </script>

@@ -186,10 +186,22 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         //for reset password
         [HttpGet]
-        public IActionResult ResetPassword(string token, string email)
+        public async Task<IActionResult> ResetPassword(string token, string email)
         {
             var model = new ResetPasswordModel { Token = token, Email = email };
-
+            var user = await _userManager.FindByEmailAsync(email);
+            var IsValid = _userManager.VerifyUserTokenAsync(user,this._userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", token);
+            if (user == null)
+            {
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = Messages.SomethingWrong;
+                return RedirectToAction("Login", "Login");
+            }
+            if(!IsValid.Result)
+            {
+                ModelState.AddModelError("Password", "Token for reset password has been expired.please try agian to reset password.");
+                TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "Token for reset password has been expired.please try agian to reset password.";
+                return RedirectToAction("Login", "Login");
+            }
             return View(model);
         }
 
@@ -206,7 +218,6 @@ namespace RecruitmentPortal.WebApp.Controllers
                 return RedirectToAction("Login", "Login");
             }
             var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.Password);
-            var toker = resetPasswordModel.Token;
             if (!resetPassResult.Succeeded)
             {
                 foreach (var error in resetPassResult.Errors)
