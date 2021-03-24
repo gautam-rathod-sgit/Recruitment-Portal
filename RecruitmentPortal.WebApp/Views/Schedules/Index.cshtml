@@ -7,26 +7,28 @@
 
 <section class="content">
     <div class="row">
-        <div class="col-sm-12">
-            <div class="box box-default boxPad">
-                <div class="box-header">
-                    <h3 class="box-title">
-                        <i class="fa fa-info-circle"></i>
-                        Schedule Interview
-                    </h3>
+        @using (Html.BeginForm("IndexPost", "Schedules", FormMethod.Post, new { @autocomplete = "off", @role = "form" }))
+        {
+            <div class="col-sm-12">
+                <div class="box box-default boxPad">
+                    <div class="box-header">
+                        <h3 class="box-title">
+                            <i class="fa fa-info-circle"></i>
+                            Schedule Interview
+                        </h3>
 
-                    <div class="box-tools pull-right">
-                        <input type="submit" value="Save" class="btn btn-primary" name="submit" />
-                        <a href='@Url.Action("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName(Model.ID.ToString())})' class="btn btn-primary">Cancel</a>
-                      @*  <a asp-action="Details" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.jobAppId).ToString())" class="mr-3 btn btn-danger">Cancel</a>*@
+                        <div class="box-tools pull-right">
+                            <input type="submit" value="Save" class="btn btn-primary" name="submit" />
+                            <input type="submit" value="Save &amp; Continue" class="btn btn-primary" name="submit" />
+                            <a href='@Url.Action("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName(Model.jobAppId.ToString()) })' class="btn btn-primary">Cancel</a>
+                            @*  <a asp-action="Details" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.jobAppId).ToString())" class="mr-3 btn btn-danger">Cancel</a>*@
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="box">
-                <div class="box-body">
-                    @using (Html.BeginForm("IndexPost", "Schedules", FormMethod.Post, new { @autocomplete = "off", @role = "form" }))
-                    {
+                <div class="box">
+                    <div class="box-body">
+
                         <div class="row">
                             <div class="col-md-6">
 
@@ -36,12 +38,13 @@
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.candidate_name, new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.candidate_name, new { @placeholder = "Name", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidate_name)
 
                                 </div>
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.position, new { @class = "asterisk" })
                                     @Html.TextBoxFor(m => m.position, new { @placeholder = "Position", @class = "form-control" })
-
+                                    @Html.ValidationMessageFor(m => m.position)
                                 </div>
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.datetime, new { @class = "asterisk" })
@@ -51,42 +54,47 @@
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.roundValue, new { @class = "asterisk" })
                                     @Html.DropDownListFor(m => m.roundValue, new SelectList(ViewBag.RoundTypeList, "Value", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
-
+                                    @Html.ValidationMessageFor(m => m.roundValue)
                                 </div>
                             </div>
 
                             <div class="col-md-6">
-                                
+
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.Multiinterviewer, new { @class = "asterisk" })
                                     @Html.ListBoxFor(m => m.Multiinterviewer, new MultiSelectList(ViewBag.users), new { @class = "form-control select2" })
+                                    @Html.ValidationMessageFor(m => m.Multiinterviewer)
                                 </div>
 
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.statusvalue, new { @class = "asterisk" })
                                     @Html.DropDownListFor(m => m.statusvalue, new SelectList(ViewBag.StatusTypeList, "Value", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
+                                    @Html.ValidationMessageFor(m => m.statusvalue)
                                 </div>
 
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.mode_of_interview, new { @class = "asterisk" })
+                                    @Html.ValidationMessageFor(m => m.mode_of_interview)
                                     <div class="col-10">
-                                        @Html.RadioButtonFor(m => m.mode_of_interview, "Online", new { @id = "online" })
                                         @Html.Label("Online ")
-                                        @Html.RadioButtonFor(m => m.mode_of_interview, "Face-To-Face", new { @id = "face" })
+                                        @Html.RadioButtonFor(m => m.mode_of_interview, "Online", new { @id = "online" })
                                         @Html.Label("Face to Face")
+                                        @Html.RadioButtonFor(m => m.mode_of_interview, "Face-To-Face", new { @id = "face" })
+
 
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    }
+
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
 </section>
 <script>
-  
+
 
     $(function () {
 
@@ -102,7 +110,7 @@
 
         var alreadyBound = false;
         $("#face").click(function () {
-          
+
             if (!alreadyBound) {
                 var element = '';
                 element += '<div class="form-group">';

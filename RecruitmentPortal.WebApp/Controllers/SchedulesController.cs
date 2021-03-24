@@ -90,13 +90,13 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> IndexPost(SchedulesViewModel model)
+        public async Task<IActionResult> IndexPost(SchedulesViewModel model, string submit)
         {
             List<Schedules> allschedules = new List<Schedules>();
             JobApplications jobAppModel = new JobApplications();
             Candidate candidateModel = new Candidate();
             SchedulesViewModel latestRecord = new SchedulesViewModel();
-
+           // JobApplicationViewModel jobApplicationViewModel = new JobApplicationViewModel();
             try
             {
                 //for getting the job application of candidate in current scenario 
@@ -147,6 +147,17 @@ namespace RecruitmentPortal.WebApp.Controllers
                     };
                     await _schedulesUsersPage.AddNewSchedulesUsers(newModel);
                 }
+                switch (submit)
+                {
+                    case "Save":
+                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Schedule updated Successfully.";
+                        return RedirectToAction("Details", "JobApplication", new { id = latestRecord.EncryptedId });
+
+                    case "Save & Continue":
+                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Schedule updated Successfully.";
+                        return RedirectToAction("Index", "Schedules", new { id = RSACSPSample.EncodeServerName(latestRecord.candidateId.ToString()) });
+                }
+
             }
             catch (Exception ex)
             {

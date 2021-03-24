@@ -399,7 +399,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             CandidateViewModel candidateViewModel = new CandidateViewModel();
             if (model.CandidateId != null)
             {
-                int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(model.CandidateId.ToString()));
+                int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(model.CandidateId));
                 candidateViewModel = await _candidatePageServices.getCandidateById(decrypted_key);
                 candidateViewModel.isRejected = true;
                 
@@ -844,7 +844,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         public async Task<IActionResult> RenderAcceptView(string id)
         {
             JobApplicationViewModel model = new JobApplicationViewModel();
-            model.candidateId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+            model.ID = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
             return PartialView("_AcceptApplicationView", model);
         }
 

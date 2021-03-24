@@ -62,7 +62,7 @@
 
                         @if (User.IsInRole("Admin") )
                         {
-                            <a href='@Url.Action("AddNewJobApplications", "JobApplication",new { id = Model.EncryptedId })' class="btn btn-primary btn-sm">
+                            <a href='@Url.Action("AddNewJobApplications", "JobApplication",new { Cid = @Model.EncryptedId })' class="btn btn-primary btn-sm">
                                 Proceed
                             </a>
                         }
