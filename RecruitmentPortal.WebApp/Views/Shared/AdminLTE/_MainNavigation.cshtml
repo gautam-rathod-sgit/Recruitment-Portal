@@ -5,7 +5,7 @@
             @if (User.IsInRole("Admin"))
             {
                 <li class="nav-item">
-                    <a href='@Url.Action("AdminIndex", "Home")' id="Home" class="nav-link" >
+                    <a href='@Url.Action("AdminIndex", "Account")' id="Account" class="nav-link" >
                         <i class="fa fa-dashboard"></i>
                         <span>
                             Dashboard
@@ -56,7 +56,7 @@
             @if (User.IsInRole("Interviewer"))
             {
                 <li class="nav-item">
-                    <a href='@Url.Action("InterviewerIndex", "Home")' id="Home" class="nav-link">
+                    <a href='@Url.Action("InterviewerIndex", "Account")' id="Account" class="nav-link">
                         <i class="fa fa-dashboard"></i>
                         <span>
                             Dashboard

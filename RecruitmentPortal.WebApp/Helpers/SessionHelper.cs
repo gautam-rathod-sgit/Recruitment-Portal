@@ -19,5 +19,11 @@ namespace RecruitmentPortal.WebApp.Helpers
             get => HttpHelper.HttpContext.Session.GetString("WelcomeUser") == null ? "Guest" : HttpHelper.HttpContext.Session.GetString("WelcomeUser");
             set => HttpHelper.HttpContext.Session.SetString("WelcomeUser", value);
         }
+
+        public static string ProfilePicture
+        {
+            get => HttpHelper.HttpContext.Session.GetString("ProfilePicture") == null ? string.Empty : HttpHelper.HttpContext.Session.GetString("ProfilePicture");
+            set => HttpHelper.HttpContext.Session.SetString("ProfilePicture", value);
+        }
     }
 }

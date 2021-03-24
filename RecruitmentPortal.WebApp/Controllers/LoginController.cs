@@ -88,6 +88,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                                 TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "User Logged In Successfully..!!";
                                 SessionHelper.UserId = logedInUser.Id;
                                 SessionHelper.WelcomeUser = logedInUser.UserName;
+                                SessionHelper.ProfilePicture = logedInUser.file == null ? string.Empty : logedInUser.file;
                                 return RedirectToAction("Index", "Home");
                             }
                             else

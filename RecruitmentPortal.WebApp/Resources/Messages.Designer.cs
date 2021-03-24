@@ -61,11 +61,11 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ApplyingThrough is Required.
+        ///   Looks up a localized string similar to Allowed Extensions for file is .jpeg, .jpg, .png.
         /// </summary>
-        public static string ApplyingThroughRequired {
+        public static string AllowImageExtensions {
             get {
-                return ResourceManager.GetString("ApplyingThroughRequired", resourceCulture);
+                return ResourceManager.GetString("AllowImageExtensions", resourceCulture);
             }
         }
         

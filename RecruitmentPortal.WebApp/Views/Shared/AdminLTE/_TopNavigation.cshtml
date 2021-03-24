@@ -1,4 +1,5 @@
-﻿<header class="main-header">
+﻿@using RecruitmentPortal.WebApp.Helpers
+<header class="main-header">
     <!-- Logo -->
     <a href="../../index2.html" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -7,7 +8,7 @@
         </span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg">
-            <img src="~/img/shaligram_logo2.png" height="auto" width="225px" style="padding: 0;"/>
+            <img src="~/img/shaligram_logo2.png" height="auto" width="225px" style="padding: 0;" />
         </span>
     </a>
 
@@ -26,8 +27,15 @@
                 <li class="dropdown user user-menu">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            @*<img src="~/img/avatar.png" class="user-image" alt="User Image">*@
+                        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+                            @if (!string.IsNullOrEmpty(SessionHelper.ProfilePicture))
+                            {
+                                <img src="~/Files/@SessionHelper.ProfilePicture" class="user-image" alt="User Image"/>
+                            }
+                            else
+                            {
+                                <img src="~/img/DefaultAvatar.jpg" class="user-image" alt="User Image">
+                            }
                             <span class="hidden-xs">@User.Identity.Name</span>
                             <i class="caret"></i>
                         </a>
@@ -46,18 +54,18 @@
                                     </a>*@
                             </li>
                             <li class="nav-item border box-shadow">
-                                <a class="nav-link font-weight-normal text-white text-lg" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
+                                <a href='@Url.Action("Logout", "Login")' class="nav-link font-weight-normal text-white text-lg">Logout</a>
                             </li>
                         </ul>
                     }
                     else
                     {
                         <li class="nav-item">
-                            <a class="nav-link font-weight-normal text-white text-lg" asp-area="" asp-controller="Login" asp-action="Login">Login</a>
+                            <a href='@Url.Action("Login", "Login")' class="nav-link font-weight-normal text-white text-lg">Login</a>
                         </li>
                     }
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
