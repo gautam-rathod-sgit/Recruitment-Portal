@@ -627,30 +627,24 @@ namespace RecruitmentPortal.WebApp.Controllers
             try
             {
                 models = await _jobApplicationPage.getJobApplications();
-                //models = models.Where(x => x.status == status_Complete);
+                models = models.Where(x => x.status == status_Complete);
                 //getting candidate name and job position with candidateId of JobApplication model
                 newlist = models.ToList();
                 foreach (var item in newlist)
                 {
-                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.candidateId.ToString()));
+                    item.EncryptedId = RSACSPSample.EncodeServerName(item.ID.ToString());
                     item.candidateName = getCandidateNameById(item.candidateId);
                     item.position = getPositionByCandidateId(item.candidateId);
                     item.job_Role = getJobRoleByCandidateId(item.candidateId);
                     item.date = item.joining_date;
                 }
 
-                filteredlist = newlist.Where(m => (m.status.Contains(applicationType) || applicationType == null)
-                                               && (degree == string.Empty)
-                                               && (m.accept_date >= sDate || sDate == null)
-                                               && (m.accept_date <= eDate || eDate == null))
-                                               .ToList();
-
-                return Json(new { data = filteredlist });
+                return Json(new { data = newlist });
             }
             catch (Exception ex)
             {
                 TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
-                return Json(new { data = filteredlist });
+                return Json(new { data = newlist });
             }
         }
 
@@ -679,26 +673,20 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                 foreach (var item in newList)
                 {
-                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.candidateId.ToString()));
+                    item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.ID.ToString()));
                     item.candidateName = getCandidateNameById(item.candidateId);
                     item.position = getPositionByCandidateId(item.candidateId);
                     item.job_Role = getJobRoleByCandidateId(item.candidateId);
                     item.candidate = await _candidatePageServices.getCandidateById(item.candidateId);
                 }
 
-                filteredlist = newList.Where(m => (m.status.Contains(applicationType) || applicationType == null)
-                                                && (degree == string.Empty)
-                                                && (m.accept_date >= sDate || sDate == null)
-                                                && (m.accept_date <= eDate || eDate == null))
-                                                .ToList();
-
-                return Json(new { data = filteredlist });
+                return Json(new { data = newList });
             }
 
             catch (Exception ex)
             {
                 TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
-                return Json(new { data = filteredlist });
+                return Json(new { data = newList });
             }
         }
 
