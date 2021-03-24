@@ -54,11 +54,11 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div>  
 </div>
 <!-- Modal end -->
 <!-- Modal for Rejecting -->
-<div class="modal fade" id="delete-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+<div class="modal fade in bg-gradient-orange" id="delete-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -131,14 +131,14 @@
                             @if (!Model.notified)
                             {
 
-                                <div>
+                                
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#edit-date">
                                         Edit
                                     </button>
                                     @*@Html.ActionLink("Edit Date", "UpdateJobApplication", "JobApplication", new { id = @RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-primary btn-sm mr-3" })*@
-                                </div>
-                                <div>
+                                
+                                
                                     @if (Model.joining_date <= DateTime.Today)
                                     {
                                         <!-- Button trigger modal For Rejecting Application-->
@@ -152,16 +152,16 @@
                                             Reject
                                         </button>
                                     }
-                                </div>
-                                <div>
+                              
+                               
                                     <a asp-action="ConfirmJobApplication" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-success mr-3">
                                         Confirm
                                     </a>
-                                </div>
+                               
                             }
                             else
                             {
-                                <div>
+                                
                                     <button class="btn btn-secondary mr-1">
                                         Edit
                                     </button>
@@ -171,19 +171,19 @@
                                     <button class="btn btn-success mr-1">
                                         Notified
                                     </button>
-                                </div>
+                                
                             }
                             @if (ViewBag.toAdminIndex != null || ViewBag.toAdminIndex == true)
                             {
-                                <div>
+                               
                                     <a asp-action="AdminIndex" asp-controller="Account" class="btn btn-primary">Cancel</a>
-                                </div>
+                               
                             }
                             else
                             {
-                                <div>
+                               
                                     <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Accepted" class="btn btn-primary">Cancel</a>
-                                </div>
+                                    
                             }
                         }
                         @*Rejected application data*@
@@ -208,28 +208,37 @@
             <form>
                 <div class="box box-default container p-2">
                     <div class="box-body">
-
-
                         <div class="row">
-
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    @Html.LabelFor(m => m.candidateName)
-                                    @Html.TextBoxFor(m => m.candidateName, new { @placeholder = "Candidate name", @class = "form-control" })
-                                    @Html.ValidationMessageFor(m => m.candidateName)
+                                    @Html.LabelFor(m => m.candidate.name)
+                                    @Html.TextBoxFor(m => m.candidate.name, new { @placeholder = "Candidate name", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidate.name)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-3">
-                                    @Html.LabelFor(m => m.position)
-                                    @Html.TextBoxFor(m => m.position, new { @placeholder = "Job Title", @class = "form-control" })
-                                    @Html.ValidationMessageFor(m => m.position)
+                                    @Html.LabelFor(m => m.candidate.email)
+                                    @Html.TextBoxFor(m => m.candidate.email, new { @placeholder = "Job Title", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidate.email)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-3">
-                                    @Html.LabelFor(m => m.candidate.jobRole)
-                                    @Html.TextBoxFor(m => m.candidate.jobRole, new { @placeholder = "Job Role", @class = "form-control" })
-                                    @Html.ValidationMessageFor(m => m.candidate.jobRole)
+                                    @Html.LabelFor(m => m.candidate.phone)
+                                    @Html.TextBoxFor(m => m.candidate.phone, new { @placeholder = "Job Role", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidate.phone)
                                 </div>
+                                <div class="form-group mb-2">
+                                    @Html.LabelFor(m => m.candidate.dob)
+                                    @Html.TextBoxFor(m => m.candidate.dob, new { @placeholder = "Degree", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidate.dob)
+                                </div>
+                                <!-- /.form-group -->
+                                <div class="form-group mb-2">
+                                    @Html.LabelFor(m => m.candidate.Gender)
+                                    @Html.TextBoxFor(m => m.candidate.Gender, new { @placeholder = "Degree", @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.candidate.Gender)
+                                </div>
+                                <!-- /.form-group -->
                                 <!-- /.form-group -->
                                 <div class="form-group mb-3">
                                     @Html.LabelFor(m => m.candidate.ssc_perc)
@@ -249,65 +258,154 @@
                                     @Html.ValidationMessageFor(m => m.candidate.degree)
                                 </div>
                                 <!-- /.form-group -->
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.candidate.applying_through)
-                                    @Html.TextBoxFor(m => m.candidate.applying_through, new { @placeholder = "Applying Through", @class = "form-control" })
-                                    @Html.ValidationMessageFor(m => m.candidate.applying_through)
-                                </div>
-                                <!-- /.form-group -->
-                            </div>
-                            <!-- /.col -->
 
 
-                            <div class="col-md-6">
-                                @if (Model.candidate.experience == "Fresher")
+                                @if (Model.status == status_Complete)
                                 {
-                                    <div class="form-group mb-2">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.commitment_mode)
+                                        @Html.TextBoxFor(m => m.commitment_mode, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.commitment_mode)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.offered_ctc)
+                                        @Html.TextBoxFor(m => m.offered_ctc, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.offered_ctc)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.remarks)
+                                        @Html.TextBoxFor(m => m.remarks, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.remarks)
+                                    </div>
+                                }
+                                @if (Model.status == status_Rejected)
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.apply_date)
+                                        @Html.TextBoxFor(m => m.candidate.apply_date, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.apply_date)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.position)
+                                        @Html.TextBoxFor(m => m.position, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.position)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.job_Role)
+                                        @Html.TextBoxFor(m => m.job_Role, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.job_Role)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.rejection_date)
+                                        @Html.TextBoxFor(m => m.rejection_date, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.rejection_date)
+                                    </div>
+                                    @if (Model.listOfRounds.Count() > 0)
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.allRounds)
+                                            @Html.TextBoxFor(m => m.allRounds, new { @class = "form-control" })
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.allRounds)
+                                            @Html.TextBoxFor(m => m.allRounds, new { @value = "No Rounds Available", @class = "form-control" })
+                                        </div>
+                                    }
+                                    @if (Model.rejection_reason != null)
+                                    {
+                                        @Html.LabelFor(m => m.rejection_reason)
+                                        @Html.TextBoxFor(m => m.rejection_reason, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.rejection_reason)
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.allRounds)
+                                            @Html.TextBoxFor(m => m.allRounds, new { @value = "No Reason Available", @class = "form-control" })
+                                        </div>
+                                    }
+                                }
+
+
+                            </div>
+                            <div class="col-md-6 container p-2">
+                                @if (Model.candidate.experience == isFresher)
+                                {
+                                    <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.experience)
-                                        @Html.TextBoxFor(m => m.candidate.experience, new { @placeholder = "Experience", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.experience, new { @placeholder = "Applying Through", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.candidate.experience)
                                     </div>
-                                    <!-- /.form-group -->
                                 }
                                 else
                                 {
-                                    <div class="form-group mb-2">
+                                    <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.experience)
-                                        @Html.TextBoxFor(m => m.candidate.experience, new { @placeholder = "Experience", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.experience, new { @placeholder = "Applying Through", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.candidate.experience)
                                     </div>
-                                    <!-- /.form-group -->
-                                    <div class="form-group mb-2">
+                                    <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.total_experience)
-                                        @Html.TextBoxFor(m => m.candidate.total_experience, new { @placeholder = "Total Experience", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.total_experience, new { @placeholder = "Applying Through", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.candidate.total_experience)
                                     </div>
-                                    <!-- /.form-group -->
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.relevent_experience)
-                                        @Html.TextBoxFor(m => m.candidate.relevent_experience, new { @placeholder = "Relevent Experience", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.relevent_experience, new { @placeholder = "Applying Through", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.candidate.relevent_experience)
                                     </div>
-                                    <!-- /.form-group -->
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.current_ctc)
-                                        @Html.TextBoxFor(m => m.candidate.current_ctc, new { @placeholder = "Current CTC", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.current_ctc, new { @placeholder = "Applying Through", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.candidate.current_ctc)
                                     </div>
-                                    <!-- /.form-group -->
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.expected_ctc)
-                                        @Html.TextBoxFor(m => m.candidate.expected_ctc, new { @placeholder = "Expected CTC", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.expected_ctc, new { @placeholder = "Applying Through", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.candidate.expected_ctc)
                                     </div>
-                                    <!-- /.form-group -->
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.notice_period)
-                                        @Html.TextBoxFor(m => m.candidate.notice_period, new { @placeholder = "Notice Period", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.notice_period, new { @placeholder = "Applying Through", @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.candidate.notice_period)
                                     </div>
-                                    <!-- /.form-group -->
                                 }
+                                @if (Model.status == status_Complete)
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.apply_date)
+                                        @Html.TextBoxFor(m => m.candidate.apply_date, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.apply_date)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.candidate.applying_through)
+                                        @Html.TextBoxFor(m => m.candidate.applying_through, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.candidate.applying_through)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.joining_date)
+                                        @Html.TextBoxFor(m => m.joining_date, new { @placeholder = "Applying Through", @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.joining_date)
+                                    </div>
+                                    @if (Model.listOfRounds.Count() > 0)
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.allRounds)
+                                            @Html.TextBoxFor(m => m.allRounds, new { @class = "form-control" })
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.allRounds)
+                                            @Html.TextBoxFor(m => m.allRounds, new { @value = "No Rounds Available", @class = "form-control" })
+                                        </div>
+                                    }
+                                }
+
                             </div>
                             <!-- /.col -->
 
@@ -317,280 +415,26 @@
                 </div>
                 <!-- /.box-body -->
             </form>
-
-
-
-
-
-
-
-
-
-
-
-            <br />
-            <dl class="row">
-                <dt class="col-sm-4">
-                    Candidate Name
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.candidate.name)
-                </dd>
-                <dt class="col-sm-4">
-                    Email-ID
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.candidate.email)
-                </dd>
-
-                <dt class="col-sm-4">
-                    Phone No.
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.candidate.phone)
-                </dd>
-                <dt class="col-sm-4">
-                    Date of Birth
-                </dt>
-                <dd class="col-sm-8">
-                    @Model.candidate.dob.ToString(date_format)
-                </dd>
-                <dt class="col-sm-4">
-                    Gender
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.candidate.Gender)
-                </dd>
-                <dt class="col-sm-4">
-                    SSC (%)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.candidate.ssc_perc)
-                </dd>
-                <dt class="col-sm-4">
-                    HSC (%)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.candidate.hsc_perc)
-                </dd>
-                <dt class="col-sm-4">
-                    Education
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.candidate.degree)
-                </dd>
-                <dt class="col-sm-4">
-                    Experience
-                </dt>
-                @if (Model.candidate.experience == isFresher)
-                {
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.candidate.experience)
-                    </dd>
-                }
-                else
-                {
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.candidate.experience)
-                    </dd>
-                    <dt class="col-sm-4">
-                        Total Experience
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.candidate.total_experience)
-                    </dd>
-                    <dt class="col-sm-4">
-                        Relevent Experience
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.candidate.relevent_experience)
-                    </dd>
-                    <dt class="col-sm-4">
-                        Current CTC
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.candidate.current_ctc)
-                    </dd>
-                    <dt class="col-sm-4">
-                        Expected CTC
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.candidate.expected_ctc)
-                    </dd>
-                    <dt class="col-sm-4">
-                        Notice Period
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.candidate.notice_period)
-                    </dd>
-                }
-
-                @if (Model.status == status_Complete)
-                {
-                    <dt class="col-sm-4">
-                        Applied Date
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.candidate.apply_date)
-                    </dd>
-                    <dt class="col-sm-4">
-                        Apply Through
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.candidate.applying_through)
-                    </dd>
-                    @if (Model.listOfRounds.Count() > 0)
-                    {
-                        <dt class="col-sm-4">
-                            Interview Rounds
-                        </dt>
-                        <dd class="col-sm-8">
-                            @foreach (var item in Model.listOfRounds)
-                            {
-
-                                <p>@item</p>
-                            }
-                        </dd>
-                    }
-                    else
-                    {
-                        <dt class="col-sm-4">
-                            Interview Rounds
-                        </dt>
-                        <dd class="col-sm-8">
-                            No Rounds available.
-                        </dd>
-                    }
-                    <dt class="col-sm-4">
-                        Joining Date
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Model.joining_date.ToString(date_format)
-                    </dd>
-                    <dt class="col-sm-4">
-                        Mode of Commitment
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.commitment_mode)
-                    </dd>
-                    <dt class="col-sm-4">
-                        Offered CTC
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.offered_ctc)
-                    </dd>
-                    <dt class="col-sm-4">
-                        Interview Remarks
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.remarks)
-                    </dd>
-                }
-                @if (Model.status == status_Rejected)
-                {
-                    <dt class="col-sm-4">
-                        Applied Date
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.candidate.apply_date)
-                    </dd>
-                    <dt class="col-sm-4">
-                        Job Title
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.position)
-                    </dd>
-                    <dt class="col-sm-4">
-                        Job Role
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.job_Role)
-                    </dd>
-                    <dt class="col-sm-4">
-                        Rejection Date
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.rejection_date)
-                    </dd>
-
-                    @if (Model.listOfRounds.Count() > 0)
-                    {
-                        <dt class="col-sm-4">
-                            Interview Rounds
-                        </dt>
-                        <dd class="col-sm-8">
-                            @foreach (var item in Model.listOfRounds)
-                            {
-                                var i = 0;
-                                <p>@(rowcount+=1).@item</p>
-                            }
-                        </dd>
-                    }
-                    else
-                    {
-                        <dt class="col-sm-4">
-                            Interview Rounds
-                        </dt>
-                        <dd class="col-sm-8">
-                            No Rounds available.
-                        </dd>
-                    }
-                    @if (Model.rejection_reason != null)
-                    {
-                        <dt class="col-sm-4">
-                            Remarks
-                        </dt>
-                        <dd class="col-sm-8">
-                            @Html.DisplayFor(model => model.rejection_reason)
-                        </dd>
-                    }
-                    else
-                    {
-                        <dt class="col-sm-4">
-                            Remarks
-                        </dt>
-                        <dd class="col-sm-8">
-                            No remarks available
-                        </dd>
-                    }
-
-
-                }
-                @*else
-            {
-                <dt class="col-sm-4">
-                    Applying Through
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.candidate.applying_through)
-                </dd>
-                <dt class="col-sm-4">
-                    Current Interview Status
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.status)
-                </dd>
-            }*@
-
-            </dl>
         </div>
-                        <script>
-                            $(function () {
-                                debugger;
-                                $('button[data-toggle="ajax-modal"]').click(function (event) {
-                                    var url = $(this).data('url');
-                                    $.get(url).done(function (data) {
-                                        $('#modal-placeholder').html(data);
-                                        $('#modal-placeholder > .modal').modal('show');
-                                    });
-                                });
-                            });
+    </div>
+</section>
+<script>
+    $(function () {
+        debugger;
+        $('button[data-toggle="ajax-modal"]').click(function (event) {
+            var url = $(this).data('url');
+            $.get(url).done(function (data) {
+                $('#modal-placeholder').html(data);
+                $('#modal-placeholder > .modal').modal('show');
+            });
+        });
+    });
 
-                            //Function for setting Flag_Rejected value as true
-                            function openPopupReject() {
-                                debugger;
-                                $("#Flag_Rejected").val(true);
-                                $('#delete-contact').modal('show');
-                            }
+    //Function for setting Flag_Rejected value as true
+    function openPopupReject() {
+        debugger;
+        $("#Flag_Rejected").val(true);
+        $('#delete-contact').modal('show');
+    }
 
-                        </script>
+</script>

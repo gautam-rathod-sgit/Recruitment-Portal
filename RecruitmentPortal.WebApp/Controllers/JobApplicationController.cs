@@ -357,6 +357,11 @@ namespace RecruitmentPortal.WebApp.Controllers
                 //if(model.status == status_Rejected)
                 //{
                 model.listOfRounds = getListOfRounds(model.candidateId);
+                foreach(var item in model.listOfRounds)
+                {
+                    model.allRounds += item + ",";
+                }
+                
                 //}
             }
             catch (Exception ex)
