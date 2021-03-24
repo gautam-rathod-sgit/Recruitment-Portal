@@ -61,6 +61,24 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accept Date.
+        /// </summary>
+        public static string AcceptDate {
+            get {
+                return ResourceManager.GetString("AcceptDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview Rounds.
+        /// </summary>
+        public static string AllRounds {
+            get {
+                return ResourceManager.GetString("AllRounds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Applying Through.
         /// </summary>
         public static string ApplyingThrough {
@@ -75,6 +93,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string CandidateName {
             get {
                 return ResourceManager.GetString("CandidateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Commitment Mode.
+        /// </summary>
+        public static string CommitmentMode {
+            get {
+                return ResourceManager.GetString("CommitmentMode", resourceCulture);
             }
         }
         
@@ -268,6 +295,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Joining Date.
+        /// </summary>
+        public static string JoiningDate {
+            get {
+                return ResourceManager.GetString("JoiningDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location.
         /// </summary>
         public static string Location {
@@ -291,6 +327,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string NoticePeriod {
             get {
                 return ResourceManager.GetString("NoticePeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offered CTC.
+        /// </summary>
+        public static string OfferedCTC {
+            get {
+                return ResourceManager.GetString("OfferedCTC", resourceCulture);
             }
         }
         
@@ -349,6 +394,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rejection date.
+        /// </summary>
+        public static string Rejectdate {
+            get {
+                return ResourceManager.GetString("Rejectdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rejection Reason.
         /// </summary>
         public static string RejectionReason {
@@ -367,7 +421,7 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remark.
+        ///   Looks up a localized string similar to Remarks.
         /// </summary>
         public static string Remark {
             get {

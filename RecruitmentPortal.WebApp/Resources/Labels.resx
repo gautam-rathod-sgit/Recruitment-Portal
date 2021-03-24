@@ -196,7 +196,7 @@
     <value>Relevent Experience</value>
   </data>
   <data name="Remark" xml:space="preserve">
-    <value>Remark</value>
+    <value>Remarks</value>
   </data>
   <data name="Resume" xml:space="preserve">
     <value>Resume</value>
@@ -257,5 +257,23 @@
   </data>
   <data name="ProfilePicture" xml:space="preserve">
     <value>Profile Picture</value>
+  </data>
+  <data name="AcceptDate" xml:space="preserve">
+    <value>Accept Date</value>
+  </data>
+  <data name="AllRounds" xml:space="preserve">
+    <value>Interview Rounds</value>
+  </data>
+  <data name="CommitmentMode" xml:space="preserve">
+    <value>Commitment Mode</value>
+  </data>
+  <data name="JoiningDate" xml:space="preserve">
+    <value>Joining Date</value>
+  </data>
+  <data name="OfferedCTC" xml:space="preserve">
+    <value>Offered CTC</value>
+  </data>
+  <data name="Rejectdate" xml:space="preserve">
+    <value>Rejection date</value>
   </data>
 </root>

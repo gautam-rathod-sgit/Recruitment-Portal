@@ -449,7 +449,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
             int actualId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
             item = await _candidatePageServices.getCandidateById(actualId);
-            
+            item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
             return View(item);
         }
 

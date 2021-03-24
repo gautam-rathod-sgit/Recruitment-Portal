@@ -98,7 +98,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public string applying_through { get; set; }
 
 
-        
+        [Display(ResourceType = typeof(Labels), Name = "Degree")]
         public string degree { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "Degree")]

@@ -1,5 +1,6 @@
 ﻿using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.WebApp.Models;
+using RecruitmentPortal.WebApp.Resources;
 using RecruitmentPortal.WebApp.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -19,25 +20,43 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public bool notified { get; set; }
 
         //for start date of candidate's interview process
+        [Display(ResourceType = typeof(Labels), Name = "StartDate")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy}")]
         public DateTime start_date { get; set; }
 
         //for application rejection constraints
+
+        [Display(ResourceType = typeof(Labels), Name = "Rejectdate")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy}")]
         public DateTime rejection_date { get; set; }
+
+        [Display(ResourceType = typeof(Labels), Name = "RejectionReason")]
         public string rejection_reason { get; set; }
 
         //for date of acceptence of candidate application
-        public DateTime accept_date { get; set; }
-
-        public DateTime joining_date { get; set; }
         public DateTime date { get; set; }
 
+        [Display(ResourceType = typeof(Labels), Name = "AcceptDate")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy}")]
+        public DateTime accept_date { get; set; }
+
+
+        [Display(ResourceType = typeof(Labels), Name = "JoiningDate")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy}")]
+        public DateTime joining_date { get; set; }
+
+
+        [Display(ResourceType = typeof(Labels), Name = "CommitmentMode")]
         public string commitment_mode { get; set; }
+        [Display(ResourceType = typeof(Labels), Name = "OfferedCTC")]
         public string offered_ctc { get; set; }
+        [Display(ResourceType = typeof(Labels), Name = "Remark")]
         public string remarks { get; set; }
+        [Display(ResourceType = typeof(Labels), Name = "AllRounds")]
+        public string allRounds { get; set; }
 
 
-        //relationship with candidate
-        public int candidateId { get; set; }
+       
 
 
         //for data fetching
@@ -45,6 +64,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public string candidateName { get; set; }
         public string position { get; set; }
 
+        [Display(ResourceType = typeof(Labels), Name = "JobRole")]
         public string job_Role { get; set; }
 
         //for accepting candidate application
@@ -68,12 +88,13 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         //for storing names of schedule done for rejected candidates
         public List<string> listOfRounds { get; set; }
+        //relationship with candidate
+        public int candidateId { get; set; }
         public string EncryptedJobId { get; set; }
         public string EncryptedCandidateId { get; set; }
 
 
-        [Display]
-        public string allRounds { get; set; }
+       
 
     }
 }
