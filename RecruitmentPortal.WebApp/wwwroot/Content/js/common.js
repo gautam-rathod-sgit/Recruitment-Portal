@@ -155,8 +155,13 @@ function getStatusCompleted(data) {
     waitingDialog.hide();
 }
 
-function sidebarActiveLink(controllerName) {
-    //$('#sideBarMenu ul li').removeClass('active');
+function sidebarActiveLink(controllerName, actionName) {
+    if (controllerName === "Account" && actionName === "AdminIndex") {
+        controllerName = "Account1";
+    }
+    if (controllerName === "Account" && actionName === "Index") {
+        controllerName = "Account2";
+    }
     $('#sideBarMenu ul li:has(a[id="' + controllerName + '"])').addClass('active');
 }
 

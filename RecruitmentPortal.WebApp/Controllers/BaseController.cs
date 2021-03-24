@@ -72,6 +72,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 SessionHelper.UserId = logedInUser.Id;
                 SessionHelper.WelcomeUser = logedInUser.UserName;
                 CommonHelper.UserId = logedInUser.Id;
+                SessionHelper.ProfilePicture = logedInUser.file == null ? string.Empty : logedInUser.file ;
             }
         }
         #endregion

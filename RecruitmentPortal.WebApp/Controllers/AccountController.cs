@@ -349,14 +349,18 @@ namespace RecruitmentPortal.WebApp.Controllers
                     //File details fetching
                     //create a place in wwwroot for storing uploaded files
                     var uploads = Path.Combine(_environment.WebRootPath, "Files");
+                    string extension = Path.GetExtension(model.FileNew.FileName);
+                    var basename = Path.Combine(Path.GetDirectoryName(model.FileNew.FileName),
+                                Path.GetFileNameWithoutExtension(model.FileNew.FileName));
                     if (model.FileNew != null)
                     {
-                        using (var fileStream = new FileStream(Path.Combine(uploads, model.FileNew.FileName), FileMode.Create))
+                        Guid gid = Guid.NewGuid();
+                        string uniquefilename = basename + "-" + gid + extension;
+                        using (var fileStream = new FileStream(Path.Combine(uploads, uniquefilename), FileMode.Create))
                         {
                             await model.FileNew.CopyToAsync(fileStream);
                         }
-                        model.file = model.FileNew.FileName;
-
+                        model.file = uniquefilename;
                     }
 
                     ApplicationUser user = await _userManager.FindByIdAsync(model.UserId.ToString());
@@ -366,6 +370,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                         user.UserName = model.UserName;
                         user.position = model.position;
                         user.skype_id = model.skype_id;
+                        user.file = model.file;
                         user.PasswordHash = passwordHasher.HashPassword(user, model.password);
 
                         var result = await _userManager.UpdateAsync(user);
@@ -410,20 +415,24 @@ namespace RecruitmentPortal.WebApp.Controllers
                     //File details fetching
                     //create a place in wwwroot for storing uploaded files
                     var uploads = Path.Combine(_environment.WebRootPath, "Files");
+                    string extension = Path.GetExtension(model.FileNew.FileName);
+                    var basename = Path.Combine(Path.GetDirectoryName(model.FileNew.FileName),
+                                Path.GetFileNameWithoutExtension(model.FileNew.FileName));
                     if (model.FileNew != null)
                     {
                         using (var fileStream = new FileStream(Path.Combine(uploads, model.FileNew.FileName), FileMode.Create))
                         {
                             await model.FileNew.CopyToAsync(fileStream);
                         }
-                        model.file = model.FileNew.FileName;
-
+                        Guid gid = Guid.NewGuid();
+                        string uniquefilename = basename + "-" + gid + extension;
+                        model.file = uniquefilename;
                     }
                     if (ModelState.IsValid)
                     {
 
                         ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email, position = model.position, skype_id = model.skype_id, file = model.file };
-
+                        user.file = model.file;
                         var result = await _userManager.CreateAsync(user, model.password);
 
                         if (result.Succeeded)
