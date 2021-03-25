@@ -18,10 +18,11 @@
     <div class="form-group">
         @Html.LabelFor(m => m.commitment_mode, new { @class = "asterisk" })
         <div class="col-10">
-            @Html.Label("Cheques")
             @Html.RadioButtonFor(m => m.commitment_mode, "Cheques", new { @id = "cheque" })
-            @Html.Label("Documents")
+            @Html.Label(" Cheques")
+
             @Html.RadioButtonFor(m => m.commitment_mode, "Documents", new { @id = "doc" })
+            @Html.Label(" Documents")
         </div>
     </div>
 

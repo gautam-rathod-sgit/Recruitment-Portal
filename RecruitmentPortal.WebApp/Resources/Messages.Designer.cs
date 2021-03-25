@@ -79,6 +79,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Candidate joining date is Passed.
+        /// </summary>
+        public static string CannotReject {
+            get {
+                return ResourceManager.GetString("CannotReject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current CTC is Required.
         /// </summary>
         public static string CurrentCTCRequired {

@@ -285,4 +285,7 @@
   <data name="ApplyDate" xml:space="preserve">
     <value>Applied Date</value>
   </data>
+  <data name="EnterOTP" xml:space="preserve">
+    <value>Enter OTP</value>
+  </data>
 </root>

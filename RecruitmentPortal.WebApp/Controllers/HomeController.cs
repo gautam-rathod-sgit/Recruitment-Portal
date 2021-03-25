@@ -427,7 +427,39 @@ namespace RecruitmentPortal.WebApp.Controllers
                     ViewData["error"] = "error";
                 }
             }
+            OTPViewModel otpModel = new OTPViewModel();
+            otpModel.email = model.email;
+            otpModel.token = body;
+
+            return RedirectToAction("otpView",otpModel);
+        }
+        [HttpGet]
+        public IActionResult OtpView(OTPViewModel model)
+        {
             return View(model);
+        }
+        //if OTP entered Successfully
+        /// <summary>
+        /// if OTP entered Successfully this action will return true
+        /// </summary>
+        /// <param name="email_ID"></param>
+        /// <returns></returns>
+        /// 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OtpViewPost(OTPViewModel model)
+        {
+            if (model.otp != model.token)
+            {
+                ModelState.AddModelError("otp", "Invalid OTP");
+                return View("OtpView",model);
+            }
+            var FinalData = await _candidatePageServices.getCandidateByEmailId(model.email);
+            FinalData.emailConfirmed = true;
+            await _candidatePageServices.UpdateCandidate(FinalData);
+
+            TempData[EnumsHelper.NotifyType.Success.GetDescription()] = Messages.SuccessfullyApplied;
+            return RedirectToAction("Index", "Home");
         }
         /// <summary>
         /// FUNCTION WILL GENERATE A RANDOM VALUE AND PASS AS OTP
@@ -441,21 +473,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             return otp;
         }
 
-        //if OTP entered Successfully
-        /// <summary>
-        /// if OTP entered Successfully this action will return true
-        /// </summary>
-        /// <param name="email_ID"></param>
-        /// <returns></returns>
-        public async Task<bool> EmailConfirmation(string email_ID)
-        {
-            var FinalData = await _candidatePageServices.getCandidateByEmailId(email_ID);
-            FinalData.emailConfirmed = true;
-            await _candidatePageServices.UpdateCandidate(FinalData);
-
-            TempData[EnumsHelper.NotifyType.Success.GetDescription()] = Messages.SuccessfullyApplied;
-            return true;
-        }
+        
         #endregion
 
 

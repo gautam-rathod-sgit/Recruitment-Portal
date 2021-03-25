@@ -196,7 +196,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             int actualId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
             jobApplicationModel = await _jobApplicationPage.getJobApplicationById(actualId);
             jobApplicationModel.EncryptedCandidateId = RSACSPSample.EncodeServerName(jobApplicationModel.candidateId.ToString());
-            jobApplicationModel.EncryptedJobId = id;
+            jobApplicationModel.EncryptedJobId = RSACSPSample.EncodeServerName(jobApplicationModel.ID.ToString()); ;
             jobApplicationModel.candidateName = getCandidateNameById(jobApplicationModel.candidateId);
             jobApplicationModel.position = getPositionByCandidateId(jobApplicationModel.candidateId);
             jobApplicationModel.job_Role = getJobRoleByCandidateId(jobApplicationModel.candidateId);
@@ -204,23 +204,6 @@ namespace RecruitmentPortal.WebApp.Controllers
               jobApplicationModel.candidate = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
 
             return View(jobApplicationModel);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Details(JobApplicationViewModel model)
-        {
-            //JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
-            //int actualId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
-            //jobApplicationModel = await _jobApplicationPage.getJobApplicationById(actualId);
-            //jobApplicationModel.EncryptedCandidateId = RSACSPSample.EncodeServerName(jobApplicationModel.candidateId.ToString());
-            //jobApplicationModel.EncryptedJobId = id;
-            //jobApplicationModel.candidateName = getCandidateNameById(jobApplicationModel.candidateId);
-            //jobApplicationModel.position = getPositionByCandidateId(jobApplicationModel.candidateId);
-            //jobApplicationModel.job_Role = getJobRoleByCandidateId(jobApplicationModel.candidateId);
-
-            //jobApplicationModel.candidate = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
-
-            return View(model);
         }
 
         public async Task<IActionResult> GetActiveAppDetailsList(string id)
@@ -392,7 +375,12 @@ namespace RecruitmentPortal.WebApp.Controllers
                 model.listOfRounds = getListOfRounds(model.candidateId);
                 foreach(var item in model.listOfRounds)
                 {
-                    model.allRounds += item + ",";
+                    model.allRounds += item;
+
+                    if(model.listOfRounds.Count() > 1)
+                    {
+                        model.allRounds += ",";
+                    }
                 }
                 
                 //}
@@ -589,7 +577,13 @@ namespace RecruitmentPortal.WebApp.Controllers
             return RedirectToAction("AllApplications", "Candidate", new { ApplicationType = "Selected" });
         }
 
-
+        public async Task<IActionResult> RenderAcceptView(string id, string candidateId)
+        {
+            JobApplicationViewModel model = new JobApplicationViewModel();
+            model.ID = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+            model.candidateId = Convert.ToInt32(RSACSPSample.DecodeServerName(candidateId));
+            return PartialView("_AcceptApplicationView", model);
+        }
 
         //==================================================================================================================
 

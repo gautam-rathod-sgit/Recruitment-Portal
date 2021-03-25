@@ -306,4 +306,7 @@
   <data name="ValidEmailRequired" xml:space="preserve">
     <value>Valid Email is Required</value>
   </data>
+  <data name="CannotReject" xml:space="preserve">
+    <value>Candidate joining date is Passed</value>
+  </data>
 </root>
