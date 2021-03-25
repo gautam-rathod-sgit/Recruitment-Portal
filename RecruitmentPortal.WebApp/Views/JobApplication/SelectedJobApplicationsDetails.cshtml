@@ -15,7 +15,6 @@
     string Rejected_mode = "Rejected";
 }
 
-
 <!-- Modal for Edit Joining date -->
 <div class="modal fade" id="edit-date" tabindex="-1" role="dialog" aria-labelledby="addJoiningLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -44,7 +43,7 @@
 
                     <div class="form-group mb-2">
                         @Html.LabelFor(m => m.joining_date)
-                        @Html.TextBoxFor(m => m.joining_date, new { @type = "datetime",   @placeholder = "Joining Date", @class = "form-control datepicker" })
+                        @Html.TextBoxFor(m => m.joining_date, new { @type = "datetime", @placeholder = "Joining Date", @class = "form-control datepicker" })
                         @Html.ValidationMessageFor(m => m.joining_date)
                     </div>
                     <div>
@@ -54,7 +53,7 @@
                 </form>
             </div>
         </div>
-    </div>  
+    </div>
 </div>
 <!-- Modal end -->
 <!-- Modal for Rejecting -->
@@ -112,14 +111,20 @@
                     {
                         <h3 class="box-title">
                             <i class="fa fa-info-circle"></i>
-                            Rejected Candidate Details:
+                            Rejected Candidate Details
+
                         </h3>
                     }
                     else
                     {
                         <h3 class="box-title">
                             <i class="fa fa-info-circle"></i>
-                            Selected Candidate Details:
+
+                            Selected Candidate Details
+                            @if (Model.notified)
+                            {
+                        <span class="pt-0">Already Notified! </span>
+                            }
                         </h3>
 
                     }
@@ -131,72 +136,73 @@
                             @if (!Model.notified)
                             {
 
-                                
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#edit-date">
-                                        Edit
+
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary btn-sm mr-2" data-toggle="modal" data-target="#edit-date">
+                                    Edit
+                                </button>
+                                @*@Html.ActionLink("Edit Date", "UpdateJobApplication", "JobApplication", new { id = @RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-primary btn-sm mr-3" })*@
+
+
+                                @if (Model.joining_date <= DateTime.Today)
+                                {
+                                    <!-- Button trigger modal For Rejecting Application-->
+                                    <button type="button" class="btn btn-primary btn-sm mr-2" data-toggle="#delete-contact" data-target="#delete-contact" onclick="openPopupReject()">
+                                        Reject
                                     </button>
-                                    @*@Html.ActionLink("Edit Date", "UpdateJobApplication", "JobApplication", new { id = @RSACSPSample.EncodeServerName((Model.ID).ToString()) }, new { @class = "btn btn-primary btn-sm mr-3" })*@
-                                
-                                
-                                    @if (Model.joining_date <= DateTime.Today)
-                                    {
-                                        <!-- Button trigger modal For Rejecting Application-->
-                                        <button type="button" class="btn btn-danger mr-2" data-toggle="#delete-contact" data-target="#delete-contact" onclick="openPopupReject()">
-                                            Reject
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <button class="btn  btn-danger mr-2" disabled>
-                                            Reject
-                                        </button>
-                                    }
-                              
-                               
-                                    <a asp-action="ConfirmJobApplication" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-success mr-3">
-                                        Confirm
-                                    </a>
-                               
+                                }
+                                else
+                                {
+                                    <button class="btn  btn-danger btn-sm mr-2" disabled>
+                                        Reject
+                                    </button>
+                                }
+
+
+                                <a asp-action="ConfirmJobApplication" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-primary btn-sm mr-3">
+                                    Confirm
+                                </a>
+
                             }
                             else
                             {
-                                
-                                    <button class="btn btn-secondary mr-1">
+
+                                @*<h4 class="text-red center pull-left" >Already Notified! </h4>*@
+                                @*<button class="btn btn-secondary btn-sm mr-1">
                                         Edit
                                     </button>
-                                    <button class="btn btn-secondary mr-1">
+                                    <button class="btn btn-secondary btn-sm mr-1">
                                         Reject
                                     </button>
-                                    <button class="btn btn-success mr-1">
+                                    <button class="btn btn-primary btn-sm mr-1">
                                         Notified
-                                    </button>
-                                
+                                    </button>*@
+
                             }
                             @if (ViewBag.toAdminIndex != null || ViewBag.toAdminIndex == true)
                             {
-                               
-                                    <a asp-action="AdminIndex" asp-controller="Account" class="btn btn-primary">Cancel</a>
-                               
+
+                                <a asp-action="AdminIndex" asp-controller="Account" class="btn btn-primary btn-sm ">Cancel</a>
+
                             }
                             else
                             {
-                               
-                                    <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Accepted" class="btn btn-primary">Cancel</a>
-                                    
+
+                                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Accepted" class="btn btn-primary btn-sm ">Cancel</a>
+
                             }
                         }
                         @*Rejected application data*@
                         @if (Model.status == status_Rejected)
                         {
-                            <a asp-action="ReOpenJobApplication" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-success mr-3">
+                            <a asp-action="ReOpenJobApplication" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-primary btn-sm mr-3">
                                 Re-open
                             </a>
-                            <a asp-action="Download" asp-controller="Candidate" class="btn btn-primary btn-md mr-3"
+                            <a asp-action="Download" asp-controller="Candidate" class="btn btn-primary btn-sm mr-3"
                                asp-route-filename="@Model.candidate.resume">
                                 Download Resume
                             </a>
-                            <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-primary">Cancel</a>
+                            <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-primary btn-sm">Cancel</a>
                         }
 
 
@@ -420,7 +426,6 @@
 </section>
 <script>
     $(function () {
-        debugger;
         $('button[data-toggle="ajax-modal"]').click(function (event) {
             var url = $(this).data('url');
             $.get(url).done(function (data) {
@@ -432,7 +437,6 @@
 
     //Function for setting Flag_Rejected value as true
     function openPopupReject() {
-        debugger;
         $("#Flag_Rejected").val(true);
         $('#delete-contact').modal('show');
     }
