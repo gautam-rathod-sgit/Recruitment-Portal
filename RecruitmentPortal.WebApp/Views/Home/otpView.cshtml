@@ -40,9 +40,9 @@
                 @Html.HiddenFor(m => m.token)
                 @Html.HiddenFor(m => m.email)
                 <div class="form-group has-feedback has-feedback-left">
-                    @Html.TextAreaFor(x => x.otp, new { @class = "form-control", @type = "number", @id = "token_input" })
+                    @Html.TextBoxFor(x => x.otp, "{0:#.#}", new { @class = "form-control", @type = "number", @id = "token_input" })
                     @Html.ValidationMessageFor(x => x.otp)
-                    <div class="form-control-feedback">
+                    <div class="form-control">
                         <i class="fa fa-envelope text-muted"></i>
                     </div>
                 </div>
