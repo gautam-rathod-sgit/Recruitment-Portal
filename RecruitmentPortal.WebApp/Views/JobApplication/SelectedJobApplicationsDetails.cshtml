@@ -201,49 +201,49 @@
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     @Html.LabelFor(m => m.candidate.name)
-                                    @Html.TextBoxFor(m => m.candidate.name, new { @placeholder = "Not Available", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.candidate.name, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.candidate.name)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-3">
                                     @Html.LabelFor(m => m.candidate.email)
-                                    @Html.TextBoxFor(m => m.candidate.email, new { @placeholder = "Job Title", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.candidate.email, new { @placeholder = "Job Title", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.candidate.email)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-3">
                                     @Html.LabelFor(m => m.candidate.phone)
-                                    @Html.TextBoxFor(m => m.candidate.phone, new { @placeholder = "Not Available", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.candidate.phone, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.candidate.phone)
                                 </div>
                                 <div class="form-group mb-2">
                                     @Html.LabelFor(m => m.candidate.dob)
-                                    @Html.TextBoxFor(m => m.candidate.dob, new { @placeholder = "Not Available", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.candidate.dob, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.candidate.dob)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-2">
                                     @Html.LabelFor(m => m.candidate.Gender)
-                                    @Html.TextBoxFor(m => m.candidate.Gender, new { @placeholder = "Not Available", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.candidate.Gender, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.candidate.Gender)
                                 </div>
                                 <!-- /.form-group -->
                                 <!-- /.form-group -->
                                 <div class="form-group mb-3">
                                     @Html.LabelFor(m => m.candidate.ssc_perc)
-                                    @Html.TextBoxFor(m => m.candidate.ssc_perc, new { @placeholder = "Not Available", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.candidate.ssc_perc, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.candidate.ssc_perc)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-2">
                                     @Html.LabelFor(m => m.candidate.hsc_perc)
-                                    @Html.TextBoxFor(m => m.candidate.hsc_perc, new { @placeholder = "Not Available", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.candidate.hsc_perc, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.candidate.hsc_perc)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-2">
                                     @Html.LabelFor(m => m.candidate.degree)
-                                    @Html.TextBoxFor(m => m.candidate.degree, new { @placeholder = "Not Available", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.candidate.degree, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.candidate.degree)
                                 </div>
                                 <!-- /.form-group -->
@@ -253,17 +253,17 @@
                                 {
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.commitment_mode)
-                                        @Html.TextBoxFor(m => m.commitment_mode, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.commitment_mode, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.commitment_mode)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.offered_ctc)
-                                        @Html.TextBoxFor(m => m.offered_ctc, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.offered_ctc, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.offered_ctc)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.remarks)
-                                        @Html.TextBoxFor(m => m.remarks, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.remarks, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.remarks)
                                     </div>
                                 }
@@ -271,49 +271,49 @@
                                 {
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.apply_date)
-                                        @Html.TextBoxFor(m => m.candidate.apply_date, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.apply_date, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.candidate.apply_date)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.position)
-                                        @Html.TextBoxFor(m => m.position, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.position, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.position)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.job_Role)
-                                        @Html.TextBoxFor(m => m.job_Role, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.job_Role, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.job_Role)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.rejection_date)
-                                        @Html.TextBoxFor(m => m.rejection_date, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.rejection_date, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.rejection_date)
                                     </div>
                                     @if (Model.listOfRounds.Count() > 0)
                                     {
                                         <div class="form-group">
                                             @Html.LabelFor(m => m.allRounds)
-                                            @Html.TextBoxFor(m => m.allRounds, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.allRounds, new { @class = "form-control", @readonly = "readonly" })
                                         </div>
                                     }
                                     else
                                     {
                                         <div class="form-group">
                                             @Html.LabelFor(m => m.allRounds)
-                                            @Html.TextBoxFor(m => m.allRounds, new { @placeholder = "No Rounds Available", @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.allRounds, new { @placeholder = "No Rounds Available", @class = "form-control", @readonly = "readonly" })
                                         </div>
                                     }
                                     @if (Model.rejection_reason != null)
                                     {
                                         @Html.LabelFor(m => m.rejection_reason)
-                                        @Html.TextBoxFor(m => m.rejection_reason, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.rejection_reason, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.rejection_reason)
                                     }
                                     else
                                     {
                                         <div class="form-group">
                                             @Html.LabelFor(m => m.allRounds)
-                                            @Html.TextBoxFor(m => m.allRounds, new { @value = "No Reason Available", @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.allRounds, new { @value = "No Reason Available", @class = "form-control", @readonly = "readonly" })
                                         </div>
                                     }
                                 }
@@ -325,7 +325,7 @@
                                 {
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.experience)
-                                        @Html.TextBoxFor(m => m.candidate.experience, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.experience, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.candidate.experience)
                                     </div>
                                 }
@@ -333,32 +333,32 @@
                                 {
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.experience)
-                                        @Html.TextBoxFor(m => m.candidate.experience, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.experience, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.candidate.experience)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.total_experience)
-                                        @Html.TextBoxFor(m => m.candidate.total_experience, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.total_experience, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.candidate.total_experience)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.relevent_experience)
-                                        @Html.TextBoxFor(m => m.candidate.relevent_experience, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.relevent_experience, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.candidate.relevent_experience)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.current_ctc)
-                                        @Html.TextBoxFor(m => m.candidate.current_ctc, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.current_ctc, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.candidate.current_ctc)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.expected_ctc)
-                                        @Html.TextBoxFor(m => m.candidate.expected_ctc, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.expected_ctc, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.candidate.expected_ctc)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.notice_period)
-                                        @Html.TextBoxFor(m => m.candidate.notice_period, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.notice_period, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.candidate.notice_period)
                                     </div>
                                 }
@@ -366,31 +366,31 @@
                                 {
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.apply_date)
-                                        @Html.TextBoxFor(m => m.candidate.apply_date, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.apply_date, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.candidate.apply_date)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.candidate.applying_through)
-                                        @Html.TextBoxFor(m => m.candidate.applying_through, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.candidate.applying_through, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.candidate.applying_through)
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.joining_date)
-                                        @Html.TextBoxFor(m => m.joining_date, new { @placeholder = "Not Available", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.joining_date, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.joining_date)
                                     </div>
                                     @if (Model.listOfRounds.Count() > 0)
                                     {
                                         <div class="form-group">
                                             @Html.LabelFor(m => m.allRounds)
-                                            @Html.TextBoxFor(m => m.allRounds, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.allRounds, new { @class = "form-control", @readonly = "readonly" })
                                         </div>
                                     }
                                     else
                                     {
                                         <div class="form-group">
                                             @Html.LabelFor(m => m.allRounds)
-                                            @Html.TextBoxFor(m => m.allRounds, new { @placeholder = "No Rounds Available", @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.allRounds, new { @placeholder = "No Rounds Available", @class = "form-control", @readonly = "readonly" })
                                         </div>
                                     }
                                 }

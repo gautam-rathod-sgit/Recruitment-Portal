@@ -100,17 +100,17 @@
                                         @Html.ValidationMessageFor(m => m.candidateName)
                                     </div>
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.position, new { @class = "asterisk", @readonly = true })
+                                        @Html.LabelFor(m => m.position, new { @class = "asterisk"})
                                         @Html.TextBoxFor(m => m.position, new { @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.position)
                                     </div>
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.job_Role, new { @class = "asterisk", @readonly = true })
+                                        @Html.LabelFor(m => m.job_Role, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.job_Role, new { @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.job_Role)
                                     </div>
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.candidate.apply_date, new { @class = "asterisk", @readonly = true })
+                                        @Html.LabelFor(m => m.candidate.apply_date, new { @class = "asterisk"})
                                         @Html.TextBoxFor(m => m.candidate.apply_date, new { @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.candidate.apply_date)
                                     </div>
@@ -121,7 +121,7 @@
                                         @if (Model.candidate.experience == "Fresher")
                                         {
                                             <div class="form-group">
-                                                @Html.LabelFor(m => m.candidate.experience, new { @class = "asterisk", @readonly = true })
+                                                @Html.LabelFor(m => m.candidate.experience, new { @class = "asterisk" })
                                                 @Html.TextBoxFor(m => m.candidate.experience, new { @class = "form-control", @readonly = "readonly" })
                                                 @Html.ValidationMessageFor(m => m.candidate.experience)
                                             </div>
@@ -130,32 +130,32 @@
                                         else
                                         {
                                             <div class="form-group">
-                                                @Html.LabelFor(m => m.candidate.experience, new { @class = "asterisk", @readonly = true })
+                                                @Html.LabelFor(m => m.candidate.experience, new { @class = "asterisk"})
                                                 @Html.TextBoxFor(m => m.candidate.experience, new { @class = "form-control", @readonly = "readonly" })
                                                 @Html.ValidationMessageFor(m => m.candidate.experience)
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(m => m.candidate.total_experience, new { @class = "asterisk", @readonly = true })
+                                                @Html.LabelFor(m => m.candidate.total_experience, new { @class = "asterisk"})
                                                 @Html.TextBoxFor(m => m.candidate.total_experience, new { @class = "form-control", @readonly = "readonly" })
                                                 @Html.ValidationMessageFor(m => m.candidate.total_experience)
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(m => m.candidate.relevent_experience, new { @class = "asterisk", @readonly = true })
+                                                @Html.LabelFor(m => m.candidate.relevent_experience, new { @class = "asterisk" })
                                                 @Html.TextBoxFor(m => m.candidate.relevent_experience, new { @class = "form-control", @readonly = "readonly" })
                                                 @Html.ValidationMessageFor(m => m.candidate.relevent_experience)
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(m => m.candidate.current_ctc, new { @class = "asterisk", @readonly = true })
+                                                @Html.LabelFor(m => m.candidate.current_ctc, new { @class = "asterisk"})
                                                 @Html.TextBoxFor(m => m.candidate.current_ctc, new { @class = "form-control", @readonly = "readonly" })
                                                 @Html.ValidationMessageFor(m => m.candidate.current_ctc)
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(m => m.candidate.expected_ctc, new { @class = "asterisk", @readonly = true })
+                                                @Html.LabelFor(m => m.candidate.expected_ctc, new { @class = "asterisk" })
                                                 @Html.TextBoxFor(m => m.candidate.expected_ctc, new { @class = "form-control", @readonly = "readonly" })
                                                 @Html.ValidationMessageFor(m => m.candidate.expected_ctc)
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(m => m.candidate.notice_period, new { @class = "asterisk", @readonly = true })
+                                                @Html.LabelFor(m => m.candidate.notice_period, new { @class = "asterisk"})
                                                 @Html.TextBoxFor(m => m.candidate.notice_period, new { @class = "form-control", @readonly = "readonly" })
                                                 @Html.ValidationMessageFor(m => m.candidate.notice_period)
                                             </div>
