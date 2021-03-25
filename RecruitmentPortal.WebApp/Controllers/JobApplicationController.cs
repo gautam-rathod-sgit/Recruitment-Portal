@@ -192,11 +192,11 @@ namespace RecruitmentPortal.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
-            JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
+            JobApplicationViewModel jobApplicationModel;
             int actualId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
             jobApplicationModel = await _jobApplicationPage.getJobApplicationById(actualId);
             jobApplicationModel.EncryptedCandidateId = RSACSPSample.EncodeServerName(jobApplicationModel.candidateId.ToString());
-            jobApplicationModel.EncryptedJobId = RSACSPSample.EncodeServerName(jobApplicationModel.ID.ToString()); ;
+            jobApplicationModel.EncryptedJobId = RSACSPSample.EncodeServerName(jobApplicationModel.ID.ToString());
             jobApplicationModel.candidateName = getCandidateNameById(jobApplicationModel.candidateId);
             jobApplicationModel.position = getPositionByCandidateId(jobApplicationModel.candidateId);
             jobApplicationModel.job_Role = getJobRoleByCandidateId(jobApplicationModel.candidateId);
@@ -205,11 +205,14 @@ namespace RecruitmentPortal.WebApp.Controllers
 
             return View(jobApplicationModel);
         }
-
+        /// <summary>
+        /// Getting the schedules specific to a particular job application
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> GetActiveAppDetailsList(string id)
         {
             JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
-            CandidateViewModel model = new CandidateViewModel();
             try
             {
                 if (id != null)
@@ -220,7 +223,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 if (jobApplicationModel != null && id != null)
                 {
                     //getting candidate schedules
-                    model = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
+                    CandidateViewModel model = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
 
                     //pushing candidate schedules to custom scheudules in job applicationViewmodel for view.
 
@@ -235,20 +238,9 @@ namespace RecruitmentPortal.WebApp.Controllers
                             List<UserModel> listOfUser = getInterviewerNames(schedule.ID);
                             schedule.InterviewerNames = listOfUser;
                             schedule.statusName = Enum.GetName(typeof(StatusType), schedule.status);
+                            schedule.roundName = Enum.GetName(typeof(RoundType), schedule.round);
                         }
                     }
-                    //getting candidate name
-                    jobApplicationModel.candidateName = getCandidateNameById(jobApplicationModel.candidateId);
-                    //getting position
-                    jobApplicationModel.position = getPositionByCandidateId(jobApplicationModel.candidateId);
-
-                    //----------riddhi--
-                    //getting job-role
-                    jobApplicationModel.job_Role = getJobRoleByCandidateId(jobApplicationModel.candidateId);
-                    //getting applied-date
-                    jobApplicationModel.date = model.apply_date;
-                    jobApplicationModel.candidate = model;
-                    jobApplicationModel.joining_date = DateTime.Now;
                 }
 
                 return Json(new { data = jobApplicationModel.Schedules });
