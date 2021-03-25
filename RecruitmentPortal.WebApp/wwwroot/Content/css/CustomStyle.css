@@ -111,3 +111,33 @@
     background: #000000;
     border-left-color: #f39c12;
 }
+
+.pt-0 {
+    float: right;
+    color: red;
+}
+
+@media screen and (min-width: 360px) {
+    .pt-0 {
+        margin-right: 146px;
+        -webkit-line-break: after-white-space;
+    }
+}
+
+@media screen and (min-width: 480px) {
+    .pt-0 {
+        margin-left: 100px;
+    }
+}
+
+@media screen and (min-width: 720px) {
+    .pt-0 {
+        margin-left: 150px;
+    }
+}
+
+@media screen and (min-width: 1080px) {
+    .pt-0 {
+        margin-left: 300px;
+    }
+}

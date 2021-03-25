@@ -58,9 +58,9 @@
 
                             @if (Model.Schedules == null)
                             {
-                            <a href='@Url.Action("Index","Schedules", new { id = Model.EncryptedCandidateId })' class="btn btn-primary btn-sm">
-                                Start Scheduling
-                            </a>
+                                <a href='@Url.Action("Index","Schedules", new { id = Model.EncryptedCandidateId })' class="btn btn-primary btn-sm">
+                                    Start Scheduling
+                                </a>
                             }
                             else
                             {
@@ -81,6 +81,9 @@
 
                             <a class="btn btn-primary btn-sm" onclick="loadPartialView('@Model.EncryptedCandidateId')">
                                 Reject
+                            </a>
+                            <a href='@Url.Action("AllApplications","Candidate")' class="btn btn-primary btn-sm">
+                                Cancel
                             </a>
                         </div>
                     </div>
@@ -273,7 +276,6 @@
             month = '0' + month.toString();
         if (day < 10)
             day = '0' + day.toString();
-        debugger;
         var maxDate = year + '-' + month + '-' + day;
         $('#demo').attr('min', maxDate);
     });
