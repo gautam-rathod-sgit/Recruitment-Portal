@@ -205,6 +205,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter OTP.
+        /// </summary>
+        public static string EnterOTP {
+            get {
+                return ResourceManager.GetString("EnterOTP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expected CTC.
         /// </summary>
         public static string ExpectedCTC {

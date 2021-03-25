@@ -1,6 +1,5 @@
-﻿@model RecruitmentPortal.WebApp.ViewModels.ResetPasswordModel
-@using RecruitmentPortal.WebApp.Resources
-@using RecruitmentPortal.WebApp.Helpers
+﻿@using RecruitmentPortal.WebApp.Resources
+@model RecruitmentPortal.WebApp.ViewModels.OTPViewModel
 @{
     Layout = null;
 }
@@ -33,37 +32,28 @@
                 </a>
             </div>
             <div class="login-logo">
-                <b>@Labels.ResetPassword</b>
+                <b>@Labels.EnterOTP</b>
 
             </div>
-            <p class="lead"></p></p>
-            @using (Html.BeginForm("ResetPassword", "Login", FormMethod.Post, new { @autocomplete = "off", @role = "form" }))
+            @using (Html.BeginForm("OtpViewPost", "Home", FormMethod.Post, new { @autocomplete = "off" }))
             {
-                @Html.HiddenFor(m => m.Token)
-                @Html.HiddenFor(m => m.Email)
-
+                @Html.HiddenFor(m => m.token)
+                @Html.HiddenFor(m => m.email)
                 <div class="form-group has-feedback has-feedback-left">
-                    @Html.TextBoxFor(m => m.Password, new { @type = "password", @placeholder = "New Password", @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Password)
-                    <div class="form-control-feedback">
-                        <i class="fa fa-envelope text-muted"></i>
-                    </div>
-                </div>
-                <div class="form-group has-feedback has-feedback-left">
-                    @Html.TextBoxFor(m => m.ConfirmPassword, new { @type = "password", @placeholder = "Confirm New Password", @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.ConfirmPassword)
-                    <div class="form-control-feedback">
+                    @Html.TextBoxFor(x => x.otp, "{0:#.#}", new { @class = "form-control", @type = "number", @id = "token_input" })
+                    @Html.ValidationMessageFor(x => x.otp)
+                    <div class="form-control">
                         <i class="fa fa-envelope text-muted"></i>
                     </div>
                 </div>
                 <div class="social-auth-links text-center">
                     <button type="submit" class="btn btn-block" style="background-color:#f58634;color: white;font-size: 18px;">
-                        Save <i class="fa fa-arrow-circle-right"></i>
+                        Submit <i class="fa fa-arrow-circle-right"></i>
                     </button>
                 </div>
                 <div class="social-auth-links text-center">
                     <a href='@Url.Action("Login","Login")' class="btn btn-block btn-secondary">
-                        Back To Login
+                        Back
                         <i class="fa fa-arrow-circle-left"></i>
                     </a>
                 </div>
@@ -73,3 +63,25 @@
     <partial name="AdminLTE/_Scripts" />
 </body>
 </html>
+
+
+@*<script type="text/javascript">
+    var data = @Model.token;
+    $("#otpform").submit(function (event) {
+        debugger;
+        if ($("#otp").val() == data) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Content("~/")' + "Home/EmailConfirmation",
+                data: { email_ID: "@Model.email" }
+            });
+        } else {
+            debugger;
+            $("#otp").val('');
+            $("#otp").after('<span class="field-validation-error" id="otp" role="alert">Invalid OTP.</span>');
+            event.preventDefault();
+        }
+       
+    });
+
+</script>*@

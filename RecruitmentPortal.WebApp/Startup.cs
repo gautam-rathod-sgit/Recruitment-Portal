@@ -65,7 +65,7 @@ namespace RecruitmentPortal.WebApp
 
             //for timspan of token
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
-            opt.TokenLifespan = TimeSpan.FromSeconds(30));
+            opt.TokenLifespan = TimeSpan.FromHours(1));
 
             //email
             services.Configure<SMTPConfigModel>(Configuration.GetSection("SMTPConfig"));

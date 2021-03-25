@@ -26,8 +26,8 @@ namespace RecruitmentPortal.WebApp.Services
         public async Task<JobPostViewModel> AddNewJobPost(JobPostViewModel model)
         {
             var mapped = _mapper.Map<JobPost>(model);
-            await _jobPostRepository.Add(mapped);
-            return model;
+            var newmodel = await _jobPostRepository.Add(mapped);
+            return _mapper.Map < JobPostViewModel > (newmodel) ;
         }
 
         public async Task DeleteJobPost(int id)

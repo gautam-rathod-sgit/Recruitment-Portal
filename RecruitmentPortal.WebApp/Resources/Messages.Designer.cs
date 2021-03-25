@@ -79,6 +79,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Candidate joining date is Passed.
+        /// </summary>
+        public static string CannotReject {
+            get {
+                return ResourceManager.GetString("CannotReject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current CTC is Required.
         /// </summary>
         public static string CurrentCTCRequired {
@@ -349,6 +358,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OTP is Required.
+        /// </summary>
+        public static string OTPRequired {
+            get {
+                return ResourceManager.GetString("OTPRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password Changed Successfully.
         /// </summary>
         public static string PasswordChanged {
@@ -588,6 +606,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string ValidHSCRequired {
             get {
                 return ResourceManager.GetString("ValidHSCRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valid OTP is Required.
+        /// </summary>
+        public static string ValidOTPRequired {
+            get {
+                return ResourceManager.GetString("ValidOTPRequired", resourceCulture);
             }
         }
         

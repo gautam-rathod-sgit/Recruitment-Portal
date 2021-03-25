@@ -841,12 +841,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             return PartialView("_RejectionReasonView", model);
         }
 
-        public async Task<IActionResult> RenderAcceptView(string id)
-        {
-            JobApplicationViewModel model = new JobApplicationViewModel();
-            model.ID = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
-            return PartialView("_AcceptApplicationView", model);
-        }
+      
 
         #endregion
     }

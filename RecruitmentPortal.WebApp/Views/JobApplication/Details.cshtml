@@ -3,30 +3,6 @@
 @using RecruitmentPortal.Infrastructure.Data.Enum
 @using RecruitmentPortal.WebApp.Resources
 
-@*@if (ViewData["msg"] != null)
-    {
-        <script>window.onload = function () { alert("Schedule @ViewData["msg"] for candidate already exist !!") }</script>
-    }
-    @if (ViewBag.timeConflict == true)
-    {
-        <script>window.onload = function () { alert("Schedule already exist with Date & Time !!") }</script>
-    }*@
-
-@*@{
-        string isFresher = "Fresher";
-        string date_format = "dd-MM-yyyy";
-        string all_mode = "All";
-
-    }*@
-
-<style type="text/css">
-    .required:after {
-        content: "*";
-        font-weight: bold;
-        color: red;
-    }
-</style>
-
  @*Modal for Accepting Application*@ 
 <div class="modal fade bg-gradient-orange center" id="acceptmodel" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -70,8 +46,6 @@
     <div class="row">
         <div class="col-sm-12">
             <!-- /.box -->
-            @*@using (Html.BeginForm("IndexPost", "Schedules", FormMethod.Post, new { @id = @Model.EncryptedCandidateId, @autocomplete = "off", @role = "form" }))
-            {*@
                 <div class="box box-default boxPad">
                     <div class="box-header">
 
@@ -101,11 +75,11 @@
                                     Download Resume
                                 </a>
                             }
-                            <a class="btn btn-primary btn-sm" data-toggle="#acceptmodel" data-target="#acceptmodel" onclick="loadAcceptPartialView('@Model.EncryptedJobId')">
+                            <a class="btn btn-primary btn-sm" onclick="loadAcceptPartialView('@Model.EncryptedJobId','@Model.EncryptedCandidateId')">
                                 Accept
                             </a>
 
-                            <a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@Model.EncryptedCandidateId')">
+                            <a class="btn btn-primary btn-sm" onclick="loadPartialView('@Model.EncryptedCandidateId')">
                                 Reject
                             </a>
                             <a href='@Url.Action("AllApplications","Candidate")' class="btn btn-primary btn-sm">
@@ -244,7 +218,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        bindDatatable();
+        //bindDatatable();
     });
 
     function bindDatatable() {
@@ -337,8 +311,9 @@
         });
     }
 
-    function loadAcceptPartialView(id) {
-        var url = '@Url.Action("RenderAcceptView", "Candidate")?id=' + id;
+    function loadAcceptPartialView(id, candidateId) {
+        debugger;
+        var url = '@Url.Action("RenderAcceptView", "JobApplication")?id=' + id + '&candidateId=' + candidateId;
         $('#_AcceptApplicationView').load(url, function () {
             $('#acceptmodel').modal({ show: true });
             $("#flag_Accepted").val(true);

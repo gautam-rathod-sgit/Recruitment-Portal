@@ -92,7 +92,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> AddNewJobPost(JobPostViewModel model)
+        public async Task<IActionResult> AddNewJobPost(JobPostViewModel model, string submit)
         {
             postlist = await _jobPostPageservices.getJobPost();
             try
@@ -106,7 +106,25 @@ namespace RecruitmentPortal.WebApp.Controllers
                     }
                 }
                 model.isActive = true;
-                await _jobPostPageservices.AddNewJobPost(model);
+                var LastAddedJob = await _jobPostPageservices.AddNewJobPost(model);
+
+
+                switch (submit)
+                {
+                    case "Save":
+                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Job updated Successfully.";
+                        return RedirectToAction("DetailsJobCategory", "JobCategory", new { id = RSACSPSample.EncodeServerName((model.JobCategoryId).ToString()) });
+
+                    case "Save & Continue":
+                        TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Job updated Successfully.";
+                        return RedirectToAction("UpdateJobPost", "JobPost", new
+                        {
+                            id = RSACSPSample.EncodeServerName((LastAddedJob.ID).ToString()),
+                            categoryId = RSACSPSample.EncodeServerName((LastAddedJob.JobCategoryId).ToString()),
+                            editMode = true,
+
+                        });
+                }
             }
             catch (Exception ex)
             {
