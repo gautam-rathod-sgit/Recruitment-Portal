@@ -176,32 +176,19 @@
         <div class="col-sm-12">
             <div class="box">
                 <div class="box-body">
-                    @*//@if (Model.Schedules.Count() > 0)
-                    {*@
                         <table id="datatable" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Round</th>
+                                    <th>Interview Round</th>
                                     <th>Interviewer</th>
                                     <th>Rating</th>
                                     <th>Remarks</th>
                                     <th>Date-Time</th>
                                     <th>Status</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
+                                    <th>Action</th>     
                                 </tr>
                             </thead>
                         </table>
-                    @*}
-                    else
-                    {
-                        <h4 class="text-gray text-center mt-4 text-capitalize">
-                            <strong>
-                                No Interview Schedules Yet.<br />
-                                Click on Start Scheduling.
-                            </strong>
-                        </h4>
-                    }*@
                 </div>
             </div>
            
@@ -214,8 +201,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-
-        //bindDatatable();
+        bindDatatable();
     });
 
     function bindDatatable() {
@@ -239,7 +225,16 @@
                 },
                 "columns": [
                     { "data": "roundName", "name": "roundName" },
-                    { "data": "interviewerNames", "name": "interviewerNames" },
+                    {
+                        "data": "interviewerNames",
+                        "mRender": function (data, type, row) {
+                            var action = '';
+                            $.each(row.interviewerNames, function (i) {
+                                action += '' + row.interviewerNames[i].name + '<br>';
+                            });
+                            return action;
+                        }
+                    },
                     { "data": "rating", "name": "rating" },
                     { "data": "remark", "name": "remark" },
                     { "data": "statusName", "name": "statusName" },
