@@ -19,7 +19,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [ScaffoldColumn(false)]
         public int ID { get; set; }
 
-        [DisplayName("Applyied Date")]
+        [Display(ResourceType = typeof(Labels), Name = "ApplyDate")]
         public DateTime apply_date { get; set; }
 
 

@@ -282,4 +282,7 @@
   <data name="ResetPassword" xml:space="preserve">
     <value>Reset Password</value>
   </data>
+  <data name="ApplyDate" xml:space="preserve">
+    <value>Applied Date</value>
+  </data>
 </root>
