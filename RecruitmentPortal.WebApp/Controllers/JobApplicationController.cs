@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using RecruitmentPortal.Core.Entities;
 using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.Infrastructure.Data.Enum;
@@ -196,7 +197,8 @@ namespace RecruitmentPortal.WebApp.Controllers
             int actualId = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
             jobApplicationModel = await _jobApplicationPage.getJobApplicationById(actualId);
             jobApplicationModel.EncryptedCandidateId = RSACSPSample.EncodeServerName(jobApplicationModel.candidateId.ToString());
-            jobApplicationModel.EncryptedJobId = RSACSPSample.EncodeServerName(jobApplicationModel.ID.ToString());
+            jobApplicationModel.EncryptedJobId = id;
+         
             jobApplicationModel.candidateName = getCandidateNameById(jobApplicationModel.candidateId);
             jobApplicationModel.position = getPositionByCandidateId(jobApplicationModel.candidateId);
             jobApplicationModel.job_Role = getJobRoleByCandidateId(jobApplicationModel.candidateId);
@@ -213,6 +215,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         public async Task<IActionResult> GetActiveAppDetailsList(string id)
         {
             JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
+            List<SchedulesViewModel> listofschedules = new List<SchedulesViewModel>();
             try
             {
                 if (id != null)
@@ -237,18 +240,23 @@ namespace RecruitmentPortal.WebApp.Controllers
                         {
                             List<UserModel> listOfUser = getInterviewerNames(schedule.ID);
                             schedule.InterviewerNames = listOfUser;
+                            schedule.EncryptedId = RSACSPSample.EncodeServerName((schedule.ID).ToString());
+                            schedule.EncryptedJobApplicationId = id;
                             schedule.statusName = Enum.GetName(typeof(StatusType), schedule.status);
                             schedule.roundName = Enum.GetName(typeof(RoundType), schedule.round);
                         }
                     }
                 }
+                listofschedules = jobApplicationModel.Schedules.ToList();
 
-                return Json(new { data = jobApplicationModel.Schedules });
+                var finallist = listofschedules.Select(m => new {m.EncryptedJobApplicationId, m.EncryptedId, m.roundName,m.rating,m.statusName,m.remark,m.datetime,m.InterviewerNames }).ToList() ;
+
+                return Json(new { data = finallist });
             }
             catch (Exception ex)
             {
                 TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
-                return Json(new { data = jobApplicationModel.Schedules });
+                return Json(new { data = listofschedules });
             }
 
         }
@@ -397,11 +405,15 @@ namespace RecruitmentPortal.WebApp.Controllers
             /// <param name="delete"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> UpdateScheduleOfJobApplication(string id, string scheduleId, bool to_schedule, bool remove = false)
+        public async Task<IActionResult> UpdateScheduleOfJobApplication(string id, string scheduleId, bool to_schedule,bool to_activeDetails = false, bool remove = false)
         {
             if (to_schedule)
             {
                 ViewBag.goback = to_schedule;
+            }
+            if (to_activeDetails)
+            {
+                ViewBag.gotoactive = to_activeDetails;
             }
             JobApplicationViewModel jobApplicationModel = new JobApplicationViewModel();
             CandidateViewModel model = new CandidateViewModel();
@@ -417,7 +429,16 @@ namespace RecruitmentPortal.WebApp.Controllers
                 if (remove == true)
                 {
                     await _schedulesPage.DeleteSchedule(schedule_ID);
-                    return RedirectToAction("Index", "Interviewer");
+                    if (to_activeDetails)
+                    {
+                        return RedirectToAction("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName((JobApplicationId).ToString()) });
+
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Interviewer");
+
+                    }
                 }
                 //for updating schedules
                 jobApplicationModel = await _jobApplicationPage.getJobApplicationById(JobApplicationId);

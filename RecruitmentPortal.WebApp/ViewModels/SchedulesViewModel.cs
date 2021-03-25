@@ -98,6 +98,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         //for candidate data
         public CandidateViewModel candidate { get; set; }
+        public string EncryptedJobApplicationId { get; set; }
 
     }
     public class UserModel
