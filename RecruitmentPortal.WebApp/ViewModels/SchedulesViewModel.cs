@@ -27,10 +27,11 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [Required(ErrorMessageResourceName = "JobTitleRequired", ErrorMessageResourceType = typeof(Messages))]
         public string position { get; set; }
 
-        [DataType(DataType.DateTime)]
+       
         [Display(ResourceType = typeof(Labels), Name = "DateTime")]
         [Required(ErrorMessageResourceName = "DateTimeRequired", ErrorMessageResourceType = typeof(Messages))]
-      //  [RegularExpression(CommonHelper.DateFormat, ErrorMessageResourceName = "DateFormat", ErrorMessageResourceType = typeof(Messages))]
+        [DisplayFormat( DataFormatString = "{dd-MM-yyyy}")]
+        //  [RegularExpression(CommonHelper.DateFormat, ErrorMessageResourceName = "DateFormat", ErrorMessageResourceType = typeof(Messages))]
         public DateTime datetime { get; set; }
 
         public string time { get; set; }
