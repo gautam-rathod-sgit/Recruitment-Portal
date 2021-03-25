@@ -40,7 +40,6 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy}")]
         public DateTime accept_date { get; set; }
 
-
         [Display(ResourceType = typeof(Labels), Name = "JoiningDate")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy}")]
         public DateTime joining_date { get; set; }
@@ -61,7 +60,12 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         //for data fetching
         public List<SchedulesViewModel> Schedules { get; set; }
+
+        [Display(ResourceType = typeof(Labels), Name = "CandidateName")]
+        [Required(ErrorMessageResourceName = "CandidateNameRequired", ErrorMessageResourceType = typeof(Messages))]
         public string candidateName { get; set; }
+
+        [Display(ResourceType = typeof(Labels), Name = "JobTitle")]
         public string position { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "JobRole")]

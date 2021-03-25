@@ -54,7 +54,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-                <h4 class="modal-title">Reject Reason:</h4>
+                <h4 class="modal-title">Fill Details:</h4>
             </div>
             <div class="modal-body" id="_RejectionReasonView">
 
@@ -108,21 +108,6 @@
                             <a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@Model.EncryptedCandidateId')">
                                 Reject
                             </a>
-
-                            @*<a href='@Url.Action("AllApplications","Candidate", new { id = RSACSPSample.EncodeServerName(Model.ID.ToString())})' class="btn btn-primary btn-sm">
-                            Cancel
-                        </a>*@
-
-
-                            @* Button trigger modal For Accepting Application*@
-                            <!--<button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#add-contact" onclick="openPopup()">
-                        Accept
-                    </button>-->
-                            @*  Button trigger modal For Rejecting Application*@
-                            <!--<button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#delete-contact" onclick="openPopupReject()">
-                        Reject
-                    </button>-->
-
                         </div>
                     </div>
                 </div>

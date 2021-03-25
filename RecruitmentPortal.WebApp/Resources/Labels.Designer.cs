@@ -79,6 +79,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Applied Date.
+        /// </summary>
+        public static string ApplyDate {
+            get {
+                return ResourceManager.GetString("ApplyDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Applying Through.
         /// </summary>
         public static string ApplyingThrough {
