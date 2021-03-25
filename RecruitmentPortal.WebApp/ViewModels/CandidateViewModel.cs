@@ -64,13 +64,11 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public string relevent_experience { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "CurrentCTC")]
-        [MinLength(1)]
         [RegularExpression(CommonHelper.RegexNumber, ErrorMessageResourceName = "ValidCTCRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "CurrentCTCRequired", ErrorMessageResourceType = typeof(Messages))]
         public double current_ctc { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "ExpectedCTC")]
-        [MinLength(1)]
         [RegularExpression(CommonHelper.RegexNumber, ErrorMessageResourceName = "ValidCTCRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "ExpectedCTCRequired", ErrorMessageResourceType = typeof(Messages))]
         public double expected_ctc { get; set; }
