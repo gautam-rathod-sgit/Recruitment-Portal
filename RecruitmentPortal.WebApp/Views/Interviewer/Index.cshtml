@@ -113,7 +113,11 @@
         window.location.href = '@Url.Action("ScheduleDetails", "Interviewer")?scheduleId=' + id + '&toCompletedList' + toCompletedList;
     }
     function Delete(id, remove = true) {
-        window.location.href = '@Url.Action("UpdateScheduleOfJobApplication", "JobApplication")?scheduleId=' + id + '&remove=' + remove;
+        bootbox.confirm("Are you ifre you want to delete this Booking record?", function (result) {
+            if (result === true) {
+                window.location.href = '@Url.Action("UpdateScheduleOfJobApplication", "JobApplication")?scheduleId=' + id + '&remove=' + remove;
+            }
+        }, 'popup-confirmation');
     }
 
 </script>
