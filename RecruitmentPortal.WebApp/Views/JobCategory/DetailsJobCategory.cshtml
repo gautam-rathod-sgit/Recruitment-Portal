@@ -7,7 +7,7 @@
 <style>
     .disableClick {
         background-color: #808080;
-        color:white;
+        color: white;
     }
 </style>
 
@@ -23,7 +23,7 @@
                         <a href='@Url.Action("AddNewJobPost","JobPost",new {id = Model.EncryptedId })' class="btn btn-primary  mr-1 ">Add Job</a>
                         <a href='@Url.Action("Index","JobCategory")' class="btn btn-primary">Cancel</a>
                     </div>
-                    
+
 
                 </div>
                 <!-- /.box-header -->
@@ -41,7 +41,7 @@
                                 <th>Skills</th>
                                 <th>Action</th>
                                 <th>Edit</th>
-                                
+
                             </tr>
                         </thead>
                     </table>
@@ -92,7 +92,7 @@
                         var iconClass = (row.isActive) ? '<i class="fa fa-check-square actionbutton"></i>' : '<i class="fa fa-times-circle actionbutton"></i>';
                         var action = '';
                         action = '<a href="javascript:void(0);" title="Activate/Deactivate" onclick="ChangeStatus(\'' + row.encryptedId + '\',\'' + row.categoryId + '\',\'' + row.isActive + '\')" class = "btn btn-primary btn-sm">' + iconClass + '</a>';
-                        
+
                         return action;
                     }
                 },
@@ -117,8 +117,12 @@
     function error() {
         notification("Error", '@Messages.EnableEntity', "error");
     }
-    function ChangeStatus(jobPostId,categoryID, status) {
+    function ChangeStatus(jobPostId, categoryID, status) {
+        bootbox.confirm("Are you sure, you want to Activate/Deactivate this record?", function (result) {
+            if (result === true) {
         window.location.href = '@Url.Action("UpdateJobPost", "JobPost")?id=' + jobPostId + '&categoryId=' + categoryID + '&status=' + status;
+            }
+        }, 'popup-confirmation');
     }
     function Edit(jobPostId, editMode = true) {
         window.location.href = '@Url.Action("UpdateJobPost", "JobPost")?id=' + jobPostId + '&editMode=' + editMode;
