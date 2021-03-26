@@ -249,7 +249,7 @@
                         "sClass": "text-center",
                         "mRender": function (data, type, row) {
                             var edit = '<a href="javascript:void(0);" title="Edit" onclick="Edit(\'' + row.encryptedId + '\',\'' + row.encryptedJobApplicationId +'\')"class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
-                            edit += '<a href="javascript:void(0);" title="Delete" onclick="Delete(\'' + row.encryptedId + '\',\'' + row.encryptedJobApplicationId +'\')" class = "btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>';
+                            edit += ' <a href="javascript:void(0);" title="Delete" onclick="Delete(\'' + row.encryptedId + '\',\'' + row.encryptedJobApplicationId +'\')" class = "btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>';
                             return edit;
                         }
                     }
@@ -262,7 +262,6 @@
 
 
     function Edit(id, jobApplicationId) {
-        window.location.href = '@Url.Action("UpdateScheduleOfJobApplication", "JobApplication")?id=' + id;
         window.location.href = '@Url.Action("UpdateScheduleOfJobApplication", "JobApplication")?scheduleId=' +
                     id + '&to_activeDetails=' + true + '&id=' + jobApplicationId;
     }
