@@ -65,23 +65,3 @@
 </html>
 
 
-@*<script type="text/javascript">
-    var data = @Model.token;
-    $("#otpform").submit(function (event) {
-        debugger;
-        if ($("#otp").val() == data) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Content("~/")' + "Home/EmailConfirmation",
-                data: { email_ID: "@Model.email" }
-            });
-        } else {
-            debugger;
-            $("#otp").val('');
-            $("#otp").after('<span class="field-validation-error" id="otp" role="alert">Invalid OTP.</span>');
-            event.preventDefault();
-        }
-       
-    });
-
-</script>*@
