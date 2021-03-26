@@ -77,6 +77,8 @@
                                         @Html.LabelFor(m => m.File, new { @class = "asterisk" })
                                         @Html.TextBoxFor(m => m.File, new { @type = "file", @id = "resume", @placeholder = "Experience" })
                                         @Html.ValidationMessageFor(m => m.File, "", new { @class = "text-danger" })
+                                        <div class="text-danger">Maximum allowed file size is <strong>10MB</strong>.</div>
+                                        <div class="text-danger">Allowed Extensions for file size is <strong> .jpeg, .jpg, .png .doc .pdf</strong>.</div>
                                     </div>
                                 </div>
 
@@ -174,17 +176,24 @@
         //for setting degree dropdown to starting index
         $("select#getDepts")[0].selectedIndex = 0;
 
-        //for only pdf and docx
+        //for restricting resume files on certain conditions
         $('#resume').on('change', function (e) {
-            myfile = $(this).val();
-            var ext = myfile.split('.').pop();
-            if (ext == "pdf" || ext == "PDF" || ext == "docx" || ext == "DOCX" || ext == "doc" || ext == "DOC"
-                || ext == "jpeg" || ext == "JPEG" || ext == "jpg" || ext == "JPG" || ext == "png" || ext == "PNG" || ext == "Jpg" || ext == "Png") {
-                var resumeok = true;
-            } else {
-                $('#resume').after('<p style="color:red">File needs to be PDF or DOCX.</p>');
-                alert("File must be pdf or docx or png or jpg or jpeg !!");
-                $("#resume").val('');
+            $file = $("#resume");
+            var $filePath = $.trim($file.val());
+            var f = this.files[0];
+                if (f.size > 10485760 || f.fileSize > 10485760) {
+                    //show an alert to the user
+                    notification("Error", '@Messages.MaxSize10MB', "error");
+                //reset file upload control
+                this.value = null;
+                return;
+        }
+            var $ext = $filePath.split(".").pop().toLowerCase();
+            var $allow = new Array("png", "jpg", "jpeg", "doc", "pdf");
+            if ($.inArray($ext, $allow) == -1) {
+                notification("Error", '@Messages.AllowFileExtension', "error");
+                this.value = null;
+                return;
             }
         });
 

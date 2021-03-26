@@ -61,6 +61,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allowed Extensions for file is .jpeg, .jpg, .png, .doc, .pdf.
+        /// </summary>
+        public static string AllowFileExtension {
+            get {
+                return ResourceManager.GetString("AllowFileExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allowed Extensions for file is .jpeg, .jpg, .png.
         /// </summary>
         public static string AllowImageExtensions {
@@ -327,6 +336,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string LocationRequired {
             get {
                 return ResourceManager.GetString("LocationRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum allowed file size is 10 MB.
+        /// </summary>
+        public static string MaxSize10MB {
+            get {
+                return ResourceManager.GetString("MaxSize10MB", resourceCulture);
             }
         }
         

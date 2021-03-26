@@ -315,4 +315,10 @@
   <data name="ValidOTPRequired" xml:space="preserve">
     <value>Valid OTP is Required</value>
   </data>
+  <data name="AllowFileExtension" xml:space="preserve">
+    <value>Allowed Extensions for file is .jpeg, .jpg, .png, .doc, .pdf</value>
+  </data>
+  <data name="MaxSize10MB" xml:space="preserve">
+    <value>Maximum allowed file size is 10 MB</value>
+  </data>
 </root>
