@@ -12,9 +12,10 @@ namespace RecruitmentPortal.WebApp.ViewModels
     {
         public string email { get; set; }
 
-        [RegularExpression(CommonHelper.RegexNumber, ErrorMessageResourceName = "ValidOTPRequired", ErrorMessageResourceType = typeof(Messages))]
+        [RegularExpression(CommonHelper.RegexNumber,ErrorMessageResourceName = "ValidOTPRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "OTPRequired", ErrorMessageResourceType = typeof(Messages))]
-        public double otp { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#.#}")]
+        public double? otp { get; set; }
         public double token { get; set; }
     }
 }
