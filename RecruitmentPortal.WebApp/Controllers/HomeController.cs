@@ -265,7 +265,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     if (item.email == model.email)
                     {
                         TempData[EnumsHelper.NotifyType.Error.GetDescription()] = model.email + " already exists !!";
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("ApplyForm", "Home");
                     }
                 }
             }
