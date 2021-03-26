@@ -50,6 +50,7 @@
                                 <th>Job Role</th>
                                 <th>Mode of Interview</th>
                                 <th>Interview Round</th>
+                                <th>Interviewer</th>
                                 <th>Date and Time</th>
                                 <th>Details</th>
                             </tr>
@@ -93,6 +94,16 @@
                 { "data": "jobRole", "name": "jobRole" },
                 { "data": "mode_of_interview", "name": "mode_of_interview" },
                 { "data": "roundName", "name": "roundName" },
+                {
+                    "data": "interviewerNames",
+                    "mRender": function (data, type, row) {
+                        var action = '';
+                        $.each(row.interviewerNames, function (i){
+                            action += '' + row.interviewerNames[i].name + '<br>';
+                        });
+                        return action;
+                    }
+                },
                 { "data": "datetime", "name": "datetime" },
 
                 {
