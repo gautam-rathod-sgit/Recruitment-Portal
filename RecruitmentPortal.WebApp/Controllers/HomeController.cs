@@ -123,64 +123,64 @@ namespace RecruitmentPortal.WebApp.Controllers
 
 
 
-        ///<summary>
-        ///This method is used for setting notification update to database
-        ///</summary>
-        ///<param name = "id" ></ param >
-        ///< returns ></ returns >
-        public async Task<IActionResult> NotificationDetails(int id)
-        {
-            JobApplicationViewModel jobApplication = new JobApplicationViewModel();
-            try
-            {
-                jobApplication = await _jobApplicationPage.getJobApplicationById(id);
-                CandidateViewModel candidateDetail = await _candidatePageServices.getCandidateById(jobApplication.candidateId);
-                jobApplication.candidate = candidateDetail;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+        /////<summary>
+        /////This method is used for setting notification update to database
+        /////</summary>
+        /////<param name = "id" ></ param >
+        /////< returns ></ returns >
+        //public async Task<IActionResult> NotificationDetails(int id)
+        //{
+        //    JobApplicationViewModel jobApplication = new JobApplicationViewModel();
+        //    try
+        //    {
+        //        jobApplication = await _jobApplicationPage.getJobApplicationById(id);
+        //        CandidateViewModel candidateDetail = await _candidatePageServices.getCandidateById(jobApplication.candidateId);
+        //        jobApplication.candidate = candidateDetail;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
 
-            return View(jobApplication);
-        }
+        //    return View(jobApplication);
+        //}
 
-        ///<summary>
-        ///SETS THE NOTIFIED FLAG OF SCHEDULE TO TRUE WHEN ADMIN CONFIRMS THE NOTIFICATION
-        ///</summary>
-        ///<param name = "id" ></ param >
-        ///< returns ></ returns >
-        public async Task<IActionResult> UpdateNotification(int id)
-        {
-            JobApplicationViewModel model = new JobApplicationViewModel();
-            try
-            {
-                //getting job application
-                model = await _jobApplicationPage.getJobApplicationById(id);
-                //setting flag
-                model.notified = true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+        /////<summary>
+        /////SETS THE NOTIFIED FLAG OF SCHEDULE TO TRUE WHEN ADMIN CONFIRMS THE NOTIFICATION
+        /////</summary>
+        /////<param name = "id" ></ param >
+        /////< returns ></ returns >
+        //public async Task<IActionResult> UpdateNotification(int id)
+        //{
+        //    JobApplicationViewModel model = new JobApplicationViewModel();
+        //    try
+        //    {
+        //        //getting job application
+        //        model = await _jobApplicationPage.getJobApplicationById(id);
+        //        //setting flag
+        //        model.notified = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
 
-            return RedirectToAction("UpdateNotificationPost", model);
+        //    return RedirectToAction("UpdateNotificationPost", model);
 
-        }
-        public async Task<IActionResult> UpdateNotificationPost(JobApplicationViewModel model)
-        {
-            try
-            {
-                await _jobApplicationPage.UpdateJobApplication(model);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+        //}
+        //public async Task<IActionResult> UpdateNotificationPost(JobApplicationViewModel model)
+        //{
+        //    try
+        //    {
+        //        await _jobApplicationPage.UpdateJobApplication(model);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
 
-            return RedirectToAction("AdminIndex", "Home", new { });
-        }
+        //    return RedirectToAction("AdminIndex", "Home", new { });
+        //}
 
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -197,6 +197,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             try
             {
                 plist = await _jobPostPage.getJobPost();
+                plist = plist.Where(x => x.isActive == true);
                 list = plist.ToList();
 
                 foreach (JobPostViewModel obj in list)
@@ -538,17 +539,17 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
         }
 
-        public List<string> noticePeriodList()
-        {
-            List<string> periodList = new List<string>();
-            periodList.Add("Select");
-            periodList.Add("Immediate");
-            periodList.Add("15 Days");
-            periodList.Add("30 Days");
-            periodList.Add("60 Days");
-            periodList.Add("90 Days");
-            return periodList;
-        }
+        //public List<string> noticePeriodList()
+        //{
+        //    List<string> periodList = new List<string>();
+        //    periodList.Add("Select");
+        //    periodList.Add("Immediate");
+        //    periodList.Add("15 Days");
+        //    periodList.Add("30 Days");
+        //    periodList.Add("60 Days");
+        //    periodList.Add("90 Days");
+        //    return periodList;
+        //}
         #endregion
 
 
