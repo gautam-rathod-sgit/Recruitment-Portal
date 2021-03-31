@@ -54,7 +54,7 @@
                                 <!-- /.form-group -->
                                 <div class="form-group mb-2">
                                     @Html.LabelFor(m => m.FileNew)
-                                    @Html.TextBoxFor(m => m.FileNew, new { @type = "file" })
+                                    @Html.TextBoxFor(m => m.FileNew, new { @type = "file", @id="filename" })
                                     @Html.ValidationMessageFor(m => m.FileNew)
                                     <div class="text-danger">Maximum allowed file size is <strong>3MB</strong>.</div>
                                     <div class="text-danger">Allowed Extensions for file size is <strong> .jpeg, .jpg, .png</strong>.</div>
@@ -95,6 +95,7 @@
 <script>
     $(document).ready(function () {
         $.validator.unobtrusive.parse($('#updateform'));
+        
     });
 
     $('#FileNew').on('change', function (e) {

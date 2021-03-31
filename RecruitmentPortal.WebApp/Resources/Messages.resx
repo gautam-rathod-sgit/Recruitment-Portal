@@ -321,4 +321,13 @@
   <data name="MaxSize10MB" xml:space="preserve">
     <value>Maximum allowed file size is 10 MB</value>
   </data>
+  <data name="CommitmentMode" xml:space="preserve">
+    <value>Commitment Mode is Required</value>
+  </data>
+  <data name="JoiningDate" xml:space="preserve">
+    <value>Joining Date is Required</value>
+  </data>
+  <data name="OfferedCTC" xml:space="preserve">
+    <value>Offered CTC is Required</value>
+  </data>
 </root>

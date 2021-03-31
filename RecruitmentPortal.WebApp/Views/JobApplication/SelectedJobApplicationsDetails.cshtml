@@ -124,72 +124,75 @@
 
                     }
 
-                    <div class="box-tools pull-right">
+                <div class="box-tools pull-right">
 
-                        @if (Model.status == status_Complete)
+                    @if (Model.status == status_Complete)
+                    {
+                        @if (!Model.notified)
                         {
-                            @if (!Model.notified)
-                            {
 
 
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm mr-2" data-toggle="modal" data-target="#edit-date">
-                                    Edit
-                                </button>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary btn-sm mr-2" data-toggle="modal" data-target="#edit-date">
+                                Edit
+                            </button>
 
-                                <!-- Button trigger modal For Rejecting Application-->
-                                <button type="button" class="btn btn-primary btn-sm mr-2" data-toggle="#delete-contact" data-target="#delete-contact" onclick="openPopupReject()">
-                                    Reject
-                                </button>
+                            <!-- Button trigger modal For Rejecting Application-->
+                            <button type="button" class="btn btn-primary btn-sm mr-2" data-toggle="#delete-contact" data-target="#delete-contact" onclick="openPopupReject()">
+                                Reject
+                            </button>
 
-                                <a asp-action="ConfirmJobApplication" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-primary btn-sm mr-3">
-                                    Confirm
-                                </a>
+                            @*<a asp-action="ConfirmJobApplication" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-primary btn-sm mr-3">
+                                Confirm
+                            </a>*@
+                            <a onclick="Confirm('@RSACSPSample.EncodeServerName((Model.ID).ToString())')" class="btn btn-primary btn-sm mr-3">Confirm</a>
 
-                            }
-                            else
-                            {
 
-                                @*<h4 class="text-red center pull-left" >Already Notified! </h4>*@
-                                @*<button class="btn btn-secondary btn-sm mr-1">
-                                        Edit
-                                    </button>
-                                    <button class="btn btn-secondary btn-sm mr-1">
-                                        Reject
-                                    </button>
-                                    <button class="btn btn-primary btn-sm mr-1">
-                                        Notified
-                                    </button>*@
-
-                            }
-                            @if (ViewBag.toAdminIndex != null || ViewBag.toAdminIndex == true)
-                            {
-
-                                <a asp-action="AdminIndex" asp-controller="Account" class="btn btn-primary btn-sm ">Cancel</a>
-
-                            }
-                            else
-                            {
-
-                                <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Accepted" class="btn btn-primary btn-sm ">Cancel</a>
-
-                            }
                         }
-                        @*Rejected application data*@
-                        @if (Model.status == status_Rejected)
+                        else
                         {
-                            <a asp-action="ReOpenJobApplication" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-primary btn-sm mr-3">
-                                Re-open
-                            </a>
-                            <a asp-action="Download" asp-controller="Candidate" class="btn btn-primary btn-sm mr-3"
-                               asp-route-filename="@Model.candidate.resume">
-                                Download Resume
-                            </a>
-                            <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-primary btn-sm">Cancel</a>
+
+                            @*<h4 class="text-red center pull-left" >Already Notified! </h4>*@
+                            @*<button class="btn btn-secondary btn-sm mr-1">
+                    Edit
+                </button>
+                <button class="btn btn-secondary btn-sm mr-1">
+                    Reject
+                </button>
+                <button class="btn btn-primary btn-sm mr-1">
+                    Notified
+                </button>*@
+
                         }
+                        @if (ViewBag.toAdminIndex != null || ViewBag.toAdminIndex == true)
+                        {
+
+                            <a asp-action="AdminIndex" asp-controller="Account" class="btn btn-primary btn-sm ">Cancel</a>
+
+                        }
+                        else
+                        {
+
+                            <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode="Accepted" class="btn btn-primary btn-sm ">Cancel</a>
+
+                        }
+                    }
+                    @*Rejected application data*@
+                    @if (Model.status == status_Rejected)
+                    {
+                        @*<a asp-action="ReOpenJobApplication" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-primary btn-sm mr-3">
+                Re-open
+            </a>*@
+                        <a onclick="Reopen('@RSACSPSample.EncodeServerName((Model.ID).ToString())')" class="btn btn-primary btn-sm mr-3">Re-open</a>
+                        <a asp-action="Download" asp-controller="Candidate" class="btn btn-primary btn-sm mr-3"
+                           asp-route-filename="@Model.candidate.resume">
+                            Download Resume
+                        </a>
+                        <a asp-action="AllApplications" asp-controller="Candidate" asp-route-Application_mode=all_mode class="btn btn-primary btn-sm">Cancel</a>
+                    }
 
 
-                    </div>
+                </div>
                 </div>
             </div>
 
@@ -425,6 +428,21 @@
     }
      function error() {
         notification("Error", '@Messages.CannotReject', "error");
+    }
+
+    function Reopen(id) {
+        bootbox.confirm("Are you sure? Do you want to re-open this candidate's application?", function (result) {
+            if (result === true) {
+        window.location.href = '@Url.Action("ReOpenJobApplication", "JobApplication")?id=' + id;
+            }
+        }, 'popup-confirmation');
+    }
+     function Confirm(id) {
+        bootbox.confirm("Are you sure? Do you want to Confirm this candidate's application?", function (result) {
+            if (result === true) {
+        window.location.href = '@Url.Action("ConfirmJobApplication", "JobApplication")?id=' + id;
+            }
+        }, 'popup-confirmation');
     }
 
 </script>

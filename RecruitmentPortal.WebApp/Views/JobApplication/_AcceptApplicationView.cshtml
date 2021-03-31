@@ -24,6 +24,7 @@
             @Html.RadioButtonFor(m => m.commitment_mode, "Documents", new { @id = "doc" })
             @Html.Label(" Documents")
         </div>
+        @Html.ValidationMessageFor(model => model.commitment_mode, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">

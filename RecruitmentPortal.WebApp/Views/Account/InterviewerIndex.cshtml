@@ -80,6 +80,7 @@
         $('#datatable').DataTable({
             lengthChange: true,
             searching: true,
+            columnDefs: [{ "targets": 3, "type": "date-eu" }],
             ordering: false,
             lengthMenu: [[5, 10, 25, 50, -1], [5,10, 25, 50, "All"]],
             paging: true,
@@ -89,7 +90,7 @@
             responsive: true,
             "bDestroy": true,
             "ajax": {
-                "url": "@Url.Action("getAdminIndexScheduleData", "Account")",
+                "url": "@Url.Action("getInterviewIndexScheduleData", "Account")",
                 "type": "GET",
                 "data": {},
                 "datatype": "json"

@@ -97,6 +97,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Commitment Mode is Required.
+        /// </summary>
+        public static string CommitmentMode {
+            get {
+                return ResourceManager.GetString("CommitmentMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current CTC is Required.
         /// </summary>
         public static string CurrentCTCRequired {
@@ -331,6 +340,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Joining Date is Required.
+        /// </summary>
+        public static string JoiningDate {
+            get {
+                return ResourceManager.GetString("JoiningDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location is Required.
         /// </summary>
         public static string LocationRequired {
@@ -372,6 +390,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         public static string NoticePeriodRequired {
             get {
                 return ResourceManager.GetString("NoticePeriodRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offered CTC is Required.
+        /// </summary>
+        public static string OfferedCTC {
+            get {
+                return ResourceManager.GetString("OfferedCTC", resourceCulture);
             }
         }
         

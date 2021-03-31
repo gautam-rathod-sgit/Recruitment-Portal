@@ -42,14 +42,20 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         [Display(ResourceType = typeof(Labels), Name = "JoiningDate")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy}")]
+        [Required(ErrorMessageResourceName = "JoiningDate", ErrorMessageResourceType = typeof(Messages))]
         public DateTime joining_date { get; set; }
 
 
         [Display(ResourceType = typeof(Labels), Name = "CommitmentMode")]
+        [Required(ErrorMessageResourceName = "CommitmentMode", ErrorMessageResourceType = typeof(Messages))]
         public string commitment_mode { get; set; }
+
         [Display(ResourceType = typeof(Labels), Name = "OfferedCTC")]
+        [Required(ErrorMessageResourceName = "OfferedCTC", ErrorMessageResourceType = typeof(Messages))]
         public string offered_ctc { get; set; }
+
         [Display(ResourceType = typeof(Labels), Name = "Remark")]
+        [Required(ErrorMessageResourceName = "RemarkRequired", ErrorMessageResourceType = typeof(Messages))]
         public string remarks { get; set; }
         [Display(ResourceType = typeof(Labels), Name = "AllRounds")]
         public string allRounds { get; set; }

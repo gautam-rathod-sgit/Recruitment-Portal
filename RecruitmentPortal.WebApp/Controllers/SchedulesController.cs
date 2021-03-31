@@ -74,6 +74,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     var job_ID = _dbContext.JobPostCandidate.Where(x => x.candidate_Id == decrypted_id).FirstOrDefault().job_Id;
                     model.position = _dbContext.JobPost.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).job_title;
                     model.EncryptedId = id;
+                    model.EncryptedJobApplicationId = RSACSPSample.EncodeServerName((model.jobAppId).ToString());
                     //getting dropdown of AspNetUsers from DB
                 }
             }
@@ -143,7 +144,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     SchedulesUsersViewModel newModel = new SchedulesUsersViewModel()
                     {
                         scheduleId = latestRecord.ID,
-                        UserId = item
+                        UserId = GetUserIdByName(item)
                     };
                     await _schedulesUsersPage.AddNewSchedulesUsers(newModel);
                 }
@@ -151,7 +152,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     case "Save":
                         TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Schedule updated Successfully.";
-                        return RedirectToAction("Details", "JobApplication", new { id = latestRecord.EncryptedId });
+                        return RedirectToAction("Details", "JobApplication", new { id = model.EncryptedJobApplicationId });
 
                     case "Save & Continue":
                         TempData[EnumsHelper.NotifyType.Success.GetDescription()] = "Schedule updated Successfully.";
@@ -231,7 +232,10 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             return interviewer_names;
         }
-
+        public string GetUserIdByName(string name)
+        {
+            return _userManager.FindByNameAsync(name).Result.Id;
+        }
         #endregion
 
 

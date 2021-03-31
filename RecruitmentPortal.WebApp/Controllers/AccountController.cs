@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -312,7 +313,23 @@ namespace RecruitmentPortal.WebApp.Controllers
                     model.UserName = user.UserName;
                     model.position = user.position;
                     model.skype_id = user.skype_id;
+                    //if (user.file != null)
+                    //{
+                    //    model.file = user.file;
+                    //}
+                    //if (user.file == null)
+                    //    return Content("filename not present");
 
+                    //var newname = user.file.Split("-")[0];
+                    //var extension = user.file.Split(".")[1];
+                    //newname += "."+extension;
+                    //var path = Path.Combine(
+                    //Directory.GetCurrentDirectory(), "wwwroot" + @"\Files", newname);
+
+                    //using (var stream = System.IO.File.OpenRead(path))
+                    //{
+                    //    model.FileNew = new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name));
+                    //}
                     //if (user.file != null)
                     //{
                     //    var path = Path.Combine(
@@ -333,6 +350,34 @@ namespace RecruitmentPortal.WebApp.Controllers
             }
             return View(model);
         }
+        /// <summary>
+        /// This method is a part of Download method. It restricts the resume that it should only in form of .pdf/.doc/.docx
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
+        /// <summary>
+        /// This method is a part of Download method. It restricts the resume that it should only in form of .pdf/.doc/.docx
+        /// </summary>
+        /// <returns></returns>
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+            {".pdf", "application/pdf"},
+            {".doc", "application/vnd.ms-word"},
+            {".docx", "application/vnd.ms-word"},
+            {".jpeg", "image/jpeg"},
+            {".jpg", "image/jpeg"},
+            {".png", "image/png"}
+            };
+        }
+
 
         /// <summary>
         /// This method works for Registering the User [POST- Send Data to Database(After the form getting filled)]
@@ -414,20 +459,24 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     //File details fetching
                     //create a place in wwwroot for storing uploaded files
-                    var uploads = Path.Combine(_environment.WebRootPath, "Files");
-                    string extension = Path.GetExtension(model.FileNew.FileName);
-                    var basename = Path.Combine(Path.GetDirectoryName(model.FileNew.FileName),
-                                Path.GetFileNameWithoutExtension(model.FileNew.FileName));
-                    if (model.FileNew != null)
+                    if(model.FileNew != null)
                     {
-                        using (var fileStream = new FileStream(Path.Combine(uploads, model.FileNew.FileName), FileMode.Create))
+                        var uploads = Path.Combine(_environment.WebRootPath, "Files");
+                        string extension = Path.GetExtension(model.FileNew.FileName);
+                        var basename = Path.Combine(Path.GetDirectoryName(model.FileNew.FileName),
+                                    Path.GetFileNameWithoutExtension(model.FileNew.FileName));
+                        if (model.FileNew != null)
                         {
-                            await model.FileNew.CopyToAsync(fileStream);
+                            using (var fileStream = new FileStream(Path.Combine(uploads, model.FileNew.FileName), FileMode.Create))
+                            {
+                                await model.FileNew.CopyToAsync(fileStream);
+                            }
+                            Guid gid = Guid.NewGuid();
+                            string uniquefilename = basename + "-" + gid + extension;
+                            model.file = uniquefilename;
                         }
-                        Guid gid = Guid.NewGuid();
-                        string uniquefilename = basename + "-" + gid + extension;
-                        model.file = uniquefilename;
                     }
+                    
                     if (ModelState.IsValid)
                     {
 

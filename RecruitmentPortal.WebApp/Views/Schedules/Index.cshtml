@@ -34,6 +34,8 @@
 
                                 @Html.HiddenFor(m => m.ID)
                                 @Html.HiddenFor(m => m.candidateId)
+                                @Html.HiddenFor(m => m.EncryptedId)
+                                @Html.HiddenFor(m => m.EncryptedJobApplicationId)
 
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.candidate_name, new { @class = "asterisk" })

@@ -20,6 +20,21 @@ namespace RecruitmentPortal.WebApp.Helpers
                 return _dbContext.Degree.Where(m => m.isActive).OrderBy(x => x.ID).ToList();
             }
         }
+        //public static SelectList GetUserList()
+        //{
+        //    using (RecruitmentPortalDbContext _dbContext = BaseContext.GetDbContext())
+        //    {
+        //        var enumData = (from user in _dbContext.Users
+        //                        select new
+        //                        {
+        //                            UserId = user.Id,
+        //                            Username = user.UserName
+        //                        }).ToList();
+        //        return new SelectList(enumData, "UserId", "Username");
+        //    }
+        //}
+
+
 
         public static SelectList GetReferenceTypeList()
         {
