@@ -86,7 +86,7 @@
                         </a>
                     </div>
                 </div>
-            </div>s
+            </div>
 
             <!-- /.box-header -->
 
@@ -97,56 +97,56 @@
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     @Html.LabelFor(m => m.name)
-                                    @Html.TextBoxFor(m => m.name, new { @placeholder = "Candidate name", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.name, new { @placeholder = "Candidate name", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.name)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-3">
                                     @Html.LabelFor(m => m.email)
-                                    @Html.TextBoxFor(m => m.email, new { @placeholder = "Email", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.email, new { @placeholder = "Email", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.email)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-3">
                                     @Html.LabelFor(m => m.phone)
-                                    @Html.TextBoxFor(m => m.phone, new { @placeholder = "Phone", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.phone, new { @placeholder = "Phone", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.phone)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-3">
                                     @Html.LabelFor(m => m.dob)
-                                    @Html.TextBoxFor(m => m.dob, new { @placeholder = "Date of Birth", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.dob, "{0:dd/MM/yyyy}", new { @placeholder = "Date of Birth", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.dob)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-2">
                                     @Html.LabelFor(m => m.Gender)
-                                    @Html.TextBoxFor(m => m.Gender, new { @placeholder = "Gender", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.Gender, new { @placeholder = "Gender", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.Gender)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-3">
                                     @Html.LabelFor(m => m.ssc_perc)
-                                    @Html.TextBoxFor(m => m.ssc_perc, new { @placeholder = "SSC percentage", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.ssc_perc, new { @placeholder = "SSC percentage", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.ssc_perc)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-2">
                                     @Html.LabelFor(m => m.hsc_perc)
-                                    @Html.TextBoxFor(m => m.hsc_perc, new { @placeholder = "HSC percentage", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.hsc_perc, new { @placeholder = "HSC percentage", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.hsc_perc)
                                 </div>
 
                                 <!-- /.form-group -->
                                 <div class="form-group mb-2">
                                     @Html.LabelFor(m => m.degree)
-                                    @Html.TextBoxFor(m => m.degree, new { @placeholder = "Degree", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.degree, new { @placeholder = "Degree", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.degree)
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.applying_through)
-                                    @Html.TextBoxFor(m => m.applying_through, new { @placeholder = "Applying Through", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.applying_through, new { @placeholder = "Applying Through", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.applying_through)
                                 </div>
                                 <!-- /.form-group -->
@@ -159,7 +159,7 @@
                                 {
                                     <div class="form-group mb-2">
                                         @Html.LabelFor(m => m.experience)
-                                        @Html.TextBoxFor(m => m.experience, new { @placeholder = "Experience", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.experience, new { @placeholder = "Experience", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.experience)
                                     </div>
                                     <!-- /.form-group -->
@@ -168,37 +168,37 @@
                                 {
                                     <div class="form-group mb-2">
                                         @Html.LabelFor(m => m.experience)
-                                        @Html.TextBoxFor(m => m.experience, new { @placeholder = "Experience", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.experience, new { @placeholder = "Experience", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.experience)
                                     </div>
                                     <!-- /.form-group -->
                                     <div class="form-group mb-2">
                                         @Html.LabelFor(m => m.total_experience)
-                                        @Html.TextBoxFor(m => m.total_experience, new { @placeholder = "Total Experience", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.total_experience, new { @placeholder = "Total Experience", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.total_experience)
                                     </div>
                                     <!-- /.form-group -->
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.relevent_experience)
-                                        @Html.TextBoxFor(m => m.relevent_experience, new { @placeholder = "Relevent Experience", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.relevent_experience, new { @placeholder = "Relevent Experience", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.relevent_experience)
                                     </div>
                                     <!-- /.form-group -->
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.current_ctc)
-                                        @Html.TextBoxFor(m => m.current_ctc, new { @placeholder = "Current CTC", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.current_ctc, new { @placeholder = "Current CTC", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.current_ctc)
                                     </div>
                                     <!-- /.form-group -->
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.expected_ctc)
-                                        @Html.TextBoxFor(m => m.expected_ctc, new { @placeholder = "Expected CTC", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.expected_ctc, new { @placeholder = "Expected CTC", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.expected_ctc)
                                     </div>
                                     <!-- /.form-group -->
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.notice_period)
-                                        @Html.TextBoxFor(m => m.notice_period, new { @placeholder = "Notice Period", @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.notice_period, new { @placeholder = "Notice Period", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.notice_period)
                                     </div>
                                     <!-- /.form-group -->

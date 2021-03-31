@@ -21,13 +21,11 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         //for start date of candidate's interview process
         [Display(ResourceType = typeof(Labels), Name = "StartDate")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy}")]
         public DateTime start_date { get; set; }
 
         //for application rejection constraints
 
         [Display(ResourceType = typeof(Labels), Name = "Rejectdate")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy}")]
         public DateTime rejection_date { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "RejectionReason")]

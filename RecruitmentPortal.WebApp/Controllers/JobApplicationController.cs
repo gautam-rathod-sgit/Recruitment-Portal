@@ -167,7 +167,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             model.round = 0;
             model.status = status_Pending;
             model.notified = false;
-            model.start_date = DateTime.Now;
+            model.start_date = Convert.ToDateTime(DateTime.Now.ToString("G"));
             try
             {
                 await _jobApplicationPage.AddJobApplications(model);
@@ -309,7 +309,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 if (model.flag_Rejected)
                 {
                     model.status = status_Rejected;
-                    model.rejection_date = DateTime.Now;
+                    model.rejection_date = Convert.ToDateTime(DateTime.Now.ToString("G"));
                     await _jobApplicationPage.UpdateJobApplication(model);
                     return RedirectToAction("SendRejectionMailToCandidate", "Candidate", new { id = model.candidateId });
                 }

@@ -78,7 +78,7 @@
                                         @Html.TextBoxFor(m => m.File, new { @type = "file", @id = "resume", @placeholder = "Experience" })
                                         @Html.ValidationMessageFor(m => m.File, "", new { @class = "text-danger" })
                                         <div class="text-danger">Maximum allowed file size is <strong>10MB</strong>.</div>
-                                        <div class="text-danger">Allowed Extensions for file size is <strong> .jpeg, .jpg, .png .doc .pdf</strong>.</div>
+                                        <div class="text-danger">Allowed Extensions for file size is <strong> .jpeg, .jpg, .png .doc .docx .pdf</strong>.</div>
                                     </div>
                                 </div>
 
@@ -99,7 +99,7 @@
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.dob, new { @class = "asterisk" })
-                                        @Html.TextBoxFor(m => m.dob, new { @type = "datetime", @placeholder = "Date & Time", @class = "form-control datepicker" })
+                                        @Html.TextBoxFor(m => m.dob, new { @type = "datetime", @placeholder = "Date of Birth", @class = "form-control datepicker" })
                                         @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left">
@@ -169,7 +169,8 @@
             endDate: '+0d',
             autoclose: true
         });
-        $('.datepicker').val(dateStr);
+        
+        
 
         $(".select2").select2();
 
@@ -189,7 +190,7 @@
                 return;
         }
             var $ext = $filePath.split(".").pop().toLowerCase();
-            var $allow = new Array("png", "jpg", "jpeg", "doc", "pdf");
+            var $allow = new Array("png", "jpg", "jpeg", "doc", "docx", "pdf");
             if ($.inArray($ext, $allow) == -1) {
                 notification("Error", '@Messages.AllowFileExtension', "error");
                 this.value = null;
@@ -212,6 +213,9 @@
             $("#noticePeriod").hide();
         });
     });
+
+    //Put it outside document.ready method for setting dob as empty on form load
+    $('.datepicker').val(dateStr);
 
      //for getting departments and dependent departments
     $('#getDepts').change(function () {

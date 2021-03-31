@@ -17,7 +17,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public int ID { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "JobCategory")]
-        [RegularExpression(CommonHelper.RegexText, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
+        [RegularExpression(CommonHelper.RegexAlphaNumSpecialChar, ErrorMessageResourceName = "ValidTextRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "JobCategoryRequired", ErrorMessageResourceType = typeof(Messages))]
         public string job_category_name { get; set; }
         public bool isActive { get; set; }
