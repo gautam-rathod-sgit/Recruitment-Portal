@@ -38,7 +38,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         [Display(ResourceType = typeof(Labels), Name = "DateofBirth")]
         [Required(ErrorMessageResourceName = "DateofBirthRequired", ErrorMessageResourceType = typeof(Messages))]
-        public DateTime dob { get; set; }
+        public DateTime?dob { get; set; }
 
 
         [Display(ResourceType = typeof(Labels), Name = "Phone")]
@@ -81,13 +81,13 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         [Display(ResourceType = typeof(Labels), Name = "HSC")]
         [Range(1, 100)]
-        [RegularExpression(CommonHelper.RegexNumber, ErrorMessageResourceName = "ValidSSCRequired", ErrorMessageResourceType = typeof(Messages))]
+        [RegularExpression(CommonHelper.RegexDecimal, ErrorMessageResourceName = "ValidSSCRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "HSCPercentageRequired", ErrorMessageResourceType = typeof(Messages))]
         public float hsc_perc { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "SSC")]
         [Range(1, 100)]
-        [RegularExpression(CommonHelper.RegexNumber, ErrorMessageResourceName = "ValidSSCRequired", ErrorMessageResourceType = typeof(Messages))]
+        [RegularExpression(CommonHelper.RegexDecimal, ErrorMessageResourceName = "ValidSSCRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "SSCPercentageRequired", ErrorMessageResourceType = typeof(Messages))]
         public float ssc_perc { get; set; }
 

@@ -313,7 +313,7 @@ namespace RecruitmentPortal.WebApp.Controllers
 
 
                 //assigning today's apply date 
-                model.apply_date = DateTime.Now;
+                model.apply_date = Convert.ToDateTime(DateTime.Now.ToString("g"));
 
                 //giving appying through
                 model.applying_through = Enum.GetName(typeof(ReferenceType), Convert.ToInt32(model.applying_through));
