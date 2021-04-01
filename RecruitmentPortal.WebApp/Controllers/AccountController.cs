@@ -89,6 +89,12 @@ namespace RecruitmentPortal.WebApp.Controllers
             ApplicationUser user = await _userManager.FindByIdAsync(id);
             try
             {
+                var isInUse = _dbContext.SchedulesUsers.Where(x => x.UserId == user.Id).Any();
+                if (isInUse)
+                {
+                    TempData[EnumsHelper.NotifyType.Error.GetDescription()] = "User is Active. Can't be Deleted..!!";
+                    return RedirectToAction("Index");
+                }
                 if (user != null)
                 {
                     //check if the user is not having any rounds scheduled for interview

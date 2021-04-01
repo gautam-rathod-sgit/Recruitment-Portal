@@ -512,7 +512,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             try
             {
                 modelList = await _candidatePageServices.getCandidates();
-                newList = modelList.ToList();
+                newList = modelList.OrderByDescending(m => m.apply_date).ToList();
                 foreach (var item in newList)
                 {
                     item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.ID.ToString()));
@@ -584,7 +584,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 modelList = await _jobApplicationPage.getJobApplications();
                 //    modelList = modelList.Where(x => x.status == status_Pending);
-                newlist = modelList.ToList();
+                newlist = modelList.OrderBy(m => m.start_date).ToList();
 
                 foreach (var data in newlist)
                 {

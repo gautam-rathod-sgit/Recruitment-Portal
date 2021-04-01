@@ -81,7 +81,7 @@
             lengthChange: true,
             searching: true,
             columnDefs: [{ "targets": 3, "type": "date-eu" }],
-            ordering: false,
+            //ordering: false,
             lengthMenu: [[5, 10, 25, 50, -1], [5,10, 25, 50, "All"]],
             paging: true,
             pagingType: "simple_numbers",
@@ -98,7 +98,6 @@
             "columns": [
                 { "data": "candidate_name", "name": "candidate_name" },
                 { "data": "position", "name": "position" },
-
                 { "data": "mode_of_interview", "name": "mode_of_interview" },
                 { "data": "roundName", "name": "roundName" }, 
                 { "data": "datetime", "name": "datetime" },
@@ -113,7 +112,7 @@
                     }
                 },
             ],
-            "order": [[0, "asc"]]
+            "order": [[4, "desc"]]
         });
     }
 
