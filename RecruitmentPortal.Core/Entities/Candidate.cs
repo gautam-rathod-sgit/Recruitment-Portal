@@ -25,6 +25,7 @@ namespace RecruitmentPortal.Core.Entities
         public float hsc_perc { get; set; }
         public float ssc_perc { get; set; }
         public string degree { get; set; }
+        public bool is_InitReject { get; set; }
         public string applying_through { get; set; }
         public string resume { get; set; }
 

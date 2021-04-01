@@ -1,7 +1,7 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.RejectReasonViewModel
 
 
-@using (Html.BeginForm("RejectApplicant", "Candidate", FormMethod.Post, new { id = "rejectform" }))
+@using (Html.BeginForm("RejectNewApplicant", "Candidate", FormMethod.Post, new { id = "rejectform" }))
 {
     <input type="hidden" value="@Model.CandidateId" name="CandidateId" id="CandidateId"/>
     <div class="form-group">

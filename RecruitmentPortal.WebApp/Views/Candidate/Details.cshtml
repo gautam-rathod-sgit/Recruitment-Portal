@@ -26,8 +26,8 @@
 <!--</div>-->
 <!-- Modal end -->
 
-<!-- Modal for Adding Rejection Reason -->
-<!--<div class="modal fade bg-gradient-orange center" id="rejectmodel" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+ @*Modal for Adding Rejection Reason*@ 
+<div class="modal fade bg-gradient-orange center" id="rejectmodel" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -39,12 +39,12 @@
             <div class="modal-body" id="_RejectionReasonView">
 
             </div>
-        </div>-->
-        <!-- /.modal-content -->
-    <!--</div>-->
-    <!-- /.modal-dialog -->
-<!--</div>-->
-<!-- Modal end -->
+        </div>
+         @*/.modal-content*@ 
+    </div>
+     @*/.modal-dialog*@ 
+</div>
+ @*Modal end*@ 
 
 <section class="content">
     <div class="row">
@@ -60,10 +60,13 @@
 
                     <div class="box-tools pull-right">
 
-                        @if (User.IsInRole("Admin") )
+                        @if (User.IsInRole("Admin"))
                         {
                             <a href='@Url.Action("AddNewJobApplications", "JobApplication",new { Cid = @Model.EncryptedId })' class="btn btn-primary btn-sm">
                                 Proceed
+                            </a>
+                            <a class="btn btn-primary btn-sm" onclick="loadPartialView('@Model.EncryptedId')">
+                                Reject
                             </a>
                         }
                         @if (Model.ID > 0)
@@ -74,12 +77,12 @@
                         }
 
                         @*<a class="btn btn-primary btn-sm" data-toggle="#acceptmodel" data-target="#acceptmodel" onclick="loadAcceptPartialView('@RSACSPSample.EncodeServerName(Model.ID.ToString())')">
-                            Accept
-                        </a>
-                        
-                        <a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@RSACSPSample.EncodeServerName(Model.ID.ToString())')">
-                            Reject
-                        </a>*@
+            Accept
+        </a>
+
+        <a class="btn btn-primary btn-sm" data-toggle="#rejectmodel" data-target="#rejectmodel" onclick="loadPartialView('@RSACSPSample.EncodeServerName(Model.ID.ToString())')">
+            Reject
+        </a>*@
 
                         <a href='@Url.Action("AllApplications","Candidate")' class="btn btn-primary btn-sm">
                             Cancel
@@ -251,14 +254,14 @@
    //     $('#rejectmodel').modal('show');
    // }
 
-    @*function loadPartialView(id) {
+    function loadPartialView(id) {
         var url = '@Url.Action("RenderRejectionView", "Candidate" )?id=' + id;
         $('#_RejectionReasonView').load(url, function () {
             $('#rejectmodel').modal({ show: true });
         });
     }
     
-    function loadAcceptPartialView(id) {
+    @*function loadAcceptPartialView(id) {
         var url = '@Url.Action("RenderAcceptView", "Candidate")?id=' + id;
         $('#_AcceptApplicationView').load(url, function () {
             $('#acceptmodel').modal({ show: true });

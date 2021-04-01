@@ -375,25 +375,33 @@ namespace RecruitmentPortal.WebApp.Controllers
         }
 
 
-       
-        
-        ////For Rejecting New Candidate Application without Proceeding it
-        //public async Task<IActionResult> RejectApplicant(int Cid)
-        //{
-        //    CandidateViewModel candidateModel = new CandidateViewModel();
-        //    int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(Cid.ToString()));
-        //    //int job_ID;
-        //    //string rejection_reason = null;
-        //    //  int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(model.CandidateId.ToString()));
-        //    candidateModel = await _candidatePageServices.getCandidateById(decrypted_key);
-        //    candidateModel.isRejected = true;
 
-        //    //job_ID = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId== model.CandidateId).ID;
-        //    //rejection_reason = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.ID == job_ID).rejection_reason;
 
-        //    return RedirectToAction("AllApplications", "Candidate");
-        //}
+        //For Rejecting New Candidate Application without Proceeding it
+        public async Task<IActionResult> RejectNewApplicant(RejectReasonViewModel model)
+        {
+            CandidateViewModel candidateModel = new CandidateViewModel();
+            if (model.CandidateId != null)
+            {
+                int decrypted_key = Convert.ToInt32(RSACSPSample.DecodeServerName(model.CandidateId));
+                candidateModel = await _candidatePageServices.getCandidateById(decrypted_key);
+                candidateModel.is_InitReject = true;
+            }
 
+            return RedirectToAction("UpdateCandidate", candidateModel);
+        }
+        public async Task<IActionResult> UpdateCandidate(CandidateViewModel model)
+        {
+            await _candidatePageServices.UpdateCandidate(model);
+            return RedirectToAction("SendRejectionMailToCandidate", "Candidate", new { id = model.ID });
+        }
+
+
+        /// <summary>
+        /// For Rejecting Active Job Application 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<IActionResult> RejectApplicant(RejectReasonViewModel model)
         {
             CandidateViewModel candidateViewModel = new CandidateViewModel();
@@ -439,7 +447,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 ViewData["error"] = "error";
             }
-            return RedirectToAction("AllApplications", "Candidate", new { Application_mode = status_Rejected });
+            return RedirectToAction("AllApplications", "Candidate");
         }
 
         /// <summary>
@@ -512,7 +520,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             try
             {
                 modelList = await _candidatePageServices.getCandidates();
-                newList = modelList.ToList();
+                newList = modelList.Where(x => x.is_InitReject == false).ToList();
                 foreach (var item in newList)
                 {
                     item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.ID.ToString()));
