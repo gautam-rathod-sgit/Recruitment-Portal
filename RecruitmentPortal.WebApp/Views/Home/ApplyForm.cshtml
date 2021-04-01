@@ -165,12 +165,12 @@
         
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
-            defaultDate: today,
+            //defaultDate: today,
             endDate: '+0d',
             autoclose: true
         });
         
-        
+        $('.datepicker').val('');
 
         $(".select2").select2();
 
@@ -214,6 +214,7 @@
         });
     });
 
+   
 
 
      //for getting departments and dependent departments
