@@ -24,13 +24,13 @@
                             {
 
 
-                                <a href='@Url.Action("ScheduleDetails", "Interviewer", new { scheduleId = Model.EncryptedId})' class="btn btn-primary">Cancel</a>
+                                <a href='@Url.Action("ScheduleDetails", "Interviewer", new { scheduleId = Model.jobAppId})' class="btn btn-primary">Cancel</a>
 
                             }
                             else
                             {
 
-                                <a href='@Url.Action("Details", "JobApplication", new { id = Model.EncryptedId})' class="btn btn-primary">Cancel</a>
+                                <a href='@Url.Action("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName(Model.jobAppId.ToString())})' class="btn btn-primary">Cancel</a>
 
                             }
                         </div>

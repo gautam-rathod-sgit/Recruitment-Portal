@@ -165,12 +165,12 @@
         var dateStr = currDate + "/" + currMonth + "/" + currYear;
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
-            defaultDate: today,
+            //defaultDate: today,
             endDate: '+0d',
             autoclose: true
         });
         
-        
+        $('.datepicker').val('');
 
         $(".select2").select2();
 
@@ -214,8 +214,7 @@
         });
     });
 
-    //Put it outside document.ready method for setting dob as empty on form load
-    $('.datepicker').val(dateStr);
+   
 
      //for getting departments and dependent departments
     $('#getDepts').change(function () {
