@@ -431,6 +431,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             OTPViewModel otpModel = new OTPViewModel();
             otpModel.email = model.email;
             otpModel.token = Convert.ToDouble(body);
+            otpModel.jobPostId = model.jobpostID;
 
             return RedirectToAction("otpView",otpModel);
         }

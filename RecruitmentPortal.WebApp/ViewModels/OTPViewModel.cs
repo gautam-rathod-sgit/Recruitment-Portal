@@ -17,5 +17,6 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#.#}")]
         public double? otp { get; set; }
         public double token { get; set; }
+        public int jobPostId { get; set; }
     }
 }
