@@ -197,7 +197,7 @@
             $('#src_2_datatable').DataTable({
                 lengthChange: true,
                 searching: true,
-                ordering: false,
+                //ordering: false,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
                 paging: true,
                 pagingType: "simple_numbers",
@@ -230,7 +230,7 @@
                         }
                     }
                 ],
-                "order": [[0, "asc"]]
+                "order": [[3, "desc"]]
             });
         }
         else if (applicationTypeName == "src_3_datatable") {
@@ -246,7 +246,7 @@
             $('#src_3_datatable').DataTable({
                 lengthChange: true,
                 searching: true,
-                ordering: false,
+                //ordering: true,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
                 paging: true,
                 pagingType: "simple_numbers",
@@ -287,7 +287,7 @@
                         }
                     }
                 ],
-                "order": [[0, "asc"]]
+                "order": [[3, "desc"]]
             });
         }
         else if (applicationTypeName == "src_4_datatable") {
@@ -303,7 +303,7 @@
             $('#src_4_datatable').DataTable({
                 lengthChange: true,
                 searching: true,
-                ordering: false,
+                //ordering: false,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
                 paging: true,
                 pagingType: "simple_numbers",
@@ -336,7 +336,7 @@
                         }
                     }
                 ],
-                "order": [[0, "asc"]]
+                "order": [[3, "desc"]]
             });
         }
         else {
@@ -352,7 +352,7 @@
             $('#src_1_datatable').DataTable({
                 lengthChange: true,
                 searching: true,
-                ordering: false,
+                //ordering: false,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
                 paging: true,
                 pagingType: "simple_numbers",
@@ -389,7 +389,7 @@
                         }
                     }
                 ],
-                "order": [[0, "asc"]]
+                "order": [[7, "desc"]]
             });
         }
     }
@@ -409,8 +409,8 @@
     }
 
     function reset() {
-        setInputValueById('srcApplicationType','');
-        setInputValueById('srcDegree','');
+        $("#srcApplicationType").val('').change();
+        $("#srcDegree").val('').change();
         setInputValueById('srcStartDate','');
         setInputValueById('srcEndDate', '');
         setLocalValue('srcAppType', '');

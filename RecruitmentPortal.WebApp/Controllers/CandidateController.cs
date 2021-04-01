@@ -592,7 +592,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 modelList = await _jobApplicationPage.getJobApplications();
                 //    modelList = modelList.Where(x => x.status == status_Pending);
-                newlist = modelList.ToList();
+                newlist = modelList.OrderBy(m => m.start_date).ToList();
 
                 foreach (var data in newlist)
                 {
@@ -641,14 +641,14 @@ namespace RecruitmentPortal.WebApp.Controllers
                 models = await _jobApplicationPage.getJobApplications();
                 models = models.Where(x => x.status == status_Complete);
                 //getting candidate name and job position with candidateId of JobApplication model
-                newlist = models.ToList();
+                newlist = models.OrderBy(m => m.joining_date).ToList();
                 foreach (var item in newlist)
                 {
                     item.EncryptedId = RSACSPSample.EncodeServerName(item.ID.ToString());
                     item.candidateName = getCandidateNameById(item.candidateId);
                     item.position = getPositionByCandidateId(item.candidateId);
                     item.job_Role = getJobRoleByCandidateId(item.candidateId);
-                    item.date = item.joining_date;
+                    //item.date = item.joining_date;
                 }
 
                 return Json(new { data = newlist });
