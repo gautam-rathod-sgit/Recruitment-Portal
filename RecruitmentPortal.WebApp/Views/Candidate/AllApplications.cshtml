@@ -246,7 +246,7 @@
             $('#src_3_datatable').DataTable({
                 lengthChange: true,
                 searching: true,
-                ordering: false,
+                //ordering: true,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
                 paging: true,
                 pagingType: "simple_numbers",
@@ -409,8 +409,8 @@
     }
 
     function reset() {
-        setInputValueById('srcApplicationType','');
-        setInputValueById('srcDegree','');
+        $("#srcApplicationType").val('').change();
+        $("#srcDegree").val('').change();
         setInputValueById('srcStartDate','');
         setInputValueById('srcEndDate', '');
         setLocalValue('srcAppType', '');

@@ -6,8 +6,10 @@
 
     <input type="hidden" value="@Model.ID" id="ID" name="ID" />
     <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
-    <input type="hidden" value="@Model.accept_date" id="accept_date" name="accept_date" />
-    <input type="hidden" value="@Model.start_date" id="start_date" name="start_date" />
+    @Html.HiddenFor(m => m.accept_date)
+    @Html.HiddenFor(m => m.start_date)
+    @*<input type="hidden" value="@Model.accept_date" id="accept_date" name="accept_date" />
+        <input type="hidden" value="@Model.start_date" id="start_date" name="start_date" />*@
     <input type="hidden" value="@Model.status" id="status" name="status" />
     <input type="hidden" value="@Model.notified" id="notified" name="notified" />
     <input type="hidden" value="@Model.commitment_mode" id="commitment_mode" name="commitment_mode" />
@@ -31,18 +33,16 @@
 
 <script>
     $(document).ready(function () {
-        $.validator.unobtrusive.parse($('#Editform'));
-
-        //for datepicker
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
             'startDate': new Date(),
             /*endDate: '+0d',*/    /*----This enables the feature that restricts the future dates----*/
             autoclose: true
         });
+        $.validator.unobtrusive.parse($('#Editform'));
     });
 
-    
+
 
     function checkFormValid() {
         var $form = $('form');
