@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace RecruitmentPortal.WebApp.Controllers
 {
-    public class SchedulesController : Controller
+    public class SchedulesController : BaseController
     {
         #region private variables
         private readonly ISchedulesPage _schedulesPage;

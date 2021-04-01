@@ -1,4 +1,5 @@
 ﻿@using RecruitmentPortal.WebApp.Resources
+@using RecruitmentPortal.WebApp.Helpers
 @model RecruitmentPortal.WebApp.ViewModels.OTPViewModel
 @{
     Layout = null;
@@ -49,7 +50,7 @@
                     </button>
                 </div>
                 <div class="social-auth-links text-center">
-                    <a href='@Url.Action("ApplyForm","Home")' class="btn btn-block btn-secondary">
+                    <a href='@Url.Action("ApplyForm","Home", new { id = RSACSPSample.EncodeServerName((Model.jobPostId).ToString()) })' class="btn btn-block btn-secondary">
                         Back
                         <i class="fa fa-arrow-circle-left"></i>
                     </a>

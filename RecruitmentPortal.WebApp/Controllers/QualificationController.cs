@@ -15,7 +15,7 @@ using System.Web;
 
 namespace RecruitmentPortal.WebApp.Controllers
 {
-    public class QualificationController : Controller
+    public class QualificationController : BaseController
     {
         #region private variables
 

@@ -267,6 +267,11 @@
                                         @Html.TextBoxFor(m => m.rejection_date, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.rejection_date)
                                     </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.rejection_reason)
+                                        @Html.TextBoxFor(m => m.rejection_reason, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
+                                        @Html.ValidationMessageFor(m => m.rejection_reason)
+                                    </div>
                                     @if (Model.listOfRounds.Count() > 0)
                                     {
                                         <div class="form-group">
