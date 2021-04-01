@@ -369,7 +369,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 model.job_Role = getJobRoleByCandidateId(model.candidateId);
                 model.interview_Status = _jobApplicationPage.getInterviewStatusForApplication(model.candidateId);
                 model.candidate = await _candidatePage.getCandidateById(model.candidateId);
-
+                model.EncryptedId = id;
                 //if(model.status == status_Rejected)
                 //{
                 model.listOfRounds = getListOfRounds(model.candidateId);
@@ -597,6 +597,13 @@ namespace RecruitmentPortal.WebApp.Controllers
             model.candidateId = Convert.ToInt32(RSACSPSample.DecodeServerName(candidateId));
             return PartialView("_AcceptApplicationView", model);
         }
+        public async Task<IActionResult> RenderEditPartialView(string id)
+        {
+            JobApplicationViewModel model = new JobApplicationViewModel();
+            model = await _jobApplicationPage.getJobApplicationById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
+            return PartialView("_EditJoiningDateView", model);
+        }
+
 
         //==================================================================================================================
 

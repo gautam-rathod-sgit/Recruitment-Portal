@@ -1,0 +1,54 @@
+﻿@model RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel
+
+
+@using (Html.BeginForm("UpdateJobApplicationPost", "JobApplication", FormMethod.Post, new { id = "Editform" }))
+{
+
+    <input type="hidden" value="@Model.ID" id="ID" name="ID" />
+    <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
+    <input type="hidden" value="@Model.accept_date" id="accept_date" name="accept_date" />
+    <input type="hidden" value="@Model.start_date" id="start_date" name="start_date" />
+    <input type="hidden" value="@Model.status" id="status" name="status" />
+    <input type="hidden" value="@Model.notified" id="notified" name="notified" />
+    <input type="hidden" value="@Model.commitment_mode" id="commitment_mode" name="commitment_mode" />
+    <input type="hidden" value="@Model.offered_ctc" id="offered_ctc" name="offered_ctc" />
+    <input type="hidden" value="@Model.remarks" id="remarks" name="remarks" />
+    <input type="hidden" value="true" id="flag_Edit" name="flag_Edit" />
+    <input type="hidden" value="@ViewBag.toAdminIndex" id="editFromMenu" name="editFromMenu" />
+
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.joining_date, new { @class = "asterisk" })
+        @Html.TextBoxFor(m => m.joining_date, new { @class = "form-control datepicker" })
+        @Html.ValidationMessageFor(model => model.joining_date)
+    </div>
+
+    <div class="modal-footer modal-footer2">
+        <button type="submit" class="btn btn-primary" onclick="return checkFormValid()">Save</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $.validator.unobtrusive.parse($('#Editform'));
+
+        //for datepicker
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            'startDate': new Date(),
+            /*endDate: '+0d',*/    /*----This enables the feature that restricts the future dates----*/
+            autoclose: true
+        });
+    });
+
+    
+
+    function checkFormValid() {
+        var $form = $('form');
+        if ($form.valid()) {
+            return true;
+        }
+        return false;
+    }
+</script>

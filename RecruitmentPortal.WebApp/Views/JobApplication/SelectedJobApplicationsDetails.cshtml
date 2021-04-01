@@ -8,7 +8,6 @@
     string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
     string status_Complete = Enum.GetName(typeof(JobApplicationStatus), 2);
     string status_Rejected = Enum.GetName(typeof(JobApplicationStatus), 3);
-
 }
 
 <!-- Modal for Edit Joining date -->
@@ -21,32 +20,8 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form asp-action="UpdateJobApplicationPost">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" value="@Model.ID" id="ID" name="ID" />
-                    <input type="hidden" value="@Model.candidateId" id="candidateId" name="candidateId" />
-                    <input type="hidden" value="@Model.accept_date" id="accept_date" name="accept_date" />
-                    <input type="hidden" value="@Model.start_date" id="start_date" name="start_date" />
-                    <input type="hidden" value="@Model.status" id="status" name="status" />
-                    <input type="hidden" value="@Model.notified" id="notified" name="notified" />
-                    <input type="hidden" value="@Model.commitment_mode" id="commitment_mode" name="commitment_mode" />
-                    <input type="hidden" value="@Model.offered_ctc" id="offered_ctc" name="offered_ctc" />
-                    <input type="hidden" value="@Model.remarks" id="remarks" name="remarks" />
-                    <input type="hidden" value="true" id="flag_Edit" name="flag_Edit" />
-                    <input type="hidden" value="@ViewBag.toAdminIndex" id="editFromMenu" name="editFromMenu" />
+            <div class="modal-body" id="_EditJoiningDateView">
 
-
-                    <div class="form-group mb-2">
-                        @Html.LabelFor(m => m.joining_date)
-                        @Html.TextBoxFor(m => m.joining_date, new { @type = "datetime", @placeholder = "Joining Date", @class = "form-control datepicker" })
-                        @Html.ValidationMessageFor(m => m.joining_date)
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" >Save</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -133,9 +108,9 @@
 
 
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary btn-sm mr-2" data-toggle="modal" data-target="#edit-date">
+                            <a class="btn btn-primary btn-sm" onclick="loadEditDatePartialView('@Model.EncryptedId')">
                                 Edit
-                            </button>
+                            </a>
 
                             <!-- Button trigger modal For Rejecting Application-->
                             <button type="button" class="btn btn-primary btn-sm mr-2" data-toggle="#delete-contact" data-target="#delete-contact" onclick="openPopupReject()">
@@ -143,8 +118,8 @@
                             </button>
 
                             @*<a asp-action="ConfirmJobApplication" asp-controller="JobApplication" asp-route-id="@RSACSPSample.EncodeServerName((Model.ID).ToString())" class="btn btn-primary btn-sm mr-3">
-                                Confirm
-                            </a>*@
+                    Confirm
+                </a>*@
                             <a onclick="Confirm('@RSACSPSample.EncodeServerName((Model.ID).ToString())')" class="btn btn-primary btn-sm mr-3">Confirm</a>
 
 
@@ -425,6 +400,10 @@
     function openPopupReject() {
         $("#Flag_Rejected").val(true);
         $('#delete-contact').modal('show');
+        $(".datepicker").datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+
     }
      function error() {
         notification("Error", '@Messages.CannotReject', "error");
@@ -443,6 +422,12 @@
         window.location.href = '@Url.Action("ConfirmJobApplication", "JobApplication")?id=' + id;
             }
         }, 'popup-confirmation');
+    }
+    function loadEditDatePartialView(id) {
+        var url = '@Url.Action("RenderEditPartialView", "JobApplication" )?id=' + id;
+        $('#_EditJoiningDateView').load(url, function () {
+            $('#edit-date').modal({ show: true });
+        });
     }
 
 </script>

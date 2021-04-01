@@ -162,7 +162,7 @@
         var currDate = today.getDate();
         var currMonth = today.getMonth();
         var currYear = today.getFullYear();
-        var dateStr = currDate + "/" + currMonth + "/" + currYear;
+        
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
             defaultDate: today,
@@ -214,8 +214,7 @@
         });
     });
 
-    //Put it outside document.ready method for setting dob as empty on form load
-    $('.datepicker').val(dateStr);
+
 
      //for getting departments and dependent departments
     $('#getDepts').change(function () {
@@ -224,7 +223,7 @@
         $.getJSON(url, { Id: ddlsource }, function (data) {
             if (data.length > 1) {
                 var dept_drop = '';
-                $('#SelectDept').remove(); //for removing if already existing dropdown exist of previous record
+                $('#SelectDept').remove(); //for removing if already existing dropdown of previous record
                 dept_drop += '<select id="SelectDept" name="SelectDept" class="form-control select2">';
                     for (var i = 0; i < data.length; i++) {
                         dept_drop += '<option value="' + data[i].value + '">' + data[i].text + '</option>';
@@ -235,10 +234,14 @@
             }
             else {
                     $("#DeptID").val(0);
-                    //$('.dept').nextAll('#SelectDept').remove();
+                //$('.dept').nextAll('#SelectDept').remove();S
                     $('#SelectDept').remove();
             }
         });
         setTimeout(function () { $('#SelectDept').select2(); }, 1000);
     });
+
+        ////Put it outside document.ready method for setting dob as empty on form load
+    //var dateStr = currDate + "/" + currMonth + "/" + currYear;
+    //$('.datepicker').val(dateStr);
 </script>

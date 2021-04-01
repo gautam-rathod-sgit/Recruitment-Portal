@@ -35,11 +35,9 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public DateTime date { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "AcceptDate")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy}")]
         public DateTime accept_date { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "JoiningDate")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy}")]
         [Required(ErrorMessageResourceName = "JoiningDate", ErrorMessageResourceType = typeof(Messages))]
         public DateTime joining_date { get; set; }
 
