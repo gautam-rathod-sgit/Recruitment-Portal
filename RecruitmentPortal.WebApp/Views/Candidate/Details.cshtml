@@ -243,30 +243,12 @@
         });
     });
 
-   // //Function for setting Flag_Accepted value as true
-   // function openPopupAccept() {
-   //     $("#Flag_Accepted").val(true);
-   //     $('#acceptmodel').modal('show');
-   // }
-   //// Function for setting Flag_Reject value as true
-   // function openPopup() {
-   //     $("#Flag_Rejected").val(true);
-   //     $('#rejectmodel').modal('show');
-   // }
-
     function loadPartialView(id) {
         var url = '@Url.Action("RenderRejectionView", "Candidate" )?id=' + id;
         $('#_RejectionReasonView').load(url, function () {
             $('#rejectmodel').modal({ show: true });
         });
     }
-    
-    @*function loadAcceptPartialView(id) {
-        var url = '@Url.Action("RenderAcceptView", "Candidate")?id=' + id;
-        $('#_AcceptApplicationView').load(url, function () {
-            $('#acceptmodel').modal({ show: true });
-            $("#flag_Accepted").val(true);
-        });
-    }*@
+
 
 </script>

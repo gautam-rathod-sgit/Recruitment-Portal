@@ -429,12 +429,19 @@ namespace RecruitmentPortal.WebApp.Controllers
 
             CandidateViewModel model = await _candidatePageServices.getCandidateById(id);
 
+            //preparing email body 
+            string Path = _environment.WebRootPath + "/Templates/RejectingCandidateTemplate.html";
+            string bodyTemplate = System.IO.File.ReadAllText(Path);
+
+            bodyTemplate = bodyTemplate.Replace("[@CandidateName]", model.name);
+
+
             //Creating Email Credentials - email-id, subject
             UserEmailOptions emailOptions = new UserEmailOptions
             {
                 Subject = "Your application to Shaligram Infotech",
                 ToEmails = new List<string>() { model.email },
-                Body = "Dear  " + model.name + "," + "<br />" + "Sorry ! But We are not having any position you're Applying for." + "<br/>" + " We will get back to you if there is any vacancy for you."
+                Body = bodyTemplate
             };
 
             //Sending Email to Receiver
