@@ -382,6 +382,13 @@ namespace RecruitmentPortal.WebApp.Controllers
             //generate otp
             string body = GenerateToken();
 
+            //preparing body of otp
+            string Path = _environment.WebRootPath + "/Templates/OTPVerificationTemplate.html";
+            string bodyTemplate = System.IO.File.ReadAllText(Path);
+
+            bodyTemplate = bodyTemplate.Replace("[@CandidateName]", model.name);
+            bodyTemplate = bodyTemplate.Replace("[@Code]", body);
+
             if (vacancy_overflow)
             {
                 //getting candidate model for sending to confirm otp
@@ -393,7 +400,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     Subject = "Recruitment Portal : Confirm you Email for verifying your Application.",
                     ToEmails = new List<string>() { candidateModel.email },
-                    Body = body
+                    Body = bodyTemplate
                 };
                 //sending mail to Receivers
                 try
@@ -406,7 +413,6 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     ViewData["error"] = "error";
                 }
-                return View(candidateModel);
             }
             else
             {
@@ -414,7 +420,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     Subject = "Recruitment Portal : Confirm you Email for verifying your Application.",
                     ToEmails = new List<string>() { model.email },
-                    Body = body
+                    Body = bodyTemplate
                 };
                 //sending mail to Receivers
                 try
