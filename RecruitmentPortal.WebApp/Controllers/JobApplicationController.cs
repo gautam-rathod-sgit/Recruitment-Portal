@@ -18,7 +18,7 @@ using System.Web;
 
 namespace RecruitmentPortal.WebApp.Controllers
 {
-    public class JobApplicationController : Controller
+    public class JobApplicationController : BaseController
     {
         #region private variables
         private string date_format = "dd-MM-yyyy";
