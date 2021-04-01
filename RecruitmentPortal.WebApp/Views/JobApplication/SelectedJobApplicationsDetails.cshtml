@@ -196,7 +196,7 @@
                                 </div>
                                 <div class="form-group mb-2">
                                     @Html.LabelFor(m => m.candidate.dob)
-                                    @Html.TextBoxFor(m => m.candidate.dob, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
+                                    @Html.TextBoxFor(m => m.candidate.dob, "{0:dd/MM/yyyy}", new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(m => m.candidate.dob)
                                 </div>
                                 <!-- /.form-group -->
@@ -359,7 +359,7 @@
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.joining_date)
-                                        @Html.TextBoxFor(m => m.joining_date, new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
+                                        @Html.TextBoxFor(m => m.joining_date, "{0:dd/MM/yyyy}", new { @placeholder = "Not Available", @class = "form-control", @readonly = "readonly" })
                                         @Html.ValidationMessageFor(m => m.joining_date)
                                     </div>
                                     @if (Model.listOfRounds.Count() > 0)

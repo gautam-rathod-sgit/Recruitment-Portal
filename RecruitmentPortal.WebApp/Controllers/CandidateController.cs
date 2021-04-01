@@ -648,15 +648,19 @@ namespace RecruitmentPortal.WebApp.Controllers
                     item.candidateName = getCandidateNameById(item.candidateId);
                     item.position = getPositionByCandidateId(item.candidateId);
                     item.job_Role = getJobRoleByCandidateId(item.candidateId);
-                    //item.date = item.joining_date;
+                   // item.joining_date = Convert.ToDateTime(item.joining_date.ToString("d"));
                 }
+                filteredlist = newlist.Where(m => (m.status.Contains(applicationType) || applicationType == null)
+                                              && (degree == string.Empty)
+                                              && (m.start_date >= sDate || sDate == null)
+                                              && (m.start_date <= eDate || eDate == null)).ToList();
 
-                return Json(new { data = newlist });
+                return Json(new { data = filteredlist });
             }
             catch (Exception ex)
             {
                 TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
-                return Json(new { data = newlist });
+                return Json(new { data = filteredlist });
             }
         }
 
@@ -692,13 +696,17 @@ namespace RecruitmentPortal.WebApp.Controllers
                     item.candidate = await _candidatePageServices.getCandidateById(item.candidateId);
                 }
 
-                return Json(new { data = newList });
+                filteredlist = newList.Where(m => (m.status.Contains(applicationType) || applicationType == null)
+                                              && (degree == string.Empty)
+                                              && (m.start_date >= sDate || sDate == null)
+                                              && (m.start_date <= eDate || eDate == null)).ToList();
+                return Json(new { data = filteredlist });
             }
 
             catch (Exception ex)
             {
                 TempData[EnumsHelper.NotifyType.Error.GetDescription()] = ex.Message;
-                return Json(new { data = newList });
+                return Json(new { data = filteredlist });
             }
         }
 
@@ -836,7 +844,6 @@ namespace RecruitmentPortal.WebApp.Controllers
         }
 
 
-
         /// <summary>
         /// for Loading the popup for adding or edititng the Rejection reason.
         /// </summary>
@@ -849,7 +856,16 @@ namespace RecruitmentPortal.WebApp.Controllers
             return PartialView("_RejectionReasonView", model);
         }
 
-      
+        public async Task<IActionResult> RenderNewRejectionView(string id)
+        {
+            RejectReasonViewModel model = new RejectReasonViewModel();
+            model.CandidateId = id;
+            return PartialView("_NewRejectionView", model);
+        }
+
+
+
+
 
         #endregion
     }

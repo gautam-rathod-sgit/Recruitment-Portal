@@ -36,7 +36,7 @@
                 </button>
                 <h4 class="modal-title">Reject Reason:</h4>
             </div>
-            <div class="modal-body" id="_RejectionReasonView">
+            <div class="modal-body" id="_NewRejectionView">
 
             </div>
         </div>
@@ -255,8 +255,8 @@
    // }
 
     function loadPartialView(id) {
-        var url = '@Url.Action("RenderRejectionView", "Candidate" )?id=' + id;
-        $('#_RejectionReasonView').load(url, function () {
+        var url = '@Url.Action("RenderNewRejectionView", "Candidate" )?id=' + id;
+        $('#_NewRejectionView').load(url, function () {
             $('#rejectmodel').modal({ show: true });
         });
     }

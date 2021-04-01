@@ -1,11 +1,11 @@
 ﻿@model RecruitmentPortal.WebApp.ViewModels.RejectReasonViewModel
 
 
-@using (Html.BeginForm("RejectApplicant", "Candidate", FormMethod.Post, new { id = "rejectform" }))
+@using (Html.BeginForm("RejectNewApplicant", "Candidate", FormMethod.Post, new { id = "rejectform" }))
 {
-    <input type="hidden" value="@Model.CandidateId" name="CandidateId" id="CandidateId"/>
+    <input type="hidden" value="@Model.CandidateId" name="CandidateId" id="CandidateId" />
     <div class="form-group">
-           @Html.LabelFor(m => m.rejection_reason, new { @class = "asterisk" })
+        @Html.LabelFor(m => m.rejection_reason, new { @class = "asterisk" })
         @Html.TextBoxFor(m => m.rejection_reason, new { @placeholder = "Reason for Rejection", @class = "form-control" })
         @Html.ValidationMessageFor(m => m.rejection_reason, "", new { @class = "text-danger" })
     </div>
