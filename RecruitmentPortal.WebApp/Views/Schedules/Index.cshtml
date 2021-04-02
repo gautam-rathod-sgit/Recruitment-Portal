@@ -103,41 +103,13 @@
 
 
     $(function () {
-        debugger;
+
         $('.datetimepicker1').datetimepicker({
             format: 'DD/MM/YYYY hh:mm A',
+            minDate: new Date()
         });
 
         $(".select2").select2();
-
-        //$('.datepicker').datepicker({
-        //    timePicker: true,
-        //    timePickerIncrement: 30,
-        //    format: 'dd/mm/yyyy',
-        //    /*endDate: '+0d',*/
-        //    autoclose: true
-        //});
-
-        ////Timepicker
-        //$('.timepicker').timepicker({
-        //    showInputs: false
-        //});
-
-
-        ////Date range picker with time picker
-        //$('#reservationtime').daterangepicker({
-        //    timePicker: true,
-        //    timePickerIncrement: 30,
-        //    format: 'dd/MM/yyyy hh:mm A'
-        //});
-
-
-
-
-
-
-
-
 
         $("#round").val($(this).val() == 0 ? '' : $(this).val());
 
