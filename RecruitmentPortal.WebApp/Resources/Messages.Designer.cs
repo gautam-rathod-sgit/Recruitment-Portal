@@ -304,6 +304,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.
+        /// </summary>
+        public static string InvalidPassword {
+            get {
+                return ResourceManager.GetString("InvalidPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Job Category is Required.
         /// </summary>
         public static string JobCategoryRequired {

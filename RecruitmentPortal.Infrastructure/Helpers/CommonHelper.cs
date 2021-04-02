@@ -17,7 +17,7 @@ namespace RecruitmentPortal.Infrastructure.Helpers
         public const string RegexText = "^[a-zA-Z][a-zA-Z_ .]*$";
         public const string RegexUsername = "^[a-zA-Z][a-zA-Z0-9_.]*$";
         public const string RegexAlphaNumSpecialChar = "^[a-zA-Z][A-Za-z0-9_ @./#&+-]*$";
-
+        
         #endregion
 
         #region Methods

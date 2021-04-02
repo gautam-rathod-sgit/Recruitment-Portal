@@ -31,7 +31,6 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public string Email { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "Password")]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 8)]
         [Required(ErrorMessageResourceName = "Passwordrequired", ErrorMessageResourceType = typeof(Messages))]
         public string password { get; set; }
 

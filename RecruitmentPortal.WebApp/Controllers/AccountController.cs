@@ -402,22 +402,26 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 try
                 {
-                    //File details fetching
-                    //create a place in wwwroot for storing uploaded files
-                    var uploads = Path.Combine(_environment.WebRootPath, "Files");
-                    string extension = Path.GetExtension(model.FileNew.FileName);
-                    var basename = Path.Combine(Path.GetDirectoryName(model.FileNew.FileName),
-                                Path.GetFileNameWithoutExtension(model.FileNew.FileName));
-                    if (model.FileNew != null)
+                    if(model.file != null)
                     {
-                        Guid gid = Guid.NewGuid();
-                        string uniquefilename = basename + "-" + gid + extension;
-                        using (var fileStream = new FileStream(Path.Combine(uploads, uniquefilename), FileMode.Create))
+                        //File details fetching
+                        //create a place in wwwroot for storing uploaded files
+                        var uploads = Path.Combine(_environment.WebRootPath, "Files");
+                        string extension = Path.GetExtension(model.FileNew.FileName);
+                        var basename = Path.Combine(Path.GetDirectoryName(model.FileNew.FileName),
+                                    Path.GetFileNameWithoutExtension(model.FileNew.FileName));
+                        if (model.FileNew != null)
                         {
-                            await model.FileNew.CopyToAsync(fileStream);
+                            Guid gid = Guid.NewGuid();
+                            string uniquefilename = basename + "-" + gid + extension;
+                            using (var fileStream = new FileStream(Path.Combine(uploads, uniquefilename), FileMode.Create))
+                            {
+                                await model.FileNew.CopyToAsync(fileStream);
+                            }
+                            model.file = uniquefilename;
                         }
-                        model.file = uniquefilename;
                     }
+                    
 
                     ApplicationUser user = await _userManager.FindByIdAsync(model.UserId.ToString());
                     if (user != null)
@@ -427,7 +431,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                         user.position = model.position;
                         user.skype_id = model.skype_id;
                         user.file = model.file;
-                        user.PasswordHash = passwordHasher.HashPassword(user, model.password);
+                      
 
                         var result = await _userManager.UpdateAsync(user);
                         _dbContext.SaveChanges();

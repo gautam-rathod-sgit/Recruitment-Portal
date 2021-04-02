@@ -4,6 +4,7 @@
 <section class="content">
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { id = "updateform", @enctype = "multipart/form-data" }))
     {
+        
         <div class="row">
             <div class="col-sm-12">
                 <!-- /.box -->
@@ -34,6 +35,10 @@
                             <div class="col-md-6">
                                 @Html.HiddenFor(m => m.UserId)
                                 @Html.HiddenFor(m => m.editMode)
+                                @if(Model.editMode){
+                                @Html.HiddenFor(m => m.file)
+                                
+                                }
                                 <div class="form-group mb-3">
                                     @Html.LabelFor(m => m.UserName)
                                     @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
@@ -68,7 +73,7 @@
                                     @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(m => m.Email)
                                 </div>
-                                <!-- /.form-group -->
+                                @if(!Model.editMode){
                                 <div class="form-group mb-2">
                                     @Html.LabelFor(m => m.password)
                                     @Html.TextBoxFor(m => m.password, new { @type = "password", @class = "form-control", @id = "password" })
@@ -79,6 +84,9 @@
                                     @Html.TextBoxFor(m => m.confirm_password, new { @type = "password", @class = "form-control", @id = "confirm_password" })
                                     @Html.ValidationMessageFor(m => m.confirm_password)
                                 </div>
+                                }
+                                <!-- /.form-group -->
+
 
                             </div>
                             <!-- /.col -->
