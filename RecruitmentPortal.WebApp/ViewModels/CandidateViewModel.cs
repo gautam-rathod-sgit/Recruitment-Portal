@@ -148,5 +148,6 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         public string JobStatus { get; set; }
 
+        public bool editMode { get; set; }
     }
 }

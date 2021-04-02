@@ -224,24 +224,24 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <returns></returns>
         public async Task<IActionResult> ApplyForm(string id) //jobpost id
         {
-
             CandidateViewModel model = new CandidateViewModel();
-            try
+            if (!string.IsNullOrEmpty(id))
             {
-                model.jobpostID = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+                try
+                {
+                        model.jobpostID = Convert.ToInt32(RSACSPSample.DecodeServerName(id));
+                        model.jobpostName = _dbContext.JobPost.FirstOrDefault(x => x.ID == model.jobpostID).job_title;
 
-                model.jobpostName = _dbContext.JobPost.FirstOrDefault(x => x.ID == model.jobpostID).job_title;
+                        //fetching all the degrees for candidate to apply with.
 
-                //fetching all the degrees for candidate to apply with.
-
-                ViewBag.ListOfDegree = SelectionList.GetDegreeList();
-                ViewBag.ReferenceSelect = SelectionList.GetReferenceTypeList();
-                ViewBag.NoticePeriod = SelectionList.GetNoticePeriodTypeList();
-
-            }
-            catch (Exception ex)
-            {
-                model = new CandidateViewModel();
+                        ViewBag.ListOfDegree = SelectionList.GetDegreeList();
+                        ViewBag.ReferenceSelect = SelectionList.GetReferenceTypeList();
+                        ViewBag.NoticePeriod = SelectionList.GetNoticePeriodTypeList();
+                }
+                catch (Exception ex)
+                {
+                    model = new CandidateViewModel();
+                }
             }
             return View(model);
         }
@@ -252,23 +252,30 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> ApplyFormPost(CandidateViewModel model)
+        public async Task<IActionResult> ApplyForm(CandidateViewModel model)
         {
             //checking if already applied for same job
-            var candidateList = await _candidatePageServices.getCandidates();
+            //var candidateList = await _candidatePageServices.getCandidates();
+            bool existOrNot = _dbContext.Candidate.Any(m => m.email == model.email && m.ID != 0);
 
             try
             {
-                List<CandidateViewModel> list = new List<CandidateViewModel>();
-                list = candidateList.ToList();
-                foreach (var item in list)
-                {
-                    if (item.email == model.email)
+                //List<CandidateViewModel> list = new List<CandidateViewModel>();
+                //list = candidateList.ToList();
+                //foreach (var item in list)
+                //{
+                    if (existOrNot)
                     {
-                        TempData[EnumsHelper.NotifyType.Error.GetDescription()] = model.email + " already exists !!";
-                        return RedirectToAction("ApplyForm", "Home");
+                        //TempData[EnumsHelper.NotifyType.Error.GetDescription()] = model.email + " already exists !!";
+                        //return RedirectToAction("ApplyForm", "Home", new { id = RSACSPSample.EncodeServerName(model.jobpostID.ToString()) });
+                        ModelState.AddModelError("email", "Email Already Exists");
+
+                        ViewBag.ListOfDegree = SelectionList.GetDegreeList();
+                        ViewBag.ReferenceSelect = SelectionList.GetReferenceTypeList();
+                        ViewBag.NoticePeriod = SelectionList.GetNoticePeriodTypeList();
+                        return View(model);
                     }
-                }
+                //}
             }
             catch (Exception ex)
             {
