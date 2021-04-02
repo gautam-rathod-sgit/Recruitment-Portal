@@ -30,7 +30,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
        
         [Display(ResourceType = typeof(Labels), Name = "DateTime")]
         [Required(ErrorMessageResourceName = "DateTimeRequired", ErrorMessageResourceType = typeof(Messages))]
-        [DisplayFormat( DataFormatString = "{dd-MM-yyyy}")]
+        [DisplayFormat( DataFormatString = "{dd-MM-yyyy hh:mm A}")]
         //  [RegularExpression(CommonHelper.DateFormat, ErrorMessageResourceName = "DateFormat", ErrorMessageResourceType = typeof(Messages))]
         public DateTime datetime { get; set; }
 
