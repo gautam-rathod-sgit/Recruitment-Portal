@@ -3,8 +3,6 @@
 @using RecruitmentPortal.WebApp.Helpers
 @using RecruitmentPortal.WebApp.Resources
 
-
-
 <section class="content">
     <div class="row">
         @using (Html.BeginForm("IndexPost", "Schedules", FormMethod.Post, new { @autocomplete = "off", @role = "form" }))
@@ -50,7 +48,7 @@
                                 </div>
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.datetime, new { @class = "asterisk" })
-                                    @Html.TextBoxFor(m => m.datetime, new { @type = "datetime", @placeholder = "Date & Time", @class = "form-control datepicker" })
+                                    @Html.TextBoxFor(m => m.datetime, new { @type = "datetime", @placeholder = "Date & Time", @class = "form-control datetimepicker1" })
                                     @Html.ValidationMessageFor(model => model.datetime, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="form-group">
@@ -58,6 +56,14 @@
                                     @Html.DropDownListFor(m => m.roundValue, new SelectList(ViewBag.RoundTypeList, "Value", "Text"), Messages.PleaseSelect, new { @class = "form-control select2" })
                                     @Html.ValidationMessageFor(m => m.roundValue)
                                 </div>
+                                @*<div class="form-group">
+                                    <div class='input-group date' id='datetimepicker1'>
+                                        <input type='text' class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>*@
                             </div>
 
                             <div class="col-md-6">
@@ -97,14 +103,39 @@
 
 
     $(function () {
+        debugger;
+        $('.datetimepicker1').datetimepicker();
 
         $(".select2").select2();
-        s
-        $('.datepicker').datepicker({
-            format: 'dd/mm/yyyy',
-            /*endDate: '+0d',*/
-            autoclose: true
-        });
+
+        //$('.datepicker').datepicker({
+        //    timePicker: true,
+        //    timePickerIncrement: 30,
+        //    format: 'dd/mm/yyyy',
+        //    /*endDate: '+0d',*/
+        //    autoclose: true
+        //});
+
+        ////Timepicker
+        //$('.timepicker').timepicker({
+        //    showInputs: false
+        //});
+
+
+        ////Date range picker with time picker
+        //$('#reservationtime').daterangepicker({
+        //    timePicker: true,
+        //    timePickerIncrement: 30,
+        //    format: 'dd/MM/yyyy hh:mm A'
+        //});
+
+
+
+
+
+
+
+
 
         $("#round").val($(this).val() == 0 ? '' : $(this).val());
 
