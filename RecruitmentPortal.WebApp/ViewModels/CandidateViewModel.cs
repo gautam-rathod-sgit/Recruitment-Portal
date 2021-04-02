@@ -21,6 +21,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         [Display(ResourceType = typeof(Labels), Name = "ApplyDate")]
         public DateTime apply_date { get; set; }
+        public string FormattedDate { get; set; }
 
 
         [Display(ResourceType = typeof(Labels), Name = "CandidateName")]

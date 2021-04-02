@@ -40,6 +40,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [Display(ResourceType = typeof(Labels), Name = "JoiningDate")]
         [Required(ErrorMessageResourceName = "JoiningDate", ErrorMessageResourceType = typeof(Messages))]
         public DateTime joining_date { get; set; }
+        public string FormattedDate { get; set; }
 
 
         [Display(ResourceType = typeof(Labels), Name = "CommitmentMode")]

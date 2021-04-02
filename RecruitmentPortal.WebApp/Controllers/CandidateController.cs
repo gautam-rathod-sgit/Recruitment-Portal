@@ -13,6 +13,7 @@ using RecruitmentPortal.WebApp.Resources;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
@@ -537,7 +538,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     item.isActive = _dbContext.jobApplications.Where(x => x.candidateId == item.ID).Any();
                     item.isSelected = _dbContext.jobApplications.Where(x => x.candidateId == item.ID && x.status == status_Complete).Any();
                     item.isRejected = _dbContext.jobApplications.Where(x => x.candidateId == item.ID && x.status == status_Rejected).Any();
-
+                    item.FormattedDate = item.apply_date.ToString("dd-MM-yyyy");
                     //getting job app id of candidates who have their records in job application table
                     var proceededCandidates = _dbContext.jobApplications.ToList();
                     var isPresent = proceededCandidates.Where(x => x.candidateId == item.ID).Any();
@@ -599,7 +600,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 modelList = await _jobApplicationPage.getJobApplications();
                 //    modelList = modelList.Where(x => x.status == status_Pending);
-                newlist = modelList.OrderBy(m => m.start_date).ToList();
+                newlist = modelList.OrderByDescending(x => x.start_date).ToList();
 
                 foreach (var data in newlist)
                 {
@@ -609,13 +610,16 @@ namespace RecruitmentPortal.WebApp.Controllers
                     data.position = getPositionByCandidateId(data.candidateId);
                     data.job_Role = getJobRoleByCandidateId(data.candidateId);
                     data.interview_Status = getInterviewStatusByCandidateId(data.candidateId);
+                    data.FormattedDate = data.start_date.ToString("dd-MM-yyyy");                    
                 }
-
+             
                 //newlist = newlist.Where(x => x.interview_Status == istatus).ToList();
                 filteredList = newlist.Where(m => (m.status.Contains(applicationType) || applicationType == null)
                                                && (degree == string.Empty)
                                                && (m.start_date >= sDate || sDate == null)
                                                && (m.start_date <= eDate || eDate == null)).ToList();
+
+                
 
                 return Json(new { data = filteredList });
             }
@@ -625,6 +629,13 @@ namespace RecruitmentPortal.WebApp.Controllers
                 return Json(new { data = filteredList });
             }
         }
+        //public DateTime changeFormat(DateTime value)
+        //{
+        //    CultureInfo provider = CultureInfo.InvariantCulture;
+        //    var x = value.ToString();
+        //    var result = DateTime.ParseExact(x, "dd-MM-yyyy",provider);
+        //    return result;
+        //}
 
         /// <summary>
         /// FOR SHOWING LIST OF SELECTED JOB-APPLICATIONS
@@ -655,7 +666,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     item.candidateName = getCandidateNameById(item.candidateId);
                     item.position = getPositionByCandidateId(item.candidateId);
                     item.job_Role = getJobRoleByCandidateId(item.candidateId);
-                   // item.joining_date = Convert.ToDateTime(item.joining_date.ToString("d"));
+                    item.FormattedDate = item.joining_date.ToString("dd-MM-yyyy");
                 }
                 filteredlist = newlist.Where(m => (m.status.Contains(applicationType) || applicationType == null)
                                               && (degree == string.Empty)
@@ -701,6 +712,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     item.position = getPositionByCandidateId(item.candidateId);
                     item.job_Role = getJobRoleByCandidateId(item.candidateId);
                     item.candidate = await _candidatePageServices.getCandidateById(item.candidateId);
+                    item.FormattedDate = item.rejection_date.ToString("dd-MM-yyyy");
                 }
 
                 filteredlist = newList.Where(m => (m.status.Contains(applicationType) || applicationType == null)

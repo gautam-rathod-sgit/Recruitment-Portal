@@ -141,7 +141,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-      
+
         $(".select2").select2();
         //Date picker
         $('#srcStartDate').datepicker({
@@ -220,7 +220,7 @@
                     { "data": "candidateName", "name": "candidateName" },
                     { "data": "position", "name": "position" },
                     { "data": "job_Role", "name": "job_Role" },
-                    { "data": "start_date", "name": "start_date" },
+                    { "data": "formattedDate", "name": "formattedDate" },
                     { "data": "status", "name": "status" },
                     {
                         "sClass": "text-center",
@@ -269,7 +269,9 @@
                     { "data": "candidateName", "name": "candidateName" },
                     { "data": "position", "name": "position" },
                     { "data": "job_Role", "name": "job_Role" },
-                    { "data": "joining_date", "name": "joining_date" },
+                    {
+                        "data": "formattedDate", "name": "formattedDate"
+                    },
                     { "data": "commitment_mode", "name": "commitment_mode" },
                     { "data": "offered_ctc", "name": "offered_ctc" },
                     {
@@ -326,7 +328,7 @@
                     { "data": "candidateName", "name": "candidateName" },
                     { "data": "position", "name": "position" },
                     { "data": "job_Role", "name": "job_Role" },
-                    { "data": "rejection_date", "name": "rejection_date" },
+                    { "data": "formattedDate", "name": "formattedDate" },
                     { "data": "status", "name": "status" },
                     {
                         "sClass": "text-center",
@@ -379,7 +381,7 @@
                     { "data": "hsc_perc", "name": "hsc_perc" },
                     { "data": "degree", "name": "degree" },
                     { "data": "experience", "name": "experience" },
-                    { "data": "apply_date", "name": "apply_date" },
+                    { "data": "formattedDate", "name": "formattedDate" },
                     { "data": "jobStatus", "name": "jobStatus" },
                     {
                         "sClass": "text-center",
