@@ -24,6 +24,7 @@
 <script>
     $(document).ready(function () {
         $.validator.unobtrusive.parse($('#rejectform'));
+        $("#rejection_reason").val('');
     });
 
     function checkFormValid() {

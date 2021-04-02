@@ -108,7 +108,7 @@
                 {
                     "sClass": "text-center",
                     "mRender": function (data, type, row) {
-                        debugger;
+                       
                         var isAdmin = '@User.IsInRole("Admin").ToString().ToLower()';
                         var action = '';
                         action += '<a href="javascript:void(0);" title="Details" onclick="Details(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';

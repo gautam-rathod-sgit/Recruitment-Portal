@@ -29,6 +29,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public DateTime rejection_date { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "RejectionReason")]
+        [Required(ErrorMessageResourceName = "RejectionReasonRequired", ErrorMessageResourceType = typeof(Messages))]
         public string rejection_reason { get; set; }
 
         //for date of acceptence of candidate application

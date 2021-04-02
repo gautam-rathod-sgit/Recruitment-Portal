@@ -658,7 +658,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 models = await _jobApplicationPage.getJobApplications();
                 models = models.Where(x => x.status == status_Complete);
                 //getting candidate name and job position with candidateId of JobApplication model
-                newlist = models.OrderBy(m => m.joining_date).ToList();
+                newlist = models.OrderByDescending(m => m.joining_date).ToList();
                 foreach (var item in newlist)
                 {
                     item.EncryptedId = RSACSPSample.EncodeServerName(item.ID.ToString());
