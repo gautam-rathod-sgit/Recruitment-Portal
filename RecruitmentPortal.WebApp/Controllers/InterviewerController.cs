@@ -99,6 +99,9 @@ namespace RecruitmentPortal.WebApp.Controllers
                         item.jobRole = getJobRoleByCandidateId(item.candidateId);
                         item.roundName = Enum.GetName(typeof(RoundType), item.round);
                         item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
+                        //getting interviewer names of schedule
+                        List<UserModel> listOfUser = getInterviewerNames(item.ID);
+                        item.InterviewerNames = listOfUser;
                         schedulelist.Add(item);
                     }
                     slist = schedulelist.AsQueryable();

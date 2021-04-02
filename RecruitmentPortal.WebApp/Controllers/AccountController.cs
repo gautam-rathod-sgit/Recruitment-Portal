@@ -288,7 +288,11 @@ namespace RecruitmentPortal.WebApp.Controllers
                 collection = pending_schedules.Where(x => x.status != reqValue).ToList();
                 foreach (var item in collection)
                 {
+                    item.jobRole = getJobRoleByCandidateId(item.candidateId);
                     item.roundName = Enum.GetName(typeof(RoundType), item.round);
+                    //getting interviewer names of schedule
+                    List<UserModel> listOfUser = getInterviewerNames(item.ID);
+                    item.InterviewerNames = listOfUser;
                     item.EncryptedId = RSACSPSample.EncodeServerName((item.ID).ToString());
                 }
             }

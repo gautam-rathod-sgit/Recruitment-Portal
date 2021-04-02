@@ -51,10 +51,12 @@
                         <thead>
                             <tr>
                                 <th>Candidate Name</th>
-                                <th>Job Position</th>
+                                <th>Job Title</th>
+                                <th>Job Role</th>
                                 <th>Mode of Interview</th>
-                                <th>Round</th>
-                                <th>Interview Date</th>
+                                <th>Interview Round</th>
+                                <th>Interviewer</th>
+                                <th>Date and Time</th>
                                 <th>Details</th>
                             </tr>
                         </thead>
@@ -98,8 +100,19 @@
             "columns": [
                 { "data": "candidate_name", "name": "candidate_name" },
                 { "data": "position", "name": "position" },
+                { "data": "jobRole", "name": "jobRole" },
                 { "data": "mode_of_interview", "name": "mode_of_interview" },
                 { "data": "roundName", "name": "roundName" }, 
+                {
+                    "data": "interviewerNames",
+                    "mRender": function (data, type, row) {
+                        var action = '';
+                        $.each(row.interviewerNames, function (i) {
+                            action += '' + row.interviewerNames[i].name + '<br>';
+                        });
+                        return action;
+                    }
+                },
                 { "data": "datetime", "name": "datetime" },
 
 
