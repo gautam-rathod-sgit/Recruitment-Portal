@@ -177,7 +177,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 Console.WriteLine(ex.Message);
             }
 
-            return RedirectToAction("AllApplications", "Candidate", new { Application_mode = "Active" });
+            return RedirectToAction("AllApplications", "Candidate");
         }
 
 
@@ -204,7 +204,6 @@ namespace RecruitmentPortal.WebApp.Controllers
             jobApplicationModel.job_Role = getJobRoleByCandidateId(jobApplicationModel.candidateId);
            
               jobApplicationModel.candidate = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
-
             return View(jobApplicationModel);
         }
         /// <summary>
@@ -243,8 +242,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                             schedule.EncryptedId = RSACSPSample.EncodeServerName((schedule.ID).ToString());
                             schedule.EncryptedJobApplicationId = id;
                             schedule.statusName = Enum.GetName(typeof(StatusType), schedule.status);
-                            schedule.roundName = Enum.GetName(typeof(RoundType), schedule.round);
-                        }
+                            schedule.roundName = Enum.GetName(typeof(RoundType), schedule.round);                        }
                     }
                 }
                 listofschedules = jobApplicationModel.Schedules.ToList();

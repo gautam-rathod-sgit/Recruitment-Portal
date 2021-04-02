@@ -66,7 +66,7 @@
 
 <script>
     $(document).ready(function () {
-        bindDatatable();
+            bindDatatable();
     });
 
     function bindDatatable() {
@@ -108,9 +108,13 @@
                 {
                     "sClass": "text-center",
                     "mRender": function (data, type, row) {
+                       
+                        var isAdmin = '@User.IsInRole("Admin").ToString().ToLower()';
                         var action = '';
                         action += '<a href="javascript:void(0);" title="Details" onclick="Details(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
-                        action += ' <a href="javascript:void(0);" title="Delete" onclick="Delete(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>';
+                        if (isAdmin == "true") {
+                            action += ' <a href="javascript:void(0);" title="Delete" onclick="Delete(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>';
+                        }
                         return action;
                     }
                 },
