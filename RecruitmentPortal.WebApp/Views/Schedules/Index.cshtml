@@ -104,7 +104,9 @@
 
     $(function () {
         debugger;
-        $('.datetimepicker1').datetimepicker();
+        $('.datetimepicker1').datetimepicker({
+            format: 'DD/MM/YYYY h:mm A'
+        });
 
         $(".select2").select2();
 
