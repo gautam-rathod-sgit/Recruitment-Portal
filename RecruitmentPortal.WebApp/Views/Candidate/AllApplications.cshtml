@@ -222,14 +222,14 @@
                     { "data": "job_Role", "name": "job_Role" },
                     {
                         "data": "formattedDate", "name": "formattedDate",
-                        //"mRender": function (data) {
-                        //    debugger;
-                        //    var day = data.day();
-                        //    var month = data.month();
-                        //    var year = data.year();
-                        //    var date = new Date(year, month, day);
-                        //    return date;
-                        //}
+                        "mRender": function (data) {
+                            var value = data.split("-");
+                            var day = value[0];
+                            var month = value[1];
+                            var year = value[2];
+                            var date = new Date(year, month, day).toISOString();
+                            return date.split("T")[0];
+                        }
                     },
                     { "data": "status", "name": "status" },
                     {
@@ -280,7 +280,15 @@
                     { "data": "position", "name": "position" },
                     { "data": "job_Role", "name": "job_Role" },
                     {
-                        "data": "formattedDate", "name": "formattedDate"
+                        "data": "formattedDate", "name": "formattedDate",
+                        "mRender": function (data) {
+                            var value = data.split("-");
+                            var day = value[0];
+                            var month = value[1];
+                            var year = value[2];
+                            var date = new Date(year, month, day).toISOString();
+                            return date.split("T")[0];
+                        }
                     },
                     { "data": "commitment_mode", "name": "commitment_mode" },
                     { "data": "offered_ctc", "name": "offered_ctc" },
@@ -338,7 +346,17 @@
                     { "data": "candidateName", "name": "candidateName" },
                     { "data": "position", "name": "position" },
                     { "data": "job_Role", "name": "job_Role" },
-                    { "data": "formattedDate", "name": "formattedDate" },
+                    {
+                        "data": "formattedDate", "name": "formattedDate",
+                        "mRender": function (data) {
+                            var value = data.split("-");
+                            var day = value[0];
+                            var month = value[1];
+                            var year = value[2];
+                            var date = new Date(year, month, day).toISOString();
+                            return date.split("T")[0];
+                        }
+                    },
                     { "data": "status", "name": "status" },
                     {
                         "sClass": "text-center",
@@ -391,7 +409,17 @@
                     { "data": "hsc_perc", "name": "hsc_perc" },
                     { "data": "degree", "name": "degree" },
                     { "data": "experience", "name": "experience" },
-                    { "data": "formattedDate", "name": "formattedDate" },
+                    {
+                        "data": "formattedDate", "name": "formattedDate",
+                        "mRender": function (data) {
+                            var value = data.split("-");
+                            var day = value[0];
+                            var month = value[1];
+                            var year = value[2];
+                            var date = new Date(year, month, day).toISOString();
+                            return date.split("T")[0];
+                        }
+                    },
                     { "data": "jobStatus", "name": "jobStatus" },
                     {
                         "sClass": "text-center",
