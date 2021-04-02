@@ -202,8 +202,8 @@ namespace RecruitmentPortal.WebApp.Controllers
             jobApplicationModel.candidateName = getCandidateNameById(jobApplicationModel.candidateId);
             jobApplicationModel.position = getPositionByCandidateId(jobApplicationModel.candidateId);
             jobApplicationModel.job_Role = getJobRoleByCandidateId(jobApplicationModel.candidateId);
-           
-              jobApplicationModel.candidate = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
+
+            jobApplicationModel.candidate = await _candidatePage.getCandidateByIdWithSchedules(jobApplicationModel.candidateId);
             return View(jobApplicationModel);
         }
         /// <summary>
