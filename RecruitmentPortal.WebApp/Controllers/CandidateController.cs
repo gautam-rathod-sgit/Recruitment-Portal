@@ -828,6 +828,10 @@ namespace RecruitmentPortal.WebApp.Controllers
                 {
                     interview_status = Enum.GetName(typeof(StatusType), 3);
                 }
+                else
+                {
+                    interview_status = Enum.GetName(typeof(StatusType), 2);
+                }
 
             }
             else

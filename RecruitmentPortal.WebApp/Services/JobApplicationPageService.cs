@@ -72,7 +72,7 @@ namespace RecruitmentPortal.WebApp.Services
                 }
                 else
                 {
-                    interview_status = Enum.GetName(typeof(StatusType), mylist.FirstOrDefault().status);
+                    interview_status = Enum.GetName(typeof(StatusType), 2);
                 }
             }
             //}
