@@ -53,7 +53,8 @@
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group mb-2">
-                                    @Html.LabelFor(m => m.FileNew)
+                                    @Html.LabelFor(m => m.FileNew)<br />
+                                    <img src="~/Files/@Model.file" class="user-image" alt="User Image" width="20%" height="20%" style=" margin-bottom: 2px;">
                                     @Html.TextBoxFor(m => m.FileNew, new { @type = "file", @id="filename" })
                                     @Html.ValidationMessageFor(m => m.FileNew)
                                     <div class="text-danger">Maximum allowed file size is <strong>3MB</strong>.</div>

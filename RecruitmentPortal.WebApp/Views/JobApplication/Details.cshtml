@@ -276,7 +276,7 @@
 
 
      function loadPartialView(id) {
-        var url = '@Url.Action("RenderRejectionView", "Candidate" )?id=' + id;
+        var url = '@Url.Action("RenderRejectionView", "JobApplication" )?id=' + id;
         $('#_RejectionReasonView').load(url, function () {
             $('#rejectmodel').modal({ show: true });
         });

@@ -1,11 +1,16 @@
-﻿@model RecruitmentPortal.WebApp.ViewModels.RejectReasonViewModel
+﻿@model RecruitmentPortal.WebApp.ViewModels.JobApplicationViewModel
 
-
-@using (Html.BeginForm("RejectApplicant", "Candidate", FormMethod.Post, new { id = "rejectform" }))
+@using (Html.BeginForm("UpdateJobApplicationPost", "JobApplication", FormMethod.Post, new { id = "rejectform" }))
 {
-    <input type="hidden" value="@Model.CandidateId" name="CandidateId" id="CandidateId"/>
+    <input type="hidden" value="@Model.ID" name="ID" id="ID" />
+    <input type="hidden" value="@Model.candidateId" name="candidateId" id="candidateId" />
+    <input type="hidden" value="@Model.joining_date" name="joining_date" id="joining_date" />
+    <input type="hidden" value=true name="flag_Rejected" id="flag_Rejected" />
+    <input type="hidden" value="@Model.start_date" name="start_date" id="start_date" />
+    <input type="hidden" value="@Model.status" name="status" id="status" />
+
     <div class="form-group">
-           @Html.LabelFor(m => m.rejection_reason, new { @class = "asterisk" })
+        @Html.LabelFor(m => m.rejection_reason, new { @class = "asterisk" })
         @Html.TextBoxFor(m => m.rejection_reason, new { @placeholder = "Reason for Rejection", @class = "form-control" })
         @Html.ValidationMessageFor(m => m.rejection_reason, "", new { @class = "text-danger" })
     </div>

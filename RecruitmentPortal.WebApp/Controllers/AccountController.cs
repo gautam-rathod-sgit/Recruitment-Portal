@@ -319,6 +319,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     model.UserName = user.UserName;
                     model.position = user.position;
                     model.skype_id = user.skype_id;
+                    model.file = user.file;
                     //if (user.file != null)
                     //{
                     //    model.file = user.file;

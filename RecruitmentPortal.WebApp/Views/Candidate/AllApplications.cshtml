@@ -220,7 +220,17 @@
                     { "data": "candidateName", "name": "candidateName" },
                     { "data": "position", "name": "position" },
                     { "data": "job_Role", "name": "job_Role" },
-                    { "data": "formattedDate", "name": "formattedDate" },
+                    {
+                        "data": "formattedDate", "name": "formattedDate",
+                        //"mRender": function (data) {
+                        //    debugger;
+                        //    var day = data.day();
+                        //    var month = data.month();
+                        //    var year = data.year();
+                        //    var date = new Date(year, month, day);
+                        //    return date;
+                        //}
+                    },
                     { "data": "status", "name": "status" },
                     {
                         "sClass": "text-center",

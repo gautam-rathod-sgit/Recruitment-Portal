@@ -603,6 +603,13 @@ namespace RecruitmentPortal.WebApp.Controllers
             model = await _jobApplicationPage.getJobApplicationById(Convert.ToInt32(RSACSPSample.DecodeServerName(id)));
             return PartialView("_EditJoiningDateView", model);
         }
+        public async Task<IActionResult> RenderRejectionView(string id)
+        {
+            JobApplicationViewModel model = new JobApplicationViewModel();
+            var jobApplicationModel = _dbContext.jobApplications.Where(x => x.candidateId == Convert.ToInt32(RSACSPSample.DecodeServerName(id))).FirstOrDefault();
+            model = await _jobApplicationPage.getJobApplicationById(jobApplicationModel.ID);
+            return PartialView("_RejectionReasonView", model);
+        }
 
 
         //==================================================================================================================

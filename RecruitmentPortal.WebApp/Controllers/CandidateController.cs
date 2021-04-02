@@ -516,17 +516,16 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         public async Task<IActionResult> GetApplicationsList(string startDate, string endDate, string applicationType, string degree)
         {
-            if (applicationType == null) applicationType = string.Empty;
-            if (degree == null) degree = string.Empty;
-            DateTime? sDate = !string.IsNullOrEmpty(startDate) ? Convert.ToDateTime(startDate) : (DateTime?)null;
-            DateTime? eDate = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : (DateTime?)null;
-
             IQueryable<CandidateViewModel> modelList;
             List<CandidateViewModel> newList = new List<CandidateViewModel>();
             List<CandidateViewModel> filteredList = new List<CandidateViewModel>();
-
             try
             {
+                if (applicationType == null) applicationType = string.Empty;
+                if (degree == null) degree = string.Empty;
+                DateTime? sDate = !string.IsNullOrEmpty(startDate) ? Convert.ToDateTime(startDate) : (DateTime?)null;
+                DateTime? eDate = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : (DateTime?)null;
+
                 modelList = await _candidatePageServices.getCandidates();
                 newList = modelList.Where(x => x.is_InitReject == false).ToList();
                 foreach (var item in newList)
@@ -880,12 +879,6 @@ namespace RecruitmentPortal.WebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<IActionResult> RenderRejectionView(string id)
-        {
-            RejectReasonViewModel model = new RejectReasonViewModel();
-            model.CandidateId = id;
-            return PartialView("_RejectionReasonView", model);
-        }
 
         public async Task<IActionResult> RenderNewRejectionView(string id)
         {
