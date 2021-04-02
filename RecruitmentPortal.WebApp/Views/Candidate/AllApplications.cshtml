@@ -2,7 +2,7 @@
 @{
     var startDate = new DateTime(DateTime.Now.Date.Year, 1, 1);
     List<SelectListItem> typeList = new List<SelectListItem>()
-    {
+{
         new SelectListItem {Text="New",Value = "1" },
         new SelectListItem {Text="Active",Value = "2" },
         new SelectListItem {Text="Selected",Value = "3" },
@@ -88,7 +88,7 @@
                     </table>
 
                     @*Active*@
-                    <table id="src_2_datatable" class="table table-bordered table-striped" >
+                    <table id="src_2_datatable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Candidate Name</th>
@@ -102,7 +102,7 @@
                     </table>
 
                     @*Selected*@
-                    <table id="src_3_datatable" class="table table-bordered table-striped" >
+                    <table id="src_3_datatable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Candidate Name</th>
@@ -118,7 +118,7 @@
                     </table>
 
                     @* Rejected*@
-                    <table id="src_4_datatable" class="table table-bordered table-striped" >
+                    <table id="src_4_datatable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Candidate Name</th>
@@ -386,7 +386,7 @@
                     {
                         "sClass": "text-center",
                         "mRender": function (data, type, row) {
-                            var edit = '<a href="javascript:void(0);" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
+                            var edit = '<a href="javascript:void(0);" title="Edit" onclick="openRecord(\'' + row.encryptedId + '\',\'' + row.jobStatus + '\')" class = "btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>';
                             return edit;
                         }
                     }
@@ -419,8 +419,17 @@
         bindDatatable();
     }
 
-    function openRecord(id) {
-        window.location.href = '@Url.Action("Details", "Candidate")?id=' + id;
+    function openRecord(id, status) {
+        if (status == "New") {
+            window.location.href = '@Url.Action("Details", "Candidate")?id=' + id;
+        }
+        else if (status == "Active") {
+             window.location.href = '@Url.Action("getJobApplicationId", "Candidate")?id=' + id + '&flag=' + true;
+        }
+        else{  
+             window.location.href = '@Url.Action("getJobApplicationId", "Candidate")?id=' + id;
+        }
+
     }
 
     function openRecordActive(id) {

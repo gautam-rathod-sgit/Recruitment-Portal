@@ -732,6 +732,18 @@ namespace RecruitmentPortal.WebApp.Controllers
         #endregion
 
         #region Private Methods
+
+        public async Task<IActionResult> getJobApplicationId(string id, bool flag)
+        {
+            var value =  _dbContext.jobApplications.Where(x => x.candidateId == Convert.ToInt32(RSACSPSample.DecodeServerName(id))).FirstOrDefault().ID;
+            if (flag)
+            {
+                return RedirectToAction("Details", "JobApplication", new { id = RSACSPSample.EncodeServerName(value.ToString()) });
+
+            }
+            return RedirectToAction("SelectedJobApplicationsDetails", "JobApplication", new { id = RSACSPSample.EncodeServerName(value.ToString()) }) ;
+        }
+
         /// <summary>
         /// FETCHING CANDIDATE NAME USING CANDIDATE ID FROM DATABASE
         /// </summary>
