@@ -402,26 +402,55 @@ namespace RecruitmentPortal.WebApp.Controllers
             {
                 try
                 {
-                    if(model.file != null)
+                    string extension = null;
+                    string basename = null;
+                    string uploads = null;
+                    if (model.file != null)
                     {
                         //File details fetching
                         //create a place in wwwroot for storing uploaded files
-                        var uploads = Path.Combine(_environment.WebRootPath, "Files");
-                        string extension = Path.GetExtension(model.FileNew.FileName);
-                        var basename = Path.Combine(Path.GetDirectoryName(model.FileNew.FileName),
-                                    Path.GetFileNameWithoutExtension(model.FileNew.FileName));
+                        uploads = Path.Combine(_environment.WebRootPath, "Files");
+                        
                         if (model.FileNew != null)
                         {
-                            Guid gid = Guid.NewGuid();
-                            string uniquefilename = basename + "-" + gid + extension;
-                            using (var fileStream = new FileStream(Path.Combine(uploads, uniquefilename), FileMode.Create))
-                            {
-                                await model.FileNew.CopyToAsync(fileStream);
-                            }
-                            model.file = uniquefilename;
+                            extension = Path.GetExtension(model.FileNew.FileName);
+                            basename = Path.Combine(Path.GetDirectoryName(model.FileNew.FileName),
+                                    Path.GetFileNameWithoutExtension(model.FileNew.FileName));
                         }
-                    }
+                        else
+                        {
+                            extension = Path.GetExtension(model.file);
+                            basename = Path.Combine(Path.GetDirectoryName(model.file),
+                                    Path.GetFileNameWithoutExtension(model.file));
+                        }
                     
+                        //if (model.FileNew != null)
+                        //{
+                        //    Guid gid = Guid.NewGuid();
+                        //    string uniquefilename = basename + "-" + gid + extension;
+                        //    using (var fileStream = new FileStream(Path.Combine(uploads, uniquefilename), FileMode.Create))
+                        //    {
+                        //        await model.FileNew.CopyToAsync(fileStream);
+                        //    }
+                        //    model.file = uniquefilename;
+                        //}
+                    }
+
+                    if (model.FileNew != null)
+                    {
+                        uploads = Path.Combine(_environment.WebRootPath, "Files");
+                        extension = Path.GetExtension(model.FileNew.FileName);
+                        basename = Path.Combine(Path.GetDirectoryName(model.FileNew.FileName),
+                                Path.GetFileNameWithoutExtension(model.FileNew.FileName));
+                        Guid gid = Guid.NewGuid();
+                        string uniquefilename = basename + "-" + gid + extension;
+                        using (var fileStream = new FileStream(Path.Combine(uploads, uniquefilename), FileMode.Create))
+                        {
+                            await model.FileNew.CopyToAsync(fileStream);
+                        }
+                        model.file = uniquefilename;
+                    }
+
 
                     ApplicationUser user = await _userManager.FindByIdAsync(model.UserId.ToString());
                     if (user != null)

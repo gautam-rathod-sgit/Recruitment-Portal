@@ -4,16 +4,29 @@
 <section class="content">
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { id = "updateform", @enctype = "multipart/form-data" }))
     {
-        
+
+
+
         <div class="row">
             <div class="col-sm-12">
                 <!-- /.box -->
                 <div class="box box-default boxPad">
                     <div class="box-header">
-                        <h3 class="box-title">
-                            <i class="fa fa-info-circle"></i>
-                            Add User
-                        </h3>
+                        @if (Model.editMode)
+                        {
+                            <h3 class="box-title">
+                                <i class="fa fa-info-circle"></i>
+                                Update User
+                            </h3>
+                        }
+                        else
+                        {
+                            <h3 class="box-title">
+                                <i class="fa fa-info-circle"></i>
+                                Add User
+                            </h3>
+                        }
+
 
                         <div class="box-tools pull-right">
                             <input type="submit" value="Save" class="btn btn-primary" name="submit" onclick="return submitFormData()" />
@@ -35,9 +48,10 @@
                             <div class="col-md-6">
                                 @Html.HiddenFor(m => m.UserId)
                                 @Html.HiddenFor(m => m.editMode)
-                                @if(Model.editMode){
-                                @Html.HiddenFor(m => m.file)
-                                
+                                @if (Model.editMode)
+                                {
+                                    @Html.HiddenFor(m => m.file)
+
                                 }
                                 <div class="form-group mb-3">
                                     @Html.LabelFor(m => m.UserName)
@@ -60,7 +74,7 @@
                                 <div class="form-group mb-2">
                                     @Html.LabelFor(m => m.FileNew)<br />
                                     <img src="~/Files/@Model.file" class="user-image" alt="User Image" width="20%" height="20%" style=" margin-bottom: 2px;">
-                                    @Html.TextBoxFor(m => m.FileNew, new { @type = "file", @id="filename" })
+                                    @Html.TextBoxFor(m => m.FileNew, new { @type = "file", @id = "filename" })
                                     @Html.ValidationMessageFor(m => m.FileNew)
                                     <div class="text-danger">Maximum allowed file size is <strong>3MB</strong>.</div>
                                     <div class="text-danger">Allowed Extensions for file size is <strong> .jpeg, .jpg, .png</strong>.</div>
@@ -73,17 +87,18 @@
                                     @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(m => m.Email)
                                 </div>
-                                @if(!Model.editMode){
-                                <div class="form-group mb-2">
-                                    @Html.LabelFor(m => m.password)
-                                    @Html.TextBoxFor(m => m.password, new { @type = "password", @class = "form-control", @id = "password" })
-                                    @Html.ValidationMessageFor(m => m.password)
-                                </div>
-                                <div class="form-group mb-2">
-                                    @Html.LabelFor(m => m.confirm_password)
-                                    @Html.TextBoxFor(m => m.confirm_password, new { @type = "password", @class = "form-control", @id = "confirm_password" })
-                                    @Html.ValidationMessageFor(m => m.confirm_password)
-                                </div>
+                                @if (!Model.editMode)
+                                {
+                                    <div class="form-group mb-2">
+                                        @Html.LabelFor(m => m.password)
+                                        @Html.TextBoxFor(m => m.password, new { @type = "password", @class = "form-control", @id = "password" })
+                                        @Html.ValidationMessageFor(m => m.password)
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        @Html.LabelFor(m => m.confirm_password)
+                                        @Html.TextBoxFor(m => m.confirm_password, new { @type = "password", @class = "form-control", @id = "confirm_password" })
+                                        @Html.ValidationMessageFor(m => m.confirm_password)
+                                    </div>
                                 }
                                 <!-- /.form-group -->
 
@@ -104,7 +119,7 @@
 <script>
     $(document).ready(function () {
         $.validator.unobtrusive.parse($('#updateform'));
-        
+
     });
 
     $('#FileNew').on('change', function (e) {
