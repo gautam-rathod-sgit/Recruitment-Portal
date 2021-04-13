@@ -39,7 +39,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
 
         [Display(ResourceType = typeof(Labels), Name = "DateofBirth")]
         [Required(ErrorMessageResourceName = "DateofBirthRequired", ErrorMessageResourceType = typeof(Messages))]
-        public DateTime?dob { get; set; }
+        public DateTime dob { get; set; }
 
 
         [Display(ResourceType = typeof(Labels), Name = "Phone")]

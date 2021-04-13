@@ -33,7 +33,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [DisplayFormat( DataFormatString = "{dd-MM-yyyy hh:mm A}")]
         //  [RegularExpression(CommonHelper.DateFormat, ErrorMessageResourceName = "DateFormat", ErrorMessageResourceType = typeof(Messages))]
         public DateTime datetime { get; set; }
-
+        public string FormattedDate { get; set; }
         public string time { get; set; }
 
         //enum round

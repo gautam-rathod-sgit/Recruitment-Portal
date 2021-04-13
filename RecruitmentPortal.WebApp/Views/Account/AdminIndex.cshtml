@@ -142,7 +142,6 @@
         $('#datatable1').DataTable({
             lengthChange: true,
             searching: true,
-            ordering: false,
             lengthMenu: [[5, 10, 25, 50, -1], [5,10, 25, 50, "All"]],
             paging: true,
             pagingType: "simple_numbers",
@@ -161,7 +160,14 @@
                 { "data": "position", "name": "position" },
                 { "data": "jobRole", "name": "jobRole" },
                 { "data": "mode_of_interview", "name": "mode_of_interview" },
-                { "data": "datetime", "name": "datetime" },
+                {
+                    "data": "datetime", "name": "datetime",
+                    "mRender": function (data) {
+                        var value = data.split("T");
+                        var formattedDate = new Date(value[0]).toISOString();
+                        return formattedDate.split("T")[0];
+                    }
+                },
                 {
                     "data": "interviewerNames",
                     "mRender": function (data, type, row) {
@@ -171,7 +177,7 @@
                         });
                         return action;
                     }
-                },
+                },  
                 
 
                 {
@@ -196,7 +202,6 @@
         $('#datatable2').DataTable({
             lengthChange: true,
             searching: true,
-            ordering: false,
             lengthMenu: [[5, 10, 25, 50, -1], [5,10, 25, 50, "All"]],
             paging: true,
             pagingType: "simple_numbers",
@@ -214,7 +219,14 @@
                 { "data": "candidateName", "name": "candidateName" },
                 { "data": "position", "name": "position" },
                 { "data": "job_Role", "name": "job_Role" },
-                { "data": "joining_date", "name": "joining_date" },
+                {
+                    "data": "joining_date", "name": "joining_date",
+                    "mRender": function (data) {
+                        var value = data.split("T");
+                        var formattedDate = new Date(value[0]).toISOString();
+                        return formattedDate.split("T")[0];
+                    }
+                },
 
                 {
                     "sClass": "text-center",

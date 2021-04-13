@@ -15,7 +15,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         [RegularExpression(CommonHelper.RegexNumber,ErrorMessageResourceName = "ValidOTPRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "OTPRequired", ErrorMessageResourceType = typeof(Messages))]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#.#}")]
-        public double? otp { get; set; }
+        public double otp { get; set; }
         public double token { get; set; }
         public int jobPostId { get; set; }
     }

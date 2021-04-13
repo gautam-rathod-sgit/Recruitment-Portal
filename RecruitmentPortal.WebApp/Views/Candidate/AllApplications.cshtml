@@ -221,14 +221,11 @@
                     { "data": "position", "name": "position" },
                     { "data": "job_Role", "name": "job_Role" },
                     {
-                        "data": "formattedDate", "name": "formattedDate",
-                        "mRender": function (data) {
-                            var value = data.split("-");
-                            var day = value[0];
-                            var month = value[1];
-                            var year = value[2];
-                            var date = new Date(year, month, day).toISOString();
-                            return date.split("T")[0];
+                        "data": "start_date", "name": "start_date",
+                        "mRender": function (data,type,row) {           
+                            var value = data.split("T");
+                            var formattedDate = new Date(value[0]).toISOString();
+                            return formattedDate.split("T")[0];
                         }
                     },
                     { "data": "interview_Status", "name": "interview_Status" },
@@ -280,14 +277,11 @@
                     { "data": "position", "name": "position" },
                     { "data": "job_Role", "name": "job_Role" },
                     {
-                        "data": "formattedDate", "name": "formattedDate",
+                        "data": "joining_date", "name": "joining_date",
                         "mRender": function (data) {
-                            var value = data.split("-");
-                            var day = value[0];
-                            var month = value[1];
-                            var year = value[2];
-                            var date = new Date(year, month, day).toISOString();
-                            return date.split("T")[0];
+                            var value = data.split("T");
+                            var formattedDate = new Date(value[0]).toISOString();
+                            return formattedDate.split("T")[0];
                         }
                     },
                     { "data": "commitment_mode", "name": "commitment_mode" },
@@ -347,14 +341,11 @@
                     { "data": "position", "name": "position" },
                     { "data": "job_Role", "name": "job_Role" },
                     {
-                        "data": "formattedDate", "name": "formattedDate",
+                        "data": "rejection_date", "name": "rejection_date",
                         "mRender": function (data) {
-                            var value = data.split("-");
-                            var day = value[0];
-                            var month = value[1];
-                            var year = value[2];
-                            var date = new Date(year, month, day).toISOString();
-                            return date.split("T")[0];
+                            var value = data.split("T");
+                            var formattedDate = new Date(value[0]).toISOString();
+                            return formattedDate.split("T")[0];
                         }
                     },
                     { "data": "status", "name": "status" },
@@ -410,14 +401,11 @@
                     { "data": "degree", "name": "degree" },
                     { "data": "experience", "name": "experience" },
                     {
-                        "data": "formattedDate", "name": "formattedDate",
+                        "data": "apply_date", "name": "apply_date",
                         "mRender": function (data) {
-                            var value = data.split("-");
-                            var day = value[0];
-                            var month = value[1];
-                            var year = value[2];
-                            var date = new Date(year, month, day).toISOString();
-                            return date.split("T")[0];
+                            var value = data.split("T");
+                            var formattedDate = new Date(value[0]).toISOString();
+                            return formattedDate.split("T")[0];
                         }
                     },
                     { "data": "jobStatus", "name": "jobStatus" },

@@ -62,7 +62,7 @@
                                 </div>
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.datetime, new { @class = "asterisk" })
-                                    @Html.TextBoxFor(m => m.datetime, new { @type = "datetime", @placeholder = "Date & Time", @class = "form-control datepicker" })
+                                    @Html.TextBoxFor(m => m.datetime, new { @type = "datetime", @placeholder = "Date & Time", @class = "form-control datetimepicker1" })
                                     @Html.ValidationMessageFor(model => model.datetime, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="form-group">
@@ -116,18 +116,18 @@
 </section>
 <script>
 
-
+    
     $(function () {
+
+        $('.datetimepicker1').datetimepicker({
+            format: 'DD/MM/YYYY hh:mm A',
+            minDate: new Date()
+        });
 
         $(".select2").select2();
 
         $(".hiddenclass").hide();
 
-        $('.datepicker').datepicker({
-            format: 'dd/mm/yyyy',
-        /* endDate: '+0d',*/    /*----This enables the feature that restricts the future dates----*/
-            autoclose: true
-        });
         $("#face").click(function () {
             $(".hiddenclass").show();
         });

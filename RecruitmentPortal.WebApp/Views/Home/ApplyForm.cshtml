@@ -162,15 +162,13 @@
         var currDate = today.getDate();
         var currMonth = today.getMonth();
         var currYear = today.getFullYear();
-        
+
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
-            //defaultDate: today,
             endDate: '+0d',
             autoclose: true
         });
-        
-        $('.datepicker').val('');
+
 
         $(".select2").select2();
 
@@ -212,9 +210,15 @@
             $(".hiddenclass").hide();
             $("#noticePeriod").hide();
         });
+
+        if (@Model.selectedDegree != 0) {
+
+            $('#getDepts').val(@Model.selectedDegree).change();
+        }
+
     });
 
-   
+
 
 
      //for getting departments and dependent departments
@@ -239,7 +243,14 @@
                     $('#SelectDept').remove();
             }
         });
-        setTimeout(function () { $('#SelectDept').select2(); }, 1000);
+        setTimeout(function () {
+            $('#SelectDept').select2();
+
+        if (@Model.selectDept != 0) {
+            $('#SelectDept').val(@Model.selectDept).change();
+        }
+
+        }, 1000);
     });
 
         ////Put it outside document.ready method for setting dob as empty on form load

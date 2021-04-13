@@ -24,7 +24,7 @@ namespace RecruitmentPortal.WebApp.Controllers
     {
         #region private variables
         private string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
-        private string status_Complete = Enum.GetName(typeof(JobApplicationStatus), 2);
+        private string status_Accepted = Enum.GetName(typeof(JobApplicationStatus), 2);
         readonly int reqValue = Convert.ToInt32(Enum.Parse(typeof(StatusType), "Completed"));
         IQueryable<SchedulesViewModel> allScheduleList;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -165,10 +165,12 @@ namespace RecruitmentPortal.WebApp.Controllers
             AdminPanelViewModel collection = new AdminPanelViewModel();
             try
             {
-                collection.ApplicationCount = _dbContext.Candidate.Where(x => x.emailConfirmed == true).Count();
+                int count = 0;
+                var candidateIdList = _dbContext.Candidate.ToList();
+                collection.ApplicationCount = candidateIdList.Where(x => x.is_InitReject == false && x.emailConfirmed == true).Count();
                 collection.ActiveApplicationCount = _dbContext.jobApplications.ToList().Where(x => x.status == status_Pending).Count();
                 collection.InterviewerCount = _dbContext.Users.Count();
-                collection.SelectedCount = _dbContext.jobApplications.Where(x => x.status == status_Complete).Count();
+                collection.SelectedCount = _dbContext.jobApplications.Where(x => x.status == status_Accepted).Count();
             }
             catch (Exception ex)
             {
@@ -239,7 +241,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             try
             {
                 var notifyJobApplications = await _jobApplicationPage.getJobApplications();
-                collection.selected_application = notifyJobApplications.Where(x => x.status == status_Complete && x.notified == false).ToList();
+                collection.selected_application = notifyJobApplications.Where(x => x.status == status_Accepted && x.notified == false).ToList();
                 foreach (var item in collection.selected_application)
                 {
                     item.candidateName = _dbContext.Candidate.Where(x => x.ID == item.candidateId).FirstOrDefault().name;
@@ -269,11 +271,19 @@ namespace RecruitmentPortal.WebApp.Controllers
 
 
             var pending_schedules = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
-
+            List<SchedulesViewModel> newScheduleList = new List<SchedulesViewModel>();
+            foreach (var item in pending_schedules)
+            {
+                var jobApp = _dbContext.jobApplications.Where(x => x.candidateId == item.candidateId).FirstOrDefault();
+                if (jobApp.status == status_Pending)
+                {
+                    newScheduleList.Add(item);
+                }
+            }
             //filtering the schedules for getting only the incompleted schedules
 
-            collection.pending_schedules = pending_schedules.Where(x => x.status != reqValue).ToList();
-            collection.PendingScheduleCount = pending_schedules.Where(x => x.status != reqValue).ToList().Count();
+            collection.pending_schedules = newScheduleList.Where(x => x.status != reqValue).ToList();
+            collection.PendingScheduleCount = newScheduleList.Where(x => x.status != reqValue).ToList().Count();
             collection.CompletedScheduleCount = pending_schedules.Where(x => x.status == reqValue).Count();
 
             return View(collection);
@@ -282,10 +292,19 @@ namespace RecruitmentPortal.WebApp.Controllers
         public async Task<IActionResult> getInterviewIndexScheduleData()
         {
             List<SchedulesViewModel> collection = new List<SchedulesViewModel>();
+            List<SchedulesViewModel> newScheduleList = new List<SchedulesViewModel>();
             try
             {
                 var pending_schedules = await _schedulesPage.GetSchedulesByUserId(_userManager.GetUserId(HttpContext.User));
-                collection = pending_schedules.Where(x => x.status != reqValue).ToList();
+                foreach (var item in pending_schedules)
+                {
+                    var jobApp = _dbContext.jobApplications.Where(x => x.candidateId == item.candidateId).FirstOrDefault();
+                    if (jobApp.status == status_Pending)
+                    {
+                        newScheduleList.Add(item);
+                    }
+                }
+                collection = newScheduleList.Where(x => x.status != reqValue).ToList();
                 foreach (var item in collection)
                 {
                     item.jobRole = getJobRoleByCandidateId(item.candidateId);

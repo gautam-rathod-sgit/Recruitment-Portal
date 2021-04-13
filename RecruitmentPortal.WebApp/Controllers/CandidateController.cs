@@ -527,7 +527,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 DateTime? eDate = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : (DateTime?)null;
 
                 modelList = await _candidatePageServices.getCandidates();
-                newList = modelList.Where(x => x.is_InitReject == false).ToList();
+                newList = modelList.Where(x => x.is_InitReject == false && x.emailConfirmed == true).ToList();
                 foreach (var item in newList)
                 {
                     item.EncryptedId = HttpUtility.UrlEncode(RSACSPSample.EncodeServerName(item.ID.ToString()));
@@ -609,7 +609,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                     data.position = getPositionByCandidateId(data.candidateId);
                     data.job_Role = getJobRoleByCandidateId(data.candidateId);
                     data.interview_Status = getInterviewStatusByCandidateId(data.candidateId);
-                    data.FormattedDate = data.start_date.ToString("dd-MM-yyyy");                    
+                    data.FormattedDate = data.start_date.ToString("dd-MM-yyyy");          
                 }
              
                 //newlist = newlist.Where(x => x.interview_Status == istatus).ToList();
@@ -618,7 +618,8 @@ namespace RecruitmentPortal.WebApp.Controllers
                                                && (m.start_date >= sDate || sDate == null)
                                                && (m.start_date <= eDate || eDate == null)).ToList();
 
-                
+                //var finallist = filteredList.Select(m => new { m.EncryptedJobApplicationId, m.EncryptedId, m.roundName, m.rating, m.statusName, m.remark, m.datetime, m.InterviewerNames }).ToList();
+
 
                 return Json(new { data = filteredList });
             }

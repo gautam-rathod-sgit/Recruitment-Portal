@@ -167,7 +167,7 @@ namespace RecruitmentPortal.WebApp.Controllers
             model.round = 0;
             model.status = status_Pending;
             model.notified = false;
-            model.start_date = Convert.ToDateTime(DateTime.Now.ToString("G"));
+            model.start_date = DateTime.Now;
             try
             {
                 await _jobApplicationPage.AddJobApplications(model);
@@ -242,12 +242,13 @@ namespace RecruitmentPortal.WebApp.Controllers
                             schedule.EncryptedId = RSACSPSample.EncodeServerName((schedule.ID).ToString());
                             schedule.EncryptedJobApplicationId = id;
                             schedule.statusName = Enum.GetName(typeof(StatusType), schedule.status);
-                            schedule.roundName = Enum.GetName(typeof(RoundType), schedule.round);                        }
+                            schedule.roundName = Enum.GetName(typeof(RoundType), schedule.round);
+                        }
                     }
                 }
                 listofschedules = jobApplicationModel.Schedules.ToList();
 
-                var finallist = listofschedules.Select(m => new {m.EncryptedJobApplicationId, m.EncryptedId, m.roundName,m.rating,m.statusName,m.remark,m.datetime,m.InterviewerNames }).ToList() ;
+                var finallist = listofschedules.Select(m => new {m.EncryptedJobApplicationId, m.EncryptedId, m.roundName,m.rating,m.statusName,m.remark,m.datetime,m.InterviewerNames}).ToList() ;
 
                 return Json(new { data = finallist });
             }
@@ -307,7 +308,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                 if (model.flag_Rejected)
                 {
                     model.status = status_Rejected;
-                    model.rejection_date = Convert.ToDateTime(DateTime.Now.ToString("G"));
+                    model.rejection_date = Convert.ToDateTime(DateTime.Now.ToString());
                     await _jobApplicationPage.UpdateJobApplication(model);
                     return RedirectToAction("SendRejectionMailToCandidate", "Candidate", new { id = model.candidateId });
                 }
