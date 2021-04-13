@@ -24,7 +24,7 @@
                             {
 
 
-                                <a href='@Url.Action("ScheduleDetails", "Interviewer", new { scheduleId = Model.jobAppId})' class="btn btn-primary">Cancel</a>
+                                <a href='@Url.Action("ScheduleDetails", "Interviewer", new { scheduleId = RSACSPSample.EncodeServerName(Model.ID.ToString())})' class="btn btn-primary">Cancel</a>
 
                             }
                             else

@@ -19,7 +19,7 @@ namespace RecruitmentPortal.WebApp.Controllers
     public class InterviewerController : BaseController
     {
         private string time_format = "HH:mm tt";
-        private string status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
+        private string JobApplication_status_Pending = Enum.GetName(typeof(JobApplicationStatus), 1);
         private int status_scheduled = Convert.ToInt32(Enum.Parse(typeof(StatusType), "Scheduled"));
         private int status_pending = Convert.ToInt32(Enum.Parse(typeof(StatusType), "Pending"));
         private int status_completed = Convert.ToInt32(Enum.Parse(typeof(StatusType), "Completed"));
@@ -81,7 +81,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                         item.InterviewerNames = listOfUser;
 
                         //creating new schedule list 
-                        if (allSchedules.status == status_Pending)
+                        if (allSchedules.status == JobApplication_status_Pending)
                         {
                             schedulelist.Add(item);
                         }
@@ -171,6 +171,11 @@ namespace RecruitmentPortal.WebApp.Controllers
 
             //getting schedule by ID
             SchedulesViewModel model = await _schedulesPage.GetSchedulesById(Convert.ToInt32(RSACSPSample.DecodeServerName(scheduleId)));
+            var jobApplicationModel = _dbContext.jobApplications.Where(x => x.candidateId == model.candidateId).FirstOrDefault();
+            if(jobApplicationModel.status == JobApplication_status_Pending)
+            {
+                ViewBag.isPending = true;
+            }
             //getting job application ID
             model.jobAppId = _dbContext.jobApplications.AsNoTracking().FirstOrDefault(x => x.candidateId == model.candidateId).ID;
             model.candidate = await _candidatePageServices.getCandidateById(model.candidateId);

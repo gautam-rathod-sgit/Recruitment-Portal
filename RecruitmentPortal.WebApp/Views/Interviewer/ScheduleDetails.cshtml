@@ -89,36 +89,39 @@
                                         )' class="btn btn-primary  btn-sm">
                             Download Resume
                         </a>
-                        <a class="btn btn-primary btn-sm" data-toggle="#reviewmodel" data-target="#reviewmodel" onclick="openPopup()">
-                            Add Reviews
-                        </a>
-
-                        @*back button*@
-                        @if (User.IsInRole("Admin"))
+                        @if (ViewBag.isPending == true)
                         {
-                            if (ViewBag.toAdminIndex != null || ViewBag.toAdminIndex == true)
-                            {
-
-                                <a href='@Url.Action("AdminIndex","Account")' class="btn btn-primary btn-sm">
-                                    Cancel
-                                </a>
-                            }
-                            else
-                            {
-                                <a href='@Url.Action("Index","Interviewer")' class="btn btn-primary btn-sm">
-                                    Cancel
-                                </a>
-                            }
-
-                        }
-                        else
-                        {  
-                            <a href='@Url.Action("InterviewerIndex","Account")' class="btn btn-primary btn-sm">
-                                Cancel
+                            <a class="btn btn-primary btn-sm" data-toggle="#reviewmodel" data-target="#reviewmodel" onclick="openPopup()">
+                                Add Reviews
                             </a>
                         }
 
-                    </div>
+                            @*back button*@
+                            @if (User.IsInRole("Admin"))
+                            {
+                                if (ViewBag.toAdminIndex != null || ViewBag.toAdminIndex == true)
+                                {
+
+                                    <a href='@Url.Action("AdminIndex","Account")' class="btn btn-primary btn-sm">
+                                        Cancel
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href='@Url.Action("Index","Interviewer")' class="btn btn-primary btn-sm">
+                                        Cancel
+                                    </a>
+                                }
+
+                            }
+                            else
+                            {
+                                <a href='@Url.Action("InterviewerIndex","Account")' class="btn btn-primary btn-sm">
+                                    Cancel
+                                </a>
+                            }
+
+                        </div>
                 </div>
             </div>
 

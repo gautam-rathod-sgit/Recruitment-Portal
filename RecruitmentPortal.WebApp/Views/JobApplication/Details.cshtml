@@ -242,7 +242,14 @@
                     },
                     { "data": "rating", "name": "rating" },
                     { "data": "remark", "name": "remark" },
-                    { "data": "datetime", "name": "datetime" },
+                    {
+                        "data": "datetime", "name": "datetime",
+                        "mRender": function (data, type, row) {
+                            var value = data.split("T");
+                            var formattedDate = new Date(value[0]).toISOString();
+                            return formattedDate.split("T")[0];
+                        }
+                    },
                     { "data": "statusName", "name": "statusName" },
                     {
                         "sClass": "text-center",
@@ -253,7 +260,7 @@
                         }
                     }
                 ],
-                "order": [[0, "asc"]]
+                "order": [[4, "desc"]]
             });
 
     }

@@ -5,7 +5,7 @@
 <section class="content">
     @using (Html.BeginForm("ApplyForm", "Home", FormMethod.Post, new { @id = "applyform", @enctype = "multipart/form-data" }))
     {
-
+        
         <div class="row">
             <div class="col-sm-12">
                 <div class="box box-default boxPad">
@@ -157,18 +157,25 @@
 </section>
 
 <script type="text/javascript">
+
     $(document).ready(function () {
+      
+        var modelYear = ('@Model.dob').replace(' ', '-').split('-');
         var today = new Date();
         var currDate = today.getDate();
         var currMonth = today.getMonth();
         var currYear = today.getFullYear();
+        var newDate = currDate + "/" + currMonth + "/" + currYear;
 
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
             endDate: '+0d',
-            autoclose: true
+            autoclose: true,
         });
 
+        if (modelYear[2] == '0001') {
+            $('.datepicker').val('');
+        }
 
         $(".select2").select2();
 
@@ -212,48 +219,54 @@
         });
 
         if (@Model.selectedDegree != 0) {
-
             $('#getDepts').val(@Model.selectedDegree).change();
         }
 
     });
-
-
-
 
      //for getting departments and dependent departments
     $('#getDepts').change(function () {
         var url = '@Url.Action("GetDept", "Home")';
         var ddlsource = $("#getDepts").val();
         $.getJSON(url, { Id: ddlsource }, function (data) {
+
+            $('.department_div').show();
             if (data.length > 1) {
                 var dept_drop = '';
-                $('#SelectDept').remove(); //for removing if already existing dropdown of previous record
-                dept_drop += '<select id="SelectDept" name="SelectDept" class="form-control select2">';
-                    for (var i = 0; i < data.length; i++) {
-                        dept_drop += '<option value="' + data[i].value + '">' + data[i].text + '</option>';
-                    }
+                $('#selectDept').remove(); //for removing if already existing dropdown of previous record
+                dept_drop += '<select id="selectDept" name="selectDept" class="form-control select2">';
+                for (var i = 0; i < data.length; i++) {
+                    dept_drop += '<option value="' + data[i].value + '">' + data[i].text + '</option>';
+                }
                 dept_drop += '</select>';
                 $('.department_div').empty();
                 $('.department_div').append(dept_drop);
             }
             else {
-                    $("#DeptID").val(0);
-                //$('.dept').nextAll('#SelectDept').remove();S
-                    $('#SelectDept').remove();
+                $("#DeptID").val(0);
+                $('.department_div').hide();
             }
         });
         setTimeout(function () {
-            $('#SelectDept').select2();
-
+            $('#selectDept').select2();
         if (@Model.selectDept != 0) {
-            $('#SelectDept').val(@Model.selectDept).change();
+            $('#selectDept').val(@Model.selectDept).change();
         }
-
         }, 1000);
     });
 
-        ////Put it outside document.ready method for setting dob as empty on form load
-    //var dateStr = currDate + "/" + currMonth + "/" + currYear;
-    //$('.datepicker').val(dateStr);
+    $('#applyform').submit(function (e) {
+
+        var department = $('.department_div');
+
+        var msg = '<span id="ValidationMessage" class = "text-danger">Department is Required</span>';
+        if ($('#selectDept').val() == 0) {
+            $("#ValidationMessage").remove();
+            department.append(msg);
+            e.preventDefault();
+            return false;
+        } else {
+            $("#ValidationMessage").remove();
+        }
+    });
 </script>

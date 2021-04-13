@@ -256,10 +256,10 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             //checking if already applied for same job
             //var candidateList = await _candidatePageServices.getCandidates();
-            bool existOrNot = _dbContext.Candidate.Any(m => m.email == model.email && m.ID != 0);
+            bool existOrNot = _dbContext.Candidate.Any(m => m.email == model.email && m.ID != 0 && m.emailConfirmed == true);
 
             try
-            {
+                {
                 //List<CandidateViewModel> list = new List<CandidateViewModel>();
                 //list = candidateList.ToList();
                 //foreach (var item in list)
@@ -273,6 +273,7 @@ namespace RecruitmentPortal.WebApp.Controllers
                         ViewBag.ListOfDegree = SelectionList.GetDegreeList();
                         ViewBag.ReferenceSelect = SelectionList.GetReferenceTypeList();
                         ViewBag.NoticePeriod = SelectionList.GetNoticePeriodTypeList();
+                    
                         return View(model);
                     }
                 //}

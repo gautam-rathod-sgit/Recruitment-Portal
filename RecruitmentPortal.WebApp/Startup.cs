@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,8 @@ using RecruitmentPortal.WebApp.Security;
 using RecruitmentPortal.WebApp.Services;
 using RecruitmentPortal.WebApp.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace RecruitmentPortal.WebApp
@@ -78,9 +81,19 @@ namespace RecruitmentPortal.WebApp
             //Url Encryption 
             services.AddDataProtection();
             services.AddMvc(options => options.EnableEndpointRouting = false);
-                //.AddJsonOptions(x => { x.SerializerSettings.ContractResolver = new DefaultContractResolver(); });
+            //.AddJsonOptions(x => { x.SerializerSettings.ContractResolver = new DefaultContractResolver(); });
             services.AddSingleton(sp => _mapperConfiguration.CreateMapper());
             RegisterServices(services);
+
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                options.DefaultRequestCulture = new RequestCulture("en-IN");
+                options.SupportedCultures = new List<CultureInfo>()
+            {
+            new CultureInfo("en-IN"),
+            };
+            });
         }
 
         private void RegisterServices(IServiceCollection services)
@@ -134,7 +147,7 @@ namespace RecruitmentPortal.WebApp
             HttpHelper.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
 
             //app.UseRouting();
-            
+
 
             //app.UseEndpoints(endpoints =>
             //{

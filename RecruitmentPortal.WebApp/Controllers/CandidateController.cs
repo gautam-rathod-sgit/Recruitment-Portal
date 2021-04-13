@@ -670,8 +670,8 @@ namespace RecruitmentPortal.WebApp.Controllers
                 }
                 filteredlist = newlist.Where(m => (m.status.Contains(applicationType) || applicationType == null)
                                               && (degree == string.Empty)
-                                              && (m.start_date >= sDate || sDate == null)
-                                              && (m.start_date <= eDate || eDate == null)).ToList();
+                                              && (m.joining_date >= sDate || sDate == null)
+                                              && (m.joining_date <= eDate || eDate == null)).ToList();
 
                 return Json(new { data = filteredlist });
             }
@@ -717,8 +717,8 @@ namespace RecruitmentPortal.WebApp.Controllers
 
                 filteredlist = newList.Where(m => (m.status.Contains(applicationType) || applicationType == null)
                                               && (degree == string.Empty)
-                                              && (m.start_date >= sDate || sDate == null)
-                                              && (m.start_date <= eDate || eDate == null)).ToList();
+                                              && (m.rejection_date >= sDate || sDate == null)
+                                              && (m.rejection_date <= eDate || eDate == null)).ToList();
                 return Json(new { data = filteredlist });
             }
 
