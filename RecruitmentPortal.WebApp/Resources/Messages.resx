@@ -333,4 +333,7 @@
   <data name="InvalidPassword" xml:space="preserve">
     <value>Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character</value>
   </data>
+  <data name="ValidDOBRequired" xml:space="preserve">
+    <value>Valid Date of Birth is Required</value>
+  </data>
 </root>

@@ -105,11 +105,7 @@
                 },
                 {
                     "data": "datetime", "name": "datetime",
-                    "mRender": function (data, type, row) {
-                        var value = data.split("T");
-                        var formattedDate = new Date(value[0]).toISOString();
-                        return formattedDate.split("T")[0];
-                    }
+                   
                 },
 
                 {

@@ -38,6 +38,7 @@ namespace RecruitmentPortal.WebApp.ViewModels
         public string token { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = "DateofBirth")]
+        [RegularExpression(CommonHelper.RegexDOB, ErrorMessageResourceName = "ValidDOBRequired", ErrorMessageResourceType = typeof(Messages))]
         [Required(ErrorMessageResourceName = "DateofBirthRequired", ErrorMessageResourceType = typeof(Messages))]
         public DateTime dob { get; set; }
 

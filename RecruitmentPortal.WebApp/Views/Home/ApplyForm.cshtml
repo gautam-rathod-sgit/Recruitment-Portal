@@ -159,7 +159,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-      
+
         var modelYear = ('@Model.dob').replace(' ', '-').split('-');
         var today = new Date();
         var currDate = today.getDate();
@@ -169,8 +169,9 @@
 
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
-            endDate: '+0d',
             autoclose: true,
+            endDate: '+0d',
+            setDate: new Date()
         });
 
         if (modelYear[2] == '0001') {
@@ -224,6 +225,7 @@
 
     });
 
+
      //for getting departments and dependent departments
     $('#getDepts').change(function () {
         var url = '@Url.Action("GetDept", "Home")';
@@ -243,7 +245,7 @@
                 $('.department_div').append(dept_drop);
             }
             else {
-                $("#DeptID").val(0);
+                $("#selectDept").val(0);
                 $('.department_div').hide();
             }
         });
@@ -256,11 +258,18 @@
     });
 
     $('#applyform').submit(function (e) {
-
+      ////for DOB validation
+      //      var minDate = new Date("03/25/2015");
+      //      var date = $('.datepicker').datepicker('getDate');
+      //      if (minDate > date) {
+      //          $('.datepicker').val('');
+      //      }
+     //for Department Dropdown
         var department = $('.department_div');
 
         var msg = '<span id="ValidationMessage" class = "text-danger">Department is Required</span>';
-        if ($('#selectDept').val() == 0) {
+        if ($('#selectDept').val() == 0 && @Model.selectedDegree != 0) {
+            debugger;
             $("#ValidationMessage").remove();
             department.append(msg);
             e.preventDefault();

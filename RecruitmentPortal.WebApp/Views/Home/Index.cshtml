@@ -1,44 +1,106 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using RecruitmentPortal.WebApp.Resources
+@using RecruitmentPortal.WebApp.Helpers
+@{
+    Layout = null;
 }
 
-<style>
-    .table-striped > tbody > tr:nth-of-type(odd) {
-        background-color: #ecf0f5;
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>@Labels.RecruitmentPortal</title>
+    <link rel="icon" type="image/png" href="~/favicon.png" />
+    <partial name="AdminLTE/_Styles" />
+    @*<environment include="Development">
+            <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css'>
+            <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css'>
+            <link href="~/bundles/RecruitmentPortalCSSBundle.min.css" rel="stylesheet" />
+        </environment>*@
+    <script src="~/Content/js/jQuery-2.2.0.min.js"></script>
+    <script src="~/Content/js/jquery.validate.min.js"></script>
+    <script src="~/Content/js/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <style>
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: #ecf0f5;
+        }
 
-    .table > thead > tr > th {
-        border-bottom: 2px solid #ecf0f5;
-    }
+        .table > thead > tr > th {
+            border-bottom: 2px solid #ecf0f5;
+        }
 
-    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-        border-top: 1px solid #ecf0f5;
-    }
-</style>
+        .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+            border-top: 1px solid #ecf0f5;
+        }
+    </style>
 
-<section class="content-header">
-    <h1>
-        <i class="fa fa-info-circle"></i> Careers
-    </h1>
-</section>
 
-<!-- Main content -->
-<section class="content">
-    <div class="row">
-        <div class="col-sm-12">
-            <table id="datatable" class="table dataTable" role="grid">
-                <thead>
-                    <tr>
-                        <th></th>
-                    </tr>
-                </thead>
-            </table>
+</head>
+<body class="sidebar-mini skin-yellow">
+    <div class="wrapper">
+        <partial name="AdminLTE/_TopNavigation" />
+        <partial name="AdminLTE/_MainNavigation" />
+
+        <div class="content-wrapper container-fluid" style="min-height: 1126px;margin-left: 0px;">
+            <section class="content-header">
+                <h1>
+                    <i class="fa fa-info-circle"></i> Careers
+                </h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="datatable" class="table dataTable" role="grid">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+
         </div>
-    </div>
-</section>
-<!-- /.content -->
+        <div class="toast__container">
+            <div class="toast__cell">
+            </div>
+        </div>
+        <footer class="main-footer container-fluid text-center" style="margin-left : 0px">
+            <!-- Default to the left -->
+            <strong>Copyright &copy; @DateTime.Now.Year <a href="#">Recruitment Portal</a>.</strong> All rights reserved.
+        </footer>
 
+        <div class="control-sidebar-bg" style="position: fixed;height: auto;"></div>
+    </div>
+    <partial name="AdminLTE/_Scripts" />
+    @*<environment exclude="Development">
+            <script src="~/bundles/RecruitmentPortalJSBundle.min.js"></script>
+        </environment>*@
+</body>
+</html>
 <script>
+    $(document).ready(function () {
+        var controllerName = '@ViewContext.RouteData.Values["Controller"].ToString()';
+        var actionName = '@ViewContext.RouteData.Values["action"].ToString()';
+        var errormessage = '@TempData[EnumsHelper.NotifyType.Error.GetDescription()]';
+        var successmessage = '@TempData[EnumsHelper.NotifyType.Success.GetDescription()]';
+        sidebarActiveLink(controllerName, actionName);
+        if (errormessage !== "") {
+            notification("Error", errormessage, "error");
+        }
+
+        if (successmessage !== "") {
+            notification("Success", successmessage, "success");
+        }
+        $("aside").remove();
+        $(".sidebar-toggle").remove();
+    });
     $(function () {
         bindDatatable();
     });

@@ -162,11 +162,7 @@
                 { "data": "mode_of_interview", "name": "mode_of_interview" },
                 {
                     "data": "datetime", "name": "datetime",
-                    "mRender": function (data) {
-                        var value = data.split("T");
-                        var formattedDate = new Date(value[0]).toISOString();
-                        return formattedDate.split("T")[0];
-                    }
+                    
                 },
                 {
                     "data": "interviewerNames",

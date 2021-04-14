@@ -646,6 +646,15 @@ namespace RecruitmentPortal.WebApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Valid Date of Birth is Required.
+        /// </summary>
+        public static string ValidDOBRequired {
+            get {
+                return ResourceManager.GetString("ValidDOBRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Valid Email is Required.
         /// </summary>
         public static string ValidEmailRequired {
