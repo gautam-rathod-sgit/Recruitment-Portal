@@ -11,7 +11,7 @@
 
     <div class="form-group">
         @Html.LabelFor(m => m.joining_date, new { @class = "asterisk" })
-        @Html.TextBoxFor(m => m.joining_date, new { @type = "datetime", @class = "form-control datepicker" })
+        @Html.TextBoxFor(m => m.joining_date, new { @type = "datetime", autocomplete = "off", @class = "form-control datepicker" })
         @Html.ValidationMessageFor(model => model.joining_date)
     </div>
 

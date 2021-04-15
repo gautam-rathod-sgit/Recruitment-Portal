@@ -62,7 +62,7 @@
                                 </div>
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.datetime, new { @class = "asterisk" })
-                                    @Html.TextBoxFor(m => m.datetime, new { @type = "datetime", @placeholder = "Date & Time", @class = "form-control datetimepicker1" })
+                                    @Html.TextBoxFor(m => m.datetime, new { @type = "datetime",autocomplete = "off", @placeholder = "Date & Time", @class = "form-control datetimepicker1" })
                                     @Html.ValidationMessageFor(model => model.datetime, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="form-group">

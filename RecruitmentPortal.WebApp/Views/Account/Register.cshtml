@@ -122,8 +122,8 @@
 
     });
 
-    $('#FileNew').on('change', function (e) {
-        $file = $("#FileNew");
+    $('#filename').on('change', function (e) {
+        $file = $("#filename");
         var $filePath = $.trim($file.val());
         var f = this.files[0];
         if (f.size > 3145728 || f.fileSize > 3145728) {

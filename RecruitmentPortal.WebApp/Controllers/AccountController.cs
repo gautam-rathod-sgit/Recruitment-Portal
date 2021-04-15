@@ -399,9 +399,7 @@ namespace RecruitmentPortal.WebApp.Controllers
         {
             return new Dictionary<string, string>
             {
-            {".pdf", "application/pdf"},
-            {".doc", "application/vnd.ms-word"},
-            {".docx", "application/vnd.ms-word"},
+   
             {".jpeg", "image/jpeg"},
             {".jpg", "image/jpeg"},
             {".png", "image/png"}

@@ -99,7 +99,7 @@
                                     </div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.dob, new { @class = "asterisk" })
-                                        @Html.TextBoxFor(m => m.dob, new { @type = "datetime", @placeholder = "Date of Birth", @class = "form-control datepicker" })
+                                        @Html.TextBoxFor(m => m.dob, new { @type = "datetime", autocomplete = "off", @placeholder = "Date of Birth", @class = "form-control datepicker" })
                                         @Html.ValidationMessageFor(model => model.dob, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group has-feedback has-feedback-left">
@@ -112,8 +112,8 @@
                                         <div>
                                             @Html.RadioButtonFor(m => m.experience, "Fresher", new { @id = "fresher", @value = "Fresher" })
                                             @Html.Label(" Fresher ")
-                                            @Html.RadioButtonFor(m => m.experience, "Experience", new { @id = "experienced", @value = "Experienced" })
-                                            @Html.Label(" Experience")
+                                            @Html.RadioButtonFor(m => m.experience, "Experienced", new { @id = "experienced", @value = "Experienced" })
+                                            @Html.Label(" Experienced")
 
                                         </div>
                                         @Html.ValidationMessageFor(model => model.experience, "", new { @class = "text-danger" })
