@@ -57,22 +57,29 @@ namespace RecruitmentPortal.WebApp.Controllers
 
         private void SetSessionValues(ActionExecutingContext filterContext)
         {
-            var loggedInUser = HttpContext.User;
-            var loggedInUserName = loggedInUser.Identity.Name;
-            var loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var logedInUser = BaseContext.GetDbContext().Users.FirstOrDefault(u => u.Id == loggedUserId);
-
-            if (logedInUser == null)
+            try
             {
-                RedirectToLoginPage(filterContext);
+                var loggedInUser = HttpContext.User;
+                var loggedInUserName = loggedInUser.Identity.Name;
+                var loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                var logedInUser = BaseContext.GetDbContext().Users.FirstOrDefault(u => u.Id == loggedUserId);
+
+                if (logedInUser == null)
+                {
+                    RedirectToLoginPage(filterContext);
+                }
+                else
+                {
+                    SessionHelper.UserId = logedInUser.Id;
+                    SessionHelper.WelcomeUser = logedInUser.UserName;
+                    CommonHelper.UserId = logedInUser.Id;
+                    SessionHelper.ProfilePicture = logedInUser.file == null ? string.Empty : logedInUser.file;
+                }
             }
-            else
+            catch(Exception ex)
             {
-                SessionHelper.UserId = logedInUser.Id;
-                SessionHelper.WelcomeUser = logedInUser.UserName;
-                CommonHelper.UserId = logedInUser.Id;
-                SessionHelper.ProfilePicture = logedInUser.file == null ? string.Empty : logedInUser.file ;
+                Console.WriteLine(ex.Message);
             }
         }
         #endregion

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using RecruitmentPortal.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,16 @@ namespace RecruitmentPortal.Infrastructure.Data
 {
     public class RecruitmentPortalDbContext : IdentityDbContext<ApplicationUser>
     {
-
+        
+        
         public RecruitmentPortalDbContext(DbContextOptions options) : base(options)
         {
-
+            
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=192.168.1.95; Initial Catalog=Recruitment_Portal; User ID=sa; Password=Ask4Apple; Integrated Security=True; Trusted_Connection=False");
+            string connectionString = "Data Source=122.170.108.155,9905; Initial Catalog=Recruitment_Portal; User ID=sa; Password=Ask4Apple; Integrated Security=True; Trusted_Connection=False";
+            optionsBuilder.UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

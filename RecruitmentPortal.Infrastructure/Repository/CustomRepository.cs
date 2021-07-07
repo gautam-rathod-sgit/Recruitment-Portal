@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using RecruitmentPortal.Infrastructure.Data;
 using RecruitmentPortal.Infrastructure.Helpers;
 using System;
@@ -11,6 +12,7 @@ namespace RecruitmentPortal.Infrastructure.Repository
     {
         public static RecruitmentPortalDbContext GetDbContext()
         {
+            
             var dbOptions = new DbContextOptionsBuilder<RecruitmentPortalDbContext>();
             dbOptions.UseSqlServer(CommonHelper.ConnectionString);
             var dbContext = new RecruitmentPortalDbContext(dbOptions.Options);
